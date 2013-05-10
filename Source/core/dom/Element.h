@@ -77,6 +77,7 @@ public:
     const Attribute* getAttributeItem(const QualifiedName&) const;
     size_t getAttributeItemIndex(const QualifiedName&) const;
     size_t getAttributeItemIndex(const AtomicString& name, bool shouldIgnoreAttributeCase) const;
+    size_t getAttrIndex(Attr*) const;
 
     bool hasID() const { return !m_idForStyleResolution.isNull(); }
     bool hasClass() const { return !m_classNames.isNull(); }
@@ -713,6 +714,7 @@ private:
 
     void detachAllAttrNodesFromElement();
     void detachAttrNodeFromElementWithValue(Attr*, const AtomicString& value);
+    void detachAttrNodeAtIndex(Attr*, size_t index);
 
     void createRendererIfNeeded();
 
