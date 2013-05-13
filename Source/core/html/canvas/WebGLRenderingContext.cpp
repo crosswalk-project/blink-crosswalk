@@ -3474,6 +3474,12 @@ void WebGLRenderingContext::texImage2D(GC3Denum target, GC3Dint level, GC3Denum 
         && type == GraphicsContext3D::UNSIGNED_BYTE
         && (texture->getType(target, level) == GraphicsContext3D::UNSIGNED_BYTE || !texture->isValid(target, level))
         && !level) {
+        // FIXME: Currently we must make sure the target texture has the correct size before copying
+        // because of crbug.com/225781. Remove this once that bug is fixed.
+        if (texture->getWidth(target, level) != video->videoWidth() || texture->getHeight(target, level) != video->videoHeight()) {
+            m_context->texImage2D(target, level, internalformat, video->videoWidth(), video->videoHeight(), 0, format, type, 0);
+            texture->setLevelInfo(target, level, internalformat, video->videoWidth(), video->videoHeight(), type);
+        }
         if (video->copyVideoTextureToPlatformTexture(m_context.get(), texture->object(), level, type, internalformat, m_unpackPremultiplyAlpha, m_unpackFlipY)) {
             texture->setLevelInfo(target, level, internalformat, video->videoWidth(), video->videoHeight(), type);
             return;
