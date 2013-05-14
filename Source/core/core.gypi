@@ -3653,6 +3653,7 @@
             'platform/chromium/support/WrappedResourceResponse.h',
         ],
         'core_unittest_files': [
+            'tests/CachedImageTest.cpp',
             'tests/HeapGraphSerializerTest.cpp',
             'tests/LayoutUnit.cpp',
             'tests/LinkRelAttribute.cpp',
