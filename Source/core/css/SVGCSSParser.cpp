@@ -283,7 +283,7 @@ bool CSSParser::parseSVGValue(CSSPropertyID propId, bool important)
     case CSSPropertyMarker:
     {
         ShorthandScope scope(this, propId);
-        m_implicitShorthand = true;
+        CSSParser::ImplicitScope implicitScope(this, PropertyImplicit);
         if (!parseValue(CSSPropertyMarkerStart, important))
             return false;
         if (m_valueList->current()) {
@@ -293,7 +293,6 @@ bool CSSParser::parseSVGValue(CSSPropertyID propId, bool important)
         CSSValue* value = m_parsedProperties.last().value();
         addProperty(CSSPropertyMarkerMid, value, important);
         addProperty(CSSPropertyMarkerEnd, value, important);
-        m_implicitShorthand = false;
         return true;
     }
     default:
