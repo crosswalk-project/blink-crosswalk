@@ -2370,7 +2370,8 @@ inline void RenderObject::clearLayoutRootIfNeeded() const
     if (!documentBeingDestroyed() && frame()) {
         if (FrameView* view = frame()->view()) {
             if (view->layoutRoot() == this) {
-                ASSERT_NOT_REACHED();
+                if (!documentBeingDestroyed())
+                    ASSERT_NOT_REACHED();
                 // This indicates a failure to layout the child, which is why
                 // the layout root is still set to |this|. Make sure to clear it
                 // since we are getting destroyed.
