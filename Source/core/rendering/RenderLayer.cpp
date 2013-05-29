@@ -2192,7 +2192,7 @@ void RenderLayer::scrollToOffset(const IntSize& scrollOffset, ScrollOffsetClampi
 {
     IntSize newScrollOffset = clamp == ScrollOffsetClamped ? clampScrollOffset(scrollOffset) : scrollOffset;
     if (newScrollOffset != this->scrollOffset())
-        scrollToOffsetWithoutAnimation(IntPoint(newScrollOffset));
+        scrollToOffsetWithoutAnimation(-scrollOrigin() + newScrollOffset);
 }
 
 void RenderLayer::scrollTo(int x, int y)
@@ -2207,15 +2207,9 @@ void RenderLayer::scrollTo(int x, int y)
             computeScrollDimensions();
     }
     
-    // FIXME: Eventually, we will want to perform a blit.  For now never
-    // blit, since the check for blitting is going to be very
-    // complicated (since it will involve testing whether our layer
-    // is either occluded by another layer or clipped by an enclosing
-    // layer or contains fixed backgrounds, etc.).
-    IntSize newScrollOffset = IntSize(x - scrollOrigin().x(), y - scrollOrigin().y());
-    if (m_scrollOffset == newScrollOffset)
+    if (m_scrollOffset == toIntSize(newScrollOffset))
         return;
-    m_scrollOffset = newScrollOffset;
+    m_scrollOffset = toIntSize(newScrollOffset);
 
     Frame* frame = renderer()->frame();
     InspectorInstrumentation::willScrollLayer(frame);
@@ -2553,11 +2547,6 @@ int RenderLayer::scrollSize(ScrollbarOrientation orientation) const
     return scrollbar ? (scrollbar->totalSize() - scrollbar->visibleSize()) : 0;
 }
 
-void RenderLayer::setScrollOffset(const IntPoint& offset)
-{
-    scrollTo(offset.x(), offset.y());
-}
-
 int RenderLayer::scrollPosition(Scrollbar* scrollbar) const
 {
     if (scrollbar->orientation() == HorizontalScrollbar)
@@ -2579,8 +2568,13 @@ IntPoint RenderLayer::minimumScrollPosition() const
 
 IntPoint RenderLayer::maximumScrollPosition() const
 {
-    // FIXME: m_scrollSize may not be up-to-date if m_scrollDimensionsDirty is true.
-    return -scrollOrigin() + roundedIntSize(m_scrollSize) - visibleContentRect(IncludeScrollbars).size();
+    RenderBox* box = renderBox();
+    if (!box || !box->hasOverflowClip())
+        return -scrollOrigin();
+
+    LayoutRect overflowRect(box->layoutOverflowRect());
+    box->flipForWritingMode(overflowRect);
+    return -scrollOrigin() + enclosingIntRect(overflowRect).size() - enclosingIntRect(box->clientBoxRect()).size();
 }
 
 IntRect RenderLayer::visibleContentRect(VisibleContentRectIncludesScrollbars scrollbarInclusion) const
@@ -3210,7 +3204,7 @@ void RenderLayer::updateScrollInfoAfterLayout()
     updateScrollbarsAfterLayout();
 
     if (originalScrollOffset != scrollOffset())
-        scrollToOffsetWithoutAnimation(IntPoint(scrollOffset()));
+        scrollToOffsetWithoutAnimation(-scrollOrigin() + scrollOffset());
 
     // Composited scrolling may need to be enabled or disabled if the amount of overflow changed.
     if (renderer()->view() && compositor()->updateLayerCompositingState(this))
