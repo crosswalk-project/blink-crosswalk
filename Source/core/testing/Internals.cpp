@@ -1399,6 +1399,16 @@ void Internals::closeDummyInspectorFrontend()
     m_frontendWindow.release();
 }
 
+Vector<unsigned long> Internals::setMemoryCacheCapacities(unsigned long minDeadBytes, unsigned long maxDeadBytes, unsigned long totalBytes)
+{
+    Vector<unsigned long> result;
+    result.append(memoryCache()->minDeadCapacity());
+    result.append(memoryCache()->maxDeadCapacity());
+    result.append(memoryCache()->capacity());
+    memoryCache()->setCapacities(minDeadBytes, maxDeadBytes, totalBytes);
+    return result;
+}
+
 void Internals::setInspectorResourcesDataSizeLimits(int maximumResourcesContentSize, int maximumSingleResourceContentSize, ExceptionCode& ec)
 {
     Page* page = contextDocument()->frame()->page();
