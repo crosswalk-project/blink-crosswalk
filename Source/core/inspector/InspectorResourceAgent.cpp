@@ -701,8 +701,9 @@ void InspectorResourceAgent::setCacheDisabled(ErrorString*, bool cacheDisabled)
         memoryCache()->evictResources();
 }
 
-void InspectorResourceAgent::loadResourceForFrontend(ErrorString* errorString, const String& frameId, const String& url, PassRefPtr<LoadResourceForFrontendCallback> callback)
+void InspectorResourceAgent::loadResourceForFrontend(ErrorString* errorString, const String& frameId, const String& url, PassRefPtr<LoadResourceForFrontendCallback> prpCallback)
 {
+    RefPtr<LoadResourceForFrontendCallback> callback = prpCallback;
     Frame* frame = m_pageAgent->assertFrame(errorString, frameId);
     if (!frame)
         return;
@@ -734,6 +735,8 @@ void InspectorResourceAgent::loadResourceForFrontend(ErrorString* errorString, c
         return;
     }
     loader->setDefersLoading(false);
+    if (!callback->isActive())
+        return;
     inspectorThreadableLoaderClient->setLoader(loader.release());
 }
 
