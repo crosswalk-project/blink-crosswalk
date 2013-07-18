@@ -2145,6 +2145,7 @@ void Document::implicitOpen()
     cancelParsing();
 
     removeChildren();
+    ASSERT(!m_focusedNode);
 
     setCompatibilityMode(NoQuirksMode);
 
