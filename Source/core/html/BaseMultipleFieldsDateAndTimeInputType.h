@@ -116,6 +116,7 @@ private:
     SpinButtonElement* spinButtonElement() const;
     ClearButtonElement* clearButtonElement() const;
     PickerIndicatorElement* pickerIndicatorElement() const;
+    bool containsFocusedShadowElement() const;
     void showPickerIndicator();
     void hidePickerIndicator();
     void updatePickerIndicatorVisibility();
