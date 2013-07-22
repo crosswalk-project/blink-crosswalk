@@ -724,6 +724,7 @@ InspectorCSSAgent::InspectorCSSAgent(InstrumentingAgents* instrumentingAgents, I
     , m_pageAgent(pageAgent)
     , m_lastStyleSheetId(1)
     , m_creatingViaInspectorStyleSheet(false)
+    , m_isSettingStyleSheetText(false)
 {
     m_domAgent->setDOMListener(this);
 }
@@ -861,8 +862,10 @@ void InspectorCSSAgent::regionLayoutUpdated(NamedFlow* namedFlow, int documentNo
     m_frontend->regionLayoutUpdated(buildObjectForNamedFlow(&errorString, namedFlow, documentNodeId));
 }
 
-void InspectorCSSAgent::activeStyleSheetsUpdated(Document* document, const Vector<RefPtr<StyleSheet> >& newSheets)
+void InspectorCSSAgent::activeStyleSheetsUpdated(Document* document, const StyleSheetVector& newSheets)
 {
+    if (m_isSettingStyleSheetText)
+        return;
     HashSet<CSSStyleSheet*> removedSheets;
     for (CSSStyleSheetToInspectorStyleSheet::iterator it = m_cssStyleSheetToInspectorStyleSheet.begin(); it != m_cssStyleSheetToInspectorStyleSheet.end(); ++it) {
         if (it->value->canBind() && (!it->key->ownerDocument() || it->key->ownerDocument() == document))
@@ -912,7 +915,7 @@ void InspectorCSSAgent::frameDetachedFromParent(Frame* frame)
     Document* document = frame->document();
     if (!document)
         return;
-    Vector<RefPtr<StyleSheet> > newSheets;
+    StyleSheetVector newSheets;
     activeStyleSheetsUpdated(document, newSheets);
 }
 
@@ -1708,6 +1711,18 @@ void InspectorCSSAgent::styleSheetChanged(InspectorStyleSheet* styleSheet)
 {
     if (m_frontend)
         m_frontend->styleSheetChanged(styleSheet->id());
+}
+
+void InspectorCSSAgent::willReparseStyleSheet()
+{
+    ASSERT(!m_isSettingStyleSheetText);
+    m_isSettingStyleSheetText = true;
+}
+
+void InspectorCSSAgent::didReparseStyleSheet()
+{
+    ASSERT(m_isSettingStyleSheetText);
+    m_isSettingStyleSheetText = false;
 }
 
 void InspectorCSSAgent::resetPseudoStates()
