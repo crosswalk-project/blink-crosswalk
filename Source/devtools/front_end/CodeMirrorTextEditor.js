@@ -90,6 +90,9 @@ WebInspector.CodeMirrorTextEditor = function(url, delegate)
     this._codeMirror.setOption("flattenSpans", false);
     this._codeMirror.setOption("maxHighlightLength", 1000);
 
+    this._shouldClearHistory = true;
+    this._lineSeparator = "\n";
+
     this._tokenHighlighter = new WebInspector.CodeMirrorTextEditor.TokenHighlighter(this._codeMirror);
     this._blockIndentController = new WebInspector.CodeMirrorTextEditor.BlockIndentController(this._codeMirror);
     this._fixWordMovement = new WebInspector.CodeMirrorTextEditor.FixWordMovement(this._codeMirror);
@@ -812,11 +815,23 @@ WebInspector.CodeMirrorTextEditor.prototype = {
     /**
      * @param {string} text
      */
+    _detectLineSeparator: function(text)
+    {
+        this._lineSeparator = text.indexOf("\r\n") >= 0 ? "\r\n" : "\n";
+    },
+
+    /**
+     * @param {string} text
+     */
     setText: function(text)
     {
         this._muteTextChangedEvent = true;
         this._codeMirror.setValue(text);
-        this._codeMirror.clearHistory();
+        if (this._shouldClearHistory) {
+            this._codeMirror.clearHistory();
+            this._shouldClearHistory = false;
+        }
+        this._detectLineSeparator(text);
         delete this._muteTextChangedEvent;
     },
 
@@ -825,7 +840,7 @@ WebInspector.CodeMirrorTextEditor.prototype = {
      */
     text: function()
     {
-        return this._codeMirror.getValue();
+        return this._codeMirror.getValue().replace(/\n/g, this._lineSeparator);
     },
 
     /**

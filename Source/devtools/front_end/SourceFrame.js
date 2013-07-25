@@ -341,7 +341,7 @@ WebInspector.SourceFrame.prototype = {
             this._textEditor.setText(content || "");
             this._textEditor.markClean();
         } else
-            this._textEditor.editRange(this._textEditor.range(), content || "");
+            this._textEditor.setText(content || "");
 
         this._textEditor.mimeType = this._simplifyMimeType(mimeType);
 
