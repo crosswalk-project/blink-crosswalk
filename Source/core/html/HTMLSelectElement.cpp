@@ -1582,4 +1582,10 @@ bool HTMLSelectElement::anonymousIndexedSetter(unsigned index, PassRefPtr<HTMLOp
     return true;
 }
 
+bool HTMLSelectElement::anonymousIndexedSetterRemove(unsigned index, ExceptionCode& ec)
+{
+    remove(index);
+    return true;
+}
+
 } // namespace
