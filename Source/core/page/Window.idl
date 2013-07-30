@@ -270,6 +270,9 @@
                                       optional boolean useCapture);
     [RaisesException] boolean dispatchEvent(Event evt);
 
+    [DeprecateAs=CaptureEvents] void captureEvents();
+    [DeprecateAs=ReleaseEvents] void releaseEvents();
+
     // Additional constructors.
     attribute TransitionEventConstructor WebKitTransitionEvent;
     [CustomConstructor] attribute HTMLImageElementConstructorConstructor Image; // Usable with new operator

@@ -142,7 +142,19 @@ public:
         SVGSwitchElement,
         PrefixedDocumentRegister,
         HTMLShadowElementOlderShadowRoot,
-        // Add new features immediately above this line. Don't change assigned numbers of each items.
+        DocumentAll,
+        FormElement,
+        DemotedFormElement,
+        CaptureAttributeAsEnum,
+        ShadowDOMPrefixedPseudo,
+        ShadowDOMPrefixedCreateShadowRoot,
+        ShadowDOMPrefixedShadowRoot,
+        SVGAnimationElement,
+        KeyboardEventKeyLocation,
+        CaptureEvents,
+        ReleaseEvents,
+        // Add new features immediately above this line. Don't change assigned
+        // numbers of each items, and don't reuse unused slots.
         NumberOfFeatures, // This enum value must be last.
     };
 

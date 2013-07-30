@@ -641,6 +641,12 @@ String UseCounter::deprecationMessage(Feature feature)
     case PrefixedDocumentRegister:
         return "The document.webkitRegister method is deprecated. Use the document.register method instead.";
 
+    case CaptureEvents:
+        return "captureEvents() is deprecated. This method doesn't do anything.";
+
+    case ReleaseEvents:
+        return "releaseEvents() is deprecated. This method doesn't do anything.";
+
     // Features that aren't deprecated don't have a deprecation message.
     default:
         return String();

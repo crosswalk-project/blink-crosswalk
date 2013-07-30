@@ -42,6 +42,9 @@
              [TreatNullAs=NullString] attribute DOMString designMode;
     readonly attribute DOMString compatMode;
 
+    [DeprecateAs=CaptureEvents] void captureEvents();
+    [DeprecateAs=ReleaseEvents] void releaseEvents();
+
     readonly attribute Element activeElement;
     boolean hasFocus();
 
