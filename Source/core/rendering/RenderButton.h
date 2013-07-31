@@ -47,10 +47,14 @@ public:
     virtual bool createsAnonymousWrapper() const { return true; }
 
     void setupInnerStyle(RenderStyle*);
+    virtual void updateFromElement();
 
     virtual bool canHaveGeneratedChildren() const OVERRIDE;
     virtual bool hasControlClip() const { return true; }
     virtual LayoutRect controlClipRect(const LayoutPoint&) const;
+
+    void setText(const String&);
+    String text() const;
 
     virtual int baselinePosition(FontBaseline, bool firstLine, LineDirectionMode, LinePositionMode) const OVERRIDE;
 
@@ -62,6 +66,7 @@ private:
 
     virtual bool requiresForcedStyleRecalcPropagation() const { return true; }
 
+    RenderTextFragment* m_buttonText;
     RenderBlock* m_inner;
 };
 
