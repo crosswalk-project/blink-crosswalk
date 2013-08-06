@@ -270,7 +270,7 @@ void DocumentStyleSheetCollection::collectActiveStyleSheets(Vector<RefPtr<StyleS
     for (StyleSheetCandidateListHashSet::iterator it = begin; it != end; ++it) {
         Node* n = *it;
         StyleSheet* sheet = 0;
-        if (n->nodeType() == Node::PROCESSING_INSTRUCTION_NODE) {
+        if (n->nodeType() == Node::PROCESSING_INSTRUCTION_NODE && !m_document->isHTMLDocument()) {
             // Processing instruction (XML documents only).
             // We don't support linking to embedded CSS stylesheets, see <https://bugs.webkit.org/show_bug.cgi?id=49281> for discussion.
             ProcessingInstruction* pi = static_cast<ProcessingInstruction*>(n);
@@ -278,7 +278,7 @@ void DocumentStyleSheetCollection::collectActiveStyleSheets(Vector<RefPtr<StyleS
             // Don't apply XSL transforms to already transformed documents -- <rdar://problem/4132806>
             if (pi->isXSL() && !m_document->transformSourceDocument()) {
                 // Don't apply XSL transforms until loading is finished.
-                if (!m_document->parsing())
+                if (!m_document->parsing() && !pi->isLoading())
                     m_document->applyXSLTransform(pi);
                 return;
             }
