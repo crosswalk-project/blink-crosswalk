@@ -1354,9 +1354,13 @@ void Element::detach(const AttachContext& context)
         data->setPseudoElement(BEFORE, 0);
         data->setPseudoElement(AFTER, 0);
         data->setIsInCanvasSubtree(false);
-        data->resetComputedStyle();
+        data->clearComputedStyle();
         data->resetDynamicRestyleObservations();
-    }
+
+        // Only clear the style state if we're not going to reuse the style from recalcStyle.
+        if (!context.resolvedStyle)
+            data->resetStyleState();
+   }
     if (ElementShadow* shadow = this->shadow())
         shadow->detach(context);
     ContainerNode::detach(context);
@@ -1428,17 +1432,16 @@ void Element::recalcStyle(StyleChange change)
     bool hasDirectAdjacentRules = childrenAffectedByDirectAdjacentRules();
     bool hasIndirectAdjacentRules = childrenAffectedByForwardPositionalRules();
 
-    if ((change > NoChange || needsStyleRecalc())) {
-        if (hasRareData())
-            elementRareData()->resetComputedStyle();
+    if (hasRareData() && (change > NoChange || needsStyleRecalc())) {
+        ElementRareData* data = elementRareData();
+        data->resetStyleState();
+        data->clearComputedStyle();
     }
+
     if (hasParentStyle && (change >= Inherit || needsStyleRecalc())) {
         StyleChange localChange = Detach;
         RefPtr<RenderStyle> newStyle;
         if (currentStyle) {
-            // FIXME: This still recalcs style twice when changing display types, but saves
-            // us from recalcing twice when going from none -> anything else which is more
-            // common, especially during lazy attach.
             newStyle = styleForRenderer();
             localChange = Node::diff(currentStyle.get(), newStyle.get(), document());
         } else if (attached() && isActiveInsertionPoint(this)) {
