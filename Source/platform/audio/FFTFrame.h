@@ -36,6 +36,11 @@
 #include <Accelerate/Accelerate.h>
 #elif USE(WEBAUDIO_OPENMAX_DL_FFT)
 #include <dl/sp/api/omxSP.h>
+#if CPU(X86)
+#include "dl/sp/api/x86SP.h"
+#else
+#include "dl/sp/api/armSP.h"
+#endif
 #elif USE(WEBAUDIO_FFMPEG)
 struct RDFTContext;
 #endif
