@@ -32,8 +32,6 @@
 
 #include "core/platform/audio/AudioArray.h"
 #include "core/platform/audio/VectorMath.h"
-#include "dl/sp/api/armSP.h"
-#include "dl/sp/api/omxSP.h"
 
 #include "wtf/MathExtras.h"
 
