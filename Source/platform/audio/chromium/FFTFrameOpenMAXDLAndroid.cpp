@@ -33,8 +33,6 @@
 #include "platform/audio/AudioArray.h"
 #include "platform/audio/VectorMath.h"
 #include "wtf/MathExtras.h"
-#include <dl/sp/api/armSP.h>
-#include <dl/sp/api/omxSP.h>
 
 namespace WebCore {
 
