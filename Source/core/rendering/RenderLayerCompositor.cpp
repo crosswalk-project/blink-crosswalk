@@ -1885,7 +1885,8 @@ bool RenderLayerCompositor::requiresCompositingForVideo(RenderObject* renderer) 
 {
     if (RuntimeEnabledFeatures::overlayFullscreenVideoEnabled() && renderer->isVideo()) {
         HTMLMediaElement* media = toHTMLMediaElement(renderer->node());
-        return media->isFullscreen();
+        if (media->isFullscreen())
+            return true;
     }
 
     if (!(m_compositingTriggers & ChromeClient::VideoTrigger))
