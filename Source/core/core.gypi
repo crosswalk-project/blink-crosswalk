@@ -2012,8 +2012,6 @@
             'dom/TextLinkColors.h',
             'dom/Touch.cpp',
             'dom/Touch.h',
-            'dom/TouchController.cpp',
-            'dom/TouchController.h',
             'dom/TouchEvent.cpp',
             'dom/TouchEvent.h',
             'dom/TouchList.cpp',
