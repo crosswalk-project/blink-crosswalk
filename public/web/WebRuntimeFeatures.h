@@ -92,6 +92,9 @@ public:
     WEBKIT_EXPORT static void enableWebKitMediaSource(bool);
     WEBKIT_EXPORT static bool isWebKitMediaSourceEnabled();
 
+    BLINK_EXPORT static void enableMediaSource(bool);
+    BLINK_EXPORT static bool isMediaSourceEnabled();
+
     WEBKIT_EXPORT static void enableMediaStream(bool);
     WEBKIT_EXPORT static bool isMediaStreamEnabled();
 
