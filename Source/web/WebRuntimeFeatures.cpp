@@ -219,16 +219,6 @@ bool WebRuntimeFeatures::isWebKitMediaSourceEnabled()
     return RuntimeEnabledFeatures::webKitMediaSourceEnabled();
 }
 
-void WebRuntimeFeatures::enableMediaSource(bool enable)
-{
-    RuntimeEnabledFeatures::setMediaSourceEnabled(enable);
-}
-
-bool WebRuntimeFeatures::isMediaSourceEnabled()
-{
-    return RuntimeEnabledFeatures::mediaSourceEnabled();
-}
-
 void WebRuntimeFeatures::enableMediaStream(bool enable)
 {
     RuntimeEnabledFeatures::setMediaStreamEnabled(enable);
