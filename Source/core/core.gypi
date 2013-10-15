@@ -2044,6 +2044,7 @@
             'dom/WheelController.h',
             'dom/WheelEvent.cpp',
             'dom/WheelEvent.h',
+            'dom/WhitespaceChildList.h',
             'dom/WindowEventContext.cpp',
             'dom/WindowEventContext.h',
             'dom/default/PlatformMessagePortChannel.cpp',
