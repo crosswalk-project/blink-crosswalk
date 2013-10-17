@@ -1664,7 +1664,7 @@ bool HTMLInputElement::isEnumeratable() const
 
 bool HTMLInputElement::supportLabels() const
 {
-    return m_inputType->supportLabels();
+    return m_inputType->isInteractiveContent();
 }
 
 bool HTMLInputElement::shouldAppearChecked() const
@@ -1874,6 +1874,11 @@ bool HTMLInputElement::setupDateTimeChooserParameters(DateTimeChooserParameters&
 bool HTMLInputElement::supportsInputModeAttribute() const
 {
     return m_inputType->supportsInputModeAttribute();
+}
+
+bool HTMLInputElement::isInteractiveContent() const
+{
+    return m_inputType->isInteractiveContent();
 }
 
 #if ENABLE(INPUT_MULTIPLE_FIELDS_UI)
