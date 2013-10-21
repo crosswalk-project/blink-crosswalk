@@ -2431,7 +2431,9 @@ void RenderLayerCompositor::ensureRootLayer()
 
         // Create a clipping layer if this is an iframe
         m_containerLayer = GraphicsLayer::create(graphicsLayerFactory(), this);
+#if OS(ANDROID)
         if (!isMainFrame())
+#endif
             m_containerLayer->setMasksToBounds(true);
 
         m_scrollLayer = GraphicsLayer::create(graphicsLayerFactory(), this);
