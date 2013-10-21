@@ -3405,7 +3405,7 @@ void Element::rebuildPresentationAttributeStyle()
         style = cacheIterator->value->value;
         presentationAttributeCacheCleaner().didHitPresentationAttributeCache();
     } else {
-        style = MutableStylePropertySet::create(isSVGElement() ? SVGAttributeMode : CSSQuirksMode);
+        style = MutableStylePropertySet::create(isSVGElement() ? SVGAttributeMode : CSSAttributeMode);
         unsigned size = attributeCount();
         for (unsigned i = 0; i < size; ++i) {
             const Attribute* attribute = attributeItem(i);
@@ -3451,7 +3451,7 @@ void Element::addPropertyToPresentationAttributeStyle(MutableStylePropertySet* s
 void Element::addPropertyToPresentationAttributeStyle(MutableStylePropertySet* style, CSSPropertyID propertyID, const String& value)
 {
     ASSERT(isStyledElement());
-    style->setProperty(propertyID, value, false, document().elementSheet()->contents());
+    style->setProperty(propertyID, value, false);
 }
 
 void ElementData::deref()
