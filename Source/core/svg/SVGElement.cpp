@@ -47,6 +47,8 @@
 #include "core/svg/SVGSVGElement.h"
 #include "core/svg/SVGUseElement.h"
 
+#include "wtf/TemporaryChange.h"
+
 namespace WebCore {
 
 // Animated property definitions
@@ -71,6 +73,9 @@ void mapAttributeToCSSProperty(HashMap<StringImpl*, CSSPropertyID>* propertyName
 
 SVGElement::SVGElement(const QualifiedName& tagName, Document& document, ConstructionType constructionType)
     : Element(tagName, &document, constructionType)
+#if !ASSERT_DISABLED
+    , m_inRelativeLengthClientsInvalidation(false)
+#endif
 {
     ScriptWrappable::init(this);
     registerAnimatedPropertiesForSVGElement();
@@ -443,6 +448,7 @@ void SVGElement::updateRelativeLengthsInformation(bool hasRelativeLengths, SVGEl
             // We were never registered. Do nothing.
             return;
         }
+        ASSERT(!currentElement->m_inRelativeLengthClientsInvalidation);
 
         m_elementsWithRelativeLengths.remove(element);
     }
@@ -458,6 +464,28 @@ void SVGElement::updateRelativeLengthsInformation(bool hasRelativeLengths, SVGEl
         // Register us in the parent element map.
         element->updateRelativeLengthsInformation(hasRelativeLengths, this);
         break;
+    }
+}
+
+void SVGElement::invalidateRelativeLengthClients(SubtreeLayoutScope* layoutScope)
+{
+    if (!inDocument())
+        return;
+
+    ASSERT(!m_inRelativeLengthClientsInvalidation);
+#if !ASSERT_DISABLED
+    TemporaryChange<bool> inRelativeLengthClientsInvalidationChange(m_inRelativeLengthClientsInvalidation, true);
+#endif
+
+    HashSet<SVGElement*>::iterator end = m_elementsWithRelativeLengths.end();
+    for (HashSet<SVGElement*>::iterator it = m_elementsWithRelativeLengths.begin(); it != end; ++it) {
+        if (*it == this)
+            continue;
+
+        if ((*it)->renderer() && (*it)->selfHasRelativeLengths())
+            (*it)->renderer()->setNeedsLayout(MarkContainingBlockChain, layoutScope);
+
+        (*it)->invalidateRelativeLengthClients(layoutScope);
     }
 }
 
