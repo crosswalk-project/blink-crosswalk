@@ -3566,8 +3566,13 @@ void HTMLMediaElement::enterFullscreen()
 {
     LOG(Media, "HTMLMediaElement::enterFullscreen");
 
+    bool processingUserGesture = ScriptController::processingUserGesture();
     if (document().settings() && document().settings()->fullScreenEnabled())
         FullscreenElementStack::from(&document())->requestFullScreenForElement(this, 0, FullscreenElementStack::ExemptIFrameAllowFullScreenRequirement);
+    // If gesture is consumed by FullscreenElementStack, remove all the behavior
+    // restrictions as other media operations may depend on the same gesture.
+    if (processingUserGesture && !ScriptController::processingUserGesture())
+        removeBehaviorsRestrictionsAfterFirstUserGesture();
 }
 
 void HTMLMediaElement::exitFullscreen()
