@@ -220,20 +220,20 @@ void HTMLDocument::setVlinkColor(const String& value)
 // not part of the DOM
 // --------------------------------------------------------------------------
 
-void HTMLDocument::addItemToMap(HashCountedSet<StringImpl*>& map, const AtomicString& name)
+void HTMLDocument::addItemToMap(HashCountedSet<AtomicString>& map, const AtomicString& name)
 {
     if (name.isEmpty())
         return;
-    map.add(name.impl());
+    map.add(name);
     if (Frame* f = frame())
         f->script()->namedItemAdded(this, name);
 }
 
-void HTMLDocument::removeItemFromMap(HashCountedSet<StringImpl*>& map, const AtomicString& name)
+void HTMLDocument::removeItemFromMap(HashCountedSet<AtomicString>& map, const AtomicString& name)
 {
     if (name.isEmpty())
         return;
-    map.remove(name.impl());
+    map.remove(name);
     if (Frame* f = frame())
         f->script()->namedItemRemoved(this, name);
 }
