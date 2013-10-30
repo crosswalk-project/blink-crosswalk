@@ -446,7 +446,6 @@ Document::Document(const DocumentInit& initializer, DocumentClassFlags documentC
     , m_referrerPolicy(ReferrerPolicyDefault)
     , m_directionSetOnDocumentElement(false)
     , m_writingModeSetOnDocumentElement(false)
-    , m_didAllowNavigationViaBeforeUnloadConfirmationPanel(false)
     , m_writeRecursionIsTooDeep(false)
     , m_writeRecursionDepth(0)
     , m_lastHandledUserGestureTimestamp(0)
@@ -2433,7 +2432,7 @@ void Document::implicitClose()
         accessSVGExtensions()->startAnimations();
 }
 
-bool Document::dispatchBeforeUnloadEvent(Chrome& chrome, Document* navigatingDocument)
+bool Document::dispatchBeforeUnloadEvent(Chrome& chrome, bool& didAllowNavigation)
 {
     if (!m_domWindow)
         return true;
@@ -2452,14 +2451,14 @@ bool Document::dispatchBeforeUnloadEvent(Chrome& chrome, Document* navigatingDoc
     if (beforeUnloadEvent->returnValue().isNull())
         return true;
 
-    if (navigatingDocument->m_didAllowNavigationViaBeforeUnloadConfirmationPanel) {
+    if (didAllowNavigation) {
         addConsoleMessage(JSMessageSource, ErrorMessageLevel, "Blocked attempt to show multiple 'beforeunload' confirmation panels for a single navigation.");
         return true;
     }
 
     String text = displayStringModifiedByEncoding(beforeUnloadEvent->returnValue());
     if (chrome.runBeforeUnloadConfirmPanel(text, m_frame)) {
-        navigatingDocument->m_didAllowNavigationViaBeforeUnloadConfirmationPanel = true;
+        didAllowNavigation = true;
         return true;
     }
     return false;
