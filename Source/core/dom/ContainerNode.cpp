@@ -32,9 +32,10 @@
 #include "core/dom/ExceptionCode.h"
 #include "core/dom/FullscreenElementStack.h"
 #include "core/dom/MutationEvent.h"
-#include "core/dom/NodeChildRemovalTracker.h"
 #include "core/dom/NodeRareData.h"
 #include "core/dom/NodeRenderStyle.h"
+#include "core/dom/NodeTraversal.h"
+#include "core/html/HTMLCollection.h"
 #include "core/rendering/InlineTextBox.h"
 #include "core/rendering/RenderText.h"
 #include "core/rendering/RenderTheme.h"
@@ -966,14 +967,11 @@ static void dispatchChildRemovalEvents(Node* child)
     RefPtr<Document> document = &child->document();
 
     // dispatch pre-removal mutation events
-    if (c->parentNode() && document->hasListenerType(Document::DOMNODEREMOVED_LISTENER)) {
-        NodeChildRemovalTracker scope(child);
+    if (c->parentNode() && document->hasListenerType(Document::DOMNODEREMOVED_LISTENER))
         c->dispatchScopedEvent(MutationEvent::create(eventNames().DOMNodeRemovedEvent, true, c->parentNode()));
-    }
 
     // dispatch the DOMNodeRemovedFromDocument event to all descendants
     if (c->inDocument() && document->hasListenerType(Document::DOMNODEREMOVEDFROMDOCUMENT_LISTENER)) {
-        NodeChildRemovalTracker scope(child);
         for (; c; c = NodeTraversal::next(c.get(), child))
             c->dispatchScopedEvent(MutationEvent::create(eventNames().DOMNodeRemovedFromDocumentEvent, false));
     }
