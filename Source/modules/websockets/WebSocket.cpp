@@ -139,6 +139,8 @@ WebSocket::WebSocket(ScriptExecutionContext* context)
     , m_binaryType(BinaryTypeBlob)
     , m_subprotocol("")
     , m_extensions("")
+    , m_stopped(false)
+    , m_timerForDeferredDropProtection(this, &WebSocket::dropProtection)
 {
     ScriptWrappable::init(this);
 }
@@ -488,8 +490,15 @@ void WebSocket::resume()
         m_channel->resume();
 }
 
+void WebSocket::dropProtection(Timer<WebSocket>*)
+{
+    unsetPendingActivity(this);
+}
+
 void WebSocket::stop()
 {
+    m_stopped = true;
+
     if (!hasPendingActivity()) {
         ASSERT(!m_channel);
         ASSERT(m_state == CLOSED);
@@ -501,8 +510,16 @@ void WebSocket::stop()
         m_channel = 0;
     }
     m_state = CLOSED;
+
     ActiveDOMObject::stop();
-    ActiveDOMObject::unsetPendingActivity(this);
+
+    // ContextLifecycleNotifier is iterating over the set of ActiveDOMObject
+    // instances. Deleting this WebSocket instance synchronously leads to
+    // ContextLifecycleNotifier::removeObserver() call which is prohibited
+    // to be called during iteration. Defer it.
+    if (m_timerForDeferredDropProtection.isActive())
+        return;
+    m_timerForDeferredDropProtection.startOneShot(0);
 }
 
 void WebSocket::didConnect()
@@ -510,10 +527,14 @@ void WebSocket::didConnect()
     LOG(Network, "WebSocket %p didConnect()", this);
     if (m_state != CONNECTING)
         return;
-    ASSERT(scriptExecutionContext());
     m_state = OPEN;
     m_subprotocol = m_channel->subprotocol();
     m_extensions = m_channel->extensions();
+
+    if (m_stopped)
+        return;
+
+    ASSERT(scriptExecutionContext());
     dispatchEvent(Event::create(eventNames().openEvent));
 }
 
@@ -522,6 +543,10 @@ void WebSocket::didReceiveMessage(const String& msg)
     LOG(Network, "WebSocket %p didReceiveMessage() Text message '%s'", this, msg.utf8().data());
     if (m_state != OPEN)
         return;
+
+    if (m_stopped)
+        return;
+
     ASSERT(scriptExecutionContext());
     dispatchEvent(MessageEvent::create(msg, SecurityOrigin::create(m_url)->toString()));
 }
@@ -537,12 +562,17 @@ void WebSocket::didReceiveBinaryData(PassOwnPtr<Vector<char> > binaryData)
         OwnPtr<BlobData> blobData = BlobData::create();
         blobData->appendData(rawData.release(), 0, BlobDataItem::toEndOfFile);
         RefPtr<Blob> blob = Blob::create(blobData.release(), size);
-        dispatchEvent(MessageEvent::create(blob.release(), SecurityOrigin::create(m_url)->toString()));
+
+        if (!m_stopped)
+            dispatchEvent(MessageEvent::create(blob.release(), SecurityOrigin::create(m_url)->toString()));
+
         break;
     }
 
     case BinaryTypeArrayBuffer:
-        dispatchEvent(MessageEvent::create(ArrayBuffer::create(binaryData->data(), binaryData->size()), SecurityOrigin::create(m_url)->toString()));
+        if (!m_stopped)
+            dispatchEvent(MessageEvent::create(ArrayBuffer::create(binaryData->data(), binaryData->size()), SecurityOrigin::create(m_url)->toString()));
+
         break;
     }
 }
@@ -550,6 +580,10 @@ void WebSocket::didReceiveBinaryData(PassOwnPtr<Vector<char> > binaryData)
 void WebSocket::didReceiveMessageError()
 {
     LOG(Network, "WebSocket %p didReceiveMessageError()", this);
+
+    if (m_stopped)
+        return;
+
     ASSERT(scriptExecutionContext());
     dispatchEvent(Event::create(eventNames().errorEvent));
 }
@@ -576,9 +610,12 @@ void WebSocket::didClose(unsigned long unhandledBufferedAmount, ClosingHandshake
     bool wasClean = m_state == CLOSING && !unhandledBufferedAmount && closingHandshakeCompletion == ClosingHandshakeComplete && code != WebSocketChannel::CloseEventCodeAbnormalClosure;
     m_state = CLOSED;
     m_bufferedAmount = unhandledBufferedAmount;
-    ASSERT(scriptExecutionContext());
-    RefPtr<CloseEvent> event = CloseEvent::create(wasClean, code, reason);
-    dispatchEvent(event);
+
+    if (!m_stopped) {
+        ASSERT(scriptExecutionContext());
+        dispatchEvent(CloseEvent::create(wasClean, code, reason));
+    }
+
     if (m_channel) {
         m_channel->disconnect();
         m_channel = 0;
