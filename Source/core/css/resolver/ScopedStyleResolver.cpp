@@ -104,7 +104,6 @@ void ScopedStyleTree::setupScopedStylesTree(ScopedStyleResolver* target)
     for (HashMap<const ContainerNode*, OwnPtr<ScopedStyleResolver> >::iterator it = m_authorStyles.begin(); it != m_authorStyles.end(); ++it) {
         if (it->value == target)
             continue;
-        ASSERT(it->key->inDocument());
         if (it->value->parent() == target->parent() && scopingNode.containsIncludingShadowDOM(it->key))
             it->value->setParent(target);
     }
@@ -213,7 +212,7 @@ void ScopedStyleTree::remove(const ContainerNode* scopingNode)
     if (!scopingNode || scopingNode->isDocumentNode())
         return;
 
-    ScopedStyleResolver* resolverRemoved = lookupScopedStyleResolverFor(scopingNode);
+    ScopedStyleResolver* resolverRemoved = scopedStyleResolverFor(*scopingNode);
     if (!resolverRemoved)
         return;
 
