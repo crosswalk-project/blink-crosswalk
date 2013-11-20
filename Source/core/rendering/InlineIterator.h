@@ -611,6 +611,8 @@ inline void InlineBidiResolver::appendRun()
                 RenderBlockFlow::appendRunsForObject(m_runs, start, end, obj, *this);
         }
 
+        if (isEndOfLine)
+            m_reachedEndOfLine = true;
         m_eor.increment();
         m_sor = m_eor;
     }
