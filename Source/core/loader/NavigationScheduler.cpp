@@ -215,7 +215,7 @@ private:
 class ScheduledFormSubmission : public ScheduledNavigation {
 public:
     ScheduledFormSubmission(PassRefPtr<FormSubmission> submission, bool lockBackForwardList)
-        : ScheduledNavigation(0, lockBackForwardList, submission->target().isNull())
+        : ScheduledNavigation(0, lockBackForwardList, true)
         , m_submission(submission)
         , m_haveToldClient(false)
     {
