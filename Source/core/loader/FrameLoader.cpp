@@ -844,8 +844,7 @@ void FrameLoader::didAccessInitialDocumentTimerFired(Timer<FrameLoader>*)
 
 void FrameLoader::notifyIfInitialDocumentAccessed()
 {
-    if (m_didAccessInitialDocumentTimer.isActive()
-        && m_stateMachine.isDisplayingInitialEmptyDocument()) {
+    if (m_didAccessInitialDocumentTimer.isActive()) {
         m_didAccessInitialDocumentTimer.stop();
         didAccessInitialDocumentTimerFired(0);
     }
