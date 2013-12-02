@@ -305,7 +305,7 @@ void Text::attach(const AttachContext& context)
     CharacterData::attach(context);
 }
 
-void Text::recalcTextStyle(StyleRecalcChange change)
+void Text::recalcTextStyle(StyleRecalcChange change, Text* nextTextSibling)
 {
     if (RenderText* renderer = toRenderText(this->renderer())) {
         if (change != NoChange || needsStyleRecalc())
@@ -315,7 +315,7 @@ void Text::recalcTextStyle(StyleRecalcChange change)
         clearNeedsStyleRecalc();
     } else if (needsStyleRecalc() || needsWhitespaceRenderer()) {
         reattach();
-        reattachWhitespaceSiblings();
+        reattachWhitespaceSiblings(nextTextSibling);
     }
 }
 

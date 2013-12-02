@@ -1490,7 +1490,7 @@ PassRefPtr<RenderStyle> Element::originalStyleForRenderer()
     return document().styleResolver()->styleForElement(this);
 }
 
-void Element::recalcStyle(StyleRecalcChange change)
+void Element::recalcStyle(StyleRecalcChange change, Text* nextTextSibling)
 {
     ASSERT(document().inStyleRecalc());
 
@@ -1518,7 +1518,7 @@ void Element::recalcStyle(StyleRecalcChange change)
         didRecalcStyle(change);
 
     if (change == Reattach)
-        reattachWhitespaceSiblings();
+        reattachWhitespaceSiblings(nextTextSibling);
 }
 
 static bool callbackSelectorsDiffer(RenderStyle* style1, RenderStyle* style2)
@@ -1625,17 +1625,21 @@ void Element::recalcChildStyle(StyleRecalcChange change)
     // Reversing this loop can lead to non-deterministic results in our code to optimize out empty whitespace
     // RenderTexts. We try to put off recalcing their style until the end to avoid this issue.
     // See crbug.com/288225
+    Text* lastTextNode = 0;
     for (Node* child = lastChild(); child; child = child->previousSibling()) {
         if (child->isTextNode()) {
-            toText(child)->recalcTextStyle(change);
+            toText(child)->recalcTextStyle(change, lastTextNode);
+            lastTextNode = toText(child);
         } else if (child->isElementNode()) {
             Element* element = toElement(child);
             if (shouldRecalcStyle(change, element)) {
                 parentPusher.push();
-                element->recalcStyle(change);
+                element->recalcStyle(change, lastTextNode);
             } else if (element->supportsStyleSharing()) {
                 document().styleResolver()->addToStyleSharingList(element);
             }
+            if (element->renderer())
+                lastTextNode = 0;
         }
     }
 
@@ -2568,6 +2572,7 @@ void Element::updatePseudoElement(PseudoId pseudoId, StyleRecalcChange change)
     if (element && (needsStyleRecalc() || shouldRecalcStyle(change, element))) {
         // PseudoElement styles hang off their parent element's style so if we needed
         // a style recalc we should Force one on the pseudo.
+        // FIXME: We should figure out the right text sibling to pass.
         element->recalcStyle(needsStyleRecalc() ? Force : change);
 
         // Wait until our parent is not displayed or pseudoElementRendererIsNeeded
