@@ -1490,7 +1490,7 @@ PassRefPtr<RenderStyle> Element::originalStyleForRenderer()
     return document().styleResolver()->styleForElement(this);
 }
 
-bool Element::recalcStyle(StyleRecalcChange change)
+void Element::recalcStyle(StyleRecalcChange change)
 {
     ASSERT(document().inStyleRecalc());
 
@@ -1517,7 +1517,8 @@ bool Element::recalcStyle(StyleRecalcChange change)
     if (hasCustomStyleCallbacks())
         didRecalcStyle(change);
 
-    return change == Reattach;
+    if (change == Reattach)
+        reattachWhitespaceSiblings();
 }
 
 static bool callbackSelectorsDiffer(RenderStyle* style1, RenderStyle* style2)
@@ -1625,20 +1626,17 @@ void Element::recalcChildStyle(StyleRecalcChange change)
     // RenderTexts. We try to put off recalcing their style until the end to avoid this issue.
     // See crbug.com/288225
     for (Node* child = lastChild(); child; child = child->previousSibling()) {
-        bool didReattach = false;
         if (child->isTextNode()) {
-            didReattach = toText(child)->recalcTextStyle(change);
+            toText(child)->recalcTextStyle(change);
         } else if (child->isElementNode()) {
             Element* element = toElement(child);
             if (shouldRecalcStyle(change, element)) {
                 parentPusher.push();
-                didReattach = element->recalcStyle(change);
+                element->recalcStyle(change);
             } else if (element->supportsStyleSharing()) {
                 document().styleResolver()->addToStyleSharingList(element);
             }
         }
-        if (didReattach)
-            child->reattachWhitespaceSiblings();
     }
 
     if (shouldRecalcStyle(change, this)) {
