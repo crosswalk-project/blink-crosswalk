@@ -1799,7 +1799,6 @@ void Document::setNeedsFocusedElementCheck()
 
 void Document::recalcStyleForLayoutIgnoringPendingStylesheets()
 {
-    TemporaryChange<bool> ignorePendingStylesheets(m_ignorePendingStylesheets, m_ignorePendingStylesheets);
     if (!haveStylesheetsLoaded()) {
         m_ignorePendingStylesheets = true;
         // FIXME: We are willing to attempt to suppress painting with outdated style info only once.
@@ -1830,6 +1829,7 @@ void Document::recalcStyleForLayoutIgnoringPendingStylesheets()
 // to instead suspend JavaScript execution.
 void Document::updateLayoutIgnorePendingStylesheets()
 {
+    TemporaryChange<bool> ignorePendingStylesheets(m_ignorePendingStylesheets, m_ignorePendingStylesheets);
     recalcStyleForLayoutIgnoringPendingStylesheets();
     updateLayout();
 }
@@ -1843,7 +1843,6 @@ void Document::partialUpdateLayoutIgnorePendingStylesheets(Node* stopLayoutAtNod
         return;
     }
 
-    TemporaryChange<bool> ignorePendingStylesheets(m_ignorePendingStylesheets, m_ignorePendingStylesheets);
     recalcStyleForLayoutIgnoringPendingStylesheets();
 
     if (stopLayoutAtNode) {
