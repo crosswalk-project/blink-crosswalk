@@ -1697,7 +1697,16 @@ void WebViewImpl::resize(const WebSize& newSize)
 
     m_size = newSize;
 
-    bool shouldAnchorAndRescaleViewport = settings()->viewportEnabled() && oldSize.width && oldContentsWidth && newSize.width != oldSize.width;
+    // FIXME: Remove and set setting instead when rebasing:
+#if defined(OS_TIZEN)
+    bool mainFrameResizesAreOrientationChanges = true;
+#else
+    bool mainFrameResizesAreOrientationChanges = false;
+#endif
+
+    bool shouldAnchorAndRescaleViewport = mainFrameResizesAreOrientationChanges
+        && oldSize.width && oldContentsWidth && newSize.width != oldSize.width;
+
     ViewportAnchor viewportAnchor(&mainFrameImpl()->frame()->eventHandler());
     if (shouldAnchorAndRescaleViewport) {
         viewportAnchor.setAnchor(view->visibleContentRect(),
