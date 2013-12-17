@@ -3,21 +3,20 @@ function log(msg)
     document.getElementById("console").innerHTML += (msg + "\n");
 }
 
-function verifySpellTest(nretry, opt_doNotFinishTest)
+function verifySpellTest(nretry)
 {
     var node = window.destination;
     if (window.destination.childNodes.length > 0)
         node = window.destination.childNodes[0];
     if (nretry && !internals.markerCountForNode(node, "spelling")) {
-        window.setTimeout(function() { verifySpellTest(nretry - 1, opt_doNotFinishTest); }, 0);
+        window.setTimeout(function() { verifySpellTest(nretry - 1); }, 0);
         return;
     }
     testFunctionCallback(node);
-    if (!opt_doNotFinishTest)
-        finishJSTest();
+    finishJSTest()
 }
 
-function initSpellTest(testElementId, testText, testFunction, opt_doNotFinishTest)
+function initSpellTest(testElementId, testText, testFunction)
 {
     if (!window.internals || !window.testRunner) {
         log("FAIL Incomplete test environment");
@@ -33,7 +32,7 @@ function initSpellTest(testElementId, testText, testFunction, opt_doNotFinishTes
     window.destination = document.getElementById(testElementId);
     window.destination.focus();
     document.execCommand("InsertText", false, testText);
-    window.setTimeout(function() { verifySpellTest(10, opt_doNotFinishTest); }, 0);
+    window.setTimeout(function() { verifySpellTest(10); }, 0);
 }
 
 function findFirstTextNode(node)

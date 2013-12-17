@@ -150,8 +150,6 @@ public:
 
     void didForceResize();
 
-    void postSpellCheckEvent(const blink::WebString& eventName);
-
 protected:
     WebTestProxyBase();
     ~WebTestProxyBase();
@@ -544,10 +542,6 @@ public:
     virtual bool runFileChooser(const WebKit::WebFileChooserParams& params, WebKit::WebFileChooserCompletion* completion)
     {
         return WebTestProxyBase::runFileChooser(params, completion);
-    }
-    virtual void postSpellCheckEvent(const blink::WebString& eventName)
-    {
-        WebTestProxyBase::postSpellCheckEvent(eventName);
     }
 };
 

@@ -799,7 +799,7 @@ void SpellChecker::spellCheckOldSelection(const VisibleSelection& oldSelection, 
     if (oldAdjacentWords  != newAdjacentWords) {
         if (isContinuousSpellCheckingEnabled() && isGrammarCheckingEnabled()) {
             VisibleSelection selectedSentence = VisibleSelection(startOfSentence(oldStart), endOfSentence(oldStart));
-            markMisspellingsAndBadGrammar(oldAdjacentWords, true, selectedSentence);
+            markMisspellingsAndBadGrammar(oldAdjacentWords, selectedSentence != newSelectedSentence, selectedSentence);
         } else {
             markMisspellingsAndBadGrammar(oldAdjacentWords, false, oldAdjacentWords);
         }

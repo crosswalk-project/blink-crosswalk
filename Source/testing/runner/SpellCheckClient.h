@@ -39,11 +39,10 @@
 namespace WebTestRunner {
 
 class WebTestDelegate;
-class WebTestProxyBase;
 
 class SpellCheckClient : public WebKit::WebSpellCheckClient, public WebKit::WebNonCopyable {
 public:
-    explicit SpellCheckClient(WebTestProxyBase*);
+    SpellCheckClient();
     virtual ~SpellCheckClient();
 
     void setDelegate(WebTestDelegate*);
@@ -72,8 +71,6 @@ private:
     WebTaskList m_taskList;
 
     WebTestDelegate* m_delegate;
-
-    WebTestProxyBase* m_webTestProxy;
 };
 
 }
