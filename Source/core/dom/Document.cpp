@@ -1745,6 +1745,7 @@ void Document::updateStyleIfNeeded()
     if (!needsStyleRecalc() && !childNeedsStyleRecalc() && !childNeedsDistributionRecalc())
         return;
 
+    RefPtr<Frame> holder(m_frame);
     AnimationUpdateBlock animationUpdateBlock(m_frame ? &m_frame->animation() : 0);
     recalcStyle(NoChange);
     m_animationClock->unfreeze();
