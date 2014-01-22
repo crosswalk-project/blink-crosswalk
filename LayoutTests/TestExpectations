@@ -239,6 +239,9 @@ crbug.com/248938 virtual/threaded/transitions/transition-end-event-unprefixed-02
 crbug.com/248938 virtual/threaded/transitions/transition-end-event-unprefixed-03.html [ Pass Failure ]
 crbug.com/248938 virtual/threaded/transitions/transition-end-event-unprefixed-04.html [ Pass Failure ]
 crbug.com/248938 virtual/threaded/transitions/transition-end-event-window.html [ Pass Failure ]
+crbug.com/332958 fast/text/webfont-synthetic-bold.html [ NeedsRebaseline ]
+crbug.com/332958 fast/css/font-face-synthetic-bold-italic.html [ NeedsRebaseline ]
+crbug.com/332958 fast/css/font-face-weight-matching.html [ NeedsRebaseline ]
 
 # Switching to content shell failures
 crbug.com/231866 [ Lion ] fast/backgrounds/animated-gif-as-background.html [ Pass ImageOnlyFailure ]
