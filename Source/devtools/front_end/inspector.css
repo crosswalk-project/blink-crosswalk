@@ -55,7 +55,7 @@ input[type="text"]:focus {
 }
 
 .hidden {
-    display: none;
+    display: none !important;
 }
 
 .nowrap,
@@ -711,7 +711,7 @@ body.remote .dock-status-bar-item {
 
 #error-warning-count {
     display: inline-block;
-    padding: 3px 6px 6px 0;
+    padding: 4px 6px 6px 0;
     font-size: 11px;
     height: 19px;
     cursor: pointer;

@@ -24,6 +24,7 @@
 #include "HTMLNames.h"
 #include "SVGNames.h"
 #include "bindings/v8/ExceptionState.h"
+#include "bindings/v8/V8Binding.h"
 #include "core/css/CSSCharsetRule.h"
 #include "core/css/CSSImportRule.h"
 #include "core/css/CSSParser.h"
@@ -35,6 +36,7 @@
 #include "core/dom/Document.h"
 #include "core/dom/ExceptionCode.h"
 #include "core/dom/Node.h"
+#include "core/page/UseCounter.h"
 #include "weborigin/SecurityOrigin.h"
 #include "wtf/text/StringBuilder.h"
 
@@ -315,6 +317,12 @@ unsigned CSSStyleSheet::insertRule(const String& ruleString, unsigned index, Exc
         m_childRuleCSSOMWrappers.insert(index, RefPtr<CSSRule>());
 
     return index;
+}
+
+unsigned CSSStyleSheet::insertRule(const String& rule, ExceptionState& exceptionState)
+{
+    UseCounter::countDeprecation(activeExecutionContext(), UseCounter::CSSStyleSheetInsertRuleOptionalArg);
+    return insertRule(rule, 0, exceptionState);
 }
 
 void CSSStyleSheet::deleteRule(unsigned index, ExceptionState& es)

@@ -361,17 +361,7 @@ void RenderLayerScrollableArea::setScrollOffset(const IntPoint& newScrollOffset)
         frame->eventHandler().dispatchFakeMouseMoveEventSoonInQuad(quadForFakeMouseMoveEvent);
     }
 
-    bool requiresRepaint = true;
-
-    if (m_box->view()->compositor()->inCompositingMode()) {
-        bool onlyScrolledCompositedLayers = !layer()->hasVisibleNonLayerContent()
-            && !layer()->hasNonCompositedChild()
-            && !layer()->hasBlockSelectionGapBounds()
-            && !m_box->isMarquee();
-
-        if (usesCompositedScrolling() || onlyScrolledCompositedLayers)
-            requiresRepaint = false;
-    }
+    bool requiresRepaint = !m_box->view()->compositor()->inCompositingMode() || !usesCompositedScrolling();
 
     // Just schedule a full repaint of our object.
     if (view && requiresRepaint)
@@ -1414,11 +1404,6 @@ bool RenderLayerScrollableArea::setNeedsCompositedScrolling(bool needsComposited
     layer()->m_needsCompositedScrolling = needsCompositedScrolling;
 
     return true;
-}
-
-void RenderLayerScrollableArea::updateHasVisibleNonLayerContent()
-{
-    layer()->updateHasVisibleNonLayerContent();
 }
 
 void RenderLayerScrollableArea::updateCompositingLayersAfterScroll()

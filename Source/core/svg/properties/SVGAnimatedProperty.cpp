@@ -32,6 +32,7 @@ SVGAnimatedProperty::SVGAnimatedProperty(SVGElement* contextElement, const Quali
     , m_isAnimating(false)
     , m_isReadOnly(false)
 {
+    contextElement->setContextElement();
 }
 
 SVGAnimatedProperty::~SVGAnimatedProperty()
@@ -55,8 +56,13 @@ void SVGAnimatedProperty::detachAnimatedPropertiesForElement(SVGElement* element
         }
     }
 
-    for (Vector<SVGAnimatedPropertyDescription>::const_iterator it = keysToRemove.begin(); it != keysToRemove.end(); ++it)
+    for (Vector<SVGAnimatedPropertyDescription>::const_iterator it = keysToRemove.begin(); it != keysToRemove.end(); ++it) {
+        // http://crbug.com/333156 :
+        // There are cases where detachAnimatedPropertiesForElement is called recursively from ~SVGAnimatedProperty.
+        // This below protect makes this function safe by deferring the recursive call until we finish touching the HashMap.
+        RefPtr<SVGAnimatedProperty> protect = cache->get(*it);
         cache->remove(*it);
+    }
 }
 
 void SVGAnimatedProperty::commitChange()

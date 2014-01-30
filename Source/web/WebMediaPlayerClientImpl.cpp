@@ -213,6 +213,7 @@ void WebMediaPlayerClientImpl::mediaSourceOpened(WebMediaSource* webMediaSource)
 {
     ASSERT(webMediaSource);
     m_mediaSource->setPrivateAndOpen(adoptPtr(new MediaSourcePrivateImpl(adoptPtr(webMediaSource))));
+    m_mediaSource = 0;
 }
 
 void WebMediaPlayerClientImpl::requestFullscreen()

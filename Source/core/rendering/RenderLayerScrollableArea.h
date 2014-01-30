@@ -205,8 +205,6 @@ private:
     virtual void updateNeedsCompositedScrolling() OVERRIDE;
     bool setNeedsCompositedScrolling(bool);
 
-    virtual void updateHasVisibleNonLayerContent() OVERRIDE;
-
     RenderBox* m_box;
 
     // Keeps track of whether the layer is currently resizing, so events can cause resizing to start and stop.

@@ -63,8 +63,8 @@ class HTMLInputElement;
 class IntRect;
 class KeyboardEvent;
 class NSResolver;
-class NamedNodeMap;
 class NameNodeList;
+class NamedNodeMap;
 class NodeList;
 class NodeListsNodeData;
 class NodeRareData;
@@ -82,6 +82,7 @@ class RenderObject;
 class RenderStyle;
 class ShadowRoot;
 class TagNodeList;
+class Text;
 class TouchEvent;
 
 const int nodeStyleChangeShift = 14;
@@ -530,6 +531,7 @@ public:
         else
             m_data.m_renderer = renderer;
     }
+    bool hasRenderer() const { return renderer(); }
 
     // Use these two methods with caution.
     RenderBox* renderBox() const;
@@ -790,6 +792,8 @@ protected:
     virtual void didMoveToNewDocument(Document& oldDocument);
 
     virtual void addSubresourceAttributeURLs(ListHashSet<KURL>&) const { }
+
+    static void reattachWhitespaceSiblings(Text* start);
 
     void willBeDeletedFromDocument();
 

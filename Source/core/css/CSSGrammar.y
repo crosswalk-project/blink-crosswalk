@@ -659,7 +659,7 @@ media_query_exp_list:
         $$ = parser->createFloatingMediaQueryExpList();
         $$->append(parser->sinkFloatingMediaQueryExp($1));
     }
-    | media_query_exp_list space MEDIA_AND space media_query_exp {
+    | media_query_exp_list maybe_space MEDIA_AND maybe_space media_query_exp {
         $$ = $1;
         $$->append(parser->sinkFloatingMediaQueryExp($5));
     }
@@ -669,7 +669,7 @@ maybe_and_media_query_exp_list:
     maybe_space {
         $$ = parser->createFloatingMediaQueryExpList();
     }
-    | space MEDIA_AND space media_query_exp_list maybe_space {
+    | maybe_space MEDIA_AND maybe_space media_query_exp_list maybe_space {
         $$ = $4;
     }
     ;
@@ -678,10 +678,10 @@ maybe_media_restrictor:
     /*empty*/ {
         $$ = MediaQuery::None;
     }
-    | MEDIA_ONLY space {
+    | MEDIA_ONLY maybe_space {
         $$ = MediaQuery::Only;
     }
-    | MEDIA_NOT space {
+    | MEDIA_NOT maybe_space {
         $$ = MediaQuery::Not;
     }
     ;

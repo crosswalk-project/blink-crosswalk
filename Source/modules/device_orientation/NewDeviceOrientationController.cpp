@@ -45,6 +45,7 @@ NewDeviceOrientationController::NewDeviceOrientationController(Document* documen
 
 NewDeviceOrientationController::~NewDeviceOrientationController()
 {
+    stopUpdating();
 }
 
 void NewDeviceOrientationController::didChangeDeviceOrientation(DeviceOrientationData* deviceOrientationData)

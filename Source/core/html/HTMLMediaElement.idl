@@ -32,7 +32,7 @@
     readonly attribute MediaError error;
 
     // network state
-    [Reflect, URL, PerWorldBindings, ActivityLogging=SetterForIsolatedWorlds] attribute DOMString src;
+    [Reflect, TreatNullAs=NullString, URL, PerWorldBindings, ActivityLogging=SetterForIsolatedWorlds] attribute DOMString src;
     [URL, PerWorldBindings, ActivityLogging=SetterForIsolatedWorlds] readonly attribute DOMString currentSrc;
 
     const unsigned short NETWORK_EMPTY = 0;
@@ -70,7 +70,7 @@
     void pause();
 
     // media controller
-    [Reflect] attribute DOMString mediaGroup;
+    [Reflect, TreatNullAs=NullString] attribute DOMString mediaGroup;
     [CustomSetter] attribute MediaController controller;
 
     // controls

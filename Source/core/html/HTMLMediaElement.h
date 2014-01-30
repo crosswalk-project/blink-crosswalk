@@ -394,6 +394,7 @@ private:
     void loadNextSourceChild();
     void userCancelledLoad();
     void clearMediaPlayer(int flags);
+    void clearMediaPlayerAndAudioSourceProviderClient();
     bool havePotentialSourceChild();
     void noneSupported();
     void mediaEngineError(PassRefPtr<MediaError> err);

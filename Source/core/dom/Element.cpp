@@ -64,7 +64,6 @@
 #include "core/dom/ScriptableDocumentParser.h"
 #include "core/dom/SelectorQuery.h"
 #include "core/dom/Text.h"
-#include "core/dom/WhitespaceChildList.h"
 #include "core/dom/custom/CustomElement.h"
 #include "core/dom/custom/CustomElementRegistrationContext.h"
 #include "core/dom/shadow/InsertionPoint.h"
@@ -1491,7 +1490,7 @@ PassRefPtr<RenderStyle> Element::originalStyleForRenderer()
     return document().styleResolver()->styleForElement(this);
 }
 
-bool Element::recalcStyle(StyleRecalcChange change)
+void Element::recalcStyle(StyleRecalcChange change, Text* nextTextSibling)
 {
     ASSERT(document().inStyleRecalc());
 
@@ -1518,7 +1517,8 @@ bool Element::recalcStyle(StyleRecalcChange change)
     if (hasCustomStyleCallbacks())
         didRecalcStyle(change);
 
-    return change == Reattach;
+    if (change == Reattach)
+        reattachWhitespaceSiblings(nextTextSibling);
 }
 
 static bool callbackSelectorsDiffer(RenderStyle* style1, RenderStyle* style2)
@@ -1625,28 +1625,23 @@ void Element::recalcChildStyle(StyleRecalcChange change)
     // Reversing this loop can lead to non-deterministic results in our code to optimize out empty whitespace
     // RenderTexts. We try to put off recalcing their style until the end to avoid this issue.
     // See crbug.com/288225
-    WhitespaceChildList whitespaceChildList(change);
+    Text* lastTextNode = 0;
     for (Node* child = lastChild(); child; child = child->previousSibling()) {
         if (child->isTextNode()) {
-            Text* textChild = toText(child);
-            // FIXME: This check is expensive and may negate the performance gained by the optimization of
-            // avoiding whitespace renderers.
-            if (textChild->containsOnlyWhitespace())
-                whitespaceChildList.append(textChild);
-            else
-                textChild->recalcTextStyle(change);
+            toText(child)->recalcTextStyle(change, lastTextNode);
+            lastTextNode = toText(child);
         } else if (child->isElementNode()) {
             Element* element = toElement(child);
             if (shouldRecalcStyle(change, element)) {
                 parentPusher.push();
-                element->recalcStyle(change);
+                element->recalcStyle(change, lastTextNode);
             } else if (element->supportsStyleSharing()) {
                 document().styleResolver()->addToStyleSharingList(element);
             }
+            if (element->renderer())
+                lastTextNode = 0;
         }
     }
-
-    whitespaceChildList.recalcStyle();
 
     if (shouldRecalcStyle(change, this)) {
         updatePseudoElement(AFTER, change);
@@ -2577,6 +2572,7 @@ void Element::updatePseudoElement(PseudoId pseudoId, StyleRecalcChange change)
     if (element && (needsStyleRecalc() || shouldRecalcStyle(change, element))) {
         // PseudoElement styles hang off their parent element's style so if we needed
         // a style recalc we should Force one on the pseudo.
+        // FIXME: We should figure out the right text sibling to pass.
         element->recalcStyle(needsStyleRecalc() ? Force : change);
 
         // Wait until our parent is not displayed or pseudoElementRendererIsNeeded

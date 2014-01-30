@@ -683,7 +683,8 @@ bool FrameLoader::prepareRequestForThisFrame(FrameLoadRequest& request)
 
     // If the requesting SecurityOrigin is not this Frame's SecurityOrigin, the request was initiated by a different frame that should
     // have already set the referrer.
-    if (request.requester() == m_frame->document()->securityOrigin())
+    // FIXME: Not clear that this is a valid assumption.
+    if (request.requester()->equal(m_frame->document()->securityOrigin()))
         setReferrerForFrameRequest(request.resourceRequest(), request.shouldSendReferrer());
     return true;
 }
@@ -715,7 +716,7 @@ void FrameLoader::load(const FrameLoadRequest& passedRequest)
     if (!prepareRequestForThisFrame(request))
         return;
 
-    RefPtr<Frame> targetFrame = findFrameForNavigation(request.frameName(), request.formState() ? request.formState()->sourceDocument() : m_frame->document());
+    RefPtr<Frame> targetFrame = request.formState() ? 0 : findFrameForNavigation(request.frameName(), request.formState() ? request.formState()->sourceDocument() : m_frame->document());
     if (targetFrame && targetFrame != m_frame) {
         request.setFrameName("_self");
         targetFrame->loader().load(request);
@@ -844,8 +845,7 @@ void FrameLoader::didAccessInitialDocumentTimerFired(Timer<FrameLoader>*)
 
 void FrameLoader::notifyIfInitialDocumentAccessed()
 {
-    if (m_didAccessInitialDocumentTimer.isActive()
-        && m_stateMachine.isDisplayingInitialEmptyDocument()) {
+    if (m_didAccessInitialDocumentTimer.isActive()) {
         m_didAccessInitialDocumentTimer.stop();
         didAccessInitialDocumentTimerFired(0);
     }

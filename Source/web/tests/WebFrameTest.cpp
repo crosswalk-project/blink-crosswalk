@@ -4227,6 +4227,38 @@ TEST_F(WebFrameTest, DidAccessInitialDocumentBodyBeforeModalDialog)
     EXPECT_TRUE(webFrameClient.m_didAccessInitialDocument);
 }
 
+TEST_F(WebFrameTest, DidWriteToInitialDocumentBeforeModalDialog)
+{
+    TestAccessInitialDocumentWebFrameClient webFrameClient;
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initialize(true, &webFrameClient);
+    runPendingTasks();
+    EXPECT_FALSE(webFrameClient.m_didAccessInitialDocument);
+
+    // Create another window that will try to access it.
+    FrameTestHelpers::WebViewHelper newWebViewHelper;
+    WebView* newView = newWebViewHelper.initialize(true);
+    newView->mainFrame()->setOpener(webViewHelper.webView()->mainFrame());
+    runPendingTasks();
+    EXPECT_FALSE(webFrameClient.m_didAccessInitialDocument);
+
+    // Access the initial document with document.write, which moves us past the
+    // initial empty document state of the state machine. We normally set a
+    // timer to notify the client.
+    newView->mainFrame()->executeScript(
+        WebScriptSource("window.opener.document.write('Modified');"));
+    EXPECT_FALSE(webFrameClient.m_didAccessInitialDocument);
+
+    // Make sure that a modal dialog forces us to notify right away.
+    newView->mainFrame()->executeScript(
+        WebScriptSource("window.opener.confirm('Modal');"));
+    EXPECT_TRUE(webFrameClient.m_didAccessInitialDocument);
+
+    // Ensure that we don't notify again later.
+    runPendingTasks();
+    EXPECT_TRUE(webFrameClient.m_didAccessInitialDocument);
+}
+
 class TestMainFrameUserOrProgrammaticScrollFrameClient : public WebFrameClient {
 public:
     TestMainFrameUserOrProgrammaticScrollFrameClient() { reset(); }
@@ -4672,6 +4704,37 @@ TEST_F(WebFrameTest, DISABLED_FirstFrameNavigationReplacesHistory)
     Platform::current()->unitTestSupport()->serveAsynchronousMockedRequests();
     EXPECT_EQ(client.frame(), iframe);
     EXPECT_FALSE(client.replacesCurrentHistoryItem());
+}
+
+// Test verifies that layout will change a layer's scrollable attibutes
+TEST_F(WebFrameTest, overflowHiddenRewrite)
+{
+    registerMockedHttpURLLoad("non-scrollable.html");
+    TestMainFrameUserOrProgrammaticScrollFrameClient client;
+    OwnPtr<FakeCompositingWebViewClient> fakeCompositingWebViewClient = adoptPtr(new FakeCompositingWebViewClient());
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    webViewHelper.initialize(true, &fakeCompositingWebViewClient->m_fakeWebFrameClient, fakeCompositingWebViewClient.get(), &configueCompositingWebView);
+
+    webViewHelper.webView()->resize(WebSize(100, 100));
+    FrameTestHelpers::loadFrame(webViewHelper.webView()->mainFrame(), m_baseURL + "non-scrollable.html");
+    Platform::current()->unitTestSupport()->serveAsynchronousMockedRequests();
+    webViewHelper.webView()->layout();
+
+    WebCore::RenderLayerCompositor* compositor =  webViewHelper.webViewImpl()->compositor();
+    ASSERT_TRUE(compositor->scrollLayer());
+
+    // Verify that the WebLayer is not scrollable initially.
+    WebCore::GraphicsLayer* scrollLayer = compositor->scrollLayer();
+    WebLayer* webScrollLayer = scrollLayer->platformLayer();
+    ASSERT_FALSE(webScrollLayer->userScrollableHorizontal());
+    ASSERT_FALSE(webScrollLayer->userScrollableVertical());
+
+    // Call javascript to make the layer scrollable, and verify it.
+    WebFrameImpl* frame = (WebFrameImpl*)webViewHelper.webView()->mainFrame();
+    frame->executeScript(WebScriptSource("allowScroll();"));
+    webViewHelper.webView()->layout();
+    ASSERT_TRUE(webScrollLayer->userScrollableHorizontal());
+    ASSERT_TRUE(webScrollLayer->userScrollableVertical());
 }
 
 } // namespace
