@@ -84,6 +84,11 @@
           # nullptr) conflict with upcoming c++0x types.
           'cflags_cc': ['-Wno-c++0x-compat'],
         }],
+        ['gcc_version>=47', {
+          # Disable warnings about narrowing conversion due to C++11 std.
+          # For more details, see: http://gcc.gnu.org/bugzilla/show_bug.cgi?id=50011
+          'cflags_cc': ['-Wno-narrowing'],
+        }],
         ['OS=="linux" and target_arch=="arm"', {
           # Due to a bug in gcc arm, we get warnings about uninitialized
           # timesNewRoman.unstatic.3258 and colorTransparent.unstatic.4879.
