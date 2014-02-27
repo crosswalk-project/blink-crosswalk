@@ -1085,6 +1085,7 @@ void Element::classAttributeChanged(const AtomicString& newClassString)
     StyleResolver* styleResolver = document().styleResolver();
     bool testShouldInvalidateStyle = inActiveDocument() && styleResolver && styleChangeType() < SubtreeStyleChange;
 
+    ASSERT(elementData());
     if (classStringHasClassName(newClassString)) {
         const bool shouldFoldCase = document().inQuirksMode();
         const SpaceSplitString oldClasses = elementData()->classNames();
