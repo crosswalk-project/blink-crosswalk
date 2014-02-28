@@ -302,6 +302,7 @@ WebInspector.ConsoleView.prototype = {
 
     onResize: function()
     {
+        this.prompt.hideSuggestBox();
         this.restoreScrollPositions();
     },
 

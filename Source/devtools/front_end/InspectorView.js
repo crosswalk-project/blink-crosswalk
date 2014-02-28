@@ -58,6 +58,7 @@ WebInspector.InspectorView = function()
     // Sidebar of main split is artificial element used for positioning.
     this._devtoolsView = new WebInspector.ViewWithResizeCallback(this._onDevToolsViewResized.bind(this));
     this._devtoolsView.show(this._splitView.sidebarElement());
+    WebInspector.Dialog.setModalHostView(this._devtoolsView);
 
     // DevTools sidebar is a vertical split of panels tabbed pane and a drawer.
     this._drawerSplitView = new WebInspector.SplitView(false, true, "Inspector.drawerSplitView", 200, 200);
@@ -111,10 +112,6 @@ WebInspector.InspectorView.Constraints = {
     OverlayHeight: 50,
     DevToolsWidth: 180,
     DevToolsHeight: 50
-};
-
-WebInspector.InspectorView.Events = {
-    DevToolsElementBoundingBoxChanged: "DevToolsElementBoundingBoxChanged"
 };
 
 WebInspector.InspectorView.prototype = {
@@ -418,7 +415,7 @@ WebInspector.InspectorView.prototype = {
 
     _onDevToolsViewResized: function()
     {
-        this.dispatchEventToListeners(WebInspector.InspectorView.Events.DevToolsElementBoundingBoxChanged);
+        WebInspector.Dialog.modalHostRepositioned();
     },
 
     _onWindowResize: function()

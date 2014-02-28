@@ -869,6 +869,7 @@ WebInspector.CodeMirrorTextEditor.prototype = {
 
     onResize: function()
     {
+        this._autocompleteController.finishAutocomplete();
         this._resizeEditor();
     },
 
