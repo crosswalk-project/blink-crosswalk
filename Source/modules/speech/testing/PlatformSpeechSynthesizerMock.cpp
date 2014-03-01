@@ -42,12 +42,14 @@ PassOwnPtr<PlatformSpeechSynthesizerMock> PlatformSpeechSynthesizerMock::create(
 PlatformSpeechSynthesizerMock::PlatformSpeechSynthesizerMock(PlatformSpeechSynthesizerClient* client)
     : PlatformSpeechSynthesizer(client)
     , m_speakingFinishedTimer(this, &PlatformSpeechSynthesizerMock::speakingFinished)
+    , m_speakingErrorOccurredTimer(this, &PlatformSpeechSynthesizerMock::speakingErrorOccurred)
 {
 }
 
 PlatformSpeechSynthesizerMock::~PlatformSpeechSynthesizerMock()
 {
     m_speakingFinishedTimer.stop();
+    m_speakingErrorOccurredTimer.stop();
 }
 
 void PlatformSpeechSynthesizerMock::speakingFinished(Timer<PlatformSpeechSynthesizerMock>*)
@@ -55,6 +57,13 @@ void PlatformSpeechSynthesizerMock::speakingFinished(Timer<PlatformSpeechSynthes
     ASSERT(m_utterance.get());
     client()->didFinishSpeaking(m_utterance);
     m_utterance = 0;
+}
+
+void PlatformSpeechSynthesizerMock::speakingErrorOccurred(Timer<PlatformSpeechSynthesizerMock>*)
+{
+    ASSERT(m_utterance.get());
+    client()->speakingErrorOccurred(m_utterance);
+    m_utterance = nullptr;
 }
 
 void PlatformSpeechSynthesizerMock::initializeVoiceList()
@@ -85,8 +94,7 @@ void PlatformSpeechSynthesizerMock::cancel()
         return;
 
     m_speakingFinishedTimer.stop();
-    client()->speakingErrorOccurred(m_utterance);
-    m_utterance = 0;
+    m_speakingErrorOccurredTimer.startOneShot(.1);
 }
 
 void PlatformSpeechSynthesizerMock::pause()
