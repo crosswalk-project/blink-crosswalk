@@ -100,6 +100,9 @@ PassRefPtr<DrawingBuffer> DrawingBuffer::create(PassOwnPtr<WebGraphicsContext3D>
         extensionsUtil->ensureExtensionEnabled("GL_OES_rgb8_rgba8");
     }
     bool packedDepthStencilSupported = extensionsUtil->supportsExtension("GL_OES_packed_depth_stencil");
+#if defined(OS_TIZEN) && CPU(X86)
+    multisampleSupported = false;
+#endif
     if (packedDepthStencilSupported)
         extensionsUtil->ensureExtensionEnabled("GL_OES_packed_depth_stencil");
 
