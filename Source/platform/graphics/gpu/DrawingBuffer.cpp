@@ -87,6 +87,9 @@ PassRefPtr<DrawingBuffer> DrawingBuffer::create(blink::WebGraphicsContext3D* con
         extensionsUtil.ensureExtensionEnabled("GL_CHROMIUM_framebuffer_multisample");
         extensionsUtil.ensureExtensionEnabled("GL_OES_rgb8_rgba8");
     }
+#if defined(OS_TIZEN) && CPU(X86)
+    multisampleSupported = false;
+#endif
     bool packedDepthStencilSupported = extensionsUtil.supportsExtension("GL_OES_packed_depth_stencil");
     if (packedDepthStencilSupported)
         extensionsUtil.ensureExtensionEnabled("GL_OES_packed_depth_stencil");
