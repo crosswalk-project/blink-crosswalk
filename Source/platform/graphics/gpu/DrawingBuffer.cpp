@@ -105,6 +105,9 @@ PassRefPtr<DrawingBuffer> DrawingBuffer::create(PassOwnPtr<WebGraphicsContext3D>
             extensionsUtil->ensureExtensionEnabled("GL_EXT_multisampled_render_to_texture");
     }
     bool packedDepthStencilSupported = extensionsUtil->supportsExtension("GL_OES_packed_depth_stencil");
+#if defined(OS_TIZEN) && CPU(X86)
+    multisampleSupported = false;
+#endif
     if (packedDepthStencilSupported)
         extensionsUtil->ensureExtensionEnabled("GL_OES_packed_depth_stencil");
     bool discardFramebufferSupported = extensionsUtil->supportsExtension("GL_EXT_discard_framebuffer");
