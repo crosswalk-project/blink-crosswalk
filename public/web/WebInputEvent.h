@@ -316,7 +316,6 @@ public:
 
 class WebMouseEvent : public WebInputEvent {
 public:
-    // These values defined for WebCore::MouseButton
     enum Button {
         ButtonNone = -1,
         ButtonLeft,
