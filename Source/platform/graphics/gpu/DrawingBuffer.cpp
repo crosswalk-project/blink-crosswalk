@@ -88,6 +88,9 @@ PassRefPtr<DrawingBuffer> DrawingBuffer::create(blink::WebGraphicsContext3D* con
         contextSupport->ensureExtensionEnabled("GL_ANGLE_framebuffer_multisample");
         contextSupport->ensureExtensionEnabled("GL_OES_rgb8_rgba8");
     }
+#if defined(OS_TIZEN) && CPU(X86)
+    multisampleSupported = false;
+#endif
     bool packedDepthStencilSupported = contextSupport->supportsExtension("GL_OES_packed_depth_stencil");
     if (packedDepthStencilSupported)
         contextSupport->ensureExtensionEnabled("GL_OES_packed_depth_stencil");
