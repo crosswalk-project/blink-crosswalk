@@ -308,12 +308,12 @@ bool Canvas2DLayerBridge::isValid()
     ASSERT(m_layer);
     if (m_destructionInProgress)
         return false;
-    if (m_contextProvider->context3d()->isContextLost() || !m_surfaceIsValid) {
+    if (!m_contextProvider || m_contextProvider->context3d()->isContextLost() || !m_surfaceIsValid) {
         // Attempt to recover.
         blink::WebGraphicsContext3D* sharedContext = 0;
-        m_layer->clearTexture();
         m_mailboxes.clear();
         m_releasedMailboxInfoIndex = InvalidMailboxIndex;
+        m_layer->clearTexture();
         m_contextProvider = adoptPtr(blink::Platform::current()->createSharedOffscreenGraphicsContext3DProvider());
         if (m_contextProvider)
             sharedContext = m_contextProvider->context3d();
