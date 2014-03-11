@@ -1059,7 +1059,17 @@ WebHistoryItem WebFrameImpl::currentHistoryItem() const
     // We're shutting down.
     if (!frame()->loader().documentLoader())
         return WebHistoryItem();
-    return WebHistoryItem(frame()->page()->historyController().currentItemForExport());
+
+    // If we are still loading, then we don't want to clobber the current
+    // history item as this could cause us to lose the scroll position and
+    // document state.  However, it is OK for new navigations.
+    // FIXME: Can we make this a plain old getter, instead of worrying about
+    // clobbering here?
+    if (!frame()->page()->historyController().inSameDocumentLoad() && (frame()->loader().loadType() == FrameLoadTypeStandard
+        || !frame()->loader().documentLoader()->isLoadingInAPISense()))
+        frame()->loader().saveDocumentAndScrollState();
+
+    return WebHistoryItem(frame()->page()->historyController().currentItemForExport(frame()));
 }
 
 void WebFrameImpl::enableViewSourceMode(bool enable)
