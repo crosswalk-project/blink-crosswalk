@@ -1069,7 +1069,7 @@ WebHistoryItem WebFrameImpl::currentHistoryItem() const
         || !frame()->loader().documentLoader()->isLoadingInAPISense()))
         frame()->loader().saveDocumentAndScrollState();
 
-    return WebHistoryItem(frame()->page()->historyController().currentItemForExport(frame()));
+    return WebHistoryItem(frame()->page()->historyController().currentItemForExport());
 }
 
 void WebFrameImpl::enableViewSourceMode(bool enable)
