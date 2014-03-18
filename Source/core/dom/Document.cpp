@@ -1716,7 +1716,7 @@ void Document::updateStyle(StyleRecalcChange change)
 {
     ASSERT(isMainThread());
 
-    if (!shouldCallRecalcStyleForDocument())
+    if (change != Force && !shouldCallRecalcStyleForDocument())
         return;
 
     if (inStyleRecalc())
