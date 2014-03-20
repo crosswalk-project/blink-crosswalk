@@ -1572,6 +1572,7 @@ WebInspector.NetworkPanel.prototype = {
         var toggled = /** @type {boolean} */ (event.data);
         this._filtersContainer.enableStyleClass("hidden", !toggled);
         this.element.enableStyleClass("filters-toggled", toggled);
+        this.doResize();
     },
 
     /**
