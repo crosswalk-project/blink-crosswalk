@@ -883,6 +883,8 @@ crbug.com/343808 fast/css/getComputedStyle/computed-style.html [ NeedsRebaseline
 crbug.com/343808 virtual/stable/webexposed/css-properties-as-js-properties.html [ NeedsRebaseline ]
 crbug.com/343808 webexposed/css-properties-as-js-properties.html [ NeedsRebaseline ]
 
+crbug.com/345452 [ Mac ] fast/repaint/box-shadow-dynamic.html [ NeedsRebaseline ]
+
 # Disable failing tests for the new WebSocket implementation
 crbug.com/339373 http/tests/security/contentSecurityPolicy/connect-src-websocket-allowed.html [ Skip ]
 crbug.com/339373 http/tests/websocket/FIXME-handshake-fail-by-null-subprotocol-selection-whitelist.html [ Skip ]

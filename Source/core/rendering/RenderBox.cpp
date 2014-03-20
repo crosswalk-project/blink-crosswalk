@@ -587,7 +587,7 @@ FloatQuad RenderBox::absoluteContentQuad() const
 LayoutRect RenderBox::outlineBoundsForRepaint(const RenderLayerModelObject* repaintContainer, const RenderGeometryMap* geometryMap) const
 {
     LayoutRect box = borderBoundingBox();
-    adjustRectForOutlineAndShadow(box);
+    adjustRectForOutline(box);
 
     if (repaintContainer != this) {
         FloatQuad containerRelativeQuad;

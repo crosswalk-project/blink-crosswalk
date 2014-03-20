@@ -1007,7 +1007,7 @@ protected:
 
     virtual LayoutRect viewRect() const;
 
-    void adjustRectForOutlineAndShadow(LayoutRect&) const;
+    void adjustRectForOutline(LayoutRect&) const;
 
     void clearLayoutRootIfNeeded() const;
     virtual void willBeDestroyed();
