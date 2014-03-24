@@ -304,7 +304,6 @@ void FrameLoader::setHistoryItemStateForCommit(HistoryCommitType historyCommitTy
     const KURL& originalURL = unreachableURL.isEmpty() ? m_documentLoader->originalURL() : unreachableURL;
     m_currentItem->setURL(url);
     m_currentItem->setTarget(m_frame->tree().uniqueName());
-    m_currentItem->setTargetFrameID(m_frame->frameID());
     m_currentItem->setOriginalURLString(originalURL.string());
     if (isPushOrReplaceState)
         m_currentItem->setStateObject(stateObject);
