@@ -1835,6 +1835,8 @@ inline bool RenderStyle::isSharable() const
         return false;
     if (hasUniquePseudoStyle())
         return false;
+    if (transitions() || animations())
+        return false;
     return true;
 }
 

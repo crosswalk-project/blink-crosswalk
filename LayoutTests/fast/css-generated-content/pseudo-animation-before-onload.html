@@ -4,17 +4,29 @@
 
 <style>
 @-webkit-keyframes example {
-  from { width: 50px; height: 50px; }
-  to { width: 10px; height: 10px; }
+  from {
+    width: 50px;
+    height: 50px;
+  }
+  to {
+    width: 10px;
+    height: 10px;
+  }
 }
 
 @keyframes example {
-  from { width: 50px; height: 50px; }
-  to { width: 10px; height: 10px; }
+  from {
+    width: 50px;
+    height: 50px;
+  }
+  to {
+    width: 10px;
+    height: 10px;
+  }
 }
 
-.after:after,
-.before:before {
+#after:after,
+#before:before {
     content: "";
     display: block;
     position: relative;
@@ -26,8 +38,8 @@
     animation: example 2s;
 }
 
-.before,
-.after {
+#before,
+#after {
     display: inline-block;
     border: 1px solid black;
     background: red;
@@ -35,12 +47,8 @@
 
 </style>
 
-<div class="before"></div>
-<div class="before" id="before"></div>
-<div class="before"></div>
-<div class="after"></div>
-<div class="after" id="after"></div>
-<div class="after"></div>
+<div id="before"></div>
+<div id="after"></div>
 
 <script>
 description('Animations on :before and :after pseudo elements should run when applied before onload.');

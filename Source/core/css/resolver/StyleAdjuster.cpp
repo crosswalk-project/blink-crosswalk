@@ -338,8 +338,8 @@ void StyleAdjuster::adjustRenderStyle(RenderStyle* style, RenderStyle* parentSty
     if (style->hasAppearance())
         RenderTheme::theme().adjustStyle(style, e, m_cachedUAStyle);
 
-    // If we have first-letter pseudo style, transitions, or animations, do not share this style.
-    if (style->hasPseudoStyle(FIRST_LETTER) || style->transitions() || style->animations())
+    // If we have first-letter pseudo style, do not share this style.
+    if (style->hasPseudoStyle(FIRST_LETTER))
         style->setUnique();
 
     // FIXME: when dropping the -webkit prefix on transform-style, we should also have opacity < 1 cause flattening.
