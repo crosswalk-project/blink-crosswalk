@@ -187,8 +187,7 @@ public:
     SharedBuffer* resourceBuffer() const { ASSERT(!m_purgeableData); return m_data.get(); }
     void setResourceBuffer(PassRefPtr<SharedBuffer>);
 
-    virtual void willSendRequest(ResourceRequest&, const ResourceResponse&);
-
+    virtual void willSendRequest(ResourceRequest&, const ResourceResponse&) { m_requestedFromNetworkingLayer = true; }
     virtual void updateRequest(const ResourceRequest&) { }
     virtual void responseReceived(const ResourceResponse&);
     void setResponse(const ResourceResponse& response) { m_response = response; }
@@ -207,6 +206,8 @@ public:
 
     bool canDelete() const { return !hasClients() && !m_loader && !m_preloadCount && !m_handleCount && !m_protectorCount && !m_resourceToRevalidate && !m_proxyResource; }
     bool hasOneHandle() const { return m_handleCount == 1; }
+
+    bool isExpired() const;
 
     // List of acceptable MIME types separated by ",".
     // A MIME type may contain a wildcard, e.g. "text/*".
@@ -227,9 +228,8 @@ public:
     void registerHandle(ResourcePtrBase* h);
     void unregisterHandle(ResourcePtrBase* h);
 
-    bool canReuseRedirectChain() const;
-    bool mustRevalidateDueToCacheHeaders() const;
     bool canUseCacheValidator() const;
+    bool mustRevalidateDueToCacheHeaders() const;
     bool isCacheValidator() const { return m_resourceToRevalidate; }
     Resource* resourceToRevalidate() const { return m_resourceToRevalidate; }
     void setResourceToRevalidate(Resource*);
@@ -306,19 +306,6 @@ protected:
 
     bool hasClient(ResourceClient* client) { return m_clients.contains(client) || m_clientsAwaitingCallback.contains(client); }
 
-    struct RedirectPair {
-    public:
-        explicit RedirectPair(const ResourceRequest& request, const ResourceResponse& redirectResponse)
-            : m_request(request)
-            , m_redirectResponse(redirectResponse)
-        {
-        }
-
-        const ResourceRequest m_request;
-        const ResourceResponse m_redirectResponse;
-    };
-    const Vector<RedirectPair>& redirectChain() const { return m_redirectChain; }
-
     virtual bool isSafeToUnlock() const { return false; }
     virtual void destroyDecodedDataIfPossible() { }
 
@@ -341,6 +328,8 @@ private:
     void revalidationSucceeded(const ResourceResponse&);
     void revalidationFailed();
 
+    double currentAge() const;
+    double freshnessLifetime() const;
     bool unlock();
 
     void failBeforeStarting();
@@ -402,9 +391,6 @@ private:
 
     // These handles will need to be updated to point to the m_resourceToRevalidate in case we get 304 response.
     HashSet<ResourcePtrBase*> m_handlesToRevalidate;
-
-    // Ordered list of all redirects followed while fetching this resource.
-    Vector<RedirectPair> m_redirectChain;
 };
 
 #if !LOG_DISABLED

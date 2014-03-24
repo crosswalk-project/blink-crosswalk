@@ -3241,7 +3241,6 @@
             'dom/DocumentTest.cpp',
             'dom/MainThreadTaskRunnerTest.cpp',
             'editing/TextIteratorTest.cpp',
-            'fetch/CachingCorrectnessTest.cpp',
             'fetch/ImageResourceTest.cpp',
             'fetch/MemoryCacheTest.cpp',
             'fetch/RawResourceTest.cpp',

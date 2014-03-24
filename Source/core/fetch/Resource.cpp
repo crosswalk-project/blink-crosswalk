@@ -278,74 +278,53 @@ bool Resource::passesAccessControlCheck(SecurityOrigin* securityOrigin, String& 
     return WebCore::passesAccessControlCheck(m_response, resourceRequest().allowCookies() ? AllowStoredCredentials : DoNotAllowStoredCredentials, securityOrigin, errorDescription);
 }
 
-static double currentAge(const ResourceResponse& response, double responseTimestamp)
+bool Resource::isExpired() const
+{
+    if (m_response.isNull())
+        return false;
+
+    return currentAge() > freshnessLifetime();
+}
+
+double Resource::currentAge() const
 {
     // RFC2616 13.2.3
     // No compensation for latency as that is not terribly important in practice
-    double dateValue = response.date();
-    double apparentAge = std::isfinite(dateValue) ? std::max(0., responseTimestamp - dateValue) : 0;
-    double ageValue = response.age();
+    double dateValue = m_response.date();
+    double apparentAge = std::isfinite(dateValue) ? std::max(0., m_responseTimestamp - dateValue) : 0;
+    double ageValue = m_response.age();
     double correctedReceivedAge = std::isfinite(ageValue) ? std::max(apparentAge, ageValue) : apparentAge;
-    double residentTime = currentTime() - responseTimestamp;
+    double residentTime = currentTime() - m_responseTimestamp;
     return correctedReceivedAge + residentTime;
 }
 
-static double freshnessLifetime(const ResourceResponse& response, double responseTimestamp)
+double Resource::freshnessLifetime() const
 {
 #if !OS(ANDROID)
     // On desktop, local files should be reloaded in case they change.
-    if (response.url().isLocalFile())
+    if (m_response.url().isLocalFile())
         return 0;
 #endif
 
     // Cache other non-http / non-filesystem resources liberally.
-    if (!response.url().protocolIsInHTTPFamily()
-        && !response.url().protocolIs("filesystem"))
+    if (!m_response.url().protocolIsInHTTPFamily()
+        && !m_response.url().protocolIs("filesystem"))
         return std::numeric_limits<double>::max();
 
     // RFC2616 13.2.4
-    double maxAgeValue = response.cacheControlMaxAge();
+    double maxAgeValue = m_response.cacheControlMaxAge();
     if (std::isfinite(maxAgeValue))
         return maxAgeValue;
-    double expiresValue = response.expires();
-    double dateValue = response.date();
-    double creationTime = std::isfinite(dateValue) ? dateValue : responseTimestamp;
+    double expiresValue = m_response.expires();
+    double dateValue = m_response.date();
+    double creationTime = std::isfinite(dateValue) ? dateValue : m_responseTimestamp;
     if (std::isfinite(expiresValue))
         return expiresValue - creationTime;
-    double lastModifiedValue = response.lastModified();
+    double lastModifiedValue = m_response.lastModified();
     if (std::isfinite(lastModifiedValue))
         return (creationTime - lastModifiedValue) * 0.1;
     // If no cache headers are present, the specification leaves the decision to the UA. Other browsers seem to opt for 0.
     return 0;
-}
-
-static bool canUseResponse(const ResourceResponse& response, double responseTimestamp)
-{
-    if (response.isNull())
-        return false;
-
-    // FIXME: Why isn't must-revalidate considered a reason we can't use the response?
-    if (response.cacheControlContainsNoCache() || response.cacheControlContainsNoStore())
-        return false;
-
-    if (response.httpStatusCode() == 303)  {
-        // Must not be cached.
-        return false;
-    }
-
-    if (response.httpStatusCode() == 302 || response.httpStatusCode() == 307) {
-        // Default to not cacheable.
-        // FIXME: Consider allowing these to be cached if they have headers permitting caching.
-        return false;
-    }
-
-    return currentAge(response, responseTimestamp) <= freshnessLifetime(response, responseTimestamp);
-}
-
-void Resource::willSendRequest(ResourceRequest& request, const ResourceResponse& response)
-{
-    m_redirectChain.append(RedirectPair(request, response));
-    m_requestedFromNetworkingLayer = true;
 }
 
 bool Resource::unlock()
@@ -813,20 +792,6 @@ void Resource::unregisterHandle(ResourcePtrBase* h)
 
     if (!m_handleCount)
         deleteIfPossible();
-}
-
-bool Resource::canReuseRedirectChain() const
-{
-    for (size_t i = 0; i < m_redirectChain.size(); ++i) {
-        if (!canUseResponse(m_redirectChain[i].m_redirectResponse, m_responseTimestamp))
-            return false;
-    }
-    return true;
-}
-
-bool Resource::mustRevalidateDueToCacheHeaders() const
-{
-    return !canUseResponse(m_response, m_responseTimestamp);
 }
 
 bool Resource::canUseCacheValidator() const
