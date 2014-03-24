@@ -672,7 +672,7 @@ void CompositedLayerMapping::updateGraphicsLayerGeometry()
         // If the compositing ancestor has a layer to clip children, we parent in that, and therefore
         // position relative to it.
         IntRect clippingBox = clipBox(toRenderBox(compAncestor->renderer()));
-        graphicsLayerParentLocation = clippingBox.location();
+        graphicsLayerParentLocation = clippingBox.location() + roundedIntSize(compAncestor->compositedLayerMapping()->subpixelAccumulation());
     } else if (compAncestor) {
         graphicsLayerParentLocation = ancestorCompositingBounds.location();
     } else {
@@ -716,7 +716,7 @@ void CompositedLayerMapping::updateGraphicsLayerGeometry()
     IntRect clippingBox;
     if (GraphicsLayer* clipLayer = clippingLayer()) {
         clippingBox = clipBox(toRenderBox(renderer()));
-        clipLayer->setPosition(FloatPoint(clippingBox.location() - localCompositingBounds.location()));
+        clipLayer->setPosition(FloatPoint(clippingBox.location() - localCompositingBounds.location() + roundedIntSize(m_subpixelAccumulation)));
         clipLayer->setSize(clippingBox.size());
         clipLayer->setOffsetFromRenderer(toIntSize(clippingBox.location()));
         if (m_childClippingMaskLayer && !m_scrollingLayer) {
