@@ -1760,7 +1760,7 @@ void Element::setNeedsAnimationStyleRecalc()
     if (styleChangeType() != NoStyleChange)
         return;
 
-    setNeedsStyleRecalc(LocalStyleChange);
+    setNeedsStyleRecalc(LocalStyleChange, StyleChangeFromRenderer);
     setAnimationStyleChange(true);
 }
 
