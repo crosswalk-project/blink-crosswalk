@@ -64,10 +64,15 @@ void StyleElement::processStyleSheet(Document& document, Element* element)
     process(element);
 }
 
-void StyleElement::removedFromDocument(Document& document, Element* element, ContainerNode* scopingNode)
+void StyleElement::removedFromDocument(Document& document, Element* element)
+{
+    removedFromDocument(document, element, 0, document);
+}
+
+void StyleElement::removedFromDocument(Document& document, Element* element, ContainerNode* scopingNode, TreeScope& treeScope)
 {
     ASSERT(element);
-    document.styleEngine()->removeStyleSheetCandidateNode(element, scopingNode);
+    document.styleEngine()->removeStyleSheetCandidateNode(element, scopingNode, treeScope);
 
     RefPtr<StyleSheet> removedSheet = m_sheet;
 
@@ -82,8 +87,11 @@ void StyleElement::clearDocumentData(Document& document, Element* element)
     if (m_sheet)
         m_sheet->clearOwnerNode();
 
-    if (element->inDocument())
-        document.styleEngine()->removeStyleSheetCandidateNode(element, element->hasTagName(HTMLNames::styleTag) ? toHTMLStyleElement(element)->scopingNode() :  0);
+    if (element->inDocument()) {
+        ContainerNode* scopingNode = element->hasTagName(HTMLNames::styleTag) ? toHTMLStyleElement(element)->scopingNode() :  0;
+        TreeScope& treeScope = scopingNode ? scopingNode->treeScope() : element->treeScope();
+        document.styleEngine()->removeStyleSheetCandidateNode(element, scopingNode, treeScope);
+    }
 }
 
 void StyleElement::childrenChanged(Element* element)
