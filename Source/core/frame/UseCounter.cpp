@@ -697,9 +697,6 @@ String UseCounter::deprecationMessage(Feature feature)
     case PrefixedPutImageDataHD:
         return "'CanvasRenderingContext2D.webkitPutImageDataHD' is deprecated. Please use putImageData instead.";
 
-    case ShadowRootApplyAuthorStyles:
-        return "'ShadowRoot.applyAuthorStyles' is deprecated.";
-
     case PrefixedSpeechAttribute:
         return "The 'x-webkit-speech' input field attribute is deprecated. Please use the JavaScript API instead.";
 
