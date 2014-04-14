@@ -1884,6 +1884,7 @@ void FrameView::scheduleRelayoutOfSubtree(RenderObject* relayoutRoot)
 
 bool FrameView::layoutPending() const
 {
+    // FIXME: This should check Document::lifecycle instead.
     return m_hasPendingLayout;
 }
 
