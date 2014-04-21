@@ -587,7 +587,9 @@ void CompositedLayerMapping::adjustBoundsForSubPixelAccumulation(const RenderLay
 {
     LayoutRect localRawCompositingBounds = compositedBounds();
     LayoutPoint rawDelta = computeOffsetFromCompositedAncestor(&m_owningLayer, compositedAncestor);
-    delta = flooredIntPoint(rawDelta);
+    // We call toInt and not floor here because toInt truncates, but floor will floor negative numbers
+    // down e.g. floor(-1.1) would become -2.
+    delta = IntPoint(rawDelta.x().toInt(), rawDelta.y().toInt());
     m_subpixelAccumulation = toLayoutSize(rawDelta).fraction();
     RELEASE_ASSERT(m_subpixelAccumulation.width() < 1 && m_subpixelAccumulation.height() < 1);
 
