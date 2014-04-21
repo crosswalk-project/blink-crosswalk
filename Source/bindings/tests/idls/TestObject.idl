@@ -122,6 +122,8 @@ interface TestObject : EventTarget {
     [RaisesException=Setter] attribute long attrWithSetterException;
     [RaisesException=Getter] attribute DOMString stringAttrWithGetterException;
     [RaisesException=Setter] attribute DOMString stringAttrWithSetterException;
+    void overloadedMethodJ(long longArg);
+    void overloadedMethodJ([Default=Null] TestInterfaceEmpty? testInterfaceEmptyNullableArg);
 
     // 'Custom' extended attribute
     [Custom] attribute long            customAttr;

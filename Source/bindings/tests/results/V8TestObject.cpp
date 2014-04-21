@@ -4731,6 +4731,55 @@ static void enabledPerContextMethodMethodCallback(const v8::FunctionCallbackInfo
     TRACE_EVENT_SET_SAMPLING_STATE("V8", "V8Execution");
 }
 
+static void overloadedMethodJ1Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+    ExceptionState exceptionState(ExceptionState::ExecutionContext, "overloadedMethodJ", "TestObject", info.Holder(), info.GetIsolate());
+    if (UNLIKELY(info.Length() < 1)) {
+        throwArityTypeError(exceptionState, 1, info.Length());
+        return;
+    }
+    TestObject* impl = V8TestObject::toNative(info.Holder());
+    TONATIVE_VOID_EXCEPTIONSTATE(int, longArg, toInt32(info[0], exceptionState), exceptionState);
+    impl->overloadedMethodJ(longArg);
+}
+
+static void overloadedMethodJ2Method(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+    if (UNLIKELY(info.Length() < 1)) {
+        throwArityTypeErrorForMethod("overloadedMethodJ", "TestObject", 1, info.Length(), info.GetIsolate());
+        return;
+    }
+    TestObject* impl = V8TestObject::toNative(info.Holder());
+    TONATIVE_VOID(TestInterfaceEmpty*, testInterfaceEmptyNullableArg, V8TestInterfaceEmpty::toNativeWithTypeCheck(info.GetIsolate(), info[0]));
+    impl->overloadedMethodJ(testInterfaceEmptyNullableArg);
+}
+
+static void overloadedMethodJMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+    if (((info.Length() == 1))) {
+        overloadedMethodJ1Method(info);
+        return;
+    }
+    if (((info.Length() == 1) && (isUndefinedOrNull(info[0]) || V8TestInterfaceEmpty::hasInstance(info[0], info.GetIsolate())))) {
+        overloadedMethodJ2Method(info);
+        return;
+    }
+    ExceptionState exceptionState(ExceptionState::ExecutionContext, "overloadedMethodJ", "TestObject", info.Holder(), info.GetIsolate());
+    if (UNLIKELY(info.Length() < 1)) {
+        throwArityTypeError(exceptionState, 1, info.Length());
+        return;
+    }
+    exceptionState.throwTypeError("No function was found that matched the signature provided.");
+    exceptionState.throwIfNeeded();
+}
+
+static void overloadedMethodJMethodCallback(const v8::FunctionCallbackInfo<v8::Value>& info)
+{
+    TRACE_EVENT_SET_SAMPLING_STATE("Blink", "DOMMethod");
+    TestObjectV8Internal::overloadedMethodJMethod(info);
+    TRACE_EVENT_SET_SAMPLING_STATE("V8", "V8Execution");
+}
+
 static void methodWithUnsignedLongSequenceMethod(const v8::FunctionCallbackInfo<v8::Value>& info)
 {
     if (UNLIKELY(info.Length() < 1)) {
@@ -5596,6 +5645,7 @@ static const V8DOMConfiguration::MethodConfiguration V8TestObjectMethods[] = {
     {"overloadedMethodA", TestObjectV8Internal::overloadedMethodAMethodCallback, 0, 1},
     {"overloadedMethodB", TestObjectV8Internal::overloadedMethodBMethodCallback, 0, 1},
     {"overloadedMethodC", TestObjectV8Internal::overloadedMethodCMethodCallback, 0, 1},
+    {"overloadedMethodJ", TestObjectV8Internal::overloadedMethodJMethodCallback, 0, 1},
     {"classMethodWithClamp", TestObjectV8Internal::classMethodWithClampMethodCallback, 0, 2},
     {"methodWithUnsignedLongSequence", TestObjectV8Internal::methodWithUnsignedLongSequenceMethodCallback, 0, 1},
     {"stringArrayFunction", TestObjectV8Internal::stringArrayFunctionMethodCallback, 0, 1},
