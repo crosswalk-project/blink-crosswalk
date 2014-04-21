@@ -34,7 +34,6 @@
 #include "core/animation/Animation.h"
 #include "core/animation/DocumentTimeline.h"
 #include "core/frame/FrameView.h"
-#include "core/page/Page.h"
 #include "core/rendering/RenderLayer.h"
 
 namespace WebCore {
@@ -42,14 +41,6 @@ namespace WebCore {
 void CSSPendingAnimations::add(AnimationPlayer* player)
 {
     ASSERT(player->source()->isAnimation());
-
-    Page* page = player->timeline()->document()->page();
-    bool visible = page && page->visibilityState() == PageVisibilityStateVisible;
-    if (!player->hasStartTime() && !visible) {
-        player->setStartTime(player->timeline()->currentTime());
-        return;
-    }
-
     m_pending.append(player);
 }
 
