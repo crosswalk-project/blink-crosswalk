@@ -1057,6 +1057,8 @@ public:
 
     void updateStyleInvalidationIfNeeded();
 
+    bool hasElementsRequiringLayerUpdate() const { return m_layerUpdateElements.size(); }
+
 protected:
     Document(const DocumentInit&, DocumentClassFlags = DefaultDocumentClass);
 
