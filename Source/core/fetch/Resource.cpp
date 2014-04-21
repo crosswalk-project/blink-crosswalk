@@ -328,9 +328,12 @@ static bool canUseResponse(const ResourceResponse& response, double responseTime
     }
 
     if (response.httpStatusCode() == 302 || response.httpStatusCode() == 307) {
-        // Default to not cacheable.
-        // FIXME: Consider allowing these to be cached if they have headers permitting caching.
-        return false;
+        // Default to not cacheable unless explicitly allowed.
+        bool hasMaxAge = std::isfinite(response.cacheControlMaxAge());
+        bool hasExpires = std::isfinite(response.expires());
+        // TODO: consider catching Cache-Control "private" and "public" here.
+        if (!hasMaxAge && !hasExpires)
+            return false;
     }
 
     return currentAge(response, responseTimestamp) <= freshnessLifetime(response, responseTimestamp);
