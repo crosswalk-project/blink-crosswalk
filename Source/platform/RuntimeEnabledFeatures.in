@@ -132,3 +132,5 @@ WebKitMediaSource status=stable
 WebVTTRegions depends_on=VideoTrack, status=experimental
 WOFF2 status=experimental
 XSLT status=stable
+
+PseudoClassesInMatchingCriteriaInAuthorShadowTrees status=test
