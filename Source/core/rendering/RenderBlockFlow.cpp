@@ -330,7 +330,6 @@ void RenderBlockFlow::layoutBlock(bool relayoutChildren)
 
 inline bool RenderBlockFlow::layoutBlockFlow(bool relayoutChildren, LayoutUnit &pageLogicalHeight, SubtreeLayoutScope& layoutScope)
 {
-    LayoutUnit oldLeft = logicalLeft();
     if (updateLogicalWidthAndColumnWidth())
         relayoutChildren = true;
 
@@ -434,7 +433,7 @@ inline bool RenderBlockFlow::layoutBlockFlow(bool relayoutChildren, LayoutUnit &
     if (heightChanged)
         relayoutChildren = true;
 
-    layoutPositionedObjects(relayoutChildren || isRoot(), oldLeft != logicalLeft() ? ForcedLayoutAfterContainingBlockMoved : DefaultLayout);
+    layoutPositionedObjects(relayoutChildren || isRoot());
 
     computeRegionRangeForBlock(flowThreadContainingBlock());
 

@@ -1507,8 +1507,7 @@ bool RenderObject::repaintAfterLayoutIfNeeded(const RenderLayerModelObject* repa
         // ASSERT(!newOutlineBoxRectPtr || *newOutlineBoxRectPtr == outlineBoundsForRepaint(repaintContainer));
         newOutlineBox = newOutlineBoxRectPtr ? *newOutlineBoxRectPtr : outlineBoundsForRepaint(repaintContainer);
 
-        if ((hasOutline() && newOutlineBox.location() != oldOutlineBox.location())
-            || (mustRepaintBackgroundOrBorder() && (newBounds != oldBounds || (hasOutline() && newOutlineBox != oldOutlineBox))))
+        if (newOutlineBox.location() != oldOutlineBox.location() || (mustRepaintBackgroundOrBorder() && (newBounds != oldBounds || newOutlineBox != oldOutlineBox)))
             fullRepaint = true;
     }
 
