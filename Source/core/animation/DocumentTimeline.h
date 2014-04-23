@@ -88,6 +88,7 @@ public:
     void setOutdatedAnimationPlayer(AnimationPlayer*);
     bool hasOutdatedAnimationPlayer() const { return m_hasOutdatedAnimationPlayer; }
 
+    Document* document() { return m_document; }
     void detachFromDocument();
 
 protected:
