@@ -3871,9 +3871,9 @@ PassRefPtrWillBeRawPtr<CSSBasicShape> CSSPropertyParser::parseInsetRoundedCorner
     if (!argument)
         return nullptr;
 
-    CSSParserValueList radiusArguments;
+    Vector<CSSParserValue*> radiusArguments;
     while (argument) {
-        radiusArguments.addValue(*argument);
+        radiusArguments.append(argument);
         argument = args->next();
     }
 
@@ -3890,7 +3890,7 @@ PassRefPtrWillBeRawPtr<CSSBasicShape> CSSPropertyParser::parseInsetRoundedCorner
 
     unsigned indexAfterSlash = 0;
     for (unsigned i = 0; i < num; ++i) {
-        CSSParserValue* value = radiusArguments.valueAt(i);
+        CSSParserValue* value = radiusArguments.at(i);
         if (value->unit == CSSParserValue::Operator) {
             if (value->iValue != '/')
                 return nullptr;
