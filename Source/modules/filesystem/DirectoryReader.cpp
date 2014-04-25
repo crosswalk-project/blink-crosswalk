@@ -113,7 +113,6 @@ void DirectoryReader::readEntries(PassOwnPtr<EntriesCallback> entriesCallback, P
 void DirectoryReader::addEntries(const EntryHeapVector& entries)
 {
     m_entries.appendVector(entries);
-    m_errorCallback = nullptr;
     if (m_entriesCallback) {
         OwnPtr<EntriesCallback> entriesCallback = m_entriesCallback.release();
         EntryHeapVector entries;
@@ -125,11 +124,8 @@ void DirectoryReader::addEntries(const EntryHeapVector& entries)
 void DirectoryReader::onError(FileError* error)
 {
     m_error = error;
-    m_entriesCallback = nullptr;
-    if (m_errorCallback) {
-        OwnPtr<ErrorCallback> errorCallback = m_errorCallback.release();
-        errorCallback->handleEvent(error);
-    }
+    if (m_errorCallback)
+        m_errorCallback->handleEvent(error);
 }
 
 void DirectoryReader::trace(Visitor* visitor)
