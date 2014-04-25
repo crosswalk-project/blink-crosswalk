@@ -295,7 +295,7 @@ bool Canvas2DLayerBridge::hasReleasedMailbox() const
 
 void Canvas2DLayerBridge::freeReleasedMailbox()
 {
-    if (m_contextProvider->context3d()->isContextLost() || !m_surfaceIsValid)
+    if (!m_surfaceIsValid || m_contextProvider->context3d()->isContextLost())
         return;
     MailboxInfo* mailboxInfo = releasedMailboxInfo();
     if (!mailboxInfo)
@@ -325,13 +325,13 @@ blink::WebGraphicsContext3D* Canvas2DLayerBridge::context()
     if (m_layer && !m_destructionInProgress && !surfaceIsValid()) {
         recoverSurface(); // To ensure rate limiter is disabled if context is lost.
     }
-    return m_contextProvider->context3d();
+    return m_contextProvider ? m_contextProvider->context3d() : 0;
 }
 
 bool Canvas2DLayerBridge::surfaceIsValid()
 {
     ASSERT(!m_destructionInProgress);
-    return !m_destructionInProgress && !m_contextProvider->context3d()->isContextLost() && m_surfaceIsValid;
+    return !m_destructionInProgress && m_surfaceIsValid && !m_contextProvider->context3d()->isContextLost();
 }
 
 bool Canvas2DLayerBridge::recoverSurface()
