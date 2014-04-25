@@ -48,6 +48,23 @@ static bool shouldAppendLayer(const RenderLayer& layer)
     return true;
 }
 
+GraphicsLayerUpdater::UpdateContext::UpdateContext(const UpdateContext& other, const RenderLayer& layer)
+    : m_compositingStackingContainer(other.m_compositingStackingContainer)
+    , m_compositingAncestor(other.m_compositingAncestor)
+{
+    CompositingState compositingState = layer.compositingState();
+    if (compositingState != NotComposited && compositingState != PaintsIntoGroupedBacking) {
+        m_compositingAncestor = &layer;
+        if (layer.stackingNode()->isStackingContainer())
+            m_compositingStackingContainer = &layer;
+    }
+}
+
+const RenderLayer* GraphicsLayerUpdater::UpdateContext::compositingContainer(const RenderLayer& layer) const
+{
+    return layer.stackingNode()->isNormalFlowOnly() ? m_compositingAncestor : m_compositingStackingContainer;
+}
+
 GraphicsLayerUpdater::GraphicsLayerUpdater()
 {
 }
@@ -122,10 +139,15 @@ void GraphicsLayerUpdater::rebuildTree(RenderLayer& layer, GraphicsLayerVector& 
     }
 }
 
-void GraphicsLayerUpdater::update(RenderLayer& layer, UpdateType updateType)
+void GraphicsLayerUpdater::update(RenderLayer& layer, UpdateType updateType, const UpdateContext& context)
 {
     if (layer.hasCompositedLayerMapping()) {
         CompositedLayerMappingPtr mapping = layer.compositedLayerMapping();
+
+        const RenderLayer* compositingContainer = context.compositingContainer(layer);
+        ASSERT(compositingContainer == layer.ancestorCompositingLayer());
+        if (mapping->updateRequiresOwnBackingStoreForAncestorReasons(compositingContainer))
+            updateType = ForceUpdate;
 
         // Note carefully: here we assume that the compositing state of all descendants have been updated already,
         // so it is legitimate to compute and cache the composited bounds for this layer.
@@ -137,7 +159,7 @@ void GraphicsLayerUpdater::update(RenderLayer& layer, UpdateType updateType)
         }
 
         mapping->updateGraphicsLayerConfiguration();
-        updateType = mapping->updateGraphicsLayerGeometry(updateType);
+        updateType = mapping->updateGraphicsLayerGeometry(updateType, compositingContainer);
         mapping->clearNeedsGeometryUpdate();
 
         if (!layer.parent())
@@ -147,8 +169,9 @@ void GraphicsLayerUpdater::update(RenderLayer& layer, UpdateType updateType)
             layer.scrollableArea()->positionOverflowControls();
     }
 
+    UpdateContext childContext(context, layer);
     for (RenderLayer* child = layer.firstChild(); child; child = child->nextSibling())
-        update(*child, updateType);
+        update(*child, updateType, childContext);
 }
 
 } // namespace WebCore

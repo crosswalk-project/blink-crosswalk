@@ -655,7 +655,7 @@ void CompositedLayerMapping::updateSquashingLayerGeometry(const IntPoint& delta)
     }
 }
 
-GraphicsLayerUpdater::UpdateType CompositedLayerMapping::updateGraphicsLayerGeometry(GraphicsLayerUpdater::UpdateType updateType)
+GraphicsLayerUpdater::UpdateType CompositedLayerMapping::updateGraphicsLayerGeometry(GraphicsLayerUpdater::UpdateType updateType, const RenderLayer* compositingContainer)
 {
     // If we haven't built z-order lists yet, wait until later.
     if (m_owningLayer.stackingNode()->isStackingContainer() && m_owningLayer.stackingNode()->zOrderListsDirty())
@@ -692,47 +692,45 @@ GraphicsLayerUpdater::UpdateType CompositedLayerMapping::updateGraphicsLayerGeom
     RenderStyle* style = renderer()->style();
     m_graphicsLayer->setBackfaceVisibility(style->backfaceVisibility() == BackfaceVisibilityVisible);
 
-    RenderLayer* compAncestor = m_owningLayer.ancestorCompositingLayer();
-
     // We compute everything relative to the enclosing compositing layer.
     IntRect ancestorCompositingBounds;
-    if (compAncestor) {
-        ASSERT(compAncestor->hasCompositedLayerMapping());
-        ancestorCompositingBounds = compAncestor->compositedLayerMapping()->pixelSnappedCompositedBounds();
+    if (compositingContainer) {
+        ASSERT(compositingContainer->hasCompositedLayerMapping());
+        ancestorCompositingBounds = compositingContainer->compositedLayerMapping()->pixelSnappedCompositedBounds();
     }
 
     IntRect localCompositingBounds;
     IntRect relativeCompositingBounds;
     IntPoint delta;
-    adjustBoundsForSubPixelAccumulation(compAncestor, localCompositingBounds, relativeCompositingBounds, delta);
+    adjustBoundsForSubPixelAccumulation(compositingContainer, localCompositingBounds, relativeCompositingBounds, delta);
 
     IntPoint graphicsLayerParentLocation;
-    if (compAncestor && compAncestor->compositedLayerMapping()->hasClippingLayer()) {
+    if (compositingContainer && compositingContainer->compositedLayerMapping()->hasClippingLayer()) {
         // If the compositing ancestor has a layer to clip children, we parent in that, and therefore
         // position relative to it.
-        IntRect clippingBox = clipBox(toRenderBox(compAncestor->renderer()));
-        graphicsLayerParentLocation = clippingBox.location() + roundedIntSize(compAncestor->compositedLayerMapping()->subpixelAccumulation());
-    } else if (compAncestor) {
+        IntRect clippingBox = clipBox(toRenderBox(compositingContainer->renderer()));
+        graphicsLayerParentLocation = clippingBox.location() + roundedIntSize(compositingContainer->compositedLayerMapping()->subpixelAccumulation());
+    } else if (compositingContainer) {
         graphicsLayerParentLocation = ancestorCompositingBounds.location();
     } else {
         graphicsLayerParentLocation = renderer()->view()->documentRect().location();
     }
 
-    if (compAncestor && compAncestor->needsCompositedScrolling()) {
-        RenderBox* renderBox = toRenderBox(compAncestor->renderer());
+    if (compositingContainer && compositingContainer->needsCompositedScrolling()) {
+        RenderBox* renderBox = toRenderBox(compositingContainer->renderer());
         IntSize scrollOffset = renderBox->scrolledContentOffset();
         IntPoint scrollOrigin(renderBox->borderLeft(), renderBox->borderTop());
         graphicsLayerParentLocation = scrollOrigin - scrollOffset;
     }
 
-    if (compAncestor && m_ancestorClippingLayer) {
-        ClipRectsContext clipRectsContext(compAncestor, CompositingClipRects, IgnoreOverlayScrollbarSize, IgnoreOverflowClip);
+    if (compositingContainer && m_ancestorClippingLayer) {
+        ClipRectsContext clipRectsContext(compositingContainer, CompositingClipRects, IgnoreOverlayScrollbarSize, IgnoreOverflowClip);
         IntRect parentClipRect = pixelSnappedIntRect(m_owningLayer.clipper().backgroundClipRect(clipRectsContext).rect());
         ASSERT(parentClipRect != PaintInfo::infiniteRect());
         m_ancestorClippingLayer->setPosition(FloatPoint(parentClipRect.location() - graphicsLayerParentLocation));
         m_ancestorClippingLayer->setSize(parentClipRect.size());
 
-        // backgroundRect is relative to compAncestor, so subtract deltaX/deltaY to get back to local coords.
+        // backgroundRect is relative to compositingContainer, so subtract deltaX/deltaY to get back to local coords.
         m_ancestorClippingLayer->setOffsetFromRenderer(parentClipRect.location() - delta);
 
         // The primary layer is then parented in, and positioned relative to this clipping layer.
@@ -776,7 +774,7 @@ GraphicsLayerUpdater::UpdateType CompositedLayerMapping::updateGraphicsLayerGeom
     if (m_owningLayer.hasTransform()) {
         const LayoutRect borderBox = toRenderBox(renderer())->borderBoxRect();
 
-        // Get layout bounds in the coords of compAncestor to match relativeCompositingBounds.
+        // Get layout bounds in the coords of compositingContainer to match relativeCompositingBounds.
         IntRect layerBounds = pixelSnappedIntRect(toLayoutPoint(m_subpixelAccumulation), borderBox.size());
         layerBounds.moveBy(delta);
 
@@ -829,7 +827,7 @@ GraphicsLayerUpdater::UpdateType CompositedLayerMapping::updateGraphicsLayerGeom
 
     if (m_owningLayer.reflectionInfo() && m_owningLayer.reflectionInfo()->reflectionLayer()->hasCompositedLayerMapping()) {
         CompositedLayerMappingPtr reflectionCompositedLayerMapping = m_owningLayer.reflectionInfo()->reflectionLayer()->compositedLayerMapping();
-        reflectionCompositedLayerMapping->updateGraphicsLayerGeometry(GraphicsLayerUpdater::ForceUpdate);
+        reflectionCompositedLayerMapping->updateGraphicsLayerGeometry(GraphicsLayerUpdater::ForceUpdate, &m_owningLayer);
 
         // The reflection layer has the bounds of m_owningLayer.reflectionLayer(),
         // but the reflected layer is the bounds of this layer, so we need to position it appropriately.
@@ -884,10 +882,6 @@ GraphicsLayerUpdater::UpdateType CompositedLayerMapping::updateGraphicsLayerGeom
 
     if (m_owningLayer.scrollableArea() && m_owningLayer.scrollableArea()->scrollsOverflow())
         m_owningLayer.scrollableArea()->positionOverflowControls();
-
-    // We can't make this call in RenderLayerCompositor::allocateOrClearCompositedLayerMapping
-    // since it depends on whether compAncestor draws content, which gets updated later.
-    updateRequiresOwnBackingStoreForAncestorReasons(compAncestor);
 
     if (RuntimeEnabledFeatures::cssCompositingEnabled()) {
         updateLayerBlendMode(style);
