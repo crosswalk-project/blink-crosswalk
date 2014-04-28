@@ -112,9 +112,6 @@ WebInspector.ConsoleView = function(hideContextSelector)
     this.prompt.proxyElement.addEventListener("keydown", this._promptKeyDown.bind(this), false);
     this.prompt.setHistoryData(WebInspector.settings.consoleHistory.get());
 
-    WebInspector.targetManager.targets().forEach(this._targetAdded, this);
-    WebInspector.targetManager.addEventListener(WebInspector.TargetManager.Events.TargetAdded, this._onTargetAdded, this);
-
     this._filterStatusMessageElement = document.createElement("div");
     this._filterStatusMessageElement.classList.add("console-message");
     this._filterStatusTextElement = this._filterStatusMessageElement.createChild("span", "console-info");
@@ -126,6 +123,9 @@ WebInspector.ConsoleView = function(hideContextSelector)
     this.messagesElement.insertBefore(this._filterStatusMessageElement, this.topGroup.element);
 
     this._updateFilterStatus();
+    WebInspector.targetManager.targets().forEach(this._targetAdded, this);
+    WebInspector.targetManager.addEventListener(WebInspector.TargetManager.Events.TargetAdded, this._onTargetAdded, this);
+
     WebInspector.settings.consoleTimestampsEnabled.addChangeListener(this._consoleTimestampsSettingChanged, this);
 }
 
