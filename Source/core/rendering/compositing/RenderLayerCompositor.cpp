@@ -463,8 +463,6 @@ void RenderLayerCompositor::updateCompositingLayersInternal()
     if (!needCompositingRequirementsUpdate && !needHierarchyAndGeometryUpdate && !needGeometryUpdate && !needsToUpdateScrollingCoordinator)
         return;
 
-    GraphicsLayerUpdater::UpdateType updateType = m_pendingUpdateType;
-
     // Only clear the flags if we're updating the entire hierarchy.
     m_compositingLayersNeedRebuild = false;
     m_needsToUpdateLayerTreeGeometry = false;
@@ -522,7 +520,7 @@ void RenderLayerCompositor::updateCompositingLayersInternal()
 
     if (needGeometryUpdate || needHierarchyAndGeometryUpdate) {
         TRACE_EVENT0("blink_rendering", "GraphicsLayerUpdater::updateRecursive");
-        GraphicsLayerUpdater().update(*updateRoot, updateType);
+        GraphicsLayerUpdater().update(*updateRoot, GraphicsLayerUpdater::ForceUpdate);
     }
 
     if (needHierarchyAndGeometryUpdate) {
