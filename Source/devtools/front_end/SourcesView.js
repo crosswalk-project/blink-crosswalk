@@ -625,7 +625,8 @@ WebInspector.SourcesView.prototype = {
      */
     _showGoToLineDialog: function(event)
     {
-        this.showOpenResourceDialog(":");
+        if (this._currentUISourceCode)
+            this.showOpenResourceDialog(":");
         return true;
     },
 
