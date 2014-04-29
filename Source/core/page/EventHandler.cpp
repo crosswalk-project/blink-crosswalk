@@ -2290,8 +2290,8 @@ bool EventHandler::handleGestureEvent(const PlatformGestureEvent& gestureEvent)
         ASSERT_NOT_REACHED();
     }
 
-    Node* eventTarget = 0;
-    Scrollbar* scrollbar = 0;
+    RefPtr<Node> eventTarget;
+    RefPtr<Scrollbar> scrollbar;
     if (gestureEvent.type() == PlatformEvent::GestureScrollEnd
         || gestureEvent.type() == PlatformEvent::GestureScrollUpdate
         || gestureEvent.type() == PlatformEvent::GestureScrollUpdateWithoutPropagation
@@ -2357,7 +2357,7 @@ bool EventHandler::handleGestureEvent(const PlatformGestureEvent& gestureEvent)
 
     if (eventTarget) {
         bool eventSwallowed = false;
-        if (handleScrollGestureOnResizer(eventTarget, gestureEvent))
+        if (handleScrollGestureOnResizer(eventTarget.get(), gestureEvent))
             eventSwallowed = true;
         else
             eventSwallowed = eventTarget->dispatchGestureEvent(gestureEvent);
