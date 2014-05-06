@@ -734,7 +734,7 @@ WebInspector.TimelinePanel.prototype = {
      */
     _updateSearchHighlight: function(revealRecord, shouldJump)
     {
-        if (this._textFilter || !this._searchRegex) {
+        if (!this._textFilter.isEmpty() || !this._searchRegex) {
             this._clearHighlight();
             return;
         }
@@ -1087,6 +1087,14 @@ WebInspector.TimelineTextFilter = function()
 }
 
 WebInspector.TimelineTextFilter.prototype = {
+    /**
+     * @return {boolean}
+     */
+    isEmpty: function()
+    {
+        return !this._regex;
+    },
+
     /**
      * @param {?RegExp} regex
      */
