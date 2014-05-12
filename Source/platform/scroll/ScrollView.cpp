@@ -274,10 +274,7 @@ void ScrollView::scrollTo(const IntSize& newOffset)
     if (scrollbarsSuppressed())
         return;
 
-    if (isFrameView())
-        m_pendingScrollDelta += scrollDelta;
-    else
-        scrollContents(scrollDelta);
+    m_pendingScrollDelta += scrollDelta;
 }
 
 void ScrollView::setScrollPosition(const IntPoint& scrollPoint)
