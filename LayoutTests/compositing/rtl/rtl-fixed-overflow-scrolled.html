@@ -1,6 +1,5 @@
 <html>
 <head>
-<script src="../../resources/run-after-display.js"></script>
 <style>
     body {
         direction: rtl;
@@ -50,11 +49,9 @@
         window.setTimeout(function() {
             window.scrollTo(offset, 0);
             if (window.testRunner) {
-                runAfterDisplay(function() {
-                    if (top == self)
-                        document.getElementById('layertree').innerText = window.internals.layerTreeAsText(document);
-                    testRunner.notifyDone();
-                });
+                if (top == self)
+                    document.getElementById('layertree').innerText = window.internals.layerTreeAsText(document);
+                testRunner.notifyDone();
             }
         }, 0);
     }

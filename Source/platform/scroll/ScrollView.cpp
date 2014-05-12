@@ -274,7 +274,9 @@ void ScrollView::scrollTo(const IntSize& newOffset)
     if (scrollbarsSuppressed())
         return;
 
-    m_pendingScrollDelta += scrollDelta;
+    repaintFixedElementsAfterScrolling();
+    scrollContents(scrollDelta);
+    updateFixedElementsAfterScrolling();
 }
 
 void ScrollView::setScrollPosition(const IntPoint& scrollPoint)
@@ -511,15 +513,6 @@ IntRect ScrollView::rectToCopyOnScroll() const
         scrollViewRect.setHeight(scrollViewRect.height() - horizontalScrollbarHeight);
     }
     return scrollViewRect;
-}
-
-void ScrollView::scrollContentsIfNeeded()
-{
-    if (m_pendingScrollDelta.isZero())
-        return;
-    IntSize scrollDelta = m_pendingScrollDelta;
-    m_pendingScrollDelta = IntSize();
-    scrollContents(scrollDelta);
 }
 
 void ScrollView::scrollContents(const IntSize& scrollDelta)

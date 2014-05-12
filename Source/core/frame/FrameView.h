@@ -151,6 +151,8 @@ public:
     void setInputEventsTransformForEmulation(const IntSize&, float);
 
     virtual void setScrollPosition(const IntPoint&) OVERRIDE;
+    virtual void repaintFixedElementsAfterScrolling() OVERRIDE;
+    virtual void updateFixedElementsAfterScrolling() OVERRIDE;
     virtual bool shouldRubberBandInDirection(ScrollDirection) const OVERRIDE;
     virtual bool isRubberBandInProgress() const OVERRIDE;
     void setScrollPositionNonProgrammatically(const IntPoint&);
@@ -231,7 +233,6 @@ public:
     bool scrollToAnchor(const String&);
     void maintainScrollPositionAtAnchor(Node*);
     void scrollElementToRect(Element*, const IntRect&);
-    void scrollContentsIfNeededRecursive();
 
     // Methods to convert points and rects between the coordinate space of the renderer, and this view.
     IntRect convertFromRenderer(const RenderObject*, const IntRect&) const;
@@ -330,7 +331,6 @@ public:
     virtual GraphicsLayer* layerForScrollCorner() const OVERRIDE;
 
 protected:
-    virtual void scrollContentsIfNeeded();
     virtual bool scrollContentsFastPath(const IntSize& scrollDelta, const IntRect& rectToScroll, const IntRect& clipRect) OVERRIDE;
     virtual void scrollContentsSlowPath(const IntRect& updateRect) OVERRIDE;
 
@@ -393,9 +393,6 @@ private:
     void scrollToAnchor();
     void scrollPositionChanged();
     void didScrollTimerFired(Timer<FrameView>*);
-
-    void updateLayersAndCompositingAfterScrollIfNeeded();
-    void updateFixedElementRepaintRectsAfterScroll();
 
     bool hasCustomScrollbars() const;
     bool shouldUseCustomScrollbars(Element*& customScrollbarElement, LocalFrame*& customScrollbarFrame);

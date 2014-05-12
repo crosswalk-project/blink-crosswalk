@@ -1250,6 +1250,10 @@ bool FrameView::useSlowRepaintsIfNotOverlapped() const
 
 bool FrameView::shouldAttemptToScrollUsingFastPath() const
 {
+    // FIXME: useSlowRepaints reads compositing state in parent frames. Compositing state on the parent
+    // frames is not necessarily up to date.
+    // https://code.google.com/p/chromium/issues/detail?id=343766
+    DisableCompositingQueryAsserts disabler;
     return !useSlowRepaints();
 }
 
@@ -1389,24 +1393,6 @@ bool FrameView::shouldSetCursor() const
     return page && page->visibilityState() != PageVisibilityStateHidden && page->focusController().isActive();
 }
 
-void FrameView::scrollContentsIfNeededRecursive()
-{
-    scrollContentsIfNeeded();
-
-    for (LocalFrame* child = m_frame->tree().firstChild(); child; child = child->tree().nextSibling()) {
-        if (FrameView* view = child->view())
-            view->scrollContentsIfNeededRecursive();
-    }
-}
-
-void FrameView::scrollContentsIfNeeded()
-{
-    bool didScroll = !pendingScrollDelta().isZero();
-    ScrollView::scrollContentsIfNeeded();
-    if (didScroll)
-        updateFixedElementRepaintRectsAfterScroll();
-}
-
 bool FrameView::scrollContentsFastPath(const IntSize& scrollDelta, const IntRect& rectToScroll, const IntRect& clipRect)
 {
     if (!m_viewportConstrainedObjects || m_viewportConstrainedObjects->isEmpty()) {
@@ -1414,6 +1400,8 @@ bool FrameView::scrollContentsFastPath(const IntSize& scrollDelta, const IntRect
         return true;
     }
 
+    // https://code.google.com/p/chromium/issues/detail?id=343767
+    DisableCompositingQueryAsserts disabler;
     const bool isCompositedContentLayer = contentsInCompositedLayer();
 
     // Get the rects of the fixed objects visible in the rectToScroll
@@ -1421,8 +1409,8 @@ bool FrameView::scrollContentsFastPath(const IntSize& scrollDelta, const IntRect
     ViewportConstrainedObjectSet::const_iterator end = m_viewportConstrainedObjects->end();
     for (ViewportConstrainedObjectSet::const_iterator it = m_viewportConstrainedObjects->begin(); it != end; ++it) {
         RenderObject* renderer = *it;
-        // m_viewportConstrainedObjects should not contain non-viewport constrained objects.
-        ASSERT(renderer->style()->hasViewportConstrainedPosition());
+        if (!renderer->style()->hasViewportConstrainedPosition())
+            continue;
 
         // Fixed items should always have layers.
         ASSERT(renderer->hasLayer());
@@ -1476,7 +1464,7 @@ bool FrameView::scrollContentsFastPath(const IntSize& scrollDelta, const IntRect
     for (size_t i = 0; i < viewportConstrainedObjectsCount; ++i) {
         IntRect updateRect = subRectsToUpdate[i];
         IntRect scrolledRect = updateRect;
-        scrolledRect.move(-scrollDelta);
+        scrolledRect.move(scrollDelta);
         updateRect.unite(scrolledRect);
         if (isCompositedContentLayer) {
             updateRect = rootViewToContents(updateRect);
@@ -1494,6 +1482,11 @@ bool FrameView::scrollContentsFastPath(const IntSize& scrollDelta, const IntRect
 
 void FrameView::scrollContentsSlowPath(const IntRect& updateRect)
 {
+    // FIXME: This is called when JS calls scrollTo, at which point there's no guarantee that
+    // compositing state is up to date.
+    // https://code.google.com/p/chromium/issues/detail?id=343767
+    DisableCompositingQueryAsserts disabler;
+
     if (contentsInCompositedLayer()) {
         IntRect updateRect = visibleContentRect();
         ASSERT(renderView());
@@ -1682,57 +1675,23 @@ void FrameView::didScrollTimerFired(Timer<FrameView>*)
     }
 }
 
-void FrameView::updateLayersAndCompositingAfterScrollIfNeeded()
+void FrameView::repaintFixedElementsAfterScrolling()
 {
-    // Nothing to do after scrolling if there are no fixed position elements.
-    if (!hasViewportConstrainedObjects())
-        return;
-
     RefPtr<FrameView> protect(this);
-
-    // If there fixed position elements, scrolling may cause compositing layers to change.
-    // Update widget and layer positions after scrolling, but only if we're not inside of
-    // layout.
-    if (!m_nestedLayoutCount) {
+    // For fixed position elements, update widget positions and compositing layers after scrolling,
+    // but only if we're not inside of layout.
+    if (!m_nestedLayoutCount && hasViewportConstrainedObjects()) {
         updateWidgetPositions();
         if (RenderView* renderView = this->renderView())
             renderView->layer()->updateLayerPositionsAfterDocumentScroll();
     }
-
-    // Compositing layers may change after scrolling.
-    // FIXME: Maybe no longer needed after we land squashing and kill overlap testing?
-    if (RenderView* renderView = this->renderView())
-        renderView->compositor()->setNeedsCompositingUpdate(CompositingUpdateOnScroll);
 }
 
-void FrameView::updateFixedElementRepaintRectsAfterScroll()
+void FrameView::updateFixedElementsAfterScrolling()
 {
-    if (!hasViewportConstrainedObjects())
-        return;
-
-    // Update the repaint rects for fixed elements after scrolling and invalidation to reflect
-    // the new scroll position.
-    ViewportConstrainedObjectSet::const_iterator end = m_viewportConstrainedObjects->end();
-    for (ViewportConstrainedObjectSet::const_iterator it = m_viewportConstrainedObjects->begin(); it != end; ++it) {
-        RenderObject* renderer = *it;
-        // m_viewportConstrainedObjects should not contain non-viewport constrained objects.
-        ASSERT(renderer->style()->hasViewportConstrainedPosition());
-
-        // Fixed items should always have layers.
-        ASSERT(renderer->hasLayer());
-
-        RenderLayer* layer = toRenderBoxModelObject(renderer)->layer();
-
-        // Don't need to do this for composited fixed items.
-        if (layer->compositingState() == PaintsIntoOwnBacking)
-            continue;
-
-        // Also don't need to do this for invisible items.
-        if (layer->viewportConstrainedNotCompositedReason() == RenderLayer::NotCompositedForBoundsOutOfView
-            || layer->viewportConstrainedNotCompositedReason() == RenderLayer::NotCompositedForNoVisibleContent)
-            continue;
-
-        layer->repainter().computeRepaintRectsIncludingDescendants();
+    if (m_nestedLayoutCount <= 1 && hasViewportConstrainedObjects()) {
+        if (RenderView* renderView = this->renderView())
+            renderView->compositor()->setNeedsCompositingUpdate(CompositingUpdateOnScroll);
     }
 }
 
@@ -2338,10 +2297,8 @@ void FrameView::scrollTo(const IntSize& newOffset)
 {
     LayoutSize offset = scrollOffset();
     ScrollView::scrollTo(newOffset);
-    if (offset != scrollOffset()) {
-        updateLayersAndCompositingAfterScrollIfNeeded();
+    if (offset != scrollOffset())
         scrollPositionChanged();
-    }
     frame().loader().client()->didChangeScrollOffset();
 }
 
@@ -2828,8 +2785,6 @@ void FrameView::updateLayoutAndStyleForPainting()
         // See crbug.com/354100.
         view->compositor()->scheduleAnimationIfNeeded();
     }
-
-    scrollContentsIfNeededRecursive();
 }
 
 void FrameView::updateLayoutAndStyleIfNeededRecursive()
