@@ -317,6 +317,8 @@ private:
 private:
     DocumentLifecycle& lifecycle() const;
 
+    void applyOverlayFullscreenVideoAdjustment();
+
     RenderView& m_renderView;
     OwnPtr<GraphicsLayer> m_rootContentLayer;
     OwnPtr<GraphicsLayer> m_rootTransformLayer;
