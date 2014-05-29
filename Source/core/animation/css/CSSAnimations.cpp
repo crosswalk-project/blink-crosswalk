@@ -135,12 +135,14 @@ static void resolveKeyframes(StyleResolver* resolver, Element* element, const El
     if (startKeyframe->offset()) {
         startKeyframe = Keyframe::create();
         startKeyframe->setOffset(0);
+        startKeyframe->setEasing(defaultTimingFunction);
         keyframes.prepend(startKeyframe);
     }
     RefPtrWillBeRawPtr<Keyframe> endKeyframe = keyframes[keyframes.size() - 1];
     if (endKeyframe->offset() != 1) {
         endKeyframe = Keyframe::create();
         endKeyframe->setOffset(1);
+        endKeyframe->setEasing(defaultTimingFunction);
         keyframes.append(endKeyframe);
     }
     ASSERT(keyframes.size() >= 2);
