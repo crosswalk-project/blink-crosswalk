@@ -247,6 +247,8 @@ TEST_F(WebViewTest, SetBaseBackgroundColorBeforeMainFrame)
     // webView does not have a frame yet, but we should still be able to set the background color.
     webView->setBaseBackgroundColor(kBlue);
     EXPECT_EQ(kBlue, webView->backgroundColor());
+    webView->setMainFrame(WebLocalFrameImpl::create(0));
+    webView->close();
 }
 
 TEST_F(WebViewTest, SetBaseBackgroundColorAndBlendWithExistingContent)
@@ -833,6 +835,53 @@ TEST_F(WebViewTest, EnterFullscreenResetScrollAndScaleState)
     m_webViewHelper.reset(); // Explicitly reset to break dependency on locally scoped client.
 }
 
+class PrintWebViewClient : public FrameTestHelpers::TestWebViewClient {
+public:
+    PrintWebViewClient()
+        : m_printCalled(false)
+    {
+    }
+
+    // WebViewClient methods
+    virtual void printPage(WebLocalFrame*) OVERRIDE
+    {
+        m_printCalled = true;
+    }
+
+    bool printCalled() const { return m_printCalled; }
+
+private:
+    bool m_printCalled;
+};
+
+
+TEST_F(WebViewTest, PrintWithXHRInFlight)
+{
+    PrintWebViewClient client;
+    URLTestHelpers::registerMockedURLFromBaseURL(WebString::fromUTF8(m_baseURL.c_str()), WebString::fromUTF8("print_with_xhr_inflight.html"));
+    WebViewImpl* webViewImpl = m_webViewHelper.initializeAndLoad(m_baseURL + "print_with_xhr_inflight.html", true, 0, &client);
+
+    ASSERT_EQ(WebCore::FrameStateComplete, webViewImpl->page()->mainFrame()->loader().state());
+    EXPECT_TRUE(client.printCalled());
+    m_webViewHelper.reset();
+}
+
+class DropTask : public WebThread::Task {
+public:
+    explicit DropTask(WebView* webView) : m_webView(webView)
+    {
+    }
+
+    virtual void run() OVERRIDE
+    {
+        const WebPoint clientPoint(0, 0);
+        const WebPoint screenPoint(0, 0);
+        m_webView->dragTargetDrop(clientPoint, screenPoint, 0);
+    }
+
+private:
+    WebView* const m_webView;
+};
 static void DragAndDropURL(WebViewImpl* webView, const std::string& url)
 {
     blink::WebDragData dragData;
