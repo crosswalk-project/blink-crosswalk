@@ -79,9 +79,13 @@ PassRefPtr<HistoryItem> HistoryItem::copy() const
     return adoptRef(new HistoryItem(*this));
 }
 
-void HistoryItem::generateNewSequenceNumbers()
+void HistoryItem::generateNewItemSequenceNumber()
 {
     m_itemSequenceNumber = generateSequenceNumber();
+}
+
+void HistoryItem::generateNewDocumentSequenceNumber()
+{
     m_documentSequenceNumber = generateSequenceNumber();
 }
 
