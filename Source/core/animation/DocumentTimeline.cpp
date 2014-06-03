@@ -70,7 +70,7 @@ DocumentTimeline::~DocumentTimeline()
 
 AnimationPlayer* DocumentTimeline::createAnimationPlayer(TimedItem* child)
 {
-    RefPtr<AnimationPlayer> player = AnimationPlayer::create(*this, child);
+    RefPtr<AnimationPlayer> player = AnimationPlayer::create(m_document->contextDocument().get(), *this, child);
     AnimationPlayer* result = player.get();
     m_players.add(result);
     setOutdatedAnimationPlayer(result);

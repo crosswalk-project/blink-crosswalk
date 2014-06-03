@@ -32,6 +32,7 @@
 #define AnimationPlayer_h
 
 #include "core/animation/TimedItem.h"
+#include "core/dom/ActiveDOMObject.h"
 #include "core/events/EventTarget.h"
 #include "wtf/RefPtr.h"
 
@@ -40,12 +41,14 @@ namespace WebCore {
 class DocumentTimeline;
 class ExceptionState;
 
-class AnimationPlayer FINAL : public RefCounted<AnimationPlayer>, public EventTargetWithInlineData {
+class AnimationPlayer FINAL : public RefCounted<AnimationPlayer>
+    , public ActiveDOMObject
+    , public EventTargetWithInlineData {
     REFCOUNTED_EVENT_TARGET(AnimationPlayer);
 public:
 
     ~AnimationPlayer();
-    static PassRefPtr<AnimationPlayer> create(DocumentTimeline&, TimedItem*);
+    static PassRefPtr<AnimationPlayer> create(ExecutionContext*, DocumentTimeline&, TimedItem*);
 
     // Returns whether the player is finished.
     bool update(TimingUpdateReason);
@@ -78,6 +81,9 @@ public:
 
     virtual const AtomicString& interfaceName() const OVERRIDE;
     virtual ExecutionContext* executionContext() const OVERRIDE;
+    virtual bool hasPendingActivity() const OVERRIDE;
+    virtual void stop() OVERRIDE;
+    virtual bool dispatchEvent(PassRefPtrWillBeRawPtr<Event>) OVERRIDE;
 
     double playbackRate() const { return m_playbackRate; }
     void setPlaybackRate(double);
@@ -143,7 +149,7 @@ public:
     virtual bool addEventListener(const AtomicString& eventType, PassRefPtr<EventListener>, bool useCapture = false) OVERRIDE;
 
 private:
-    AnimationPlayer(DocumentTimeline&, TimedItem*);
+    AnimationPlayer(ExecutionContext*, DocumentTimeline&, TimedItem*);
     double sourceEnd() const;
     bool limited(double currentTime) const;
     double currentTimeWithoutLag() const;
@@ -172,6 +178,10 @@ private:
     bool m_outdated;
 
     bool m_finished;
+    // Holds a 'finished' event queued for asynchronous dispatch via the
+    // ScriptedAnimationController. This object remains active until the
+    // event is actually dispatched.
+    RefPtr<Event> m_pendingFinishedEvent;
 };
 
 } // namespace

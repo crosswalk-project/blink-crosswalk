@@ -48,13 +48,16 @@ static unsigned nextSequenceNumber()
 
 }
 
-PassRefPtr<AnimationPlayer> AnimationPlayer::create(DocumentTimeline& timeline, TimedItem* content)
+PassRefPtr<AnimationPlayer> AnimationPlayer::create(ExecutionContext* executionContext, DocumentTimeline& timeline, TimedItem* content)
 {
-    return adoptRef(new AnimationPlayer(timeline, content));
+    RefPtr<AnimationPlayer> player = adoptRef(new AnimationPlayer(executionContext, timeline, content));
+    player->suspendIfNeeded();
+    return player.release();
 }
 
-AnimationPlayer::AnimationPlayer(DocumentTimeline& timeline, TimedItem* content)
-    : m_playbackRate(1)
+AnimationPlayer::AnimationPlayer(ExecutionContext* executionContext, DocumentTimeline& timeline, TimedItem* content)
+    : ActiveDOMObject(executionContext)
+    , m_playbackRate(1)
     , m_startTime(nullValue())
     , m_holdTime(nullValue())
     , m_storedTimeLag(0)
@@ -283,11 +286,25 @@ const AtomicString& AnimationPlayer::interfaceName() const
 
 ExecutionContext* AnimationPlayer::executionContext() const
 {
-    if (m_timeline) {
-        if (Document* document = m_timeline->document())
-            return document->contextDocument().get();
-    }
-    return 0;
+    return ActiveDOMObject::executionContext();
+}
+
+bool AnimationPlayer::hasPendingActivity() const
+{
+    return m_pendingFinishedEvent || (!m_finished && hasEventListeners(EventTypeNames::finish));
+}
+
+void AnimationPlayer::stop()
+{
+    m_finished = true;
+    m_pendingFinishedEvent = nullptr;
+}
+
+bool AnimationPlayer::dispatchEvent(PassRefPtrWillBeRawPtr<Event> event)
+{
+    if (m_pendingFinishedEvent == event)
+        m_pendingFinishedEvent = nullptr;
+    return EventTargetWithInlineData::dispatchEvent(event);
 }
 
 void AnimationPlayer::setPlaybackRate(double playbackRate)
@@ -365,10 +382,10 @@ bool AnimationPlayer::update(TimingUpdateReason reason)
         if (reason == TimingUpdateForAnimationFrame && hasStartTime()) {
             const AtomicString& eventType = EventTypeNames::finish;
             if (executionContext() && hasEventListeners(eventType)) {
-                RefPtrWillBeRawPtr<AnimationPlayerEvent> event = AnimationPlayerEvent::create(eventType, currentTime(), timeline()->currentTime());
-                event->setTarget(this);
-                event->setCurrentTarget(this);
-                m_timeline->document()->enqueueAnimationFrameEvent(event.release());
+                m_pendingFinishedEvent = AnimationPlayerEvent::create(eventType, currentTime(), timeline()->currentTime());
+                m_pendingFinishedEvent->setTarget(this);
+                m_pendingFinishedEvent->setCurrentTarget(this);
+                m_timeline->document()->enqueueAnimationFrameEvent(m_pendingFinishedEvent);
             }
             m_finished = true;
         }
