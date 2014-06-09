@@ -369,8 +369,7 @@ void LocalFrame::createView(const IntSize& viewportSize, const Color& background
 
     setView(frameView);
 
-    if (backgroundColor.alpha())
-        frameView->updateBackgroundRecursively(backgroundColor, transparent);
+    frameView->updateBackgroundRecursively(backgroundColor, transparent);
 
     if (isMainFrame)
         frameView->setParentVisible(true);
