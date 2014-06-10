@@ -42,7 +42,10 @@ PassRefPtr<NodeList> TreeScopeEventContext::ensureEventPath(EventPath& path)
     Vector<RefPtr<Node> > nodes;
     nodes.reserveInitialCapacity(path.size());
     for (size_t i = 0; i < path.size(); ++i) {
-        if (path[i].treeScopeEventContext()->isInclusiveAncestorOf(*this))
+        TreeScope& treeScope = path[i].treeScopeEventContext().treeScope();
+        if (treeScope.rootNode().isShadowRoot() && toShadowRoot(treeScope).type() == ShadowRoot::AuthorShadowRoot)
+            nodes.append(path[i].node());
+        else if (path[i].treeScopeEventContext().isInclusiveAncestorOf(*this))
             nodes.append(path[i].node());
     }
     m_eventPath = StaticNodeList::adopt(nodes);
