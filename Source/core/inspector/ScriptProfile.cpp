@@ -64,6 +64,26 @@ double ScriptProfile::endTime() const
     return static_cast<double>(m_profile->GetEndTime()) / 1000000;
 }
 
+static RefPtr<TypeBuilder::Array<TypeBuilder::Profiler::LineTick> > buildInspectorObjectForLineTicks(const v8::CpuProfileNode* node)
+{
+    RefPtr<TypeBuilder::Array<TypeBuilder::Profiler::LineTick> > array = TypeBuilder::Array<TypeBuilder::Profiler::LineTick>::create();
+    unsigned int lineCount = node->GetHitLineCount();
+    if (lineCount) {
+        Vector<v8::CpuProfileNode::LineTick> entries(lineCount);
+        bool res = node->GetLineTicks(&entries[0], lineCount);
+        if (res) {
+            for (unsigned int i = 0; i < lineCount; i++) {
+                RefPtr<TypeBuilder::Profiler::LineTick> line = TypeBuilder::Profiler::LineTick::create()
+                    .setLine(entries[i].line)
+                    .setTicks(entries[i].hit_count);
+                array->addItem(line);
+                line.release();
+            }
+        }
+    }
+    return array;
+}
+
 static PassRefPtr<TypeBuilder::Profiler::CPUProfileNode> buildInspectorObjectFor(const v8::CpuProfileNode* node)
 {
     v8::HandleScope handleScope(v8::Isolate::GetCurrent());
@@ -75,6 +95,8 @@ static PassRefPtr<TypeBuilder::Profiler::CPUProfileNode> buildInspectorObjectFor
         children->addItem(buildInspectorObjectFor(child));
     }
 
+    RefPtr<TypeBuilder::Array<TypeBuilder::Profiler::LineTick> > lineTicks = buildInspectorObjectForLineTicks(node);
+
     RefPtr<TypeBuilder::Profiler::CPUProfileNode> result = TypeBuilder::Profiler::CPUProfileNode::create()
         .setFunctionName(toCoreString(node->GetFunctionName()))
         .setScriptId(String::number(node->GetScriptId()))
@@ -84,6 +106,7 @@ static PassRefPtr<TypeBuilder::Profiler::CPUProfileNode> buildInspectorObjectFor
         .setHitCount(node->GetHitCount())
         .setCallUID(node->GetCallUid())
         .setChildren(children.release())
+        .setLineTicks(lineTicks.release())
         .setDeoptReason(node->GetBailoutReason())
         .setId(node->GetNodeId());
     return result.release();
