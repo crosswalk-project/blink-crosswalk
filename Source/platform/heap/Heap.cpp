@@ -816,16 +816,29 @@ void ThreadHeap<Header>::assertEmpty()
         for (headerAddress = page->payload(); headerAddress < end; ) {
             BasicObjectHeader* basicHeader = reinterpret_cast<BasicObjectHeader*>(headerAddress);
             ASSERT(basicHeader->size() < blinkPagePayloadSize());
-            // Live object is potentially a dangling pointer from some root.
-            // Treat it as critical bug both in release and debug mode.
-            RELEASE_ASSERT(basicHeader->isFree());
+            // A live object is potentially a dangling pointer from
+            // some root. Treat that as a bug. Unfortunately, it is
+            // hard to reliably check in the presence of conservative
+            // stack scanning. Something could be conservatively kept
+            // alive because a non-pointer on another thread's stack
+            // is treated as a pointer into the heap.
+            //
+            // FIXME: This assert can currently trigger in cases where
+            // worker shutdown does not get enough precise GCs to get
+            // all objects removed from the worker heap. There are two
+            // issues: 1) conservative GCs keeping objects alive, and
+            // 2) long chains of RefPtrs/Persistents that require more
+            // GCs to get everything cleaned up. Maybe we can keep
+            // threads alive until their heaps become empty instead of
+            // forcing the threads to die immediately?
+            ASSERT(Heap::lastGCWasConservative() || basicHeader->isFree());
             headerAddress += basicHeader->size();
         }
         ASSERT(headerAddress == end);
         addToFreeList(page->payload(), end - page->payload());
     }
 
-    RELEASE_ASSERT(!m_firstLargeHeapObject);
+    ASSERT(Heap::lastGCWasConservative() || !m_firstLargeHeapObject);
 }
 
 template<typename Header>
@@ -1554,6 +1567,7 @@ Address Heap::checkAndMarkPointer(Visitor* visitor, Address address)
             // Pointer was in a page of that thread. If it actually pointed
             // into an object then that object was found and marked.
             ASSERT(!s_heapDoesNotContainCache->lookup(address));
+            s_lastGCWasConservative = true;
             return address;
         }
     }
@@ -1637,6 +1651,9 @@ void Heap::collectGarbage(ThreadState::StackState stackState)
         ThreadState::current()->setGCRequested();
         return;
     }
+
+    s_lastGCWasConservative = false;
+
     TRACE_EVENT0("Blink", "Heap::collectGarbage");
     TRACE_EVENT_SCOPED_SAMPLING_STATE("Blink", "BlinkGC");
 #if ENABLE(GC_TRACING)
@@ -1726,4 +1743,5 @@ CallbackStack* Heap::s_markingStack;
 CallbackStack* Heap::s_weakCallbackStack;
 HeapDoesNotContainCache* Heap::s_heapDoesNotContainCache;
 bool Heap::s_shutdownCalled = false;
+bool Heap::s_lastGCWasConservative = false;
 }

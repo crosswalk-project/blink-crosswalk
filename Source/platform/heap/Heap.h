@@ -162,15 +162,16 @@ public:
     virtual bool isLargeObject() { return false; }
 
 private:
-    // Accessor to silence unused warnings.
-    void* padding() const { return m_padding; }
+    // Accessor to silence unused warnings for the m_padding field.
+    intptr_t padding() const { return m_padding; }
 
     PageMemory* m_storage;
     const GCInfo* m_gcInfo;
     ThreadState* m_threadState;
-    // Free word only needed to ensure proper alignment of the
-    // HeapPage header.
-    void* m_padding;
+    // Pointer sized integer to ensure proper alignment of the
+    // HeapPage header. This can be used as a bit field if we need
+    // to associate more information with pages.
+    intptr_t m_padding;
 };
 
 // Large allocations are allocated as separate objects and linked in a
@@ -951,6 +952,10 @@ public:
     static void flushHeapDoesNotContainCache();
     static bool heapDoesNotContainCacheIsEmpty() { return s_heapDoesNotContainCache->isEmpty(); }
 
+    // Return true if the last GC found a pointer into a heap page
+    // during conservative scanning.
+    static bool lastGCWasConservative() { return s_lastGCWasConservative; }
+
 private:
     static Visitor* s_markingVisitor;
 
@@ -958,6 +963,7 @@ private:
     static CallbackStack* s_weakCallbackStack;
     static HeapDoesNotContainCache* s_heapDoesNotContainCache;
     static bool s_shutdownCalled;
+    static bool s_lastGCWasConservative;
     friend class ThreadState;
 };
 
