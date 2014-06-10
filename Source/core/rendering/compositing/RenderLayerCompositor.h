@@ -207,6 +207,8 @@ public:
 
     void updateDirectCompositingReasons(RenderLayer*);
 
+    void setOverlayLayer(GraphicsLayer*);
+
 private:
     class OverlapMap;
 
