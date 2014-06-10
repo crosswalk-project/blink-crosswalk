@@ -3487,7 +3487,8 @@
                     { "name": "callUID", "type": "number", "description": "Call UID." },
                     { "name": "children", "type": "array", "items": { "$ref": "CPUProfileNode" }, "description": "Child nodes." },
                     { "name": "deoptReason", "type": "string", "description": "The reason of being not optimized. The function may be deoptimized or marked as don't optimize."},
-                    { "name": "id", "type": "integer", "description": "Unique id of the node." }
+                    { "name": "id", "type": "integer", "description": "Unique id of the node." },
+                    { "name": "lineTicks", "type": "array", "items": { "$ref": "LineTick" }, "description": "A set of source line ticks." }
                 ]
             },
             {
@@ -3500,6 +3501,15 @@
                     { "name": "endTime", "type": "number", "description": "Profiling end time in seconds." },
                     { "name": "samples", "optional": true, "type": "array", "items": { "type": "integer" }, "description": "Ids of samples top nodes." },
                     { "name": "timestamps", "optional": true, "type": "array", "items": { "type": "number" }, "description": "Timestamps of the samples in microseconds." }
+                ]
+            },
+            {
+                "id": "LineTick",
+                "type": "object",
+                "description": "Specifies a number of samples attributed to a certain source line.",
+                "properties": [
+                    { "name": "line", "type": "integer", "description": "Source line number." },
+                    { "name": "ticks", "type": "integer", "description": "Number of samples attributed to a source line number." }
                 ]
             }
         ],
