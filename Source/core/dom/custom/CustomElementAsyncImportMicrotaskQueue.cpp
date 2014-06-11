@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Google Inc. All rights reserved.
+ * Copyright (C) 2014 Google Inc. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -28,31 +28,28 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef CustomElementMicrotaskStep_h
-#define CustomElementMicrotaskStep_h
+#include "config.h"
+#include "core/dom/custom/CustomElementAsyncImportMicrotaskQueue.h"
 
-#include "wtf/Noncopyable.h"
+#include "core/dom/custom/CustomElementMicrotaskImportStep.h"
 
 namespace WebCore {
 
-class CustomElementMicrotaskStep {
-    WTF_MAKE_NONCOPYABLE(CustomElementMicrotaskStep);
-public:
-    CustomElementMicrotaskStep() { }
-    virtual ~CustomElementMicrotaskStep() { }
-
-    enum Result {
-        Processing,
-        FinishedProcessing
-    };
-
-    virtual Result process() = 0;
-
-#if !defined(NDEBUG)
-    virtual void show(unsigned indent) = 0;
-#endif
-};
-
+void CustomElementAsyncImportMicrotaskQueue::enqueue(PassOwnPtr<CustomElementMicrotaskImportStep> step)
+{
+    m_queue.append(step);
 }
 
-#endif // CustomElementMicrotaskStep_h
+void CustomElementAsyncImportMicrotaskQueue::doDispatch()
+{
+    WillBeHeapVector<OwnPtr<CustomElementMicrotaskStep> > remaining;
+
+    for (unsigned i = 0; i < m_queue.size(); ++i) {
+        if (CustomElementMicrotaskStep::Processing == m_queue[i]->process())
+            remaining.append(m_queue[i].release());
+    }
+
+    m_queue.swap(remaining);
+}
+
+} // namespace WebCore

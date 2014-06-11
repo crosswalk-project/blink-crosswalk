@@ -55,12 +55,7 @@ CustomElementMicrotaskResolutionStep::~CustomElementMicrotaskResolutionStep()
 CustomElementMicrotaskStep::Result CustomElementMicrotaskResolutionStep::process()
 {
     m_context->resolve(m_element.get(), m_descriptor);
-    return CustomElementMicrotaskStep::ContinueWithRemoving;
-}
-
-bool CustomElementMicrotaskResolutionStep::needsProcessOrStop() const
-{
-    return true;
+    return CustomElementMicrotaskStep::FinishedProcessing;
 }
 
 #if !defined(NDEBUG)

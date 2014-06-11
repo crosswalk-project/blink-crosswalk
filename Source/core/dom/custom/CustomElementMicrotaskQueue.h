@@ -41,26 +41,35 @@
 
 namespace WebCore {
 
-class CustomElementMicrotaskQueue : public RefCounted<CustomElementMicrotaskQueue> {
-    WTF_MAKE_NONCOPYABLE(CustomElementMicrotaskQueue);
+class CustomElementMicrotaskQueueBase : public RefCounted<CustomElementMicrotaskQueueBase> {
+    WTF_MAKE_NONCOPYABLE(CustomElementMicrotaskQueueBase);
 public:
-    static PassRefPtr<CustomElementMicrotaskQueue> create() { return adoptRef(new CustomElementMicrotaskQueue()); }
+    virtual ~CustomElementMicrotaskQueueBase() { }
 
 
     bool isEmpty() const { return m_queue.isEmpty(); }
-    void enqueue(PassOwnPtr<CustomElementMicrotaskStep>);
-
-    typedef CustomElementMicrotaskStep::Result Result;
-    Result dispatch();
-    bool needsProcessOrStop() const;
+    void dispatch();
 
 #if !defined(NDEBUG)
     void show(unsigned indent);
 #endif
-private:
-    CustomElementMicrotaskQueue() { }
+
+protected:
+    CustomElementMicrotaskQueueBase() { }
+    virtual void doDispatch() = 0;
 
     Vector<OwnPtr<CustomElementMicrotaskStep> > m_queue;
+};
+
+class CustomElementMicrotaskQueue : public CustomElementMicrotaskQueueBase {
+public:
+    static PassRefPtr<CustomElementMicrotaskQueue> create() { return adoptRef(new CustomElementMicrotaskQueue()); }
+
+    void enqueue(PassOwnPtr<CustomElementMicrotaskStep>);
+
+private:
+    CustomElementMicrotaskQueue() { }
+    virtual void doDispatch();
 };
 
 }

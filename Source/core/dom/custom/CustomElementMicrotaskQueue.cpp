@@ -38,9 +38,9 @@ namespace WebCore {
 class MicrotaskQueueInvocationScope {
 public:
 #if defined(NDEBUG)
-    explicit MicrotaskQueueInvocationScope(CustomElementMicrotaskQueue*) { }
+    explicit MicrotaskQueueInvocationScope(CustomElementMicrotaskQueueBase*) { }
 #else
-    explicit MicrotaskQueueInvocationScope(CustomElementMicrotaskQueue* queue)
+    explicit MicrotaskQueueInvocationScope(CustomElementMicrotaskQueueBase* queue)
         : m_parent(s_top)
         , m_queue(queue)
     {
@@ -65,7 +65,7 @@ private:
     }
 
     MicrotaskQueueInvocationScope* m_parent;
-    CustomElementMicrotaskQueue* m_queue;
+    CustomElementMicrotaskQueueBase* m_queue;
 
     static MicrotaskQueueInvocationScope* s_top;
 #endif
@@ -75,46 +75,14 @@ private:
 MicrotaskQueueInvocationScope* MicrotaskQueueInvocationScope::s_top = 0;
 #endif
 
-void CustomElementMicrotaskQueue::enqueue(PassOwnPtr<CustomElementMicrotaskStep> step)
-{
-    m_queue.append(step);
-}
-
-CustomElementMicrotaskStep::Result CustomElementMicrotaskQueue::dispatch()
+void CustomElementMicrotaskQueueBase::dispatch()
 {
     MicrotaskQueueInvocationScope scope(this);
-    Vector<OwnPtr<CustomElementMicrotaskStep> > remaining;
-    Result accumulatedResult = CustomElementMicrotaskStep::ContinueWithRemoving;
-
-    unsigned i;
-    for (i = 0; i < m_queue.size(); ++i) {
-        Result result = m_queue[i]->process();
-        accumulatedResult = CustomElementMicrotaskStep::Result(result | accumulatedResult);
-        if (result & CustomElementMicrotaskStep::ShouldRemain)
-            remaining.append(m_queue[i].release());
-        if (result & CustomElementMicrotaskStep::ShouldStop)
-            break;
-    }
-
-    for (++i; i < m_queue.size(); ++i)
-        remaining.append(m_queue[i].release());
-    m_queue.swap(remaining);
-
-    return accumulatedResult;
-}
-
-bool CustomElementMicrotaskQueue::needsProcessOrStop() const
-{
-    for (size_t i = 0; i < m_queue.size(); ++i) {
-        if (m_queue[i]->needsProcessOrStop())
-            return true;
-    }
-
-    return false;
+    doDispatch();
 }
 
 #if !defined(NDEBUG)
-void CustomElementMicrotaskQueue::show(unsigned indent)
+void CustomElementMicrotaskQueueBase::show(unsigned indent)
 {
     for (unsigned q = 0; q < m_queue.size(); ++q) {
         if (m_queue[q])
@@ -124,5 +92,22 @@ void CustomElementMicrotaskQueue::show(unsigned indent)
     }
 }
 #endif
+
+void CustomElementMicrotaskQueue::enqueue(PassOwnPtr<CustomElementMicrotaskStep> step)
+{
+    m_queue.append(step);
+}
+
+void CustomElementMicrotaskQueue::doDispatch()
+{
+    unsigned i;
+
+    for (i = 0; i < m_queue.size(); ++i) {
+        if (CustomElementMicrotaskStep::Processing == m_queue[i]->process())
+            break;
+    }
+
+    m_queue.remove(0, i);
+}
 
 } // namespace WebCore

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Google Inc. All rights reserved.
+ * Copyright (C) 2014 Google Inc. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
@@ -28,31 +28,26 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef CustomElementMicrotaskStep_h
-#define CustomElementMicrotaskStep_h
+#ifndef CustomElementAsyncImportMicrotaskQueue_h
+#define CustomElementAsyncImportMicrotaskQueue_h
 
-#include "wtf/Noncopyable.h"
+#include "core/dom/custom/CustomElementMicrotaskQueue.h"
 
 namespace WebCore {
 
-class CustomElementMicrotaskStep {
-    WTF_MAKE_NONCOPYABLE(CustomElementMicrotaskStep);
+class CustomElementMicrotaskImportStep;
+
+class CustomElementAsyncImportMicrotaskQueue : public CustomElementMicrotaskQueueBase {
 public:
-    CustomElementMicrotaskStep() { }
-    virtual ~CustomElementMicrotaskStep() { }
+    static PassRefPtrWillBeRawPtr<CustomElementAsyncImportMicrotaskQueue> create() { return adoptRefWillBeNoop(new CustomElementAsyncImportMicrotaskQueue()); }
 
-    enum Result {
-        Processing,
-        FinishedProcessing
-    };
+    void enqueue(PassOwnPtr<CustomElementMicrotaskImportStep>);
 
-    virtual Result process() = 0;
-
-#if !defined(NDEBUG)
-    virtual void show(unsigned indent) = 0;
-#endif
+private:
+    CustomElementAsyncImportMicrotaskQueue() { }
+    virtual void doDispatch() OVERRIDE;
 };
 
 }
 
-#endif // CustomElementMicrotaskStep_h
+#endif // CustomElementAsyncImportMicrotaskQueue_h

@@ -35,6 +35,7 @@
 #include "core/dom/custom/CustomElement.h"
 #include "core/dom/custom/CustomElementMicrotaskDispatcher.h"
 #include "core/dom/custom/CustomElementMicrotaskImportStep.h"
+#include "core/dom/custom/CustomElementMicrotaskQueue.h"
 #include "core/html/imports/HTMLImportChildClient.h"
 #include "core/html/imports/HTMLImportLoader.h"
 #include "core/html/imports/HTMLImportsController.h"
@@ -208,7 +209,7 @@ void HTMLImportChild::shareLoader(HTMLImportChild* loader)
 
 bool HTMLImportChild::isDone() const
 {
-    return m_loader && m_loader->isDone() && !m_loader->microtaskQueue()->needsProcessOrStop() && !m_customElementMicrotaskStep;
+    return m_loader && m_loader->isDone() && m_loader->microtaskQueue()->isEmpty() && !m_customElementMicrotaskStep;
 }
 
 bool HTMLImportChild::loaderHasError() const
