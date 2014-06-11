@@ -144,13 +144,13 @@ Document* HTMLImportChild::document() const
 void HTMLImportChild::stateWillChange()
 {
     toHTMLImportsController(root())->scheduleRecalcState();
+    ensureLoader();
 }
 
 void HTMLImportChild::stateDidChange()
 {
     HTMLImport::stateDidChange();
 
-    ensureLoader();
     if (state().isReady())
         didFinish();
 }
@@ -208,7 +208,7 @@ void HTMLImportChild::shareLoader(HTMLImportChild* loader)
 
 bool HTMLImportChild::isDone() const
 {
-    return m_loader && m_loader->isDone() && !m_customElementMicrotaskStep;
+    return m_loader && m_loader->isDone() && !m_loader->microtaskQueue()->needsProcessOrStop() && !m_customElementMicrotaskStep;
 }
 
 bool HTMLImportChild::loaderHasError() const
