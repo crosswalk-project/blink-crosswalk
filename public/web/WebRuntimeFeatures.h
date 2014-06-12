@@ -127,6 +127,8 @@ public:
     BLINK_EXPORT static void enableTargetedStyleRecalc(bool);
 
     BLINK_EXPORT static void enablePreciseMemoryInfo(bool);
+    
+    BLINK_EXPORT static void enableScreenOrientation(bool);
 
     BLINK_EXPORT static void enableLayerSquashing(bool);
 
