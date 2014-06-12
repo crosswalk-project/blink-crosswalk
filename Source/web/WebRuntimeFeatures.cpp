@@ -290,4 +290,9 @@ void WebRuntimeFeatures::enableShowModalDialog(bool enable)
     RuntimeEnabledFeatures::setShowModalDialogEnabled(enable);
 }
 
+void WebRuntimeFeatures::enableScreenOrientation(bool enable)
+{
+    RuntimeEnabledFeatures::setScreenOrientationEnabled(enable);
+}
+
 } // namespace blink
