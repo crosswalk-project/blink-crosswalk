@@ -281,4 +281,9 @@ void WebRuntimeFeatures::enablePreciseMemoryInfo(bool enable)
     RuntimeEnabledFeatures::setPreciseMemoryInfoEnabled(enable);
 }
 
+void WebRuntimeFeatures::enableScreenOrientation(bool enable)
+{
+    RuntimeEnabledFeatures::setScreenOrientationEnabled(enable);
+}
+
 } // namespace blink
