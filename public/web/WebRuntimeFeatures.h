@@ -126,6 +126,8 @@ public:
     BLINK_EXPORT static void enableTargetedStyleRecalc(bool);
 
     BLINK_EXPORT static void enablePreciseMemoryInfo(bool);
+    
+    BLINK_EXPORT static void enableScreenOrientation(bool);
 
 private:
     WebRuntimeFeatures();
