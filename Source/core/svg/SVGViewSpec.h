@@ -54,8 +54,6 @@ public:
     void setZoomAndPan(unsigned short value) { } // read only
     void setZoomAndPan(unsigned short value, ExceptionState&);
 
-    SVGSVGElement* contextElement() { return m_contextElement.get(); }
-
 private:
     explicit SVGViewSpec(SVGSVGElement*);
 

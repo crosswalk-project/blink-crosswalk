@@ -19,13 +19,13 @@
     document.getElementById("container").removeChild(document.getElementById("container").childNodes[0]);
 
     asyncGC(function() {
-        shouldBeNonNull("svgView.preserveAspectRatio;");
-        shouldBeNonNull("svgView.transform;");
-        shouldBeNull("svgView.viewTarget;");
-        shouldNotThrow("svgView.viewBox;");
-        shouldBeEqualToString("svgView.preserveAspectRatioString", "xMidYMid meet");
+        shouldBeNull("viewPreserveAspectRatio = svgView.preserveAspectRatio;");
+        shouldBeNull("viewTransform = svgView.transform;");
+        shouldBeNull("viewViewTarget = svgView.viewTarget;");
+        shouldNotThrow("viewViewBox = svgView.viewBox;");
+        shouldBeEqualToString("svgView.preserveAspectRatioString", "");
         shouldBeEqualToString("svgView.transformString", "");
-        shouldBeEqualToString("svgView.viewBoxString", "0 0 0 0");
+        shouldBeEqualToString("svgView.viewBoxString", "");
         finishJSTest();
     });
 
