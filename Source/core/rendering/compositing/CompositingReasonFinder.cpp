@@ -52,9 +52,10 @@ void CompositingReasonFinder::updateTriggers()
     if (settings.acceleratedCompositingForFiltersEnabled())
         m_compositingTriggers |= FilterTrigger;
 
-    // We map both these settings to universal overlow scrolling.
-    // FIXME: Replace these settings with a generic compositing setting for HighDPI.
-    if (settings.acceleratedCompositingForOverflowScrollEnabled() || settings.compositorDrivenAcceleratedScrollingEnabled())
+    if (settings.acceleratedCompositingForOverflowScrollEnabled())
+        m_compositingTriggers |= LegacyOverflowScrollTrigger;
+
+    if (settings.compositorDrivenAcceleratedScrollingEnabled())
         m_compositingTriggers |= OverflowScrollTrigger;
 
     // FIXME: acceleratedCompositingForFixedPositionEnabled should be renamed acceleratedCompositingForViewportConstrainedPositionEnabled().
