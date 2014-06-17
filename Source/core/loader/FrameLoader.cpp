@@ -947,7 +947,7 @@ bool FrameLoader::checkLoadCompleteForThisFrame()
     }
 
     bool allChildrenAreDoneLoading = true;
-    for (LocalFrame* child = m_frame->tree().firstChild(); child; child = child->tree().nextSibling())
+    for (RefPtr<LocalFrame> child = m_frame->tree().firstChild(); child; child = child->tree().nextSibling())
         allChildrenAreDoneLoading &= child->loader().checkLoadCompleteForThisFrame();
     if (!allChildrenAreDoneLoading)
         return false;
