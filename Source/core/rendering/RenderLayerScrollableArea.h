@@ -212,7 +212,6 @@ private:
     void setHasVerticalScrollbar(bool hasScrollbar);
 
     void updateScrollCornerStyle();
-    IntSize minimumSizeForResizing();
 
     // See comments on isPointInResizeControl.
     IntRect resizerCornerRect(const IntRect&, ResizerHitTestType) const;
