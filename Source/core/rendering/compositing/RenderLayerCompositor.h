@@ -209,6 +209,8 @@ public:
 
     void setOverlayLayer(GraphicsLayer*);
 
+    bool inOverlayFullscreenVideo() const { return m_inOverlayFullscreenVideo; }
+
 private:
     class OverlapMap;
 
@@ -310,6 +312,8 @@ private:
 #if USE(RUBBER_BANDING)
     OwnPtr<GraphicsLayer> m_layerForOverhangShadow;
 #endif
+
+    bool m_inOverlayFullscreenVideo;
 };
 
 } // namespace WebCore

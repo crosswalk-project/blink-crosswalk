@@ -119,6 +119,7 @@ RenderLayerCompositor::RenderLayerCompositor(RenderView& renderView)
     , m_needsUpdateFixedBackground(false)
     , m_isTrackingRepaints(false)
     , m_rootLayerAttachment(RootLayerUnattached)
+    , m_inOverlayFullscreenVideo(false)
 {
     updateAcceleratedCompositingSettings();
 }
@@ -440,6 +441,7 @@ void RenderLayerCompositor::updateIfNeeded()
 
         // Host the document layer in the RenderView's root layer.
         if (RuntimeEnabledFeatures::overlayFullscreenVideoEnabled() && m_renderView.frame()->isMainFrame()) {
+            m_inOverlayFullscreenVideo = false;
             RenderVideo* video = findFullscreenVideoRenderer(m_renderView.document());
             GraphicsLayer* backgroundLayer = fixedRootBackgroundLayer();
             if (video && video->hasCompositedLayerMapping()) {
@@ -447,6 +449,7 @@ void RenderLayerCompositor::updateIfNeeded()
                 childList.append(video->compositedLayerMapping()->mainGraphicsLayer());
                 if (backgroundLayer && backgroundLayer->parent())
                     backgroundLayer->removeFromParent();
+                m_inOverlayFullscreenVideo = true;
             } else {
                 if (backgroundLayer && !backgroundLayer->parent())
                     rootFixedBackgroundsChanged();
