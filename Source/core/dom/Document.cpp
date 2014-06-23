@@ -1018,8 +1018,8 @@ PassRefPtr<Node> Document::adoptNode(PassRefPtr<Node> source, ExceptionState& ex
         return nullptr;
     case ATTRIBUTE_NODE: {
         Attr* attr = toAttr(source.get());
-        if (attr->ownerElement())
-            attr->ownerElement()->removeAttributeNode(attr, exceptionState);
+        if (RefPtrWillBeRawPtr<Element> ownerElement = attr->ownerElement())
+            ownerElement->removeAttributeNode(attr, exceptionState);
         break;
     }
     default:
