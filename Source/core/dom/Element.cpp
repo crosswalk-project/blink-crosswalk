@@ -549,35 +549,35 @@ static double adjustForLocalZoom(LayoutUnit value, RenderObject& renderer)
     return value.toDouble() / zoomFactor;
 }
 
-double Element::offsetLeft()
+int Element::offsetLeft()
 {
     document().updateLayoutIgnorePendingStylesheets();
     if (RenderBoxModelObject* renderer = renderBoxModelObject())
-        return adjustForLocalZoom(renderer->offsetLeft(), *renderer);
+        return lroundf(adjustForLocalZoom(renderer->offsetLeft(), *renderer));
     return 0;
 }
 
-double Element::offsetTop()
+int Element::offsetTop()
 {
     document().updateLayoutIgnorePendingStylesheets();
     if (RenderBoxModelObject* renderer = renderBoxModelObject())
-        return adjustForLocalZoom(renderer->offsetTop(), *renderer);
+        return lroundf(adjustForLocalZoom(renderer->pixelSnappedOffsetTop(), *renderer));
     return 0;
 }
 
-double Element::offsetWidth()
+int Element::offsetWidth()
 {
     document().updateLayoutIgnorePendingStylesheets();
     if (RenderBoxModelObject* renderer = renderBoxModelObject())
-        return adjustLayoutUnitForAbsoluteZoom(renderer->offsetWidth(), *renderer).toFloat();
+        return adjustLayoutUnitForAbsoluteZoom(renderer->pixelSnappedOffsetWidth(), *renderer).round();
     return 0;
 }
 
-double Element::offsetHeight()
+int Element::offsetHeight()
 {
     document().updateLayoutIgnorePendingStylesheets();
     if (RenderBoxModelObject* renderer = renderBoxModelObject())
-        return adjustLayoutUnitForAbsoluteZoom(renderer->offsetHeight(), *renderer).toFloat();
+        return adjustLayoutUnitForAbsoluteZoom(renderer->pixelSnappedOffsetHeight(), *renderer).round();
     return 0;
 }
 
@@ -597,25 +597,25 @@ Element* Element::offsetParent()
     return 0;
 }
 
-double Element::clientLeft()
+int Element::clientLeft()
 {
     document().updateLayoutIgnorePendingStylesheets();
 
     if (RenderBox* renderer = renderBox())
-        return adjustForAbsoluteZoom(renderer->clientLeft(), renderer);
+        return adjustLayoutUnitForAbsoluteZoom(roundToInt(renderer->clientLeft()), *renderer);
     return 0;
 }
 
-double Element::clientTop()
+int Element::clientTop()
 {
     document().updateLayoutIgnorePendingStylesheets();
 
     if (RenderBox* renderer = renderBox())
-        return adjustForAbsoluteZoom(renderer->clientTop(), renderer);
+        return adjustLayoutUnitForAbsoluteZoom(roundToInt(renderer->clientTop()), *renderer);
     return 0;
 }
 
-double Element::clientWidth()
+int Element::clientWidth()
 {
     document().updateLayoutIgnorePendingStylesheets();
 
@@ -631,11 +631,11 @@ double Element::clientWidth()
     }
 
     if (RenderBox* renderer = renderBox())
-        return adjustLayoutUnitForAbsoluteZoom(renderer->clientWidth(), *renderer).toFloat();
+        return adjustLayoutUnitForAbsoluteZoom(renderer->pixelSnappedClientWidth(), *renderer).round();
     return 0;
 }
 
-double Element::clientHeight()
+int Element::clientHeight()
 {
     document().updateLayoutIgnorePendingStylesheets();
 
@@ -652,11 +652,11 @@ double Element::clientHeight()
     }
 
     if (RenderBox* renderer = renderBox())
-        return adjustLayoutUnitForAbsoluteZoom(renderer->clientHeight(), *renderer).toFloat();
+        return adjustLayoutUnitForAbsoluteZoom(renderer->pixelSnappedClientHeight(), *renderer).round();
     return 0;
 }
 
-double Element::scrollLeft()
+int Element::scrollLeft()
 {
     document().updateLayoutIgnorePendingStylesheets();
 
@@ -679,7 +679,7 @@ double Element::scrollLeft()
     return 0;
 }
 
-double Element::scrollTop()
+int Element::scrollTop()
 {
     document().updateLayoutIgnorePendingStylesheets();
 
@@ -702,7 +702,7 @@ double Element::scrollTop()
     return 0;
 }
 
-void Element::setScrollLeft(double newLeft)
+void Element::setScrollLeft(int newLeft)
 {
     document().updateLayoutIgnorePendingStylesheets();
 
@@ -748,7 +748,7 @@ void Element::setScrollLeft(const Dictionary& scrollOptionsHorizontal, Exception
     setScrollLeft(position);
 }
 
-void Element::setScrollTop(double newTop)
+void Element::setScrollTop(int newTop)
 {
     document().updateLayoutIgnorePendingStylesheets();
 
@@ -794,7 +794,7 @@ void Element::setScrollTop(const Dictionary& scrollOptionsVertical, ExceptionSta
     setScrollTop(position);
 }
 
-double Element::scrollWidth()
+int Element::scrollWidth()
 {
     document().updateLayoutIgnorePendingStylesheets();
     if (RenderBox* rend = renderBox())
@@ -802,7 +802,7 @@ double Element::scrollWidth()
     return 0;
 }
 
-double Element::scrollHeight()
+int Element::scrollHeight()
 {
     document().updateLayoutIgnorePendingStylesheets();
     if (RenderBox* rend = renderBox())
