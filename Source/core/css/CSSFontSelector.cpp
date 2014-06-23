@@ -250,6 +250,8 @@ void CSSFontSelector::updateGenericFontFamilySettings(Document& document)
 {
     ASSERT(document.settings());
     m_genericFontFamilySettings = document.settings()->genericFontFamilySettings();
+    // Need to increment FontFaceCache version to update RenderStyles.
+    m_fontFaceCache.incrementVersion();
 }
 
 void CSSFontSelector::trace(Visitor* visitor)
