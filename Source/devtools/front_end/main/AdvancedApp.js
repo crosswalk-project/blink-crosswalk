@@ -67,8 +67,13 @@ WebInspector.AdvancedApp.prototype = {
 
     _updatePageResizer: function()
     {
-        if (WebInspector.experimentsSettings.responsiveDesign.isEnabled())
-            WebInspector.overridesSupport.setPageResizer(this._isDocked() ? this._responsiveDesignView : (this._toolbox ? this._toolbox._responsiveDesignView : null));
+        if (!WebInspector.experimentsSettings.responsiveDesign.isEnabled())
+            return;
+
+        if (this._isDocked())
+            this._responsiveDesignView.updatePageResizer();
+        else if (this._toolbox)
+            this._toolbox._responsiveDesignView.updatePageResizer();
     },
 
     /**
