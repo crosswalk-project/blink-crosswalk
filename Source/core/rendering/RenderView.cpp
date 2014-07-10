@@ -203,7 +203,7 @@ bool RenderView::shouldDoFullRepaintForNextLayout() const
     if (height() != viewHeight()) {
         // FIXME: Disable optimization to fix crbug.com/390378 for the branch.
         return true;
-
+#if 0
         if (RenderObject* backgroundRenderer = this->backgroundRenderer()) {
             // When background-attachment is 'fixed', we treat the viewport (instead of the 'root'
             // i.e. html or body) as the background positioning area, and we should full repaint
@@ -215,6 +215,7 @@ bool RenderView::shouldDoFullRepaintForNextLayout() const
                 return true;
             }
         }
+#endif
     }
 
     return false;
