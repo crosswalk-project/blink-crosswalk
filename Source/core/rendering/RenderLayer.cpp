@@ -262,7 +262,11 @@ void RenderLayer::updateLayerPositionsAfterLayout(const RenderLayer* rootLayer, 
 
 void RenderLayer::updateLayerPositionRecursive(UpdateLayerPositionsFlags flags)
 {
-    updateLayerPosition();
+    if (updateLayerPosition())
+        flags |= ForceMayNeedPaintInvalidation;
+
+    if (flags & ForceMayNeedPaintInvalidation)
+        m_renderer->setMayNeedPaintInvalidation(true);
 
     // Clear our cached clip rect information.
     m_clipper.clearClipRects();
