@@ -156,6 +156,7 @@ public:
         CheckForRepaint = 1 << 0,
         NeedsFullRepaintInBacking = 1 << 1,
         UpdatePagination = 1 << 2,
+        ForceMayNeedPaintInvalidation = 1 << 3,
     };
     typedef unsigned UpdateLayerPositionsFlags;
 
