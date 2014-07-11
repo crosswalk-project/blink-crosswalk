@@ -146,7 +146,7 @@ InspectorTest.DebuggerModelMock.prototype = {
         InspectorTest.addResult("    " + InspectorTest.dumpTarget(this) + "debuggerModel.removeBreakpoint(" + breakpointId + ")");
         delete this._breakpoints[breakpointId];
         if (callback)
-            callback();
+            setTimeout(callback, 0);
     },
 
     setBreakpointsActive: function() { },
