@@ -46,7 +46,6 @@ enum BackgroundBleedAvoidance {
 enum ContentChangeType {
     ImageChanged,
     CanvasChanged,
-    CanvasPixelsChanged,
     CanvasContextChanged
 };
 
