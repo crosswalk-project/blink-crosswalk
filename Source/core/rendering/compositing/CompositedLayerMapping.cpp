@@ -1713,7 +1713,7 @@ void CompositedLayerMapping::contentChanged(ContentChangeType changeType)
         return;
     }
 
-    if (changeType == CanvasChanged && isAcceleratedCanvas(renderer())) {
+    if ((changeType == CanvasChanged || changeType == CanvasPixelsChanged) && isAcceleratedCanvas(renderer())) {
         m_graphicsLayer->setContentsNeedsDisplay();
         return;
     }
