@@ -126,10 +126,12 @@ const FontData* FontFallbackList::primaryFontData(const FontDescription& fontDes
         if (!fontData) {
             // All fonts are custom fonts and are loading. Return the first FontData.
             fontData = fontDataAt(fontDescription, 0);
-            if (!fontData)
-                fontData = FontCache::fontCache()->getLastResortFallbackFont(fontDescription).get();
-            ASSERT(fontData);
-            return fontData;
+            if (fontData)
+                return fontData->fontDataForCharacter(' ');
+
+            SimpleFontData* lastResortFallback = FontCache::fontCache()->getLastResortFallbackFont(fontDescription).get();
+            ASSERT(lastResortFallback);
+            return lastResortFallback;
         }
 
         if (fontData->isSegmented() && !toSegmentedFontData(fontData)->containsCharacter(' '))
