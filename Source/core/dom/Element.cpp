@@ -684,7 +684,7 @@ void Element::setScrollLeft(int newLeft)
 
     if (document().documentElement() != this) {
         if (RenderBox* rend = renderBox())
-            rend->setScrollLeft(roundf(newLeft * rend->style()->effectiveZoom()));
+            rend->setScrollLeft(LayoutUnit::fromFloatRound(newLeft * rend->style()->effectiveZoom()));
         return;
     }
 
@@ -730,7 +730,7 @@ void Element::setScrollTop(int newTop)
 
     if (document().documentElement() != this) {
         if (RenderBox* rend = renderBox())
-            rend->setScrollTop(roundf(newTop * rend->style()->effectiveZoom()));
+            rend->setScrollTop(LayoutUnit::fromFloatRound(newTop * rend->style()->effectiveZoom()));
         return;
     }
 
