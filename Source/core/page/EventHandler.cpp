@@ -3538,14 +3538,19 @@ bool EventHandler::handleTouchEvent(const PlatformTouchEvent& event)
             touchTarget = m_targetForTouchID.get(point.id());
         }
 
-        LocalFrame* targetFrame;
-        bool knownTarget;
+        LocalFrame* targetFrame = 0;
+        bool knownTarget = false;
         if (touchTarget) {
             Document& doc = touchTarget->toNode()->document();
-            ASSERT(&doc == m_touchSequenceDocument.get());
-            targetFrame = doc.frame();
-            knownTarget = true;
-        } else {
+            // If the target node has moved to a new document while it was being touched,
+            // we can't send events to the new document because that could leak nodes
+            // from one document to another. See http://crbug.com/394339.
+            if (&doc == m_touchSequenceDocument.get()) {
+                targetFrame = doc.frame();
+                knownTarget = true;
+            }
+        }
+        if (!knownTarget) {
             // If we don't have a target registered for the point it means we've
             // missed our opportunity to do a hit test for it (due to some
             // optimization that prevented blink from ever seeing the
@@ -3563,7 +3568,6 @@ bool EventHandler::handleTouchEvent(const PlatformTouchEvent& event)
             // is on-heap.
             touchTarget = m_touchSequenceDocument.get();
             targetFrame = m_touchSequenceDocument->frame();
-            knownTarget = false;
         }
         ASSERT(targetFrame);
 
