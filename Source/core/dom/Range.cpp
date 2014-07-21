@@ -954,7 +954,7 @@ String Range::text() const
     // FIXME: As with innerText, we'd like this to work even if there are no render objects.
     m_start.container()->document().updateLayout();
 
-    return plainText(this);
+    return plainText(this, TextIteratorEmitsObjectReplacementCharacter);
 }
 
 PassRefPtrWillBeRawPtr<DocumentFragment> Range::createContextualFragment(const String& markup, ExceptionState& exceptionState)
