@@ -915,6 +915,7 @@
       'testing/TreeTestHelpers.cpp',
       'testing/TreeTestHelpers.h',
       'transforms/TransformOperationsTest.cpp',
+      'transforms/TransformationMatrixTest.cpp',
       'text/BidiResolverTest.cpp',
       'text/DateTimeFormatTest.cpp',
       'text/SegmentedStringTest.cpp',
