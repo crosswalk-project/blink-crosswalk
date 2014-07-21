@@ -891,8 +891,6 @@ crbug.com/339597 http/tests/navigation/back-to-redirect-with-frame.php [ Pass Ti
 crbug.com/339373 http/tests/websocket/close-before-handshake-response.html [ Failure ]
 crbug.com/339373 http/tests/websocket/multiple-connections.html [ Timeout ]
 
-crbug.com/311448 [ XP ] editing/selection/move-left-right.html [ NeedsRebaseline ]
-
 # Tests of functionality not implemented in the new WebSocket
 # implementation. These tests will be removed when the old implementation is
 # removed.
