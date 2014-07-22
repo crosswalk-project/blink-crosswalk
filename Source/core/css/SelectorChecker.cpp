@@ -106,20 +106,13 @@ bool SelectorChecker::scopeContainsLastMatchedElement(const SelectorCheckingCont
         return true;
 
     ASSERT(context.scope);
-    // If behaviorAtBoundary is not ScopeIsShadowRoot, we can use "contains".
-    if (!(context.behaviorAtBoundary & SelectorChecker::ScopeIsShadowRoot))
-        return context.scope->contains(context.element);
-
-    // If a given element is scope, i.e. shadow host, matches.
-    if (context.element == context.scope->shadowHost() && (!context.previousElement || context.previousElement->isInDescendantTreeOf(context.element)))
+    if (context.scope->treeScope() == context.element->treeScope())
         return true;
 
-    ShadowRoot* root = context.element->containingShadowRoot();
-    if (!root)
-        return false;
-
-    // If a host of the containing shadow root is scope, matches.
-    return root == context.scope;
+    // Because Blink treats a shadow host's TreeScope as a separate one from its descendent shadow roots,
+    // if the last matched element is a shadow host, the condition above isn't met, even though it
+    // should be.
+    return context.element == context.scope->shadowHost() && (!context.previousElement || context.previousElement->isInDescendantTreeOf(context.element));
 }
 
 static inline bool nextSelectorExceedsScope(const SelectorChecker::SelectorCheckingContext& context)
@@ -167,8 +160,7 @@ SelectorChecker::Match SelectorChecker::match(const SelectorCheckingContext& con
     }
 
     // Prepare next selector
-    const CSSSelector* historySelector = context.selector->tagHistory();
-    if (!historySelector) {
+    if (context.selector->isLastInTagHistory()) {
         if (scopeContainsLastMatchedElement(context)) {
             if (result)
                 result->specificity += specificity;
