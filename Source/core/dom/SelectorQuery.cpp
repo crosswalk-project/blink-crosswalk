@@ -122,7 +122,7 @@ inline bool SelectorDataList::selectorMatches(const CSSSelector& selector, Eleme
     selectorCheckingContext.behaviorAtBoundary = SelectorChecker::StaysWithinTreeScope;
     selectorCheckingContext.scope = !rootNode.isDocumentNode() ? &rootNode : 0;
     if (selectorCheckingContext.scope)
-        selectorCheckingContext.contextFlags = SelectorChecker::ScopeContainsLastMatchedElement;
+        selectorCheckingContext.behaviorAtBoundary = static_cast<SelectorChecker::BehaviorAtBoundary>(SelectorChecker::StaysWithinTreeScope | SelectorChecker::ScopeContainsLastMatchedElement);
     return selectorChecker.match(selectorCheckingContext, DOMSiblingTraversalStrategy()) == SelectorChecker::SelectorMatches;
 }
 
