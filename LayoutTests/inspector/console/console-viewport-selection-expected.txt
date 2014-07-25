@@ -147,7 +147,7 @@ CONSOLE MESSAGE: line 9: Message #145
 CONSOLE MESSAGE: line 9: Message #146
 CONSOLE MESSAGE: line 9: Message #147
 CONSOLE MESSAGE: line 9: Message #148
-CONSOLE MESSAGE: line 9: Message #149
+CONSOLE MESSAGE: line 10: hello %cworld
 Tests that console viewport handles selection properly.
 
 
@@ -165,8 +165,8 @@ EOL
 
 Running: testSelectionMultiLineText
 Selected text:<<<EOL
-age #73 console-viewport-selection.html:9
-Message #74 console-viewport-selection.html:9
+age #74 console-viewport-selection.html:9
+Message #75 console-viewport-selection.html:9
 Message
 EOL
 
@@ -213,4 +213,7 @@ first visible message index: 5
 Running: testShiftClickReversedSelectionBelow
 anchor = {item: 76, offset: 6}, head = {item: 140, offset: 0}
 first visible message index: 135
+
+Running: testZeroOffsetSelection
+Selected text: world
 
