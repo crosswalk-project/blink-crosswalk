@@ -156,6 +156,8 @@ WebInspector.AdvancedApp.prototype = {
     {
         if (this._changingDockSide || (this._isDocked() === toolbox))
             return;
+        if (!window.innerWidth || !window.innerHeight)
+            return;
         var bounds = /** @type {{x: number, y: number, width: number, height: number}} */ (event.data);
         InspectorFrontendHost.setInspectedPageBounds(bounds);
     },
