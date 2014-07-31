@@ -105,12 +105,12 @@ PassRefPtr<SimpleFontData> FontCache::getLastResortFallbackFont(const FontDescri
 #if OS(WIN)
     // Try some more Windows-specific fallbacks.
     if (!fontPlatformData) {
-        DEFINE_STATIC_LOCAL(const FontFaceCreationParams, msuigothicCreationParams, (AtomicString("MS UI Gothic", AtomicString::ConstructFromLiteral)));
-        fontPlatformData = getFontPlatformData(description, msuigothicCreationParams);
+        DEFINE_STATIC_LOCAL(const AtomicString, msuigothicStr, ("MS UI Gothic", AtomicString::ConstructFromLiteral));
+        fontPlatformData = getFontPlatformData(description, msuigothicStr);
     }
     if (!fontPlatformData) {
-        DEFINE_STATIC_LOCAL(const FontFaceCreationParams, mssansserifCreationParams, (AtomicString("Microsoft Sans Serif", AtomicString::ConstructFromLiteral)));
-        fontPlatformData = getFontPlatformData(description, mssansserifCreationParams);
+        DEFINE_STATIC_LOCAL(const AtomicString, mssansserifStr, ("Microsoft Sans Serif", AtomicString::ConstructFromLiteral));
+        fontPlatformData = getFontPlatformData(description, mssansserifStr);
     }
 #endif
 
