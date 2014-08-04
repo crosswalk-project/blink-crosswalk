@@ -882,9 +882,4 @@ void ChromeClientImpl::openTextDataListChooser(HTMLInputElement& input)
         m_webView->autofillClient()->openTextDataListChooser(WebInputElement(&input));
 }
 
-bool ChromeClientImpl::usesGpuRasterization()
-{
-    return m_webView->layerTreeView()->usesGpuRasterization();
-}
-
 } // namespace blink
