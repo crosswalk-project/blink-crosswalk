@@ -261,7 +261,6 @@ public:
 
     // WebViewImpl
 
-    WebCore::HitTestResult coreHitTestResultAt(const WebPoint&);
     void suppressInvalidations(bool enable);
     void invalidateRect(const WebCore::IntRect&);
 
