@@ -364,6 +364,14 @@ bool HitTestResult::isOverLink() const
     return m_innerURLElement && m_innerURLElement->isLink();
 }
 
+String HitTestResult::titleDisplayString() const
+{
+    if (!m_innerURLElement)
+        return String();
+
+    return m_innerURLElement->title();
+}
+
 String HitTestResult::textContent() const
 {
     if (!m_innerURLElement)

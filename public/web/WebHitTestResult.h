@@ -34,6 +34,7 @@ class HitTestResult;
 class WebElement;
 class WebHitTestResultPrivate;
 class WebNode;
+class WebString;
 class WebURL;
 struct WebPoint;
 
@@ -66,8 +67,18 @@ public:
     // If an link is hit, return the link url source. Return empty otherwise.
     BLINK_EXPORT WebURL absoluteLinkURL() const;
 
+    // If a media element is hit, return the media url source. Return empty otherwise.
+    BLINK_EXPORT WebURL absoluteMediaURL() const;
+
     // Return whether an editable input element was hit.
     BLINK_EXPORT bool isContentEditable() const;
+
+    // If a link is hit, return the text content. Return empty otherwise.
+    BLINK_EXPORT WebString textContent() const;
+    // If a link is hit, return the title string. Return empty otherwise.
+    BLINK_EXPORT WebString titleDisplayString() const;
+    // Return whether the selection was hit.
+    BLINK_EXPORT bool isSelected() const;
 
 #if BLINK_IMPLEMENTATION
     WebHitTestResult(const HitTestResult&);
