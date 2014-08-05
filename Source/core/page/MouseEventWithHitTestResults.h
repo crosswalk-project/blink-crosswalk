@@ -29,7 +29,6 @@ namespace WebCore {
 class Scrollbar;
 
 class MouseEventWithHitTestResults {
-    STACK_ALLOCATED();
 public:
     MouseEventWithHitTestResults(const PlatformMouseEvent&, const HitTestResult&);
 

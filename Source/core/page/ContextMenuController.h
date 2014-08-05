@@ -42,12 +42,12 @@ namespace WebCore {
     class Event;
     class Page;
 
-    class ContextMenuController : public NoBaseWillBeGarbageCollectedFinalized<ContextMenuController> {
-        WTF_MAKE_NONCOPYABLE(ContextMenuController); WTF_MAKE_FAST_ALLOCATED_WILL_BE_REMOVED;
+    class ContextMenuController {
+        WTF_MAKE_NONCOPYABLE(ContextMenuController); WTF_MAKE_FAST_ALLOCATED;
     public:
-        static PassOwnPtrWillBeRawPtr<ContextMenuController> create(Page*, ContextMenuClient*);
         ~ContextMenuController();
-        void trace(Visitor*);
+
+        static PassOwnPtr<ContextMenuController> create(Page*, ContextMenuClient*);
 
         ContextMenu* contextMenu() const { return m_contextMenu.get(); }
         void clearContextMenu();
