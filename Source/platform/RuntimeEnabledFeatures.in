@@ -140,6 +140,7 @@ TargetedStyleRecalc status=stable
 Touch status=stable
 
 TouchIconLoading
+ThreadedParserDataReceiver status=experimental
 UserSelectAll status=experimental
 WebAnimationsSVG
 WebAnimationsElementAnimate status=stable
