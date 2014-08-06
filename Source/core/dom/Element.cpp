@@ -2504,12 +2504,15 @@ void Element::normalizeAttributes()
 {
     if (!hasAttributes())
         return;
-    // attributeCount() cannot be cached before the loop because the attributes
-    // list is altered while iterating.
-    for (unsigned i = 0; i < attributeCount(); ++i) {
-        if (RefPtrWillBeRawPtr<Attr> attr = attrIfExists(attributeAt(i).name()))
-            attr->normalize();
-    }
+    WillBeHeapVector<RefPtrWillBeMember<Attr> >* attrNodes = attrNodeList();
+    if (!attrNodes)
+        return;
+    // Copy the Attr Vector because Node::normalize() can fire synchronous JS
+    // events (e.g. DOMSubtreeModified) and a JS listener could add / remove
+    // attributes while we are iterating.
+    WillBeHeapVector<RefPtrWillBeMember<Attr> > attrNodesCopy(*attrNodes);
+    for (size_t i = 0; i < attrNodesCopy.size(); ++i)
+        attrNodesCopy[i]->normalize();
 }
 
 void Element::updatePseudoElement(PseudoId pseudoId, StyleRecalcChange change)
