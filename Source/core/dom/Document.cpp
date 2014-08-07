@@ -576,10 +576,8 @@ Document::~Document()
     if (m_styleSheetList)
         m_styleSheetList->detachFromDocument();
 
-    if (m_importsController) {
-        m_importsController->wasDetachedFrom(*this);
-        m_importsController = nullptr;
-    }
+    if (m_importsController)
+        HTMLImportsController::removeFrom(*this);
 
     m_timeline->detachFromDocument();
 
@@ -633,10 +631,8 @@ void Document::dispose()
 
     m_registrationContext.clear();
 
-    if (m_importsController) {
-        m_importsController->wasDetachedFrom(*this);
-        m_importsController = nullptr;
-    }
+    if (m_importsController)
+        HTMLImportsController::removeFrom(*this);
 
     // removeDetachedChildren() doesn't always unregister IDs,
     // so tear down scope information upfront to avoid having stale references in the map.
