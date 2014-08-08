@@ -51,11 +51,6 @@ public:
     }
     bool canSubmitToInsecureForm(SecurityOrigin* securityOrigin, const KURL& url) const
     {
-        // For whatever reason, some folks handle forms via JavaScript, and submit to `javascript:void(0)`
-        // rather than calling `preventDefault()`. We special-case `javascript:` URLs here, as they don't
-        // introduce MixedContent for form submissions.
-        if (url.protocolIs("javascript"))
-            return true;
         return canDisplayInsecureContentInternal(securityOrigin, url, MixedContentChecker::Submission);
     }
 
