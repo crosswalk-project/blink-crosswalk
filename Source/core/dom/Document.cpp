@@ -1807,6 +1807,9 @@ void Document::updateRenderTree(StyleRecalcChange change)
 {
     ASSERT(isMainThread());
 
+    if (!view() || !isActive())
+        return;
+
     if (change != Force && !needsRenderTreeUpdate())
         return;
 
