@@ -3879,6 +3879,19 @@ void RenderLayer::computeSelfHitTestRects(LayerHitTestRects& rects) const
     }
 }
 
+void RenderLayer::setShouldDoFullPaintInvalidationIncludingNonCompositingDescendants()
+{
+    renderer()->setShouldDoFullPaintInvalidation(true);
+
+    // Disable for reading compositingState() in isPaintInvalidationContainer() below.
+    DisableCompositingQueryAsserts disabler;
+
+    for (RenderLayer* child = firstChild(); child; child = child->nextSibling()) {
+        if (!child->isPaintInvalidationContainer())
+            child->setShouldDoFullPaintInvalidationIncludingNonCompositingDescendants();
+    }
+}
+
 DisableCompositingQueryAsserts::DisableCompositingQueryAsserts()
     : m_disabler(gCompositingQueryMode, CompositingQueriesAreAllowed) { }
 
