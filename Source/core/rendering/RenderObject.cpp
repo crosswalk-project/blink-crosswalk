@@ -2148,9 +2148,7 @@ void RenderObject::setStyle(PassRefPtr<RenderStyle> style)
             container->setNeedsOverflowRecalcAfterStyleChange();
     }
 
-    if (updatedDiff.needsRepaintLayer()) {
-        toRenderLayerModelObject(this)->layer()->setShouldDoFullPaintInvalidationIncludingNonCompositingDescendants();
-    } else if (updatedDiff.needsRepaint()) {
+    if (updatedDiff.needsRepaint()) {
         // Invalidate paints with the new style, e.g., for example if we go from not having
         // an outline to having an outline.
         if (RuntimeEnabledFeatures::repaintAfterLayoutEnabled() && needsLayout())

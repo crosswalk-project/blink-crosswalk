@@ -492,8 +492,6 @@ public:
 
     void didUpdateNeedsCompositedScrolling();
 
-    void setShouldDoFullPaintInvalidationIncludingNonCompositingDescendants();
-
 private:
     // Bounding box in the coordinates of this layer.
     LayoutRect logicalBoundingBox() const;
