@@ -450,11 +450,6 @@ crbug.com/378610 [ Win7 ] svg/custom/focus-ring-text.svg [ ImageOnlyFailure ]
 crbug.com/378610 [ Win7 ] virtual/antialiasedtext/fast/text/international/inline-block-with-mixed-direction-words.html [ ImageOnlyFailure ]
 crbug.com/378610 [ Win7 ] virtual/antialiasedtext/fast/text/international/text-overflow-ellipsis-bidi.html [ ImageOnlyFailure ]
 
-crbug.com/396225 fast/repaint/outline-continuations.html [ NeedsRebaseline ]
-crbug.com/396225 fast/repaint/focus-continuations.html [ NeedsRebaseline ]
-crbug.com/396225 fast/repaint/outline-change-continuations.html [ NeedsRebaseline ]
-crbug.com/396225 fast/repaint/focus-enable-continuations.html [ NeedsRebaseline ]
-
 # Text tests that needs investigation or test changes (mostly due to precision).
 crbug.com/378610 [ Win7 ] fast/events/touch/gesture/touch-gesture-scroll-input-field.html [ Failure ]
 crbug.com/378610 [ Win7 ] fast/forms/cursor-at-editable-content-boundary.html [ Failure ]

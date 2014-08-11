@@ -147,29 +147,16 @@ static RenderObject* inFlowPositionedInlineAncestor(RenderObject* p)
 static void updateStyleOfAnonymousBlockContinuations(RenderObject* block, const RenderStyle* newStyle, const RenderStyle* oldStyle)
 {
     for (;block && block->isAnonymousBlock(); block = block->nextSibling()) {
-        if (!toRenderBlock(block)->isAnonymousBlockContinuation())
+        if (!toRenderBlock(block)->isAnonymousBlockContinuation() || block->style()->position() == newStyle->position())
             continue;
-
+        // If we are no longer in-flow positioned but our descendant block(s) still have an in-flow positioned ancestor then
+        // their containing anonymous block should keep its in-flow positioning.
         RenderInline* cont = toRenderBlock(block)->inlineElementContinuation();
+        if (oldStyle->hasInFlowPosition() && inFlowPositionedInlineAncestor(cont))
+            continue;
         RefPtr<RenderStyle> blockStyle = RenderStyle::createAnonymousStyleWithDisplay(block->style(), BLOCK);
-
-        if (!block->style()->isOutlineEquivalent(newStyle)) {
-            blockStyle->setOutlineWidth(newStyle->outlineWidth());
-            blockStyle->setOutlineStyle(newStyle->outlineStyle());
-            blockStyle->setOutlineOffset(newStyle->outlineOffset());
-            blockStyle->setOutlineColor(block->resolveColor(newStyle, CSSPropertyOutlineColor));
-            blockStyle->setOutlineStyleIsAuto(newStyle->outlineStyleIsAuto());
-            block->setStyle(blockStyle);
-        }
-
-        if (block->style()->position() != newStyle->position()) {
-            // If we are no longer in-flow positioned but our descendant block(s) still have an in-flow positioned ancestor then
-            // their containing anonymous block should keep its in-flow positioning.
-            if (oldStyle->hasInFlowPosition() && inFlowPositionedInlineAncestor(cont))
-                continue;
-            blockStyle->setPosition(newStyle->position());
-            block->setStyle(blockStyle);
-        }
+        blockStyle->setPosition(newStyle->position());
+        block->setStyle(blockStyle);
     }
 }
 
@@ -194,13 +181,12 @@ void RenderInline::styleDidChange(StyleDifference diff, const RenderStyle* oldSt
 
     // If an inline's in-flow positioning has changed then any descendant blocks will need to change their in-flow positioning accordingly.
     // Do this by updating the position of the descendant blocks' containing anonymous blocks - there may be more than one.
-    if (continuation && oldStyle
-        && (!newStyle->isOutlineEquivalent(oldStyle)
-            || (newStyle->position() != oldStyle->position() && (newStyle->hasInFlowPosition() || oldStyle->hasInFlowPosition())))) {
+    if (continuation && oldStyle && newStyle->position() != oldStyle->position()
+        && (newStyle->hasInFlowPosition() || oldStyle->hasInFlowPosition())) {
         // If any descendant blocks exist then they will be in the next anonymous block and its siblings.
         RenderObject* block = containingBlock()->nextSibling();
-        if (block && block->isAnonymousBlock())
-            updateStyleOfAnonymousBlockContinuations(block, newStyle, oldStyle);
+        ASSERT(block && block->isAnonymousBlock());
+        updateStyleOfAnonymousBlockContinuations(block, newStyle, oldStyle);
     }
 
     if (!m_alwaysCreateLineBoxes) {
