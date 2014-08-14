@@ -3030,6 +3030,9 @@ void WebViewImpl::updateMainFrameLayoutSize()
         }
     }
 
+    if (page()->settings().forceZeroLayoutHeight())
+        layoutSize.height = 0;
+
     view->setLayoutSize(layoutSize);
 }
 
