@@ -3454,7 +3454,10 @@ void Document::styleResolverChanged(StyleResolverUpdateMode updateMode)
         // We need to manually repaint because we avoid doing all repaints in layout or style
         // recalc while sheets are still loading to avoid FOUC.
         m_pendingSheetLayout = IgnoreLayoutWithPendingSheets;
-        renderView()->repaintViewAndCompositedLayers();
+
+        ASSERT(renderView() || importsController());
+        if (renderView())
+            renderView()->repaintViewAndCompositedLayers();
     }
 }
 
