@@ -265,6 +265,14 @@ WebElement WebDocument::createElement(const WebString& tagName)
     return element;
 }
 
+void WebDocument::suspendScheduledTasks() {
+    unwrap<Document>()->suspendScheduledTasks();
+}
+
+void WebDocument::resumeScheduledTasks() {
+    unwrap<Document>()->resumeScheduledTasks();
+}
+
 WebAXObject WebDocument::accessibilityObject() const
 {
     const Document* document = constUnwrap<Document>();
