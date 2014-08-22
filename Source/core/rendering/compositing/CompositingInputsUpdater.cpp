@@ -54,7 +54,7 @@ void CompositingInputsUpdater::update(RenderLayer* layer, UpdateType updateType,
 
             const RenderLayer* parent = layer->parent();
             properties.opacityAncestor = parent->isTransparent() ? parent : parent->compositingInputs().opacityAncestor;
-            properties.transformAncestor = parent->transform() ? parent : parent->compositingInputs().transformAncestor;
+            properties.transformAncestor = parent->hasTransform() ? parent : parent->compositingInputs().transformAncestor;
             properties.filterAncestor = parent->hasFilter() ? parent : parent->compositingInputs().filterAncestor;
 
             if (layer->renderer()->isOutOfFlowPositioned() && info.ancestorScrollingLayer && !layer->subtreeIsInvisible()) {
