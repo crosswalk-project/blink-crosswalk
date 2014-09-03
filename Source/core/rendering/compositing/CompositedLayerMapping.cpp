@@ -50,7 +50,6 @@
 #include "platform/LengthFunctions.h"
 #include "platform/RuntimeEnabledFeatures.h"
 #include "platform/fonts/FontCache.h"
-#include "platform/geometry/TransformState.h"
 #include "platform/graphics/GraphicsContext.h"
 #include "wtf/CurrentTime.h"
 #include "wtf/text/StringBuilder.h"
