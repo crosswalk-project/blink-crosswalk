@@ -82,6 +82,10 @@ public:
     // if there isn't any.
     BLINK_EXPORT WebImage imageContents();
 
+    // Returns the image file name extension of this element or an
+    // empty string if there isn't any.
+    BLINK_EXPORT WebString imageFilenameExtension();
+
 #if BLINK_IMPLEMENTATION
     WebElement(const PassRefPtrWillBeRawPtr<Element>&);
     WebElement& operator=(const PassRefPtrWillBeRawPtr<Element>&);
