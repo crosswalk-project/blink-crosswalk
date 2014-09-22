@@ -24,7 +24,7 @@
     'bidi': {
       'filepath': 'Source/platform/text/.*Bidi' \
                   '|Source/core/rendering/.*Bidi',
-    },
+    },BLAH
     'bindings': {
       'filepath': 'Source/bindings',
     },
