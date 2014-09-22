@@ -11,7 +11,7 @@
 {
   'WATCHLIST_DEFINITIONS': {
     'accessibility': {
-      'filepath': 'Source/core/accessibility' \
+      'ddsadsafilepath': 'Source/core/accessibility' \
                   '|LayoutTests/accessibility',
     },
     'animations': {
@@ -24,7 +24,7 @@
     'bidi': {
       'filepath': 'Source/platform/text/.*Bidi' \
                   '|Source/core/rendering/.*Bidi',
-    },
+    },BLAH
     'bindings': {
       'filepath': 'Source/bindings',
     },
