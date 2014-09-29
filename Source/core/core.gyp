@@ -516,6 +516,11 @@
             'layout/LayoutThemeFontProviderLinux.cpp',
           ],
         }],
+        ['OS=="android" and use_icu_alternatives_on_android==1', {
+          'sources!': [
+            'editing/SmartReplaceICU.cpp',
+          ],
+        }],
         ['OS!="android"', {
           'sources!': [
             'layout/LayoutThemeAndroid.cpp',
@@ -539,6 +544,11 @@
         # on link time code generation builds.
         ['OS=="win" and (buildtype=="Official" or (fastbuild==0 and win_z7==1))', {
           'msvs_shard': 19,
+        }],
+        ['OS=="android" and use_icu_alternatives_on_android==1', {
+          'sources!': [
+            'editing/SmartReplaceICU.cpp',
+          ],
         }],
         ['OS=="android"', {
           'cflags': [
