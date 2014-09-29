@@ -31,8 +31,12 @@
 #include "config.h"
 #include "platform/text/LocaleICU.h"
 
+#if defined(USE_ICU_ALTERNATIVES_ON_ANDROID)
+#include "base/icu_alternatives_on_android/icu_utils.h"
+#else
 #include <unicode/udatpg.h>
 #include <unicode/uloc.h>
+#endif
 #include <limits>
 #include "wtf/DateMath.h"
 #include "wtf/PassOwnPtr.h"
@@ -63,10 +67,12 @@ LocaleICU::LocaleICU(const char* locale)
 
 LocaleICU::~LocaleICU()
 {
+#if !defined(USE_ICU_ALTERNATIVES_ON_ANDROID)
     unum_close(m_numberFormat);
     udat_close(m_shortDateFormat);
     udat_close(m_mediumTimeFormat);
     udat_close(m_shortTimeFormat);
+#endif
 }
 
 PassOwnPtr<LocaleICU> LocaleICU::create(const char* localeString)
@@ -74,6 +80,7 @@ PassOwnPtr<LocaleICU> LocaleICU::create(const char* localeString)
     return adoptPtr(new LocaleICU(localeString));
 }
 
+#if !defined(USE_ICU_ALTERNATIVES_ON_ANDROID)
 String LocaleICU::decimalSymbol(UNumberFormatSymbol symbol)
 {
     UErrorCode status = U_ZERO_ERROR;
@@ -104,12 +111,30 @@ String LocaleICU::decimalTextAttribute(UNumberFormatTextAttribute tag)
         return String();
     return String::adopt(buffer);
 }
+#endif
 
 void LocaleICU::initializeLocaleData()
 {
     if (m_didCreateDecimalFormat)
         return;
     m_didCreateDecimalFormat = true;
+#if defined(USE_ICU_ALTERNATIVES_ON_ANDROID)
+    Vector<String, DecimalSymbolsSize> symbols;
+    symbols.append(String("0"));
+    symbols.append(String("1"));
+    symbols.append(String("2"));
+    symbols.append(String("3"));
+    symbols.append(String("4"));
+    symbols.append(String("5"));
+    symbols.append(String("6"));
+    symbols.append(String("7"));
+    symbols.append(String("8"));
+    symbols.append(String("9"));
+    symbols.append(String("."));
+    symbols.append(String(","));
+    ASSERT(symbols.size() == DecimalSymbolsSize);
+    setLocaleData(symbols, String(), String(), String("-"), String("-"));
+#else
     UErrorCode status = U_ZERO_ERROR;
     m_numberFormat = unum_open(UNUM_DECIMAL, 0, 0, m_locale.data(), 0, &status);
     if (!U_SUCCESS(status))
@@ -130,26 +155,38 @@ void LocaleICU::initializeLocaleData()
     symbols.append(decimalSymbol(UNUM_GROUPING_SEPARATOR_SYMBOL));
     ASSERT(symbols.size() == DecimalSymbolsSize);
     setLocaleData(symbols, decimalTextAttribute(UNUM_POSITIVE_PREFIX), decimalTextAttribute(UNUM_POSITIVE_SUFFIX), decimalTextAttribute(UNUM_NEGATIVE_PREFIX), decimalTextAttribute(UNUM_NEGATIVE_SUFFIX));
+#endif
 }
 
 bool LocaleICU::initializeShortDateFormat()
 {
+#if defined(USE_ICU_ALTERNATIVES_ON_ANDROID)
+    return false;
+#else
     if (m_didCreateShortDateFormat)
         return m_shortDateFormat;
     m_shortDateFormat = openDateFormat(UDAT_NONE, UDAT_SHORT);
     m_didCreateShortDateFormat = true;
     return m_shortDateFormat;
+#endif
 }
 
 UDateFormat* LocaleICU::openDateFormat(UDateFormatStyle timeStyle, UDateFormatStyle dateStyle) const
 {
+#if defined(USE_ICU_ALTERNATIVES_ON_ANDROID)
+    return 0;
+#else
     const UChar gmtTimezone[3] = {'G', 'M', 'T'};
     UErrorCode status = U_ZERO_ERROR;
     return udat_open(timeStyle, dateStyle, m_locale.data(), gmtTimezone, WTF_ARRAY_LENGTH(gmtTimezone), 0, -1, &status);
+#endif
 }
 
 static String getDateFormatPattern(const UDateFormat* dateFormat)
 {
+#if defined(USE_ICU_ALTERNATIVES_ON_ANDROID)
+    return emptyString();
+#else
     if (!dateFormat)
         return emptyString();
 
@@ -163,8 +200,10 @@ static String getDateFormatPattern(const UDateFormat* dateFormat)
     if (U_FAILURE(status))
         return emptyString();
     return String::adopt(buffer);
+#endif
 }
 
+#if !defined(USE_ICU_ALTERNATIVES_ON_ANDROID)
 PassOwnPtr<Vector<String> > LocaleICU::createLabelVector(const UDateFormat* dateFormat, UDateFormatSymbolType type, int32_t startIndex, int32_t size)
 {
     if (!dateFormat)
@@ -188,6 +227,7 @@ PassOwnPtr<Vector<String> > LocaleICU::createLabelVector(const UDateFormat* date
     }
     return labels.release();
 }
+#endif
 
 static PassOwnPtr<Vector<String> > createFallbackWeekDayShortLabels()
 {
@@ -213,11 +253,13 @@ void LocaleICU::initializeCalendar()
         m_weekDayShortLabels = createFallbackWeekDayShortLabels();
         return;
     }
+#if !defined(USE_ICU_ALTERNATIVES_ON_ANDROID)
     m_firstDayOfWeek = ucal_getAttribute(udat_getCalendar(m_shortDateFormat), UCAL_FIRST_DAY_OF_WEEK) - UCAL_SUNDAY;
 
     m_weekDayShortLabels = createLabelVector(m_shortDateFormat, UDAT_SHORT_WEEKDAYS, UCAL_SUNDAY, 7);
     if (!m_weekDayShortLabels)
         m_weekDayShortLabels = createFallbackWeekDayShortLabels();
+#endif
 }
 
 static PassOwnPtr<Vector<String> > createFallbackMonthLabels()
@@ -233,11 +275,13 @@ const Vector<String>& LocaleICU::monthLabels()
 {
     if (m_monthLabels)
         return *m_monthLabels;
+#if !defined(USE_ICU_ALTERNATIVES_ON_ANDROID)
     if (initializeShortDateFormat()) {
         m_monthLabels = createLabelVector(m_shortDateFormat, UDAT_MONTHS, UCAL_JANUARY, 12);
         if (m_monthLabels)
             return *m_monthLabels;
     }
+#endif
     m_monthLabels = createFallbackMonthLabels();
     return *m_monthLabels;
 }
@@ -256,8 +300,12 @@ unsigned LocaleICU::firstDayOfWeek()
 
 bool LocaleICU::isRTL()
 {
+#if defined(USE_ICU_ALTERNATIVES_ON_ANDROID)
+    return false;
+#else
     UErrorCode status = U_ZERO_ERROR;
     return uloc_getCharacterOrientation(m_locale.data(), &status) == ULOC_LAYOUT_RTL;
+#endif
 }
 
 static PassOwnPtr<Vector<String> > createFallbackAMPMLabels()
@@ -285,15 +333,23 @@ void LocaleICU::initializeDateTimeFormat()
 
     UDateFormat* dateTimeFormatWithSeconds = openDateFormat(UDAT_MEDIUM, UDAT_SHORT);
     m_dateTimeFormatWithSeconds = getDateFormatPattern(dateTimeFormatWithSeconds);
+#if !defined(USE_ICU_ALTERNATIVES_ON_ANDROID)
     udat_close(dateTimeFormatWithSeconds);
+#endif
 
     UDateFormat* dateTimeFormatWithoutSeconds = openDateFormat(UDAT_SHORT, UDAT_SHORT);
     m_dateTimeFormatWithoutSeconds = getDateFormatPattern(dateTimeFormatWithoutSeconds);
+#if !defined(USE_ICU_ALTERNATIVES_ON_ANDROID)
     udat_close(dateTimeFormatWithoutSeconds);
+#endif
 
+#if defined(USE_ICU_ALTERNATIVES_ON_ANDROID)
+    OwnPtr<Vector<String> > timeAMPMLabels = createFallbackAMPMLabels();
+#else
     OwnPtr<Vector<String> > timeAMPMLabels = createLabelVector(m_mediumTimeFormat, UDAT_AM_PMS, UCAL_AM, 2);
     if (!timeAMPMLabels)
         timeAMPMLabels = createFallbackAMPMLabels();
+#endif
     m_timeAMPMLabels = *timeAMPMLabels;
 
     m_didCreateTimeFormat = true;
@@ -312,6 +368,7 @@ String LocaleICU::dateFormat()
 static String getFormatForSkeleton(const char* locale, const String& skeleton)
 {
     String format = "yyyy-MM";
+#if !defined(USE_ICU_ALTERNATIVES_ON_ANDROID)
     UErrorCode status = U_ZERO_ERROR;
     UDateTimePatternGenerator* patternGenerator = udatpg_open(locale, &status);
     if (!patternGenerator)
@@ -328,6 +385,7 @@ static String getFormatForSkeleton(const char* locale, const String& skeleton)
             format = String::adopt(buffer);
     }
     udatpg_close(patternGenerator);
+#endif
     return format;
 }
 
@@ -377,12 +435,14 @@ const Vector<String>& LocaleICU::shortMonthLabels()
 {
     if (!m_shortMonthLabels.isEmpty())
         return m_shortMonthLabels;
+#if !defined(USE_ICU_ALTERNATIVES_ON_ANDROID)
     if (initializeShortDateFormat()) {
         if (OwnPtr<Vector<String> > labels = createLabelVector(m_shortDateFormat, UDAT_SHORT_MONTHS, UCAL_JANUARY, 12)) {
             m_shortMonthLabels = *labels;
             return m_shortMonthLabels;
         }
     }
+#endif
     m_shortMonthLabels.reserveCapacity(WTF_ARRAY_LENGTH(WTF::monthName));
     for (unsigned i = 0; i < WTF_ARRAY_LENGTH(WTF::monthName); ++i)
         m_shortMonthLabels.append(WTF::monthName[i]);
@@ -393,12 +453,14 @@ const Vector<String>& LocaleICU::standAloneMonthLabels()
 {
     if (!m_standAloneMonthLabels.isEmpty())
         return m_standAloneMonthLabels;
+#if !defined(USE_ICU_ALTERNATIVES_ON_ANDROID)
     if (initializeShortDateFormat()) {
         if (OwnPtr<Vector<String> > labels = createLabelVector(m_shortDateFormat, UDAT_STANDALONE_MONTHS, UCAL_JANUARY, 12)) {
             m_standAloneMonthLabels = *labels;
             return m_standAloneMonthLabels;
         }
     }
+#endif
     m_standAloneMonthLabels = monthLabels();
     return m_standAloneMonthLabels;
 }
@@ -407,12 +469,14 @@ const Vector<String>& LocaleICU::shortStandAloneMonthLabels()
 {
     if (!m_shortStandAloneMonthLabels.isEmpty())
         return m_shortStandAloneMonthLabels;
+#if !defined(USE_ICU_ALTERNATIVES_ON_ANDROID)
     if (initializeShortDateFormat()) {
         if (OwnPtr<Vector<String> > labels = createLabelVector(m_shortDateFormat, UDAT_STANDALONE_SHORT_MONTHS, UCAL_JANUARY, 12)) {
             m_shortStandAloneMonthLabels = *labels;
             return m_shortStandAloneMonthLabels;
         }
     }
+#endif
     m_shortStandAloneMonthLabels = shortMonthLabels();
     return m_shortStandAloneMonthLabels;
 }

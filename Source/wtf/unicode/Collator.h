@@ -35,7 +35,15 @@
 #include "wtf/WTFExport.h"
 #include "wtf/unicode/Unicode.h"
 
+#if defined(USE_ICU_ALTERNATIVES_ON_ANDROID)
+namespace base {
+namespace icu_utils {
+class JCollator;
+}
+}
+#else
 struct UCollator;
+#endif
 
 namespace WTF {
 
@@ -53,11 +61,15 @@ namespace WTF {
         Result collate(const ::UChar*, size_t, const ::UChar*, size_t) const;
 
     private:
+#if defined(USE_ICU_ALTERNATIVES_ON_ANDROID)
+        base::icu_utils::JCollator m_collator;
+#else
         void createCollator() const;
         void releaseCollator();
         mutable UCollator* m_collator;
         char* m_locale;
         bool m_lowerFirst;
+#endif
     };
 }
 

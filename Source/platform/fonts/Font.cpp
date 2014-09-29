@@ -118,8 +118,11 @@ float Font::drawText(GraphicsContext* context, const TextRunPaintInfo& runInfo, 
 
     if (codePathToUse != ComplexPath)
         return drawSimpleText(context, runInfo, point);
-
+#if defined(USE_ICU_ALTERNATIVES_ON_ANDROID)
+    return drawSimpleText(context, runInfo, point);
+#else
     return drawComplexText(context, runInfo, point);
+#endif
 }
 
 void Font::drawEmphasisMarks(GraphicsContext* context, const TextRunPaintInfo& runInfo, const AtomicString& mark, const FloatPoint& point) const
@@ -135,7 +138,11 @@ void Font::drawEmphasisMarks(GraphicsContext* context, const TextRunPaintInfo& r
     if (codePathToUse != ComplexPath)
         drawEmphasisMarksForSimpleText(context, runInfo, mark, point);
     else
+#if defined(USE_ICU_ALTERNATIVES_ON_ANDROID)
+        drawEmphasisMarksForSimpleText(context, runInfo, mark, point);
+#else
         drawEmphasisMarksForComplexText(context, runInfo, mark, point);
+#endif
 }
 
 static inline void updateGlyphOverflowFromBounds(const IntRectExtent& glyphBounds,
@@ -175,7 +182,11 @@ float Font::width(const TextRun& run, HashSet<const SimpleFontData*>* fallbackFo
     float result;
     IntRectExtent glyphBounds;
     if (codePathToUse == ComplexPath) {
+#if defined(USE_ICU_ALTERNATIVES_ON_ANDROID)
+        result = floatWidthForSimpleText(run, fallbackFonts, &glyphBounds);
+#else
         result = floatWidthForComplexText(run, fallbackFonts, &glyphBounds);
+#endif
     } else {
         ASSERT(!isCacheable);
         result = floatWidthForSimpleText(run, fallbackFonts, glyphOverflow ? &glyphBounds : 0);
@@ -251,7 +262,11 @@ FloatRect Font::selectionRectForText(const TextRun& run, const FloatPoint& point
     if (codePathToUse != ComplexPath)
         return selectionRectForSimpleText(run, point, h, from, to, accountForGlyphBounds);
 
+#if defined(USE_ICU_ALTERNATIVES_ON_ANDROID)
+    return selectionRectForSimpleText(run, point, h, from, to, accountForGlyphBounds);
+#else
     return selectionRectForComplexText(run, point, h, from, to);
+#endif
 }
 
 int Font::offsetForPosition(const TextRun& run, float x, bool includePartialGlyphs) const
@@ -260,7 +275,11 @@ int Font::offsetForPosition(const TextRun& run, float x, bool includePartialGlyp
     if (codePath(run) != ComplexPath && !fontDescription().typesettingFeatures())
         return offsetForPositionForSimpleText(run, x, includePartialGlyphs);
 
+#if defined(USE_ICU_ALTERNATIVES_ON_ANDROID)
+    return offsetForPositionForSimpleText(run, x, includePartialGlyphs);
+#else
     return offsetForPositionForComplexText(run, x, includePartialGlyphs);
+#endif
 }
 
 void Font::setCodePath(CodePath p)

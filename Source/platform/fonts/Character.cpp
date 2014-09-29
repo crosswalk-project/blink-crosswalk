@@ -288,7 +288,11 @@ unsigned Character::expansionOpportunityCount(const LChar* characters, size_t le
 
 unsigned Character::expansionOpportunityCount(const UChar* characters, size_t length, TextDirection direction, bool& isAfterExpansion)
 {
+#if !defined(USE_ICU_ALTERNATIVES_ON_ANDROID)
     static bool expandAroundIdeographs = FontPlatformFeatures::canExpandAroundIdeographsInComplexText();
+#else
+    static bool expandAroundIdeographs = false;
+#endif
     unsigned count = 0;
     if (direction == LTR) {
         for (size_t i = 0; i < length; ++i) {
