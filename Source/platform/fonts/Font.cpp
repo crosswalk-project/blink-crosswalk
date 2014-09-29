@@ -35,7 +35,9 @@
 #include "platform/fonts/GlyphBuffer.h"
 #include "platform/fonts/GlyphPageTreeNode.h"
 #include "platform/fonts/SimpleFontData.h"
+#if !defined(USE_ICU_ALTERNATIVES_ON_ANDROID)
 #include "platform/fonts/shaping/HarfBuzzShaper.h"
+#endif
 #include "platform/fonts/shaping/SimpleShaper.h"
 #include "platform/geometry/FloatRect.h"
 #include "platform/graphics/skia/SkiaUtils.h"
@@ -102,12 +104,14 @@ void Font::update(PassRefPtrWillBeRawPtr<FontSelector> fontSelector) const
 float Font::buildGlyphBuffer(const TextRunPaintInfo& runInfo, GlyphBuffer& glyphBuffer,
     const GlyphData* emphasisData) const
 {
+#if !defined(USE_ICU_ALTERNATIVES_ON_ANDROID)
     if (codePath(runInfo) == ComplexPath) {
         HarfBuzzShaper shaper(this, runInfo.run, emphasisData);
         shaper.setDrawRange(runInfo.from, runInfo.to);
         shaper.shape(&glyphBuffer);
         return shaper.totalWidth();
     }
+#endif
 
     SimpleShaper shaper(this, runInfo.run, emphasisData, nullptr /* fallbackFonts */, nullptr);
     shaper.advance(runInfo.from);
@@ -252,7 +256,11 @@ float Font::width(const TextRun& run, HashSet<const SimpleFontData*>* fallbackFo
     float result;
     IntRectOutsets glyphBounds;
     if (codePathToUse == ComplexPath) {
+#if defined(USE_ICU_ALTERNATIVES_ON_ANDROID)
+        result = floatWidthForSimpleText(run, fallbackFonts, &glyphBounds);
+#else
         result = floatWidthForComplexText(run, fallbackFonts, &glyphBounds);
+#endif
     } else {
         ASSERT(!isCacheable);
         result = floatWidthForSimpleText(run, fallbackFonts, glyphOverflow ? &glyphBounds : 0);
@@ -329,7 +337,11 @@ FloatRect Font::selectionRectForText(const TextRun& run, const FloatPoint& point
 
     if (codePath(runInfo) != ComplexPath)
         return pixelSnappedSelectionRect(selectionRectForSimpleText(run, point, h, from, to, accountForGlyphBounds));
+#if defined(USE_ICU_ALTERNATIVES_ON_ANDROID)
+    return pixelSnappedSelectionRect(selectionRectForSimpleText(run, point, h, from, to, accountForGlyphBounds));
+#else
     return pixelSnappedSelectionRect(selectionRectForComplexText(run, point, h, from, to));
+#endif
 }
 
 int Font::offsetForPosition(const TextRun& run, float x, bool includePartialGlyphs) const
@@ -339,7 +351,11 @@ int Font::offsetForPosition(const TextRun& run, float x, bool includePartialGlyp
     if (codePath(TextRunPaintInfo(run)) != ComplexPath && !fontDescription().typesettingFeatures())
         return offsetForPositionForSimpleText(run, x, includePartialGlyphs);
 
+#if defined(USE_ICU_ALTERNATIVES_ON_ANDROID)
+    return offsetForPositionForSimpleText(run, x, includePartialGlyphs);
+#else
     return offsetForPositionForComplexText(run, x, includePartialGlyphs);
+#endif
 }
 
 CodePath Font::codePath(const TextRunPaintInfo& runInfo) const
@@ -726,6 +742,7 @@ void Font::drawTextBlob(SkCanvas* canvas, const SkPaint& paint, const SkTextBlob
     canvas->drawTextBlob(blob, origin.x(), origin.y(), paint);
 }
 
+#if !defined(USE_ICU_ALTERNATIVES_ON_ANDROID)
 float Font::floatWidthForComplexText(const TextRun& run, HashSet<const SimpleFontData*>* fallbackFonts, IntRectOutsets* glyphBounds) const
 {
     FloatRect bounds;
@@ -760,6 +777,7 @@ FloatRect Font::selectionRectForComplexText(const TextRun& run,
         return FloatRect();
     return shaper.selectionRect(point, height, from, to);
 }
+#endif
 
 void Font::drawGlyphBuffer(SkCanvas* canvas, const SkPaint& paint, const TextRunPaintInfo& runInfo, const GlyphBuffer& glyphBuffer, const FloatPoint& point, float deviceScaleFactor) const
 {
