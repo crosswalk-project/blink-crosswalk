@@ -292,6 +292,9 @@ CodePath Font::codePath(const TextRun& run) const
     if (run.length() > 1 && fontDescription().typesettingFeatures())
         return ComplexPath;
 
+    if (run.useComplexCodePath())
+        return ComplexPath;
+
     if (!run.characterScanForCodePath())
         return SimplePath;
 
