@@ -33,6 +33,7 @@
 
 #include "core/frame/Settings.h"
 #include "core/inspector/InspectorController.h"
+#include "platform/RuntimeEnabledFeatures.h"
 #include "platform/graphics/DeferredImageDecoder.h"
 
 #include "public/platform/WebString.h"
@@ -615,6 +616,7 @@ void WebSettingsImpl::setMediaPlaybackRequiresUserGesture(bool required)
 
 void WebSettingsImpl::setViewportEnabled(bool enabled)
 {
+    RuntimeEnabledFeatures::setCSSViewportEnabled(enabled);
     m_settings->setViewportEnabled(enabled);
 }
 
