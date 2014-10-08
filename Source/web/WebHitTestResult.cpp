@@ -33,6 +33,7 @@
 #include "core/rendering/RenderObject.h"
 #include "platform/weborigin/KURL.h"
 #include "public/platform/WebPoint.h"
+#include "public/platform/WebString.h"
 #include "public/platform/WebURL.h"
 #include "public/web/WebElement.h"
 #include "public/web/WebNode.h"
@@ -100,9 +101,29 @@ WebURL WebHitTestResult::absoluteLinkURL() const
     return m_private->result().absoluteLinkURL();
 }
 
+WebURL WebHitTestResult::absoluteMediaURL() const
+{
+    return m_private->result().absoluteMediaURL();
+}
+
 bool WebHitTestResult::isContentEditable() const
 {
     return m_private->result().isContentEditable();
+}
+
+WebString WebHitTestResult::textContent() const
+{
+    return m_private->result().textContent();
+}
+
+WebString WebHitTestResult::titleDisplayString() const
+{
+    return m_private->result().titleDisplayString();
+}
+
+bool WebHitTestResult::isSelected() const
+{
+    return m_private->result().isSelected();
 }
 
 WebHitTestResult::WebHitTestResult(const HitTestResult& result)
