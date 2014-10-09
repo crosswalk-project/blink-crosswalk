@@ -168,6 +168,18 @@ WebImage WebElement::imageContents()
     return bitmap->bitmap();
 }
 
+WebString WebElement::imageFilenameExtension()
+{
+    if (isNull())
+        return WebString();
+
+    blink::Image* image = unwrap<Element>()->imageContents();
+    if (!image)
+        return WebString();
+
+    return image->filenameExtension();
+}
+
 WebElement::WebElement(const PassRefPtrWillBeRawPtr<Element>& elem)
     : WebNode(elem)
 {
