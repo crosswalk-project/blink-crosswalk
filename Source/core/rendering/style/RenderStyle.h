@@ -1864,7 +1864,7 @@ inline double adjustScrollForAbsoluteZoom(int scrollOffset, float zoomFactor)
 {
     double result = scrollOffset / zoomFactor;
     const double kScale = 10000; // 4 decimal places of accuracy
-    return lround(result * kScale) / kScale;
+    return round(result * kScale) / kScale;
 }
 
 inline double adjustScrollForAbsoluteZoom(int scrollOffset, const RenderStyle& style)
