@@ -2664,6 +2664,9 @@ WebInspector.StylePropertyTreeElement = function(stylesPane, styleRule, style, p
     this._applyStyleThrottler = new WebInspector.Throttler(0);
 }
 
+/** @typedef {{expanded: boolean, hasChildren: boolean, isEditingName: boolean, previousContent: string}} */
+WebInspector.StylePropertyTreeElement.Context;
+
 WebInspector.StylePropertyTreeElement.prototype = {
     /**
      * @return {?WebInspector.DOMNode}
@@ -2926,6 +2929,7 @@ WebInspector.StylePropertyTreeElement.prototype = {
             return splitFieldValue.join("");
         }
 
+        /** @type {!WebInspector.StylePropertyTreeElement.Context} */
         var context = {
             expanded: this.expanded,
             hasChildren: this.hasChildren,
@@ -2941,6 +2945,8 @@ WebInspector.StylePropertyTreeElement.prototype = {
         selectElement.textContent = selectElement.textContent; // remove color swatch and the like
 
         /**
+         * @param {!WebInspector.StylePropertyTreeElement.Context} context
+         * @param {!Event} event
          * @this {WebInspector.StylePropertyTreeElement}
          */
         function pasteHandler(context, event)
@@ -2971,6 +2977,8 @@ WebInspector.StylePropertyTreeElement.prototype = {
         }
 
         /**
+         * @param {!WebInspector.StylePropertyTreeElement.Context} context
+         * @param {!Event} event
          * @this {WebInspector.StylePropertyTreeElement}
          */
         function blurListener(context, event)
@@ -3000,20 +3008,24 @@ WebInspector.StylePropertyTreeElement.prototype = {
         }
         var proxyElement = this._prompt.attachAndStartEditing(selectElement, blurListener.bind(this, context));
 
-        proxyElement.addEventListener("keydown", this.editingNameValueKeyDown.bind(this, context), false);
-        proxyElement.addEventListener("keypress", this.editingNameValueKeyPress.bind(this, context), false);
+        proxyElement.addEventListener("keydown", this._editingNameValueKeyDown.bind(this, context), false);
+        proxyElement.addEventListener("keypress", this._editingNameValueKeyPress.bind(this, context), false);
+        proxyElement.addEventListener("input", this._editingNameValueInput.bind(this, context), false);
         if (isEditingName)
             proxyElement.addEventListener("paste", pasteHandler.bind(this, context), false);
 
         window.getSelection().setBaseAndExtent(selectElement, 0, selectElement, 1);
     },
 
-    editingNameValueKeyDown: function(context, event)
+    /**
+     * @param {!WebInspector.StylePropertyTreeElement.Context} context
+     * @param {!Event} event
+     */
+    _editingNameValueKeyDown: function(context, event)
     {
         if (event.handled)
             return;
 
-        var isEditingName = context.isEditingName;
         var result;
 
         if (isEnterKey(event)) {
@@ -3021,7 +3033,7 @@ WebInspector.StylePropertyTreeElement.prototype = {
             result = "forward";
         } else if (event.keyCode === WebInspector.KeyboardShortcut.Keys.Esc.code || event.keyIdentifier === "U+001B")
             result = "cancel";
-        else if (!isEditingName && this._newProperty && event.keyCode === WebInspector.KeyboardShortcut.Keys.Backspace.code) {
+        else if (!context.isEditingName && this._newProperty && event.keyCode === WebInspector.KeyboardShortcut.Keys.Backspace.code) {
             // For a new property, when Backspace is pressed at the beginning of new property value, move back to the property name.
             var selection = window.getSelection();
             if (selection.isCollapsed && !selection.focusOffset) {
@@ -3047,12 +3059,13 @@ WebInspector.StylePropertyTreeElement.prototype = {
             event.consume();
             return;
         }
-
-        if (!isEditingName)
-            this._applyFreeFlowStyleTextEdit();
     },
 
-    editingNameValueKeyPress: function(context, event)
+    /**
+     * @param {!WebInspector.StylePropertyTreeElement.Context} context
+     * @param {!Event} event
+     */
+    _editingNameValueKeyPress: function(context, event)
     {
         function shouldCommitValueSemicolon(text, cursorPosition)
         {
@@ -3078,6 +3091,16 @@ WebInspector.StylePropertyTreeElement.prototype = {
             this.editingCommitted(event.target.textContent, context, "forward");
             return;
         }
+    },
+
+    /**
+     * @param {!WebInspector.StylePropertyTreeElement.Context} context
+     * @param {!Event} event
+     */
+    _editingNameValueInput: function(context, event)
+    {
+        if (!context.isEditingName)
+            this._applyFreeFlowStyleTextEdit();
     },
 
     _applyFreeFlowStyleTextEdit: function()
