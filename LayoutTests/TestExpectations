@@ -1375,4 +1375,116 @@ crbug.com/417752 [ Linux ] storage/websql/sql-error-codes.html [ Pass Failure ]
 
 crbug.com/91208 virtual/gpu/fast/canvas/canvas-drawImage-video.html [ NeedsRebaseline ]
 
-crbug.com/418021 inspector/profiler/heap-snapshot-inspect-dom-wrapper.html [ Pass Crash Timeout ]
+crbug.com/418091 [ SnowLeopard Debug ] media/track/track-cue-rendering-rtl.html [ Pass Crash ]
+crbug.com/418091 [ Mac ] virtual/antialiasedtext/fast/text/international/bidi-neutral-run.html [ Pass Crash Failure ]
+crbug.com/418091 [ SnowLeopard Debug ] inspector/elements/bidi-dom-tree.html [ Pass Crash ]
+crbug.com/418091 [ SnowLeopard Debug ] virtual/antialiasedtext/fast/text/atsui-bidi-control.html [ Pass Crash ]
+crbug.com/418091 [ SnowLeopard Debug ] fast/text/international/bidi-neutral-run.html [ Pass Crash ]
+crbug.com/418091 [ SnowLeopard Debug ] virtual/textblob/fast/text/international/bidi-neutral-run.html [ Pass Crash ]
+crbug.com/418091 [ SnowLeopard Debug ] fast/text/atsui-bidi-control.html [ Pass Crash ]
+crbug.com/418091 [ SnowLeopard Debug ] virtual/textblob/fast/text/atsui-bidi-control.html [ Pass Crash ]
+crbug.com/418091 [ SnowLeopard ] fast/text/shadow-translucent-fill.html [ Pass Failure ]
+crbug.com/418091 [ SnowLeopard ] fast/text/text-shadow-no-default-color.html [ Pass Failure ]
+crbug.com/418091 [ SnowLeopard ] virtual/antialiasedtext/fast/text/shadow-translucent-fill.html [ Pass Failure ]
+crbug.com/418091 [ SnowLeopard ] virtual/antialiasedtext/fast/text/text-shadow-no-default-color.html [ Pass Failure ]
+crbug.com/418091 [ SnowLeopard ] virtual/textblob/fast/text/shadow-translucent-fill.html [ Pass Failure ]
+crbug.com/418091 [ SnowLeopard ] virtual/textblob/fast/text/text-shadow-no-default-color.html [ Pass Failure ]
+
+crbug.com/418091 [ SnowLeopard Debug ] css2.1/t100801-c544-valgn-02-d-agi.html [ Pass Failure ]
+crbug.com/418091 [ SnowLeopard Debug ] css2.1/t100801-c544-valgn-03-d-agi.html [ Pass Failure ]
+crbug.com/418091 [ SnowLeopard Debug ] css2.1/t100801-c544-valgn-04-d-agi.html [ Pass Failure ]
+crbug.com/418091 [ SnowLeopard ] fast/text/aat-morx.html [ Pass Failure ]
+crbug.com/418091 [ SnowLeopard ] virtual/textblob/fast/text/aat-morx.html [ Pass Failure ]
+crbug.com/418091 [ SnowLeopard Debug ] virtual/antialiasedtext/fast/text/aat-morx.html [ Pass Failure ]
+crbug.com/418091 [ SnowLeopard Debug ] virtual/antialiasedtext/fast/text/apply-start-width-after-skipped-text.html [ Pass Failure ]
+crbug.com/418091 [ SnowLeopard Debug ] virtual/antialiasedtext/fast/text/bidi-explicit-embedding-past-end.html [ Pass Failure ]
+crbug.com/418091 [ SnowLeopard Debug ] virtual/antialiasedtext/fast/text/cg-fallback-bolding.html [ Pass Failure ]
+crbug.com/418091 [ SnowLeopard Debug ] virtual/antialiasedtext/fast/text/decorations-transformed.html [ Pass Failure ]
+crbug.com/418091 [ SnowLeopard Debug ] virtual/antialiasedtext/fast/text/emphasis-avoid-ruby.html [ Pass Failure ]
+crbug.com/418091 [ SnowLeopard Debug ] virtual/antialiasedtext/fast/text/emphasis-overlap.html [ Pass Failure ]
+crbug.com/418091 [ SnowLeopard Debug ] virtual/antialiasedtext/fast/text/fake-italic.html [ Pass Failure ]
+crbug.com/418091 [ SnowLeopard Debug ] virtual/antialiasedtext/fast/text/fixed-pitch-control-characters.html [ Pass Failure ]
+crbug.com/418091 [ SnowLeopard ] virtual/antialiasedtext/fast/text/justify-nbsp.html [ Pass Failure ]
+crbug.com/418091 [ SnowLeopard ] virtual/antialiasedtext/fast/text/justify-padding-distribution.html [ Pass Failure ]
+crbug.com/418091 [ SnowLeopard ] virtual/antialiasedtext/fast/text/selection-painted-separately.html [ Pass Failure ]
+crbug.com/418091 [ SnowLeopard ] virtual/antialiasedtext/fast/text/setData-dirty-lines.html [ Pass Failure ]
+crbug.com/418091 [ SnowLeopard ] virtual/antialiasedtext/fast/text/soft-hyphen-2.html [ Pass Failure ]
+crbug.com/418091 [ SnowLeopard ] virtual/antialiasedtext/fast/text/soft-hyphen-3.html [ Pass Failure ]
+crbug.com/418091 [ SnowLeopard ] virtual/antialiasedtext/fast/text/soft-hyphen-4.html [ Pass Failure ]
+crbug.com/418091 [ SnowLeopard ] virtual/antialiasedtext/fast/text/splitText-dirty-lines.html [ Pass Failure ]
+
+crbug.com/334269 [ SnowLeopard ] fast/text/whitespace/008.html [ NeedsManualRebaseline ]
+crbug.com/334269 [ SnowLeopard ] virtual/textblob/fast/text/whitespace/008.html [ NeedsManualRebaseline ]
+crbug.com/334269 [ SnowLeopard ] fast/text/whitespace/009.html [ NeedsManualRebaseline ]
+crbug.com/334269 [ SnowLeopard ] virtual/textblob/fast/text/whitespace/009.html [ NeedsManualRebaseline ]
+crbug.com/334269 [ SnowLeopard ] fast/text/whitespace/012.html [ NeedsManualRebaseline ]
+crbug.com/334269 [ SnowLeopard ] virtual/textblob/fast/text/whitespace/012.html [ NeedsManualRebaseline ]
+crbug.com/334269 [ SnowLeopard ] fast/text/whitespace/013.html [ NeedsManualRebaseline ]
+crbug.com/334269 [ SnowLeopard ] virtual/textblob/fast/text/whitespace/013.html [ NeedsManualRebaseline ]
+crbug.com/334269 [ SnowLeopard ] fast/text/whitespace/014.html [ NeedsManualRebaseline ]
+crbug.com/334269 [ SnowLeopard ] virtual/textblob/fast/text/whitespace/014.html [ NeedsManualRebaseline ]
+crbug.com/334269 [ SnowLeopard ] fast/text/whitespace/018.html [ NeedsManualRebaseline ]
+crbug.com/334269 [ SnowLeopard ] virtual/textblob/fast/text/whitespace/018.html [ NeedsManualRebaseline ]
+
+crbug.com/334269 [ Mac ] virtual/antialiasedtext/fast/text/ipa-tone-letters.html [ Pass Failure ]
+crbug.com/334269 [ Mac ] virtual/antialiasedtext/fast/text/bidi-embedding-pop-and-push-same-2.html [ Pass Failure ]
+crbug.com/334269 [ Mac ] virtual/antialiasedtext/fast/text/ellipsis-stroked.html [ Pass Failure ]
+crbug.com/334269 [ Mac ] virtual/antialiasedtext/fast/text/line-break-after-question-mark.html [ Pass Failure ]
+crbug.com/334269 [ Mac ] virtual/antialiasedtext/fast/text/remove-zero-length-run.html [ Pass Failure ]
+crbug.com/334269 [ Mac ] virtual/antialiasedtext/fast/text/text-combine-shrink-to-fit.html [ Pass Failure ]
+
+crbug.com/419486 [ Mac ] fast/text/atsui-small-caps-punctuation-size.html [ Pass Failure ]
+crbug.com/419486 [ Mac ] virtual/textblob/fast/text/atsui-small-caps-punctuation-size.html [ Pass Failure ]
+
+crbug.com/420307 [ Win ] http/tests/serviceworker/fetch-frame-resource.html [ Pass Timeout ]
+
+crbug.com/404494 [ Win ] http/tests/xmlhttprequest/xmlhttprequest-allowed-with-disabled-web-security.html [ Pass Timeout ]
+
+crbug.com/421283 fast/html/marquee-scrollamount.html [ Pass Failure ]
+
+# Disabled until the test plugin is fixed.
+crbug.com/363099 [ Win ] plugins/geturlnotify-during-document-teardown.html [ Failure ]
+crbug.com/363099 [ Win ] plugins/nested-plugin-objects.html [ Failure ]
+crbug.com/363099 [ Win ] plugins/netscape-destroy-plugin-script-objects.html [ Failure ]
+crbug.com/363099 [ Win ] plugins/open-and-close-window-with-plugin.html [ Failure ]
+
+crbug.com/420008 [ Win ] inspector/tracing [ Pass Failure ]
+crbug.com/420008 [ Win ] http/tests/inspector/tracing [ Pass Failure ]
+crbug.com/420008 [ Win ] virtual/deferred/inspector/tracing [ Pass Failure ]
+crbug.com/420008 [ Win ] virtual/implsidepainting/inspector/tracing [ Pass Failure ]
+
+crbug.com/421298 http/tests/security/subresourceIntegrity/subresource-integrity-style-blocked.html [ Pass Failure ]
+
+# Temporarily skipped until event_sender is changed not to set the keyIdentifier into an empty string
+crbug.com/423270 fast/events/press-enter-key-on-focused-element-inside-link.html [ Pass Failure ]
+crbug.com/423270 fast/dom/fragment-activation-focuses-target.html [ Pass Failure ]
+
+# These are experiencing assertions in harfbuzz.
+# fast/text/international/bidi-neutral-run.html is missing here, since it has a NeedsManualRebaseline expectation up above.
+crbug.com/421854 [ SnowLeopard Debug ] fast/dom/52776.html [ Pass Crash ]
+crbug.com/421854 [ SnowLeopard Debug ] virtual/antialiasedtext/fast/text/sub-pixel/text-scaling-rtl.html [ Pass Crash ]
+crbug.com/421854 [ SnowLeopard Debug ] virtual/textblob/fast/text/sub-pixel/text-scaling-rtl.html [ Pass Crash ]
+
+crbug.com/414283 [ Mac ] fast/scrolling/fractional-scroll-offset-document.html [ Pass Failure ]
+
+# Updating Javascript spec.
+crbug.com/422199 ietestcenter/Javascript/15.2.3.14-1-1.html [ NeedsManualRebaseline ]
+crbug.com/422199 ietestcenter/Javascript/15.2.3.14-1-2.html [ NeedsManualRebaseline ]
+crbug.com/422199 ietestcenter/Javascript/15.2.3.14-1-3.html [ NeedsManualRebaseline ]
+crbug.com/422199 ietestcenter/Javascript/15.2.3.4-1.html [ NeedsManualRebaseline ]
+
+crbug.com/424974 http/tests/appcache/different-https-origin-resource-main.html [ Failure ]
+
+# Timing out on WinXP after r183502
+crbug.com/422278 [ XP ] http/tests/serviceworker/fetch-canvas-tainting.html [ Pass Timeout ]
+crbug.com/422278 [ XP ] http/tests/serviceworker/fetch-cors-xhr.html [ Pass Timeout ]
+
+crbug.com/422846 [ Linux ] fast/text/shaping/same-script-different-lang.html [ Pass Failure ]
+crbug.com/422846 [ Linux ] virtual/textblob/fast/text/shaping/same-script-different-lang.html [ Pass Failure ]
+
+crbug.com/424648 editing/selection/deleteFromDocument-crash.html [ Pass ImageOnlyFailure ]
+
+crbug.com/425345 [ Mac ] fast/text/line-break-after-question-mark.html [ Failure ]
+crbug.com/425345 [ Mac ] virtual/textblob/fast/text/line-break-after-question-mark.html [ Failure ]
+
+crbug.com/425537 fast/notifications/notifications-constructor-request-permission.html [ Skip ]
