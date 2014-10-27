@@ -94,7 +94,7 @@ void RenderReplaced::layout()
     clearNeedsLayout();
 
     if (replacedContentRect() != oldContentRect)
-        setShouldDoFullPaintInvalidation();
+        setShouldDoFullPaintInvalidation(true);
 }
 
 void RenderReplaced::intrinsicSizeChanged()
