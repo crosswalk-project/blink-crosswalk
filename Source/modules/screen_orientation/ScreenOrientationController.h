@@ -52,6 +52,9 @@ private:
     virtual bool hasLastData() OVERRIDE;
     virtual void pageVisibilityChanged() OVERRIDE;
 
+    // Inherited from FrameDestructionObserver.
+    virtual void willDetachFrameHost() override;
+
     void notifyDispatcher();
 
     void updateOrientation();
