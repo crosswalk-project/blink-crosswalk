@@ -6,7 +6,8 @@
  * met:
  *
  *     * Redistributions of source code must retain the above copyright
- * notice, this list of conditions and the following disclaimer.
+ * notice, this list of co
+ * nditions and the following disclaimer.
  *     * Redistributions in binary form must reproduce the above
  * copyright notice, this list of conditions and the following disclaimer
  * in the documentation and/or other materials provided with the
@@ -62,6 +63,8 @@ public:
     virtual void disable(ErrorString*) OVERRIDE;
     virtual void startTrackingHeapObjects(ErrorString*, const bool* trackAllocations) OVERRIDE;
     virtual void stopTrackingHeapObjects(ErrorString*, const bool* reportProgress) OVERRIDE;
+    virtual void startTrackingHeapXDK(ErrorString*, const int* stack_depth, const int* sav, const bool* retentions) OVERRIDE;
+    virtual void stopTrackingHeapXDK(ErrorString*, RefPtr<TypeBuilder::HeapProfiler::HeapEventXDK>&) OVERRIDE;
 
     virtual void setFrontend(InspectorFrontend*) OVERRIDE;
     virtual void clearFrontend() OVERRIDE;
@@ -76,10 +79,20 @@ private:
     class HeapStatsStream;
     class HeapStatsUpdateTask;
 
+    class HeapXDKStream;
+    class HeapXDKUpdateTask;
+
     explicit InspectorHeapProfilerAgent(InjectedScriptManager*);
 
     void requestHeapStatsUpdate();
     void pushHeapStatsUpdate(const uint32_t* const data, const int size);
+
+    void requestHeapXDKUpdate();
+    void pushHeapXDKUpdate(const char* symbols, int symbolsSize,
+                           const char* frames, int framesSize,
+                           const char* types, int typesSize,
+                           const char* chunks, int chunksSize,
+                           const char* retentions, int retentionsSize);
 
     void startTrackingHeapObjectsInternal(bool trackAllocations);
     void stopTrackingHeapObjectsInternal();
@@ -88,6 +101,7 @@ private:
     InspectorFrontend::HeapProfiler* m_frontend;
     unsigned m_nextUserInitiatedHeapSnapshotNumber;
     OwnPtrWillBeMember<HeapStatsUpdateTask> m_heapStatsUpdateTask;
+    OwnPtrWillBeMember<HeapXDKUpdateTask> m_heapXDKUpdateTask;
 };
 
 } // namespace blink
