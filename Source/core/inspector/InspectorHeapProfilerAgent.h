@@ -61,6 +61,8 @@ public:
     virtual void disable(ErrorString*) override;
     virtual void startTrackingHeapObjects(ErrorString*, const bool* trackAllocations) override;
     virtual void stopTrackingHeapObjects(ErrorString*, const bool* reportProgress) override;
+    virtual void startTrackingHeapXDK(ErrorString*, const int* stack_depth, const int* sav, const bool* retentions) override;
+    virtual void stopTrackingHeapXDK(ErrorString*, RefPtr<TypeBuilder::HeapProfiler::HeapEventXDK>&) override;
 
     virtual void setFrontend(InspectorFrontend*) override;
     virtual void clearFrontend() override;
@@ -75,10 +77,20 @@ private:
     class HeapStatsStream;
     class HeapStatsUpdateTask;
 
+    class HeapXDKStream;
+    class HeapXDKUpdateTask;
+
     explicit InspectorHeapProfilerAgent(InjectedScriptManager*);
 
     void requestHeapStatsUpdate();
     void pushHeapStatsUpdate(const uint32_t* const data, const int size);
+
+    void requestHeapXDKUpdate();
+    void pushHeapXDKUpdate(const char* symbols, int symbolsSize,
+                           const char* frames, int framesSize,
+                           const char* types, int typesSize,
+                           const char* chunks, int chunksSize,
+                           const char* retentions, int retentionsSize);
 
     void startTrackingHeapObjectsInternal(bool trackAllocations);
     void stopTrackingHeapObjectsInternal();
@@ -87,6 +99,7 @@ private:
     InspectorFrontend::HeapProfiler* m_frontend;
     unsigned m_nextUserInitiatedHeapSnapshotNumber;
     OwnPtrWillBeMember<HeapStatsUpdateTask> m_heapStatsUpdateTask;
+    OwnPtrWillBeMember<HeapXDKUpdateTask> m_heapXDKUpdateTask;
 };
 
 } // namespace blink
