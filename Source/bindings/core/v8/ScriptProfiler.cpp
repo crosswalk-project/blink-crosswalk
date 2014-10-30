@@ -315,4 +315,58 @@ void ScriptProfiler::setIdle(bool isIdle)
         profiler->SetIdle(isIdle);
 }
 
+namespace {
+
+class HeapXDKStream : public v8::OutputStream {
+public:
+    HeapXDKStream(ScriptProfiler::OutputStream* stream) : m_stream(stream) { }
+    virtual void EndOfStream() override { }
+
+    virtual WriteResult WriteAsciiChunk(char* data, int size) override
+    {
+        ASSERT(false);
+        return kAbort;
+    }
+
+    virtual WriteResult WriteHeapXDKChunk(const char* symbols, int symbolsSize,
+                                          const char* frames, int framesSize,
+                                          const char* types, int typesSize,
+                                          const char* chunks, int chunksSize,
+                                          const char* retentions,
+                                          int retentionSize) override
+    {
+        m_stream->write(symbols, symbolsSize, frames, framesSize,
+                        types, typesSize, chunks, chunksSize,
+                        retentions, retentionSize);
+        return kContinue;
+    }
+
+private:
+    ScriptProfiler::OutputStream* m_stream;
+};
+
+}
+
+void ScriptProfiler::requestHeapXDKUpdate(ScriptProfiler::OutputStream* stream)
+{
+    HeapXDKStream heapXDKStream(stream);
+    v8::Isolate::GetCurrent()->GetHeapProfiler()->GetHeapXDKStats(
+            &heapXDKStream);
+}
+
+void ScriptProfiler::startTrackingHeapObjectsXDK(int stackDepth,
+                                                 bool retentions)
+{
+    v8::Isolate::GetCurrent()->GetHeapProfiler()->StartTrackingHeapObjectsXDK(
+            stackDepth, retentions);
+}
+
+PassRefPtr<HeapProfileXDK> ScriptProfiler::stopTrackingHeapObjectsXDK()
+{
+    return HeapProfileXDK::create(
+            v8::Isolate::GetCurrent()
+                    ->GetHeapProfiler()->StopTrackingHeapObjectsXDK());
+}
+
+
 } // namespace blink
