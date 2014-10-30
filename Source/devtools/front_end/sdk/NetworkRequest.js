@@ -1003,5 +1003,10 @@ WebInspector.NetworkRequest.prototype = {
         this._frames.push({ type: type, text: response.payloadData, time: time, opCode: response.opcode, mask: response.mask });
     },
 
+    replayXHR: function()
+    {
+        this.target().networkAgent().replayXHR(this.requestId);
+    },
+
     __proto__: WebInspector.SDKObject.prototype
 }
