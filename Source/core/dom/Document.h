@@ -917,6 +917,8 @@ public:
     void enqueueUniqueAnimationFrameEvent(PassRefPtrWillBeRawPtr<Event>);
     void enqueueMediaQueryChangeListeners(WillBeHeapVector<RefPtrWillBeMember<MediaQueryListListener> >&);
 
+    void dispatchEventsForPrinting();
+
     bool hasFullscreenSupplement() const { return m_hasFullscreenSupplement; }
     void setHasFullscreenSupplement() { m_hasFullscreenSupplement = true; }
 
