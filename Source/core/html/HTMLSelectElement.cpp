@@ -606,7 +606,7 @@ void HTMLSelectElement::selectAll()
     setActiveSelectionAnchorIndex(nextSelectableListIndex(-1));
     setActiveSelectionEndIndex(previousSelectableListIndex(-1));
 
-    updateListBoxSelection(false);
+    updateListBoxSelection(false, false);
     listBoxOnChange();
     setNeedsValidityCheck();
 }
@@ -649,7 +649,7 @@ void HTMLSelectElement::setActiveSelectionEndIndex(int index)
     setNeedsStyleRecalc(SubtreeStyleChange);
 }
 
-void HTMLSelectElement::updateListBoxSelection(bool deselectOtherOptions)
+void HTMLSelectElement::updateListBoxSelection(bool deselectOtherOptions, bool scroll)
 {
     ASSERT(renderer() && (renderer()->isListBox() || m_multiple));
     ASSERT(!listItems().size() || m_activeSelectionAnchorIndex >= 0);
@@ -672,7 +672,8 @@ void HTMLSelectElement::updateListBoxSelection(bool deselectOtherOptions)
     }
 
     setNeedsValidityCheck();
-    scrollToSelection();
+    if (scroll)
+        scrollToSelection();
     notifyFormStateChanged();
 }
 
@@ -886,11 +887,17 @@ void HTMLSelectElement::scrollTo(int listIndex)
 {
     if (listIndex < 0)
         return;
+    if (usesMenuList())
+        return;
     const WillBeHeapVector<RawPtrWillBeMember<HTMLElement> >& items = listItems();
     int listSize = static_cast<int>(items.size());
     if (listIndex >= listSize)
         return;
-    items[listIndex]->scrollIntoViewIfNeeded(false);
+    document().updateLayoutIgnorePendingStylesheets();
+    if (!renderer() || !renderer()->isListBox())
+        return;
+    LayoutRect bounds = items[listIndex]->boundingBox();
+    toRenderListBox(renderer())->scrollToRect(bounds);
 }
 
 void HTMLSelectElement::optionSelectionStateChanged(HTMLOptionElement* option, bool optionIsSelected)
@@ -1705,7 +1712,8 @@ void HTMLSelectElement::finishParsingChildren()
 {
     HTMLFormControlElementWithState::finishParsingChildren();
     updateListItemSelectedStates();
-    scrollToSelection();
+    if (!usesMenuList())
+        scrollToSelection();
 }
 
 bool HTMLSelectElement::anonymousIndexedSetter(unsigned index, PassRefPtrWillBeRawPtr<HTMLOptionElement> value, ExceptionState& exceptionState)

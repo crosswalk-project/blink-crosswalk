@@ -52,6 +52,7 @@
 #include "core/rendering/HitTestResult.h"
 #include "core/rendering/PaintInfo.h"
 #include "core/rendering/RenderScrollbar.h"
+#include "core/rendering/RenderLayer.h"
 #include "core/rendering/RenderText.h"
 #include "core/rendering/RenderTheme.h"
 #include "core/rendering/RenderView.h"
@@ -146,6 +147,15 @@ void RenderListBox::computeIntrinsicLogicalWidths(LayoutUnit& minLogicalWidth, L
     RenderBlockFlow::computeIntrinsicLogicalWidths(minLogicalWidth, maxLogicalWidth);
     if (style()->width().isPercent())
         minLogicalWidth = 0;
+}
+
+void RenderListBox::scrollToRect(const LayoutRect& rect)
+{
+    if (hasOverflowClip()) {
+        ASSERT(layer());
+        ASSERT(layer()->scrollableArea());
+        layer()->scrollableArea()->exposeRect(rect, ScrollAlignment::alignToEdgeIfNeeded, ScrollAlignment::alignToEdgeIfNeeded);
+    }
 }
 
 } // namespace blink

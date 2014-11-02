@@ -46,6 +46,8 @@ public:
 
     void paintInvalidationOfScrollbarIfNeeded();
 
+    // Unlike scrollRectToVisible this will not scroll parent boxes.
+    void scrollToRect(const LayoutRect&);
 private:
     HTMLSelectElement* selectElement() const;
 
