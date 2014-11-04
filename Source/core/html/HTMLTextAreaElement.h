@@ -66,6 +66,10 @@ private:
     HTMLTextAreaElement(Document&, HTMLFormElement*);
 
     enum WrapMethod { NoWrap, SoftWrap, HardWrap };
+    enum SetValueCommonOption {
+        NotSetSelection,
+        SetSeletion
+    };
 
     virtual void didAddUserAgentShadowRoot(ShadowRoot&) OVERRIDE;
     // FIXME: Author shadows should be allowed
@@ -77,7 +81,7 @@ private:
     void updateValue() const;
     virtual void setInnerEditorValue(const String&) OVERRIDE;
     void setNonDirtyValue(const String&);
-    void setValueCommon(const String&, TextFieldEventBehavior, SelectionOption = NotChangeSelection);
+    void setValueCommon(const String&, TextFieldEventBehavior, SetValueCommonOption = NotSetSelection);
 
     virtual bool supportsPlaceholder() const OVERRIDE { return true; }
     virtual void updatePlaceholderText() OVERRIDE;
