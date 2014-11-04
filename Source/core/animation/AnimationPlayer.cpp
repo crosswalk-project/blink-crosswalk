@@ -251,7 +251,7 @@ void AnimationPlayer::notifyCompositorStartTime(double timelineTime)
 
         double initialCompositorHoldTime = m_compositorState->holdTime;
         m_compositorState->pendingAction = None;
-        m_compositorState->startTime = timelineTime;
+        m_compositorState->startTime = timelineTime + currentTimeInternal() / -m_playbackRate;
 
         if (paused() || m_compositorState->playbackRate != m_playbackRate || m_compositorState->sourceChanged) {
             // Paused state, playback rate, or source changed while starting.
@@ -584,10 +584,16 @@ bool AnimationPlayer::maybeStartAnimationOnCompositor()
     if (!canStartAnimationOnCompositor())
         return false;
 
+    bool reversed = m_playbackRate < 0;
+
     double startTime = timeline()->zeroTime() + startTimeInternal();
+    if (reversed) {
+        startTime -= sourceEnd() / fabs(m_playbackRate);
+    }
+
     double timeOffset = 0;
     if (std::isnan(startTime)) {
-        timeOffset = m_playbackRate < 0 ? sourceEnd() - currentTimeInternal() : currentTimeInternal();
+        timeOffset = reversed ? sourceEnd() - currentTimeInternal() : currentTimeInternal();
         timeOffset = timeOffset / fabs(m_playbackRate);
     }
     return toAnimation(m_content.get())->maybeStartAnimationOnCompositor(startTime, timeOffset, m_playbackRate);
