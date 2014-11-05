@@ -35,7 +35,11 @@
 #include "wtf/ThreadingPrimitives.h"
 #include <stdlib.h>
 #include <string.h>
+#if defined(USE_ICU_ALTERNATIVES_ON_ANDROID)
+#include "base/icu_alternatives_on_android/icu_utils.h"
+#else
 #include <unicode/ucol.h>
+#endif
 
 #if OS(MACOSX)
 #include "wtf/RetainPtr.h"
@@ -44,6 +48,27 @@
 
 namespace WTF {
 
+#if defined(USE_ICU_ALTERNATIVES_ON_ANDROID)
+Collator::Collator(const char* locale)
+    : m_collator(locale)
+{
+}
+
+Collator::~Collator()
+{
+}
+
+void Collator::setOrderLowerFirst(bool) {}
+
+PassOwnPtr<Collator> Collator::userDefault()
+{
+    return adoptPtr(new Collator(0));
+}
+
+Collator::Result Collator::collate(const UChar* lhs, size_t lhsLength, const UChar* rhs, size_t rhsLength) const {
+    return static_cast<Result>(m_collator.collate(lhs, lhsLength, rhs, rhsLength));
+}
+#else
 static UCollator* cachedCollator;
 static Mutex& cachedCollatorMutex()
 {
@@ -142,5 +167,6 @@ void Collator::releaseCollator()
         m_collator  = 0;
     }
 }
+#endif
 
 } // namespace WTF

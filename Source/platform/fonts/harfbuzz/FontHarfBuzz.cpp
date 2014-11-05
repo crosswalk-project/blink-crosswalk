@@ -221,6 +221,9 @@ void Font::drawTextBlob(GraphicsContext* gc, const SkTextBlob* blob, const SkPoi
 
 float Font::drawComplexText(GraphicsContext* gc, const TextRunPaintInfo& runInfo, const FloatPoint& point) const
 {
+#if defined(USE_ICU_ALTERNATIVES_ON_ANDROID)
+    return 0;
+#else
     if (!runInfo.run.length())
         return 0;
 
@@ -238,6 +241,7 @@ float Font::drawComplexText(GraphicsContext* gc, const TextRunPaintInfo& runInfo
         return 0;
     FloatPoint adjustedPoint = shaper.adjustStartPoint(point);
     return drawGlyphBuffer(gc, runInfo, glyphBuffer, adjustedPoint);
+#endif
 }
 
 void Font::drawEmphasisMarksForComplexText(GraphicsContext* context, const TextRunPaintInfo& runInfo, const AtomicString& mark, const FloatPoint& point) const
@@ -254,14 +258,19 @@ void Font::drawEmphasisMarksForComplexText(GraphicsContext* context, const TextR
 
 float Font::getGlyphsAndAdvancesForComplexText(const TextRunPaintInfo& runInfo, GlyphBuffer& glyphBuffer, ForTextEmphasisOrNot forTextEmphasis) const
 {
+#if !defined(USE_ICU_ALTERNATIVES_ON_ANDROID)
     HarfBuzzShaper shaper(this, runInfo.run, HarfBuzzShaper::ForTextEmphasis);
     shaper.setDrawRange(runInfo.from, runInfo.to);
     shaper.shape(&glyphBuffer);
+#endif
     return 0;
 }
 
 float Font::floatWidthForComplexText(const TextRun& run, HashSet<const SimpleFontData*>* fallbackFonts, IntRectExtent* glyphBounds) const
 {
+#if defined(USE_ICU_ALTERNATIVES_ON_ANDROID)
+    return 0;
+#else
     HarfBuzzShaper shaper(this, run, HarfBuzzShaper::NotForTextEmphasis, fallbackFonts);
     if (!shaper.shape())
         return 0;
@@ -272,16 +281,21 @@ float Font::floatWidthForComplexText(const TextRun& run, HashSet<const SimpleFon
     glyphBounds->setRight(std::max<int>(0, ceilf(shaper.glyphBoundingBox().right() - shaper.totalWidth())));
 
     return shaper.totalWidth();
+#endif
 }
 
 // Return the code point index for the given |x| offset into the text run.
 int Font::offsetForPositionForComplexText(const TextRun& run, float xFloat,
                                           bool includePartialGlyphs) const
 {
+#if defined(USE_ICU_ALTERNATIVES_ON_ANDROID)
+    return 0;
+#else
     HarfBuzzShaper shaper(this, run);
     if (!shaper.shape())
         return 0;
     return shaper.offsetForPosition(xFloat);
+#endif
 }
 
 // Return the rectangle for selecting the given range of code-points in the TextRun.
@@ -289,10 +303,14 @@ FloatRect Font::selectionRectForComplexText(const TextRun& run,
                                             const FloatPoint& point, int height,
                                             int from, int to) const
 {
+#if defined(USE_ICU_ALTERNATIVES_ON_ANDROID)
+    return FloatRect();
+#else
     HarfBuzzShaper shaper(this, run);
     if (!shaper.shape())
         return FloatRect();
     return shaper.selectionRect(point, height, from, to);
+#endif
 }
 
 PassTextBlobPtr Font::buildTextBlob(const GlyphBuffer& glyphBuffer, float initialAdvance,

@@ -73,8 +73,9 @@ struct ICUConverterWrapper {
     WTF_MAKE_NONCOPYABLE(ICUConverterWrapper); WTF_MAKE_FAST_ALLOCATED;
 public:
     ICUConverterWrapper() : converter(0) { }
+#if !defined(USE_ICU_ALTERNATIVES_ON_ANDROID)
     ~ICUConverterWrapper();
-
+#endif
     UConverter* converter;
 };
 

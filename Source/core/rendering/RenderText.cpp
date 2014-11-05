@@ -50,6 +50,10 @@
 #include "wtf/text/StringBuilder.h"
 #include "wtf/unicode/CharacterNames.h"
 
+#if defined(USE_ICU_ALTERNATIVES_ON_ANDROID)
+#include "base/icu_alternatives_on_android/icu_utils.h"
+#endif
+
 using namespace WTF;
 using namespace Unicode;
 
@@ -1702,7 +1706,11 @@ inline bool isHangulLVT(UChar32 character)
 
 inline bool isMark(UChar32 c)
 {
+#if defined(USE_ICU_ALTERNATIVES_ON_ANDROID)
+    int8_t charType = (int8_t)base::icu_utils::category(c);
+#else
     int8_t charType = u_charType(c);
+#endif
     return charType == U_NON_SPACING_MARK || charType == U_ENCLOSING_MARK || charType == U_COMBINING_SPACING_MARK;
 }
 

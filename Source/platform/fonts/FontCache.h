@@ -50,7 +50,11 @@ struct IDWriteFactory;
 #endif
 
 #if OS(ANDROID)
+#if defined(USE_ICU_ALTERNATIVES_ON_ANDROID)
+#include "base/icu_alternatives_on_android/icu_utils.h"
+#else
 #include <unicode/uscript.h>
+#endif
 #endif
 
 class SkTypeface;

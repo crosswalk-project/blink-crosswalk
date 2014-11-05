@@ -168,6 +168,20 @@
                         ['exclude', 'WebInputEventFactoryAndroid.cpp$'],
                     ],
                 }],
+                ['OS=="android" and use_icu_alternatives_on_android==1', {
+                    'dependencies': [
+                        '<(DEPTH)/base/base.gyp:base_icu_alternatives',
+                    ],
+                    'dependencies!': [
+                        '<(DEPTH)/third_party/icu/icu.gyp:icuuc',
+                    ],
+                    'export_dependent_settings': [
+                        '<(DEPTH)/base/base.gyp:base_icu_alternatives',
+                    ],
+                    'export_dependent_settings!': [
+                        '<(DEPTH)/third_party/icu/icu.gyp:icuuc',
+                    ],
+                }],
                 ['OS=="mac"', {
                     'link_settings': {
                         'libraries': [

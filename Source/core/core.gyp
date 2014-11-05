@@ -592,6 +592,11 @@
             ['exclude', 'Linux\\.cpp$'],
           ],
         }],
+        ['OS=="android" and use_icu_alternatives_on_android==1', {
+          'sources!': [
+            'editing/SmartReplaceICU.cpp',
+          ],
+        }],
         ['OS=="android"', {
           'sources/': [
             ['include', 'rendering/RenderThemeChromiumFontProviderLinux\\.cpp$'],
@@ -628,6 +633,11 @@
         ['OS != "linux"', {
           'sources/': [
             ['exclude', 'Linux\\.cpp$'],
+          ],
+        }],
+        ['OS=="android" and use_icu_alternatives_on_android==1', {
+          'sources!': [
+            'editing/SmartReplaceICU.cpp',
           ],
         }],
         ['OS=="android"', {

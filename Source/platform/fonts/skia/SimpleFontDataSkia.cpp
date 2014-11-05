@@ -31,7 +31,11 @@
 #include "config.h"
 #include "platform/fonts/SimpleFontData.h"
 
+#if defined(USE_ICU_ALTERNATIVES_ON_ANDROID)
+#include "base/icu_alternatives_on_android/icu_utils.h"
+#else
 #include <unicode/normlzr.h>
+#endif
 #include "SkPaint.h"
 #include "SkPath.h"
 #include "SkTypeface.h"
@@ -261,12 +265,20 @@ bool SimpleFontData::canRenderCombiningCharacterSequence(const UChar* characters
     if (!addResult.isNewEntry)
         return addResult.storedValue->value;
 
+#if defined(USE_ICU_ALTERNATIVES_ON_ANDROID)
+    bool error;
+    Vector<UChar, 4> normalizedCharacters(length);
+    int32_t normalizedLength = base::icu_utils::normalize(characters, length, 4/*UNORM_NFC*/, &normalizedCharacters[0], length, &error);
+    if (error || (static_cast<size_t>(normalizedLength) == length))
+        return false;
+#else
     UErrorCode error = U_ZERO_ERROR;
     Vector<UChar, 4> normalizedCharacters(length);
     int32_t normalizedLength = unorm_normalize(characters, length, UNORM_NFC, UNORM_UNICODE_3_2, &normalizedCharacters[0], length, &error);
     // Can't render if we have an error or no composition occurred.
     if (U_FAILURE(error) || (static_cast<size_t>(normalizedLength) == length))
         return false;
+#endif
 
     SkPaint paint;
     m_platformData.setupPaint(&paint);

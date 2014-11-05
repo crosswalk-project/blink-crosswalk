@@ -52,15 +52,17 @@
 #include "wtf/text/CString.h"
 #include "wtf/text/StringBuilder.h"
 #include "wtf/unicode/CharacterNames.h"
+#if !defined(USE_ICU_ALTERNATIVES_ON_ANDROID)
 #include <unicode/usearch.h>
 #include <unicode/utf16.h>
+#endif
 
 using namespace WTF::Unicode;
 
 namespace blink {
 
 using namespace HTMLNames;
-
+#if !defined(USE_ICU_ALTERNATIVES_ON_ANDROID)
 // Buffer that knows how to compare with a search target.
 // Keeps enough of the previous text to be able to search in the future, but no more.
 // Non-breaking spaces are always equal to normal spaces.
@@ -105,7 +107,7 @@ private:
     Vector<UChar> m_normalizedTarget;
     mutable Vector<UChar> m_normalizedMatch;
 };
-
+#endif
 // --------
 
 static const unsigned bitsInWord = sizeof(unsigned) * 8;
@@ -1924,6 +1926,7 @@ UChar WordAwareIterator::characterAt(unsigned index) const
 
 // --------
 
+#if !defined(USE_ICU_ALTERNATIVES_ON_ANDROID)
 static const size_t minimumSearchBufferSize = 8192;
 
 #if ENABLE(ASSERT)
@@ -2227,7 +2230,7 @@ nextMatch:
     start = size - matchStart;
     return matchedLength;
 }
-
+#endif
 // --------
 
 int TextIterator::rangeLength(const Range* r, bool forSelectionPreservation)
@@ -2309,7 +2312,7 @@ static PassRefPtrWillBeRawPtr<Range> collapsedToBoundary(const Range* range, boo
     result->collapse(!forward);
     return result.release();
 }
-
+#if !defined(USE_ICU_ALTERNATIVES_ON_ANDROID)
 // Check if there's any unpaird surrogate code point.
 // Non-character code points are not checked.
 static bool isValidUTF16(const String& s)
@@ -2327,12 +2330,12 @@ static bool isValidUTF16(const String& s)
     }
     return true;
 }
-
+#endif
 static size_t findPlainTextInternal(CharacterIterator& it, const String& target, FindOptions options, size_t& matchStart)
 {
     matchStart = 0;
     size_t matchLength = 0;
-
+#if !defined(USE_ICU_ALTERNATIVES_ON_ANDROID)
     if (!isValidUTF16(target))
         return 0;
 
@@ -2372,7 +2375,7 @@ tryAgain:
             goto tryAgain;
         }
     }
-
+#endif
     return matchLength;
 }
 

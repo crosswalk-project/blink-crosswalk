@@ -42,7 +42,9 @@
 #include "core/editing/FrameSelection.h"
 #include "core/editing/HTMLInterchange.h"
 #include "core/editing/SimplifyMarkupCommand.h"
+#if !defined(USE_ICU_ALTERNATIVES_ON_ANDROID)
 #include "core/editing/SmartReplace.h"
+#endif
 #include "core/editing/TextIterator.h"
 #include "core/editing/VisibleUnits.h"
 #include "core/editing/htmlediting.h"
@@ -375,7 +377,11 @@ inline void ReplaceSelectionCommand::InsertedNodes::didReplaceNode(Node& node, N
 ReplaceSelectionCommand::ReplaceSelectionCommand(Document& document, PassRefPtrWillBeRawPtr<DocumentFragment> fragment, CommandOptions options, EditAction editAction)
     : CompositeEditCommand(document)
     , m_selectReplacement(options & SelectReplacement)
+#if !defined(USE_ICU_ALTERNATIVES_ON_ANDROID)
     , m_smartReplace(options & SmartReplace)
+#else
+    , m_smartReplace(false)
+#endif
     , m_matchStyle(options & MatchStyle)
     , m_documentFragment(fragment)
     , m_preventNesting(options & PreventNesting)
@@ -1298,7 +1304,11 @@ bool ReplaceSelectionCommand::shouldPerformSmartReplace() const
 
 static bool isCharacterSmartReplaceExemptConsideringNonBreakingSpace(UChar32 character, bool previousCharacter)
 {
+#if !defined(USE_ICU_ALTERNATIVES_ON_ANDROID)
     return isCharacterSmartReplaceExempt(character == noBreakSpace ? ' ' : character, previousCharacter);
+#else
+    return false;
+#endif
 }
 
 void ReplaceSelectionCommand::addSpacesForSmartReplace()
