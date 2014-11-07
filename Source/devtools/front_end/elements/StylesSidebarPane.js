@@ -1832,8 +1832,6 @@ WebInspector.StylePropertiesSection.prototype = {
             return;
         }
 
-        var selectedNode = this._parentPane._node;
-
         /**
          * @param {!WebInspector.CSSRule} newRule
          * @this {WebInspector.StylePropertiesSection}
@@ -1853,7 +1851,7 @@ WebInspector.StylePropertiesSection.prototype = {
             this.rule = newRule;
             this.styleRule = { section: this, style: newRule.style, selectorText: newRule.selectorText, media: newRule.media, rule: newRule };
 
-            this._parentPane.update(selectedNode);
+            this._parentPane._refreshUpdate(this, false);
             this._parentPane._styleSheetRuleEdited(this.rule, oldSelectorRange, this.rule.selectorRange);
 
             finishOperationAndMoveEditor.call(this, moveDirection);
@@ -1870,6 +1868,7 @@ WebInspector.StylePropertiesSection.prototype = {
 
         // This gets deleted in finishOperationAndMoveEditor(), which is called both on success and failure.
         this._parentPane._userOperation = true;
+        var selectedNode = this._parentPane._node;
         this._parentPane._target.cssModel.setRuleSelector(this.rule, selectedNode ? selectedNode.id : 0, newContent, successCallback.bind(this), finishOperationAndMoveEditor.bind(this, moveDirection));
     },
 
