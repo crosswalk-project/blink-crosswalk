@@ -77,7 +77,7 @@ private:
 
     // This method should never be called, SVG uses a different nodeAtPoint method
     virtual bool nodeAtPoint(const HitTestRequest&, HitTestResult&, const HitTestLocation& locationInContainer, const LayoutPoint& accumulatedOffset, HitTestAction) OVERRIDE FINAL;
-    virtual void absoluteFocusRingQuads(Vector<FloatQuad>&) OVERRIDE FINAL;
+    virtual IntRect absoluteFocusRingBoundingBoxRect() const OVERRIDE FINAL;
 
     InvalidationReason invalidatePaintIfNeeded(const PaintInvalidationState&, const RenderLayerModelObject& paintInvalidationContainer) OVERRIDE FINAL;
 };
