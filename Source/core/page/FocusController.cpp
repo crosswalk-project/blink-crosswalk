@@ -546,9 +546,10 @@ static Node* nextNodeWithGreaterTabIndex(Node* start, int tabIndex)
     int winningTabIndex = std::numeric_limits<short>::max() + 1;
     Node* winner = 0;
     for (Node* node = start; node; node = NodeTraversal::next(*node)) {
-        if (shouldVisit(node) && node->tabIndex() > tabIndex && node->tabIndex() < winningTabIndex) {
+        int currentTabIndex = adjustedTabIndex(node);
+        if (shouldVisit(node) && currentTabIndex > tabIndex && currentTabIndex < winningTabIndex) {
             winner = node;
-            winningTabIndex = node->tabIndex();
+            winningTabIndex = currentTabIndex;
         }
     }
 
