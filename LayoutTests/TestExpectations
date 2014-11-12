@@ -1,11 +1,8 @@
-crbug.com/423834 fast/borders/border-radius-mask-video-ratio.html [ NeedsRebaseline ]
-crbug.com/423834 fast/borders/border-radius-mask-video-shadow.html [ NeedsRebaseline ]
-crbug.com/423834 fast/borders/border-radius-mask-video.html [ NeedsRebaseline ]
-crbug.com/423834 fast/overflow/overflow-update-transform.html [ NeedsRebaseline ]
-crbug.com/423834 fast/replaced/border-radius-clip-content-edge.html [ NeedsRebaseline ]
-crbug.com/423834 fast/replaced/selection-rect-transform.html [ NeedsRebaseline ]
-crbug.com/423834 ietestcenter/css3/bordersbackgrounds/border-radius-content-edge-001.htm [ NeedsRebaseline ]
- 
+crbug.com/418521 compositing/overflow/overflow-positioning.html [ NeedsRebaseline ]
+crbug.com/418521 virtual/prefer_compositing_to_lcd_text/compositing/overflow/overflow-positioning.html [ NeedsRebaseline ]
+crbug.com/418521 transforms/3d/point-mapping/3d-point-mapping-deep.html [ NeedsRebaseline ]
+crbug.com/418521 compositing/geometry/preserve-3d-switching.html [ NeedsRebaseline ]
+
 # This directly has manual tests that don't have to run with run-webkit-tests
 crbug.com/359838 http/tests/ManualTests/ [ Skip ]
 
@@ -760,7 +757,6 @@ crbug.com/334269 [ Mac ] svg/dynamic-updates/SVGForeignObjectElement-svgdom-widt
 crbug.com/334269 [ Mac ] svg/dynamic-updates/SVGImageElement-dom-height-attr.html [ NeedsManualRebaseline ]
 crbug.com/334269 [ Mac ] svg/dynamic-updates/SVGImageElement-dom-preserveAspectRatio-attr.html [ NeedsManualRebaseline ]
 crbug.com/334269 [ Mac ] svg/dynamic-updates/SVGImageElement-dom-width-attr.html [ NeedsManualRebaseline ]
-crbug.com/334269 [ Mac ] compositing/overflow/overflow-positioning.html [ NeedsManualRebaseline ]
 crbug.com/334269 [ Mac ] fast/backgrounds/animated-gif-as-background.html [ NeedsManualRebaseline ]
 crbug.com/334269 [ Mac ] fast/inline/justify-emphasis-inline-box.html [ NeedsManualRebaseline ]
 crbug.com/334269 [ Mac ] fast/repaint/box-shadow-h.html [ NeedsManualRebaseline ]
