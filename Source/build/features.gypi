@@ -71,6 +71,15 @@
           'ENABLE_WEB_AUDIO=1',
         ],
       }],
+      ['OS=="android" and disable_media_stream==1', {
+        'feature_defines': [
+          'ENABLE_MEDIA_STREAM=0',
+        ],
+      }, {
+        'feature_defines': [
+          'ENABLE_MEDIA_STREAM=1',
+        ],
+      }],
       # Mac OS X has not implemented support for ENABLE(OPENTYPE_VERTICAL) yet
       ['OS!="mac"', {
         'feature_defines': [

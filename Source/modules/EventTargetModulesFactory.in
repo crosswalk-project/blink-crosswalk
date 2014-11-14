@@ -11,11 +11,11 @@ modules/indexeddb/IDBTransaction
 modules/mediasource/MediaSource
 modules/mediasource/SourceBuffer
 modules/mediasource/SourceBufferList
-modules/mediastream/MediaStream
-modules/mediastream/MediaStreamTrack
-modules/mediastream/RTCDTMFSender
-modules/mediastream/RTCDataChannel
-modules/mediastream/RTCPeerConnection
+modules/mediastream/MediaStream Conditional=MEDIA_STREAM
+modules/mediastream/MediaStreamTrack Conditional=MEDIA_STREAM
+modules/mediastream/RTCDTMFSender Conditional=MEDIA_STREAM
+modules/mediastream/RTCDataChannel Conditional=MEDIA_STREAM
+modules/mediastream/RTCPeerConnection Conditional=MEDIA_STREAM
 modules/netinfo/NetworkInformation
 modules/notifications/Notification
 modules/presentation/Presentation

@@ -36,7 +36,6 @@
 #include "core/inspector/ScriptCallStack.h"
 #include "platform/audio/FFTFrame.h"
 #include "platform/audio/HRTFPanner.h"
-#include "modules/mediastream/MediaStream.h"
 #include "modules/webaudio/AnalyserNode.h"
 #include "modules/webaudio/AudioBuffer.h"
 #include "modules/webaudio/AudioBufferCallback.h"
@@ -53,8 +52,6 @@
 #include "modules/webaudio/DynamicsCompressorNode.h"
 #include "modules/webaudio/GainNode.h"
 #include "modules/webaudio/MediaElementAudioSourceNode.h"
-#include "modules/webaudio/MediaStreamAudioDestinationNode.h"
-#include "modules/webaudio/MediaStreamAudioSourceNode.h"
 #include "modules/webaudio/OfflineAudioCompletionEvent.h"
 #include "modules/webaudio/OfflineAudioContext.h"
 #include "modules/webaudio/OfflineAudioDestinationNode.h"
@@ -63,6 +60,12 @@
 #include "modules/webaudio/PeriodicWave.h"
 #include "modules/webaudio/ScriptProcessorNode.h"
 #include "modules/webaudio/WaveShaperNode.h"
+
+#if ENABLE(MEDIA_STREAM)
+#include "modules/mediastream/MediaStream.h"
+#include "modules/webaudio/MediaStreamAudioDestinationNode.h"
+#include "modules/webaudio/MediaStreamAudioSourceNode.h"
+#endif
 
 #if DEBUG_AUDIONODE_REFERENCES
 #include <stdio.h>
@@ -283,6 +286,7 @@ MediaElementAudioSourceNode* AudioContext::createMediaElementSource(HTMLMediaEle
     return node;
 }
 
+#if ENABLE(MEDIA_STREAM)
 MediaStreamAudioSourceNode* AudioContext::createMediaStreamSource(MediaStream* mediaStream, ExceptionState& exceptionState)
 {
     ASSERT(isMainThread());
@@ -318,6 +322,7 @@ MediaStreamAudioDestinationNode* AudioContext::createMediaStreamDestination()
     // Set number of output channels to stereo by default.
     return MediaStreamAudioDestinationNode::create(this, 2);
 }
+#endif  // ENABLE(MEDIA_STREAM)
 
 ScriptProcessorNode* AudioContext::createScriptProcessor(ExceptionState& exceptionState)
 {

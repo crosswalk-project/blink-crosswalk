@@ -55,8 +55,8 @@
 
     [RaisesException] MediaElementAudioSourceNode createMediaElementSource(HTMLMediaElement mediaElement);
 
-    [RaisesException] MediaStreamAudioSourceNode createMediaStreamSource(MediaStream mediaStream);
-    MediaStreamAudioDestinationNode createMediaStreamDestination();
+    [Conditional=MEDIA_STREAM, RaisesException] MediaStreamAudioSourceNode createMediaStreamSource(MediaStream mediaStream);
+    [Conditional=MEDIA_STREAM] MediaStreamAudioDestinationNode createMediaStreamDestination();
 
     // Processing nodes
     GainNode createGain();

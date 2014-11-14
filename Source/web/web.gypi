@@ -98,8 +98,6 @@
       'StorageQuotaClientImpl.h',
       'TextFinder.cpp',
       'TextFinder.h',
-      'UserMediaClientImpl.cpp',
-      'UserMediaClientImpl.h',
       'ValidationMessageClientImpl.cpp',
       'ValidationMessageClientImpl.h',
       'ViewportAnchor.cpp',
@@ -120,7 +118,6 @@
       'WebDOMError.cpp',
       'WebDOMEvent.cpp',
       'WebDOMFileSystem.cpp',
-      'WebDOMMediaStreamTrack.cpp',
       'WebDOMMessageEvent.cpp',
       'WebDOMMouseEvent.cpp',
       'WebDOMProgressEvent.cpp',
@@ -183,7 +180,6 @@
       'WebMediaDevicesRequest.cpp',
       'WebMediaPlayerClientImpl.cpp',
       'WebMediaPlayerClientImpl.h',
-      'WebMediaStreamRegistry.cpp',
       'WebNetworkStateNotifier.cpp',
       'WebNode.cpp',
       'WebNodeList.cpp',
@@ -312,6 +308,16 @@
       'tests/WebViewTest.cpp',
     ],
     'conditions': [
+      ['disable_media_stream==0',
+        {
+          'web_files': [
+            'UserMediaClientImpl.cpp',
+            'UserMediaClientImpl.h',
+            'WebDOMMediaStreamTrack.cpp',
+            'WebMediaStreamRegistry.cpp',
+          ],
+        }
+      ],
       ['OS=="win"',
         {
           'web_unittest_files': [

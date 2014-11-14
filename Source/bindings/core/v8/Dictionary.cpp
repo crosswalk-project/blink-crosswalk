@@ -46,16 +46,19 @@
 #include "bindings/modules/v8/V8Headers.h"
 #include "bindings/modules/v8/V8IDBKeyRange.h"
 #include "bindings/modules/v8/V8MIDIPort.h"
-#include "bindings/modules/v8/V8MediaStream.h"
 #include "bindings/modules/v8/V8SpeechRecognitionResult.h"
 #include "bindings/modules/v8/V8SpeechRecognitionResultList.h"
 #include "core/html/track/TrackBase.h"
 #include "modules/gamepad/Gamepad.h"
 #include "modules/indexeddb/IDBKeyRange.h"
-#include "modules/mediastream/MediaStream.h"
 #include "modules/speech/SpeechRecognitionResult.h"
 #include "modules/speech/SpeechRecognitionResultList.h"
 #include "wtf/MathExtras.h"
+
+#if ENABLE(MEDIA_STREAM)
+#include "bindings/modules/v8/V8MediaStream.h"
+#include "modules/mediastream/MediaStream.h"
+#endif
 
 namespace blink {
 

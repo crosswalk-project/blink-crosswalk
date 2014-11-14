@@ -1514,7 +1514,9 @@ WebLocalFrameImpl::WebLocalFrameImpl(WebFrameClient* client)
     , m_client(client)
     , m_permissionClient(0)
     , m_inputEventsScaleFactorForEmulation(1)
+#if ENABLE(MEDIA_STREAM)
     , m_userMediaClientImpl(this)
+#endif
     , m_geolocationClientProxy(GeolocationClientProxy::create(client ? client->geolocationClient() : 0))
 #if ENABLE(OILPAN)
     , m_selfKeepAlive(this)
@@ -1555,7 +1557,9 @@ void WebLocalFrameImpl::setCoreFrame(PassRefPtrWillBeRawPtr<LocalFrame> frame)
 
         provideNotification(*m_frame, notificationPresenter.release());
         provideNotificationPermissionClientTo(*m_frame, NotificationPermissionClientImpl::create());
+#if ENABLE(MEDIA_STREAM)
         provideUserMediaTo(*m_frame, &m_userMediaClientImpl);
+#endif
         provideGeolocationTo(*m_frame, m_geolocationClientProxy.get());
         m_geolocationClientProxy->setController(GeolocationController::from(m_frame.get()));
         provideMIDITo(*m_frame, MIDIClientProxy::create(m_client ? m_client->webMIDIClient() : 0));
