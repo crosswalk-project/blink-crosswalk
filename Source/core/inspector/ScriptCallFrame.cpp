@@ -55,6 +55,7 @@ ScriptCallFrame::~ScriptCallFrame()
 {
 }
 
+#if ENABLE(INSPECTOR)
 PassRefPtr<TypeBuilder::Console::CallFrame> ScriptCallFrame::buildInspectorObject() const
 {
     return TypeBuilder::Console::CallFrame::create()
@@ -65,5 +66,6 @@ PassRefPtr<TypeBuilder::Console::CallFrame> ScriptCallFrame::buildInspectorObjec
         .setColumnNumber(m_column)
         .release();
 }
+#endif // ENABLE(INSPECTOR)
 
 } // namespace blink

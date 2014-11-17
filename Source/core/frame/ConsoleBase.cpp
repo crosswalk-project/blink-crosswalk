@@ -103,6 +103,7 @@ void ConsoleBase::assertCondition(ScriptState* scriptState, PassRefPtrWillBeRawP
 
 void ConsoleBase::count(ScriptState* scriptState, PassRefPtrWillBeRawPtr<ScriptArguments> arguments)
 {
+#if ENABLE(INSPECTOR)
     RefPtrWillBeRawPtr<ScriptCallStack> callStack(createScriptCallStackForConsole(1));
     const ScriptCallFrame& lastCaller = callStack->at(0);
     // Follow Firebug's behavior of counting with null and undefined title in
@@ -120,6 +121,7 @@ void ConsoleBase::count(ScriptState* scriptState, PassRefPtrWillBeRawPtr<ScriptA
     consoleMessage->setScriptState(scriptState);
     consoleMessage->setCallStack(callStack.release());
     reportMessageToConsole(consoleMessage.release());
+#endif
 }
 
 void ConsoleBase::markTimeline(const String& title)
@@ -139,6 +141,7 @@ void ConsoleBase::profileEnd(const String& title)
 
 void ConsoleBase::time(const String& title)
 {
+#if ENABLE(INSPECTOR)
     InspectorInstrumentation::consoleTime(context(), title);
     TRACE_EVENT_COPY_ASYNC_BEGIN0("blink.console", title.utf8().data(), this);
 
@@ -146,10 +149,12 @@ void ConsoleBase::time(const String& title)
         return;
 
     m_times.add(title, monotonicallyIncreasingTime());
+#endif
 }
 
 void ConsoleBase::timeEnd(ScriptState* scriptState, const String& title)
 {
+#if ENABLE(INSPECTOR)
     TRACE_EVENT_COPY_ASYNC_END0("blink.console", title.utf8().data(), this);
     InspectorInstrumentation::consoleTimeEnd(context(), title, scriptState);
 
@@ -173,6 +178,7 @@ void ConsoleBase::timeEnd(ScriptState* scriptState, const String& title)
     consoleMessage->setScriptState(scriptState);
     consoleMessage->setCallStack(createScriptCallStackForConsole(1));
     reportMessageToConsole(consoleMessage.release());
+#endif
 }
 
 void ConsoleBase::timeStamp(const String& title)
@@ -220,6 +226,7 @@ void ConsoleBase::groupEnd()
 
 void ConsoleBase::internalAddMessage(MessageType type, MessageLevel level, ScriptState* scriptState, PassRefPtrWillBeRawPtr<ScriptArguments> scriptArguments, bool acceptNoArguments, bool printTrace)
 {
+#if ENABLE(INSPECTOR)
     RefPtrWillBeRawPtr<ScriptArguments> arguments = scriptArguments;
     if (!acceptNoArguments && (!arguments || !arguments->argumentCount()))
         return;
@@ -235,6 +242,7 @@ void ConsoleBase::internalAddMessage(MessageType type, MessageLevel level, Scrip
     size_t stackSize = printTrace ? ScriptCallStack::maxCallStackSizeToCapture : 1;
     consoleMessage->setCallStack(createScriptCallStackForConsole(stackSize));
     reportMessageToConsole(consoleMessage.release());
+#endif
 }
 
 } // namespace blink

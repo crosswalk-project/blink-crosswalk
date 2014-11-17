@@ -35,12 +35,16 @@
 #include "core/inspector/InspectorController.h"
 #include "core/page/Page.h"
 #include "modules/webdatabase/Database.h"
+#if ENABLE(INSPECTOR)
 #include "modules/webdatabase/InspectorDatabaseAgent.h"
+#endif
 
 namespace blink {
 
 DatabaseClient::DatabaseClient()
+#if ENABLE(INSPECTOR)
     : m_inspectorAgent(0)
+#endif
 { }
 
 DatabaseClient* DatabaseClient::from(ExecutionContext* context)
@@ -55,16 +59,20 @@ const char* DatabaseClient::supplementName()
 
 void DatabaseClient::didOpenDatabase(PassRefPtrWillBeRawPtr<Database> database, const String& domain, const String& name, const String& version)
 {
+#if ENABLE(INSPECTOR)
     if (m_inspectorAgent)
         m_inspectorAgent->didOpenDatabase(database, domain, name, version);
+#endif
 }
 
 void DatabaseClient::createInspectorAgentFor(Page* page)
 {
+#if ENABLE(INSPECTOR)
     ASSERT(!m_inspectorAgent);
     OwnPtrWillBeRawPtr<InspectorDatabaseAgent> inspectorAgent = InspectorDatabaseAgent::create();
     m_inspectorAgent = inspectorAgent.get();
     page->inspectorController().registerModuleAgent(inspectorAgent.release());
+#endif
 }
 
 void provideDatabaseClientTo(Page& page, PassOwnPtrWillBeRawPtr<DatabaseClient> client)

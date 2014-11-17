@@ -30,6 +30,7 @@
 
     # Write lists of main IDL files to a file, so that the command lines don't
     # exceed OS length limits.
+    # FIXME: the conditions in the core_idl_files is not evaluated before the use of <|(...)
     'core_idl_files_list': '<|(core_idl_files_list.tmp <@(core_definition_idl_files))',
     'core_dictionary_idl_files_list': '<|(core_dictionary_idl_files_list.tmp <@(core_dictionary_idl_files) <@(core_testing_dictionary_idl_files))',
 

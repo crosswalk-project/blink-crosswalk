@@ -44,7 +44,9 @@
 #include "core/inspector/ConsoleMessageStorage.h"
 #include "core/inspector/InspectorConsoleInstrumentation.h"
 #include "core/inspector/ScriptCallStack.h"
+#if ENABLE(INSPECTOR)
 #include "core/inspector/WorkerInspectorController.h"
+#endif
 #include "core/loader/WorkerThreadableLoader.h"
 #include "core/frame/LocalDOMWindow.h"
 #include "core/workers/WorkerNavigator.h"
@@ -84,7 +86,9 @@ WorkerGlobalScope::WorkerGlobalScope(const KURL& url, const String& userAgent, W
     , m_userAgent(userAgent)
     , m_script(adoptPtr(new WorkerScriptController(*this)))
     , m_thread(thread)
+#if ENABLE(INSPECTOR)
     , m_workerInspectorController(adoptRefWillBeNoop(new WorkerInspectorController(this)))
+#endif
     , m_closing(false)
     , m_eventQueue(WorkerEventQueue::create(this))
     , m_workerClients(workerClients)
@@ -93,7 +97,9 @@ WorkerGlobalScope::WorkerGlobalScope(const KURL& url, const String& userAgent, W
 {
     setSecurityOrigin(SecurityOrigin::create(url));
     m_workerClients->reattachThread();
+#if ENABLE(INSPECTOR)
     m_thread->setWorkerInspectorController(m_workerInspectorController.get());
+#endif
 }
 
 WorkerGlobalScope::~WorkerGlobalScope()
@@ -190,11 +196,13 @@ void WorkerGlobalScope::postTask(PassOwnPtr<ExecutionContextTask> task)
 // FIXME: Called twice, from WorkerThreadShutdownFinishTask and WorkerGlobalScope::dispose.
 void WorkerGlobalScope::clearInspector()
 {
+#if ENABLE(INSPECTOR)
     if (!m_workerInspectorController)
         return;
     thread()->setWorkerInspectorController(nullptr);
     m_workerInspectorController->dispose();
     m_workerInspectorController.clear();
+#endif // ENABLE(INSPECTOR)
 }
 
 void WorkerGlobalScope::dispose()
@@ -264,7 +272,9 @@ EventTarget* WorkerGlobalScope::errorEventTarget()
 
 void WorkerGlobalScope::logExceptionToConsole(const String& errorMessage, int, const String& sourceURL, int lineNumber, int columnNumber, PassRefPtrWillBeRawPtr<ScriptCallStack>)
 {
+#if ENABLE(INSPECTOR)
     thread()->workerReportingProxy().reportException(errorMessage, lineNumber, columnNumber, sourceURL);
+#endif
 }
 
 void WorkerGlobalScope::reportBlockedScriptExecutionToInspector(const String& directiveText)
@@ -274,6 +284,7 @@ void WorkerGlobalScope::reportBlockedScriptExecutionToInspector(const String& di
 
 void WorkerGlobalScope::addConsoleMessage(PassRefPtrWillBeRawPtr<ConsoleMessage> prpConsoleMessage)
 {
+#if ENABLE(INSPECTOR)
     RefPtrWillBeRawPtr<ConsoleMessage> consoleMessage = prpConsoleMessage;
     if (!isContextThread()) {
         postTask(AddConsoleMessageTask::create(consoleMessage->source(), consoleMessage->level(), consoleMessage->message()));
@@ -281,12 +292,15 @@ void WorkerGlobalScope::addConsoleMessage(PassRefPtrWillBeRawPtr<ConsoleMessage>
     }
     thread()->workerReportingProxy().reportConsoleMessage(consoleMessage);
     addMessageToWorkerConsole(consoleMessage.release());
+#endif // ENABLE(INSPECTOR)
 }
 
 void WorkerGlobalScope::addMessageToWorkerConsole(PassRefPtrWillBeRawPtr<ConsoleMessage> consoleMessage)
 {
+#if ENABLE(INSPECTOR)
     ASSERT(isContextThread());
     m_messageStorage->reportMessage(consoleMessage);
+#endif // ENABLE(INSPECTOR)
 }
 
 bool WorkerGlobalScope::isContextThread() const
@@ -330,7 +344,9 @@ void WorkerGlobalScope::trace(Visitor* visitor)
     visitor->trace(m_console);
     visitor->trace(m_location);
     visitor->trace(m_navigator);
+#if ENABLE(INSPECTOR)
     visitor->trace(m_workerInspectorController);
+#endif // ENABLE(INSPECTOR)
     visitor->trace(m_eventQueue);
     visitor->trace(m_workerClients);
     visitor->trace(m_messageStorage);

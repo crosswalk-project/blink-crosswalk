@@ -27,7 +27,9 @@
 #include "bindings/core/v8/V8PerIsolateData.h"
 
 #include "bindings/core/v8/DOMDataStore.h"
+#if ENABLE(INSPECTOR)
 #include "bindings/core/v8/PageScriptDebugServer.h"
+#endif
 #include "bindings/core/v8/ScriptGCEvent.h"
 #include "bindings/core/v8/ScriptProfiler.h"
 #include "bindings/core/v8/V8Binding.h"
@@ -84,7 +86,9 @@ V8PerIsolateData::V8PerIsolateData()
 #endif
     if (isMainThread()) {
         mainThreadPerIsolateData = this;
+#if ENABLE(INSPECTOR)
         PageScriptDebugServer::setMainThreadIsolate(isolate());
+#endif
     }
     isolate()->SetUseCounterCallback(&useCounterCallback);
 }

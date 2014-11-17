@@ -64,6 +64,7 @@ double ScriptProfile::endTime() const
     return static_cast<double>(m_profile->GetEndTime()) / 1000000;
 }
 
+#if ENABLE(INSPECTOR)
 static PassRefPtr<TypeBuilder::Profiler::CPUProfileNode> buildInspectorObjectFor(const v8::CpuProfileNode* node)
 {
     v8::HandleScope handleScope(v8::Isolate::GetCurrent());
@@ -111,5 +112,6 @@ PassRefPtr<TypeBuilder::Array<double> > ScriptProfile::buildInspectorObjectForTi
         array->addItem(m_profile->GetSampleTimestamp(i));
     return array.release();
 }
+#endif // ENABLE(INSPECTOR)
 
 } // namespace blink

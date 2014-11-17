@@ -31,7 +31,9 @@
 #include "core/page/Page.h"
 #include "modules/geolocation/GeolocationClient.h"
 #include "modules/geolocation/GeolocationError.h"
+#if ENABLE(INSPECTOR)
 #include "modules/geolocation/GeolocationInspectorAgent.h"
+#endif
 #include "modules/geolocation/GeolocationPosition.h"
 
 namespace blink {
@@ -41,8 +43,11 @@ GeolocationController::GeolocationController(LocalFrame& frame, GeolocationClien
     , m_client(client)
     , m_hasClientForTest(false)
     , m_isClientUpdating(false)
+#if ENABLE(INSPECTOR)
     , m_inspectorAgent(nullptr)
+#endif
 {
+#if ENABLE(INSPECTOR)
     // FIXME: Once GeolocationInspectorAgent is per frame, there will be a 1:1 relationship between
     // it and this class. Until then, there's one GeolocationInspectorAgent per page that the main
     // frame is responsible for creating.
@@ -58,6 +63,7 @@ GeolocationController::GeolocationController(LocalFrame& frame, GeolocationClien
     // to handle that scenario.
     if (m_inspectorAgent)
         m_inspectorAgent->addController(this);
+#endif // ENABLE(INSPECTOR)
 
     if (!frame.isMainFrame() && frame.page()->mainFrame()->isLocalFrame()) {
         // internals.setGeolocationClientMock is per page.
@@ -87,10 +93,12 @@ GeolocationController::~GeolocationController()
 {
     ASSERT(m_observers.isEmpty());
 #if !ENABLE(OILPAN)
+#if ENABLE(INSPECTOR)
     if (page() && m_inspectorAgent) {
         m_inspectorAgent->removeController(this);
         m_inspectorAgent = nullptr;
     }
+#endif // ENABLE(INSPECTOR)
 
     if (m_hasClientForTest) {
         m_client->controllerForTestRemoved(this);
@@ -151,6 +159,7 @@ void GeolocationController::cancelPermissionRequest(Geolocation* geolocation)
 
 void GeolocationController::positionChanged(GeolocationPosition* position)
 {
+#if ENABLE(INSPECTOR)
     position = m_inspectorAgent->overrideGeolocationPosition(position);
     if (!position) {
         errorOccurred(GeolocationError::create(GeolocationError::PositionUnavailable, "PositionUnavailable"));
@@ -161,6 +170,7 @@ void GeolocationController::positionChanged(GeolocationPosition* position)
     copyToVector(m_observers, observersVector);
     for (size_t i = 0; i < observersVector.size(); ++i)
         observersVector[i]->positionChanged();
+#endif // ENABLE(INSPECTOR)
 }
 
 void GeolocationController::errorOccurred(GeolocationError* error)
@@ -214,7 +224,9 @@ void GeolocationController::trace(Visitor* visitor)
     visitor->trace(m_lastPosition);
     visitor->trace(m_observers);
     visitor->trace(m_highAccuracyObservers);
+#if ENABLE(INSPECTOR)
     visitor->trace(m_inspectorAgent);
+#endif
     WillBeHeapSupplement<LocalFrame>::trace(visitor);
 }
 

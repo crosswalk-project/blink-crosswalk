@@ -33,18 +33,20 @@
 
 #include "core/events/EventTarget.h"
 #include "core/fetch/FetchInitiatorInfo.h"
+#if ENABLE(INSPECTOR)
 #include "core/inspector/InspectorCSSAgent.h"
 #include "core/inspector/InspectorConsoleAgent.h"
-#include "core/inspector/InspectorController.h"
 #include "core/inspector/InspectorDebuggerAgent.h"
 #include "core/inspector/InspectorInspectorAgent.h"
 #include "core/inspector/InspectorProfilerAgent.h"
 #include "core/inspector/InspectorResourceAgent.h"
 #include "core/inspector/InspectorTimelineAgent.h"
-#include "core/inspector/InstrumentingAgents.h"
 #include "core/inspector/ScriptAsyncCallStack.h"
-#include "core/inspector/ScriptCallStack.h"
 #include "core/inspector/WorkerInspectorController.h"
+#endif
+#include "core/inspector/InspectorController.h"
+#include "core/inspector/InstrumentingAgents.h"
+#include "core/inspector/ScriptCallStack.h"
 #include "core/page/Page.h"
 #include "core/workers/WorkerGlobalScope.h"
 
@@ -90,6 +92,8 @@ InspectorInstrumentationCookie::~InspectorInstrumentationCookie()
 }
 
 namespace InspectorInstrumentation {
+
+#if ENABLE(INSPECTOR)
 
 bool isDebuggerPausedImpl(InstrumentingAgents* instrumentingAgents)
 {
@@ -235,6 +239,47 @@ InstrumentingAgents* instrumentingAgentsForNonDocumentContext(ExecutionContext* 
     return 0;
 }
 
+#else
+
+bool isDebuggerPausedImpl(InstrumentingAgents* instrumentingAgents) { return false; }
+void didReceiveResourceResponseButCanceledImpl(LocalFrame* frame, DocumentLoader* loader, unsigned long identifier, const ResourceResponse& r) {}
+void continueAfterXFrameOptionsDeniedImpl(LocalFrame* frame, DocumentLoader* loader, unsigned long identifier, const ResourceResponse& r) {}
+void continueWithPolicyIgnoreImpl(LocalFrame* frame, DocumentLoader* loader, unsigned long identifier, const ResourceResponse& r) {}
+void willDestroyResourceImpl(Resource* cachedResource) {}
+bool collectingHTMLParseErrorsImpl(InstrumentingAgents* instrumentingAgents) { return false; }
+PassOwnPtr<ScriptSourceCode> preprocessImpl(InstrumentingAgents* instrumentingAgents, LocalFrame* frame, const ScriptSourceCode& sourceCode) { return PassOwnPtr<ScriptSourceCode>(); }
+String preprocessEventListenerImpl(InstrumentingAgents* instrumentingAgents, LocalFrame* frame, const String& source, const String& url, const String& functionName) { return source; }
+void appendAsyncCallStack(ExecutionContext* executionContext, ScriptCallStack* callStack) {}
+bool canvasAgentEnabled(ExecutionContext* executionContext) { return false; }
+bool consoleAgentEnabled(ExecutionContext* executionContext) { return false; }
+bool timelineAgentEnabled(ExecutionContext* executionContext) { return false; }
+
+void registerInstrumentingAgents(InstrumentingAgents* instrumentingAgents)
+{
+    if (!instrumentingAgentsSet)
+        instrumentingAgentsSet = new HashSet<InstrumentingAgents*>();
+    instrumentingAgentsSet->add(instrumentingAgents);
+}
+
+void unregisterInstrumentingAgents(InstrumentingAgents* instrumentingAgents)
+{
+    if (!instrumentingAgentsSet)
+        return;
+    instrumentingAgentsSet->remove(instrumentingAgents);
+    if (instrumentingAgentsSet->isEmpty()) {
+        delete instrumentingAgentsSet;
+        instrumentingAgentsSet = 0;
+    }
+}
+
+InstrumentingAgents* instrumentingAgentsFor(Page* page) { return 0; }
+InstrumentingAgents* instrumentingAgentsFor(EventTarget* eventTarget) { return 0; }
+InstrumentingAgents* instrumentingAgentsFor(RenderObject* renderer) { return 0; }
+InstrumentingAgents* instrumentingAgentsFor(WorkerGlobalScope* workerGlobalScope) { return 0; }
+InstrumentingAgents* instrumentingAgentsForNonDocumentContext(ExecutionContext* context) { return 0; }
+
+#endif // ENABLE(INSPECTOR)
+
 } // namespace InspectorInstrumentation
 
 namespace InstrumentationEvents {
@@ -265,8 +310,10 @@ InstrumentingAgents* instrumentationForPage(Page* page)
 
 InstrumentingAgents* instrumentationForWorkerGlobalScope(WorkerGlobalScope* workerGlobalScope)
 {
+#if ENABLE(INSPECTOR)
     if (WorkerInspectorController* controller = workerGlobalScope->workerInspectorController())
         return controller->m_instrumentingAgents.get();
+#endif
     return 0;
 }
 

@@ -58,7 +58,9 @@ public:
     void createInspectorAgentFor(Page*);
 
 private:
+#if ENABLE(INSPECTOR)
     InspectorDatabaseAgent* m_inspectorAgent;
+#endif
 };
 
 void provideDatabaseClientTo(Page&, PassOwnPtrWillBeRawPtr<DatabaseClient>);

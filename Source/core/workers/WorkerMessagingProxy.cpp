@@ -39,14 +39,18 @@
 #include "core/frame/LocalFrame.h"
 #include "core/frame/csp/ContentSecurityPolicy.h"
 #include "core/inspector/ScriptCallStack.h"
+#if ENABLE(INSPECTOR)
 #include "core/inspector/WorkerDebuggerAgent.h"
+#endif
 #include "core/loader/DocumentLoadTiming.h"
 #include "core/loader/DocumentLoader.h"
 #include "core/workers/DedicatedWorkerGlobalScope.h"
 #include "core/workers/DedicatedWorkerThread.h"
 #include "core/workers/Worker.h"
 #include "core/workers/WorkerClients.h"
+#if ENABLE(INSPECTOR)
 #include "core/workers/WorkerInspectorProxy.h"
+#endif
 #include "core/workers/WorkerObjectProxy.h"
 #include "core/workers/WorkerThreadStartupData.h"
 #include "platform/NotImplemented.h"
@@ -92,7 +96,9 @@ WorkerMessagingProxy::WorkerMessagingProxy(Worker* workerObject, PassOwnPtrWillB
     , m_unconfirmedMessageCount(0)
     , m_workerThreadHadPendingActivity(false)
     , m_askedToTerminate(false)
+#if ENABLE(INSPECTOR)
     , m_workerInspectorProxy(WorkerInspectorProxy::create())
+#endif
     , m_workerClients(workerClients)
 {
     ASSERT(m_workerObject);
@@ -123,7 +129,9 @@ void WorkerMessagingProxy::startWorkerGlobalScope(const KURL& scriptURL, const S
     RefPtr<DedicatedWorkerThread> thread = DedicatedWorkerThread::create(*this, *m_workerObjectProxy.get(), originTime, startupData.release());
     thread->start();
     workerThreadCreated(thread);
+#if ENABLE(INSPECTOR)
     m_workerInspectorProxy->workerThreadCreated(m_executionContext.get(), m_workerThread.get(), scriptURL);
+#endif
 }
 
 void WorkerMessagingProxy::postMessageToWorkerObject(PassRefPtr<SerializedScriptValue> message, PassOwnPtr<MessagePortChannelArray> channels)
@@ -249,17 +257,21 @@ void WorkerMessagingProxy::terminateWorkerGlobalScope()
 
 void WorkerMessagingProxy::postMessageToPageInspector(const String& message)
 {
+#if ENABLE(INSPECTOR)
     if (!m_workerInspectorProxy)
         return;
     WorkerInspectorProxy::PageInspector* pageInspector = m_workerInspectorProxy->pageInspector();
     if (pageInspector)
         pageInspector->dispatchMessageFromWorker(message);
+#endif
 }
 
+#if ENABLE(INSPECTOR)
 WorkerInspectorProxy* WorkerMessagingProxy::workerInspectorProxy()
 {
     return m_workerInspectorProxy.get();
 }
+#endif
 
 void WorkerMessagingProxy::confirmMessageFromWorkerObject(bool hasPendingActivity)
 {
@@ -282,7 +294,9 @@ bool WorkerMessagingProxy::hasPendingActivity() const
 
 void WorkerMessagingProxy::terminateInternally()
 {
+#if ENABLE(INSPECTOR)
     m_workerInspectorProxy->workerThreadTerminated();
+#endif
 
     // FIXME: This need to be revisited when we support nested worker one day
     ASSERT(m_executionContext->isDocument());

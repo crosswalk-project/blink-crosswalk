@@ -55,24 +55,33 @@ $methods
 
 template_inline = string.Template("""
 inline void ${name}(${params_public})
-{   ${fast_return}
+{
+#if ENABLE(INSPECTOR)
+    ${fast_return}
     if (${condition})
         ${name}Impl(${params_impl});
+#endif
 }
 """)
 
 template_inline_forward = string.Template("""
 inline void ${name}(${params_public})
-{   ${fast_return}
+{
+#if ENABLE(INSPECTOR)
+    ${fast_return}
     ${name}Impl(${params_impl});
+#endif
 }
 """)
 
 template_inline_returns_value = string.Template("""
 inline ${return_type} ${name}(${params_public})
-{   ${fast_return}
+{
+#if ENABLE(INSPECTOR)
+    ${fast_return}
     if (${condition})
         return ${name}Impl(${params_impl});
+#endif
     return ${default_return_value};
 }
 """)

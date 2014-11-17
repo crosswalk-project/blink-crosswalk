@@ -39,7 +39,11 @@ class JSCallStack : public TraceEvent::ConvertableToTraceFormat  {
 public:
     explicit JSCallStack(PassRefPtrWillBeRawPtr<ScriptCallStack> callstack)
     {
+#if ENABLE(INSPECTOR)
         m_serialized = callstack ? callstack->buildInspectorArray()->toJSONString() : "[]";
+#else
+        m_serialized = "[]";
+#endif
         ASSERT(m_serialized.isSafeToSendToAnotherThread());
     }
     virtual String asTraceFormat() const
@@ -121,8 +125,12 @@ PassRefPtr<TraceEvent::ConvertableToTraceFormat> InspectorLayoutInvalidationTrac
     RefPtr<TracedValue> value = TracedValue::create();
     value->setString("frame", toHexString(renderer->frame()));
     setGeneratingNodeInfo(value.get(), renderer, "nodeId", "nodeName");
+#if ENABLE(INSPECTOR)
     RefPtrWillBeRawPtr<ScriptCallStack> callstack = createScriptCallStack(maxInvalidationTrackingCallstackSize, true);
     value->setString("callstack", callstack ? callstack->buildInspectorArray()->toJSONString() : "[]");
+#else
+    value->setString("callstack", "[]");
+#endif
     return value;
 }
 

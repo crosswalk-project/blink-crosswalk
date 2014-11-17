@@ -37,8 +37,10 @@
 #include "core/html/HTMLFormElement.h"
 #include "core/inspector/ConsoleMessage.h"
 #include "core/inspector/InspectorInstrumentation.h"
+#if ENABLE(INSPECTOR)
 #include "core/inspector/WorkerDebuggerAgent.h"
 #include "core/inspector/WorkerInspectorController.h"
+#endif
 #include "core/loader/FrameLoadRequest.h"
 #include "core/loader/FrameLoader.h"
 #include "core/page/Page.h"
@@ -46,7 +48,9 @@
 #include "core/workers/SharedWorkerThread.h"
 #include "core/workers/WorkerClients.h"
 #include "core/workers/WorkerGlobalScope.h"
+#if ENABLE(INSPECTOR)
 #include "core/workers/WorkerInspectorProxy.h"
+#endif
 #include "core/workers/WorkerScriptLoader.h"
 #include "core/workers/WorkerThreadStartupData.h"
 #include "platform/RuntimeEnabledFeatures.h"
@@ -153,7 +157,9 @@ WebSharedWorkerImpl::WebSharedWorkerImpl(WebSharedWorkerClient* client)
     : m_webView(0)
     , m_mainFrame(0)
     , m_askedToTerminate(false)
+#if ENABLE(INSPECTOR)
     , m_workerInspectorProxy(WorkerInspectorProxy::create())
+#endif
     , m_client(WeakReference<WebSharedWorkerClient>::create(client))
     , m_clientWeakPtr(WeakPtr<WebSharedWorkerClient>(m_client))
     , m_pauseWorkerContextOnStart(false)
@@ -187,7 +193,9 @@ void WebSharedWorkerImpl::stopWorkerThread()
     }
     if (m_workerThread)
         m_workerThread->stop();
+#if ENABLE(INSPECTOR)
     m_workerInspectorProxy->workerThreadTerminated();
+#endif
 }
 
 void WebSharedWorkerImpl::initializeLoader(const WebURL& url)
@@ -260,11 +268,13 @@ void WebSharedWorkerImpl::postMessageToPageInspector(const String& message)
 
 void WebSharedWorkerImpl::postMessageToPageInspectorOnMainThread(const String& message)
 {
+#if ENABLE(INSPECTOR)
     WorkerInspectorProxy::PageInspector* pageInspector = m_workerInspectorProxy->pageInspector();
     if (!pageInspector)
         return;
     pageInspector->dispatchMessageFromWorker(message);
 
+#endif
 }
 
 void WebSharedWorkerImpl::updateInspectorStateCookie(const String& cookie)
@@ -353,7 +363,9 @@ void WebSharedWorkerImpl::didReceiveScriptLoaderResponse()
 
 static void connectToWorkerContextInspectorTask(ExecutionContext* context, bool)
 {
+#if ENABLE(INSPECTOR)
     toWorkerGlobalScope(context)->workerInspectorController()->connectFrontend();
+#endif
 }
 
 void WebSharedWorkerImpl::onScriptLoaderFinished()
@@ -386,7 +398,9 @@ void WebSharedWorkerImpl::onScriptLoaderFinished()
         workerThread()->postDebuggerTask(createCrossThreadTask(connectToWorkerContextInspectorTask, true));
 
     workerThread()->start();
+#if ENABLE(INSPECTOR)
     m_workerInspectorProxy->workerThreadCreated(m_loadingDocument.get(), workerThread(), m_url);
+#endif
     if (client()) {
         client()->workerScriptLoaded();
         client()->workerReadyForInspection();
@@ -410,7 +424,9 @@ void WebSharedWorkerImpl::pauseWorkerContextOnStart()
 
 static void resumeWorkerContextTask(ExecutionContext* context, bool)
 {
+#if ENABLE(INSPECTOR)
     toWorkerGlobalScope(context)->workerInspectorController()->resume();
+#endif
 }
 
 void WebSharedWorkerImpl::resumeWorkerContext()
@@ -435,9 +451,11 @@ void WebSharedWorkerImpl::attachDevTools(const WebString& hostId)
 
 static void reconnectToWorkerContextInspectorTask(ExecutionContext* context, const String& savedState)
 {
+#if ENABLE(INSPECTOR)
     WorkerInspectorController* ic = toWorkerGlobalScope(context)->workerInspectorController();
     ic->restoreInspectorStateFromCookie(savedState);
     ic->resume();
+#endif
 }
 
 void WebSharedWorkerImpl::reattachDevTools(const WebString& savedState)
@@ -452,7 +470,9 @@ void WebSharedWorkerImpl::reattachDevTools(const WebString& hostId, const WebStr
 
 static void disconnectFromWorkerContextInspectorTask(ExecutionContext* context, bool)
 {
+#if ENABLE(INSPECTOR)
     toWorkerGlobalScope(context)->workerInspectorController()->disconnectFrontend();
+#endif
 }
 
 void WebSharedWorkerImpl::detachDevTools()
@@ -463,7 +483,9 @@ void WebSharedWorkerImpl::detachDevTools()
 
 static void dispatchOnInspectorBackendTask(ExecutionContext* context, const String& message)
 {
+#if ENABLE(INSPECTOR)
     toWorkerGlobalScope(context)->workerInspectorController()->dispatchMessageFromFrontend(message);
+#endif
 }
 
 void WebSharedWorkerImpl::dispatchDevToolsMessage(const WebString& message)

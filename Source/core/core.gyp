@@ -62,46 +62,6 @@
 
   'targets': [
     {
-      # GN version: //third_party/WebKit/Source/core/inspector:protocol_sources
-      'target_name': 'inspector_protocol_sources',
-      'type': 'none',
-      'dependencies': [
-        'generate_inspector_protocol_version'
-      ],
-      'actions': [
-        {
-          'action_name': 'generateInspectorProtocolBackendSources',
-          'inputs': [
-            # The python script in action below.
-            'inspector/CodeGeneratorInspector.py',
-            # The helper script imported by CodeGeneratorInspector.py.
-            'inspector/CodeGeneratorInspectorStrings.py',
-            # Input file for the script.
-            '../devtools/protocol.json',
-          ],
-          'outputs': [
-            '<(blink_core_output_dir)/InspectorBackendDispatcher.cpp',
-            '<(blink_core_output_dir)/InspectorBackendDispatcher.h',
-            '<(blink_core_output_dir)/InspectorFrontend.cpp',
-            '<(blink_core_output_dir)/InspectorFrontend.h',
-            '<(blink_core_output_dir)/InspectorTypeBuilder.cpp',
-            '<(blink_core_output_dir)/InspectorTypeBuilder.h',
-          ],
-          'variables': {
-            'generator_include_dirs': [
-            ],
-          },
-          'action': [
-            'python',
-            'inspector/CodeGeneratorInspector.py',
-            '../devtools/protocol.json',
-            '--output_dir', '<(blink_core_output_dir)',
-          ],
-          'message': 'Generating Inspector protocol backend sources from protocol.json',
-        },
-      ]
-    },
-    {
       # GN version: //third_party/WebKit/Source/core/inspector:instrumentation_sources
       'target_name': 'inspector_instrumentation_sources',
       'type': 'none',
@@ -121,7 +81,6 @@
             '<(blink_core_output_dir)/InspectorInstrumentationInl.h',
             '<(blink_core_output_dir)/InspectorOverridesInl.h',
             '<(blink_core_output_dir)/InstrumentingAgentsInl.h',
-            '<(blink_core_output_dir)/InspectorInstrumentationImpl.cpp',
           ],
           'action': [
             'python',
@@ -130,35 +89,13 @@
             '--output_dir', '<(blink_core_output_dir)',
           ],
           'message': 'Generating Inspector instrumentation code from InspectorInstrumentation.idl',
-        }
-      ]
-    },
-    {
-      # GN version: //third_party/WebKit/Source/core/inspector:protocol_version
-      'target_name': 'generate_inspector_protocol_version',
-      'type': 'none',
-      'actions': [
-         {
-          'action_name': 'generateInspectorProtocolVersion',
-          'inputs': [
-            'inspector/generate-inspector-protocol-version',
-            '../devtools/protocol.json',
+          'conditions': [
+            ['disable_inspector==0', {
+              'outputs': [
+                '<(blink_core_output_dir)/InspectorInstrumentationImpl.cpp',
+              ],
+            }],
           ],
-          'outputs': [
-            '<(blink_core_output_dir)/InspectorProtocolVersion.h',
-          ],
-          'variables': {
-            'generator_include_dirs': [
-            ],
-          },
-          'action': [
-            'python',
-            'inspector/generate-inspector-protocol-version',
-            '-o',
-            '<@(_outputs)',
-            '<@(_inputs)'
-          ],
-          'message': 'Validate inspector protocol for backwards compatibility and generate version file',
         }
       ]
     },
@@ -170,7 +107,6 @@
       'dependencies': [
         'webcore_prerequisites',
         'core_generated.gyp:make_core_generated',
-        'inspector_protocol_sources',
         'inspector_instrumentation_sources',
         '../bindings/core/v8/generated.gyp:bindings_core_v8_generated',
         # FIXME: don't depend on bindings_modules http://crbug.com/358074
@@ -251,18 +187,12 @@
         '<(blink_core_output_dir)/CSSGrammar.cpp',
         '<(blink_core_output_dir)/XPathGrammar.cpp',
 
-        # Additional .cpp files from the inspector_protocol_sources list.
-        '<(blink_core_output_dir)/InspectorFrontend.cpp',
-        '<(blink_core_output_dir)/InspectorBackendDispatcher.cpp',
-        '<(blink_core_output_dir)/InspectorTypeBuilder.cpp',
-
         # Additional .cpp files from the inspector_instrumentation_sources list.
         '<(blink_core_output_dir)/InspectorCanvasInstrumentationInl.h',
         '<(blink_core_output_dir)/InspectorConsoleInstrumentationInl.h',
         '<(blink_core_output_dir)/InspectorInstrumentationInl.h',
         '<(blink_core_output_dir)/InspectorOverridesInl.h',
         '<(blink_core_output_dir)/InstrumentingAgentsInl.h',
-        '<(blink_core_output_dir)/InspectorInstrumentationImpl.cpp',
 
         # Additional .cpp files for SVG.
         '<(blink_core_output_dir)/SVGElementFactory.cpp',
@@ -281,6 +211,20 @@
         '<@(generated_core_dictionary_files)',
       ],
       'conditions': [
+        ['disable_inspector==0', {
+          'dependencies': [
+            'inspector_protocol_sources',
+          ],
+          'sources': [
+            # Additional .cpp files from the inspector_protocol_sources list.
+            '<(blink_core_output_dir)/InspectorFrontend.cpp',
+            '<(blink_core_output_dir)/InspectorBackendDispatcher.cpp',
+            '<(blink_core_output_dir)/InspectorTypeBuilder.cpp',
+
+            # Additional .cpp files from the inspector_instrumentation_sources list.
+            '<(blink_core_output_dir)/InspectorInstrumentationImpl.cpp',
+          ],
+        }],
         ['OS=="win" and component=="shared_library"', {
           'defines': [
             'USING_V8_SHARED',
@@ -317,7 +261,6 @@
       'target_name': 'webcore_prerequisites',
       'type': 'none',
       'dependencies': [
-        'inspector_protocol_sources',
         'inspector_instrumentation_sources',
         'core_generated.gyp:make_core_generated',
         '../bindings/core/v8/generated.gyp:bindings_core_v8_generated',
@@ -392,6 +335,11 @@
           ],
           'export_dependent_settings!': [
             '<(DEPTH)/third_party/libwebp/libwebp.gyp:libwebp',
+          ],
+        }],
+        ['disable_inspector==0', {
+          'dependencies': [
+            'inspector_protocol_sources',
           ],
         }],
         ['OS=="win" and component=="shared_library"', {
@@ -826,4 +774,79 @@
       ],
     },
   ],  # targets
+  'conditions': [
+    ['disable_inspector==0', {
+      'targets': [
+        {
+          # GN version: //third_party/WebKit/Source/core/inspector:protocol_sources
+          'target_name': 'inspector_protocol_sources',
+          'type': 'none',
+          'dependencies': [
+            'generate_inspector_protocol_version'
+          ],
+          'actions': [
+            {
+              'action_name': 'generateInspectorProtocolBackendSources',
+              'inputs': [
+                # The python script in action below.
+                'inspector/CodeGeneratorInspector.py',
+                # The helper script imported by CodeGeneratorInspector.py.
+                'inspector/CodeGeneratorInspectorStrings.py',
+                # Input file for the script.
+                '../devtools/protocol.json',
+              ],
+              'outputs': [
+                '<(blink_core_output_dir)/InspectorBackendDispatcher.cpp',
+                '<(blink_core_output_dir)/InspectorBackendDispatcher.h',
+                '<(blink_core_output_dir)/InspectorFrontend.cpp',
+                '<(blink_core_output_dir)/InspectorFrontend.h',
+                '<(blink_core_output_dir)/InspectorTypeBuilder.cpp',
+                '<(blink_core_output_dir)/InspectorTypeBuilder.h',
+              ],
+              'variables': {
+                'generator_include_dirs': [
+                ],
+              },
+              'action': [
+                'python',
+                'inspector/CodeGeneratorInspector.py',
+                '../devtools/protocol.json',
+                '--output_dir', '<(blink_core_output_dir)',
+              ],
+              'message': 'Generating Inspector protocol backend sources from protocol.json',
+            },
+          ]
+        },
+        {
+          # GN version: //third_party/WebKit/Source/core/inspector:protocol_version
+          'target_name': 'generate_inspector_protocol_version',
+          'type': 'none',
+          'actions': [
+             {
+              'action_name': 'generateInspectorProtocolVersion',
+              'inputs': [
+                'inspector/generate-inspector-protocol-version',
+                '../devtools/protocol.json',
+              ],
+              'outputs': [
+                '<(blink_core_output_dir)/InspectorProtocolVersion.h',
+              ],
+              'variables': {
+                'generator_include_dirs': [
+                ],
+              },
+              'action': [
+                'python',
+                'inspector/generate-inspector-protocol-version',
+                '-o',
+                '<@(_outputs)',
+                '<@(_inputs)'
+              ],
+              'message': 'Validate inspector protocol for backwards compatibility and generate version file',
+            }
+          ]
+        },
+      ],
+    }],
+  ],
 }

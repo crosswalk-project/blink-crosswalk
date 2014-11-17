@@ -31,7 +31,9 @@
 #include "bindings/core/v8/ScriptSourceCode.h"
 #include "core/dom/Microtask.h"
 #include "core/inspector/InspectorInstrumentation.h"
+#if ENABLE(INSPECTOR)
 #include "core/inspector/WorkerInspectorController.h"
+#endif
 #include "core/workers/DedicatedWorkerGlobalScope.h"
 #include "core/workers/WorkerClients.h"
 #include "core/workers/WorkerReportingProxy.h"
@@ -231,9 +233,11 @@ void WorkerThread::start()
 
 void WorkerThread::interruptAndDispatchInspectorCommands()
 {
+#if ENABLE(INSPECTOR)
     MutexLocker locker(m_workerInspectorControllerMutex);
     if (m_workerInspectorController)
         m_workerInspectorController->interruptAndDispatchInspectorCommands();
+#endif
 }
 
 PlatformThreadId WorkerThread::platformThreadId() const
@@ -479,10 +483,12 @@ void WorkerThread::didLeaveNestedLoop()
     InspectorInstrumentation::didLeaveNestedRunLoop(m_workerGlobalScope.get());
 }
 
+#if ENABLE(INSPECTOR)
 void WorkerThread::setWorkerInspectorController(WorkerInspectorController* workerInspectorController)
 {
     MutexLocker locker(m_workerInspectorControllerMutex);
     m_workerInspectorController = workerInspectorController;
 }
+#endif
 
 } // namespace blink

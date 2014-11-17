@@ -42,7 +42,9 @@ namespace blink {
 class ServiceWorkerGlobalScopeProxy;
 class WebServiceWorkerNetworkProvider;
 class WebView;
+#if ENABLE(INSPECTOR)
 class WorkerInspectorProxy;
+#endif
 class WorkerScriptLoader;
 class WorkerThread;
 
@@ -113,7 +115,9 @@ private:
     RefPtr<WorkerThread> m_workerThread;
     OwnPtr<LoaderProxy> m_loaderProxy;
     OwnPtr<ServiceWorkerGlobalScopeProxy> m_workerGlobalScopeProxy;
+#if ENABLE(INSPECTOR)
     OwnPtr<WorkerInspectorProxy> m_workerInspectorProxy;
+#endif
 
     // 'shadow page' - created to proxy loading requests from the worker.
     // Both WebView and WebFrame objects are close()'ed (where they're

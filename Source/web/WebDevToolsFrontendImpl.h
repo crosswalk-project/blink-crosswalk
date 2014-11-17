@@ -60,9 +60,11 @@ public:
     virtual void dispose() OVERRIDE;
 
 private:
+#if ENABLE(INSPECTOR)
     WebViewImpl* m_webViewImpl;
     WebDevToolsFrontendClient* m_client;
     RefPtrWillBePersistent<InspectorFrontendHost> m_frontendHost;
+#endif
 };
 
 } // namespace blink

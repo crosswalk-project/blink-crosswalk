@@ -45,6 +45,7 @@
 
 namespace blink {
 
+#if ENABLE(INSPECTOR)
 static const HashSet<int>& allClientReportingMessageTypes()
 {
     DEFINE_STATIC_LOCAL(HashSet<int>, types, ());
@@ -59,6 +60,7 @@ static const HashSet<int>& allClientReportingMessageTypes()
     }
     return types;
 }
+#endif
 
 namespace {
 
@@ -75,6 +77,7 @@ DEFINE_EMPTY_DESTRUCTOR_WILL_BE_REMOVED(FrameConsole);
 
 void FrameConsole::addMessage(PassRefPtrWillBeRawPtr<ConsoleMessage> prpConsoleMessage)
 {
+#if ENABLE(INSPECTOR)
     RefPtrWillBeRawPtr<ConsoleMessage> consoleMessage = prpConsoleMessage;
     if (muteCount && consoleMessage->source() != ConsoleAPIMessageSource)
         return;
@@ -119,10 +122,12 @@ void FrameConsole::addMessage(PassRefPtrWillBeRawPtr<ConsoleMessage> prpConsoleM
     if (reportedCallStack)
         stackTrace = FrameConsole::formatStackTraceString(consoleMessage->message(), reportedCallStack);
     frame().chromeClient().addMessageToConsole(m_frame, consoleMessage->source(), consoleMessage->level(), consoleMessage->message(), lineNumber, messageURL, stackTrace);
+#endif
 }
 
 void FrameConsole::reportResourceResponseReceived(DocumentLoader* loader, unsigned long requestIdentifier, const ResourceResponse& response)
 {
+#if ENABLE(INSPECTOR)
     if (!loader)
         return;
     if (response.httpStatusCode() < 400)
@@ -131,6 +136,7 @@ void FrameConsole::reportResourceResponseReceived(DocumentLoader* loader, unsign
     RefPtrWillBeRawPtr<ConsoleMessage> consoleMessage = ConsoleMessage::create(NetworkMessageSource, ErrorMessageLevel, message, response.url().string());
     consoleMessage->setRequestIdentifier(requestIdentifier);
     addMessage(consoleMessage.release());
+#endif
 }
 
 String FrameConsole::formatStackTraceString(const String& originalMessage, PassRefPtrWillBeRawPtr<ScriptCallStack> callStack)

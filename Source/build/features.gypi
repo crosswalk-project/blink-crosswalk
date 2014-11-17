@@ -80,6 +80,15 @@
           'ENABLE_MEDIA_STREAM=1',
         ],
       }],
+      ['disable_inspector==0', {
+        'feature_defines': [
+          'ENABLE_INSPECTOR=1',
+        ],
+      }, {
+        'feature_defines': [
+          'ENABLE_INSPECTOR=0',
+        ],
+      }],
       # Mac OS X has not implemented support for ENABLE(OPENTYPE_VERTICAL) yet
       ['OS!="mac"', {
         'feature_defines': [

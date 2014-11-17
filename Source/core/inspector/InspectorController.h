@@ -31,7 +31,9 @@
 #ifndef InspectorController_h
 #define InspectorController_h
 
+#if ENABLE(INSPECTOR)
 #include "core/inspector/InspectorBaseAgent.h"
+#endif
 #include "platform/heap/Handle.h"
 #include "wtf/Forward.h"
 #include "wtf/HashMap.h"
@@ -45,22 +47,9 @@ class DOMWrapperWorld;
 class LocalFrame;
 class GraphicsContext;
 class GraphicsLayer;
-class InjectedScriptManager;
-class InspectorBackendDispatcher;
-class InspectorAgent;
 class InspectorClient;
-class InspectorCSSAgent;
-class InspectorDOMAgent;
-class InspectorFrontend;
 class InspectorFrontendChannel;
 class InspectorFrontendClient;
-class InspectorLayerTreeAgent;
-class InspectorPageAgent;
-class InspectorResourceAgent;
-class InspectorTimelineAgent;
-class InspectorTracingAgent;
-class InspectorOverlay;
-class InspectorState;
 class InstrumentingAgents;
 class IntPoint;
 class IntSize;
@@ -70,6 +59,22 @@ class PlatformKeyboardEvent;
 class PlatformMouseEvent;
 class PlatformTouchEvent;
 class Node;
+
+#if ENABLE(INSPECTOR)
+class InjectedScriptManager;
+class InspectorBackendDispatcher;
+class InspectorAgent;
+class InspectorCSSAgent;
+class InspectorDOMAgent;
+class InspectorFrontend;
+class InspectorLayerTreeAgent;
+class InspectorPageAgent;
+class InspectorResourceAgent;
+class InspectorTimelineAgent;
+class InspectorTracingAgent;
+class InspectorOverlay;
+class InspectorState;
+#endif
 
 class InspectorController : public NoBaseWillBeGarbageCollectedFinalized<InspectorController> {
     WTF_MAKE_NONCOPYABLE(InspectorController);
@@ -86,7 +91,9 @@ public:
     void setPreferCompositingToLCDTextEnabled(bool);
 
     void willBeDestroyed();
+#if ENABLE(INSPECTOR)
     void registerModuleAgent(PassOwnPtrWillBeRawPtr<InspectorAgent>);
+#endif
 
     void setInspectorFrontendClient(InspectorFrontendClient*);
     void didClearDocumentOfWindowObject(LocalFrame*);
@@ -146,6 +153,7 @@ private:
     friend InstrumentingAgents* instrumentationForPage(Page*);
 
     RefPtrWillBeMember<InstrumentingAgents> m_instrumentingAgents;
+#if ENABLE(INSPECTOR)
     OwnPtrWillBeMember<InjectedScriptManager> m_injectedScriptManager;
     OwnPtrWillBeMember<InspectorCompositeState> m_state;
     OwnPtr<InspectorOverlay> m_overlay;
@@ -164,6 +172,7 @@ private:
     RawPtrWillBeMember<Page> m_page;
     InspectorClient* m_inspectorClient;
     InspectorAgentRegistry m_agents;
+#endif
     bool m_isUnderTest;
     bool m_deferredAgentsInitialized;
     String m_hostId;

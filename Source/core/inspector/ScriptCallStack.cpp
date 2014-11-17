@@ -68,6 +68,7 @@ void ScriptCallStack::setAsyncCallStack(PassRefPtrWillBeRawPtr<ScriptAsyncCallSt
     m_asyncCallStack = asyncCallStack;
 }
 
+#if ENABLE(INSPECTOR)
 PassRefPtr<TypeBuilder::Array<TypeBuilder::Console::CallFrame> > ScriptCallStack::buildInspectorArray() const
 {
     RefPtr<TypeBuilder::Array<TypeBuilder::Console::CallFrame> > frames = TypeBuilder::Array<TypeBuilder::Console::CallFrame>::create();
@@ -75,6 +76,7 @@ PassRefPtr<TypeBuilder::Array<TypeBuilder::Console::CallFrame> > ScriptCallStack
         frames->addItem(m_frames.at(i).buildInspectorObject());
     return frames;
 }
+#endif // ENABLE(INSPECTOR)
 
 void ScriptCallStack::trace(Visitor* visitor)
 {
