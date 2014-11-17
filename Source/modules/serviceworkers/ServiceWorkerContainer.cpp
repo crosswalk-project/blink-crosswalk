@@ -121,6 +121,12 @@ ScriptPromise ServiceWorkerContainer::registerServiceWorker(ScriptState* scriptS
         return promise;
     }
 
+    KURL pageURL = KURL(KURL(), documentOrigin->toString());
+    if (!pageURL.protocolIsInHTTPFamily()) {
+        resolver->reject(DOMException::create(SecurityError, "The URL protocol of the current origin is not supported: " + pageURL.protocol()));
+        return promise;
+    }
+
     KURL patternURL = executionContext->completeURL(options.scope());
     patternURL.removeFragmentIdentifier();
     if (!documentOrigin->canRequest(patternURL)) {
@@ -171,6 +177,12 @@ ScriptPromise ServiceWorkerContainer::getRegistration(ScriptState* scriptState, 
     String errorMessage;
     if (!documentOrigin->canAccessFeatureRequiringSecureOrigin(errorMessage)) {
         resolver->reject(DOMException::create(NotSupportedError, errorMessage));
+        return promise;
+    }
+
+    KURL pageURL = KURL(KURL(), documentOrigin->toString());
+    if (!pageURL.protocolIsInHTTPFamily()) {
+        resolver->reject(DOMException::create(SecurityError, "The URL protocol of the current origin is not supported: " + pageURL.protocol()));
         return promise;
     }
 
