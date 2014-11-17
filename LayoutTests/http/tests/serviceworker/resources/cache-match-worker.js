@@ -338,7 +338,7 @@ cache_test(function(cache) {
             response.url, request_url,
             '[https://fetch.spec.whatwg.org/#dom-response-url] ' +
             'Reponse.url should return the URL of the response.');
-          return cache.put(request, response);
+          return cache.put(request, response.clone());
         })
       .then(function() {
           return cache.match(request.url);
@@ -398,7 +398,7 @@ cache_test(function(cache) {
 function prepopulated_cache_test(entries, test_function, description) {
   cache_test(function(cache) {
       return Promise.all(Object.keys(entries).map(function(k) {
-          return cache.put(entries[k].request, entries[k].response);
+          return cache.put(entries[k].request.clone(), entries[k].response.clone());
         }))
         .catch(function(reason) {
             assert_unreached('Test setup failed: ' + reason.message);
