@@ -507,6 +507,8 @@ public:
 
     virtual void setTopControlsLayoutHeight(float) override;
 
+    IntSize mainFrameSize();
+
 private:
     void didUpdateTopControls();
     void setTopControlsContentOffset(float);
