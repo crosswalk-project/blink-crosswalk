@@ -1,7 +1,12 @@
-crbug.com/418521 compositing/overflow/overflow-positioning.html [ NeedsRebaseline ]
-crbug.com/418521 virtual/prefer_compositing_to_lcd_text/compositing/overflow/overflow-positioning.html [ NeedsRebaseline ]
-crbug.com/418521 transforms/3d/point-mapping/3d-point-mapping-deep.html [ NeedsRebaseline ]
-crbug.com/418521 compositing/geometry/preserve-3d-switching.html [ NeedsRebaseline ]
+crbug.com/433282 fast/borders/border-radius-mask-video-ratio.html [ NeedsRebaseline ]
+crbug.com/433282 fast/borders/border-radius-mask-video-shadow.html [ NeedsRebaseline ]
+crbug.com/433282 fast/borders/border-radius-mask-video.html [ NeedsRebaseline ]
+crbug.com/433282 fast/overflow/overflow-update-transform.html [ NeedsRebaseline ]
+crbug.com/433282 fast/replaced/border-radius-clip-content-edge.html [ NeedsRebaseline ]
+crbug.com/433282 fast/replaced/selection-rect-transform.html [ NeedsRebaseline ]
+crbug.com/433282 ietestcenter/css3/bordersbackgrounds/border-radius-content-edge-001.htm [ NeedsRebaseline ]
+ 
+crbug.com/423071 fast/reflections/reflection-masks-opacity.html [ NeedsRebaseline ]
 
 # This directly has manual tests that don't have to run with run-webkit-tests
 crbug.com/359838 http/tests/ManualTests/ [ Skip ]
