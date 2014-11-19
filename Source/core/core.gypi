@@ -458,7 +458,6 @@
             'xml/XPathExpression.idl',
             'xml/XPathNSResolver.idl',
             'xml/XPathResult.idl',
-            'xml/XSLTProcessor.idl',
         ],
         # 'partial interface', target (right side of) 'implements', and
         # interfaces with static bindings (in bindings/core/v8/)
@@ -1127,8 +1126,6 @@
             'fetch/ScriptResource.h',
             'fetch/TextResource.cpp',
             'fetch/TextResource.h',
-            'fetch/XSLStyleSheetResource.cpp',
-            'fetch/XSLStyleSheetResource.h',
             'fileapi/Blob.cpp',
             'fileapi/Blob.h',
             'fileapi/File.cpp',
@@ -1962,17 +1959,6 @@
             'xml/XPathValue.h',
             'xml/XPathVariableReference.cpp',
             'xml/XPathVariableReference.h',
-            'xml/XSLImportRule.cpp',
-            'xml/XSLImportRule.h',
-            'xml/XSLStyleSheet.h',
-            'xml/XSLStyleSheetLibxslt.cpp',
-            'xml/XSLTExtensions.cpp',
-            'xml/XSLTExtensions.h',
-            'xml/XSLTProcessor.cpp',
-            'xml/XSLTProcessor.h',
-            'xml/XSLTProcessorLibxslt.cpp',
-            'xml/XSLTUnicodeSort.cpp',
-            'xml/XSLTUnicodeSort.h',
             'xml/parser/MarkupTokenizerInlines.h',
             'xml/parser/SharedBufferReader.cpp',
             'xml/parser/SharedBufferReader.h',
@@ -3578,6 +3564,28 @@
             'testing/UnitTestHelpers.cpp',
             'testing/UnitTestHelpers.h',
             'xml/parser/SharedBufferReaderTest.cpp',
+        ],
+        'conditions': [
+            ['disable_xslt==0', {
+                'webcore_files': [
+                    'fetch/XSLStyleSheetResource.cpp',
+                    'fetch/XSLStyleSheetResource.h',
+                    'xml/XSLImportRule.cpp',
+                    'xml/XSLImportRule.h',
+                    'xml/XSLStyleSheet.h',
+                    'xml/XSLStyleSheetLibxslt.cpp',
+                    'xml/XSLTExtensions.cpp',
+                    'xml/XSLTExtensions.h',
+                    'xml/XSLTProcessor.cpp',
+                    'xml/XSLTProcessor.h',
+                    'xml/XSLTProcessorLibxslt.cpp',
+                    'xml/XSLTUnicodeSort.cpp',
+                    'xml/XSLTUnicodeSort.h',
+                ],
+                'core_idl_files': [
+                    'xml/XSLTProcessor.idl',
+                ],
+            }],
         ],
     }
 }

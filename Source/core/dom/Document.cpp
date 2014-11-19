@@ -182,7 +182,9 @@
 #include "core/svg/SVGTitleElement.h"
 #include "core/svg/SVGUseElement.h"
 #include "core/workers/SharedWorkerRepositoryClient.h"
+#if !defined(DISABLE_XSLT)
 #include "core/xml/XSLTProcessor.h"
+#endif
 #include "core/xml/parser/XMLDocumentParser.h"
 #include "platform/DateComponents.h"
 #include "platform/EventDispatchForbiddenScope.h"
@@ -4442,6 +4444,7 @@ void Document::popCurrentScript()
 
 void Document::applyXSLTransform(ProcessingInstruction* pi)
 {
+#if !defined(DISABLE_XSLT)
     ASSERT(!pi->isLoading());
     UseCounter::count(*this, UseCounter::XSLProcessingInstruction);
     RefPtrWillBeRawPtr<XSLTProcessor> processor = XSLTProcessor::create(*this);
@@ -4455,6 +4458,7 @@ void Document::applyXSLTransform(ProcessingInstruction* pi)
     LocalFrame* ownerFrame = frame();
     processor->createDocumentFromSource(newSource, resultEncoding, resultMIMEType, this, ownerFrame);
     InspectorInstrumentation::frameDocumentUpdated(ownerFrame);
+#endif
 }
 
 void Document::setTransformSource(PassOwnPtr<TransformSource> source)

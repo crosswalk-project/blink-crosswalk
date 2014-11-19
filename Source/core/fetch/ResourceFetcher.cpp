@@ -42,7 +42,6 @@
 #include "core/fetch/ResourceLoader.h"
 #include "core/fetch/ResourceLoaderSet.h"
 #include "core/fetch/ScriptResource.h"
-#include "core/fetch/XSLStyleSheetResource.h"
 #include "core/html/HTMLElement.h"
 #include "core/html/HTMLFrameOwnerElement.h"
 #include "core/html/imports/HTMLImportsController.h"
@@ -74,6 +73,10 @@
 #include "wtf/text/CString.h"
 #include "wtf/text/WTFString.h"
 
+#if !defined(DISABLE_XSLT)
+#include "core/fetch/XSLStyleSheetResource.h"
+#endif
+
 #define PRELOAD_DEBUG 0
 
 using blink::WebURLRequest;
@@ -99,7 +102,11 @@ static Resource* createResource(Resource::Type type, const ResourceRequest& requ
     case Resource::Media:
         return new RawResource(request, type);
     case Resource::XSLStyleSheet:
+#if defined(DISABLE_XSLT)
+        return 0;
+#else
         return new XSLStyleSheetResource(request, charset);
+#endif
     case Resource::LinkPrefetch:
         return new Resource(request, Resource::LinkPrefetch);
     case Resource::LinkSubresource:
@@ -366,12 +373,14 @@ ResourcePtr<ScriptResource> ResourceFetcher::fetchScript(FetchRequest& request)
     return toScriptResource(requestResource(Resource::Script, request));
 }
 
+#if !defined(DISABLE_XSLT)
 ResourcePtr<XSLStyleSheetResource> ResourceFetcher::fetchXSLStyleSheet(FetchRequest& request)
 {
     ASSERT(RuntimeEnabledFeatures::xsltEnabled());
     request.mutableResourceRequest().setRequestContext(WebURLRequest::RequestContextXSLT);
     return toXSLStyleSheetResource(requestResource(Resource::XSLStyleSheet, request));
 }
+#endif
 
 ResourcePtr<DocumentResource> ResourceFetcher::fetchSVGDocument(FetchRequest& request)
 {

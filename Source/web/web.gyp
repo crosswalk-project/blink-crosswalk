@@ -134,6 +134,11 @@
                                 '<(DEPTH)/third_party/nss/nss.gyp:*',
                             ],
                         }],
+                        ['disable_xslt==1', {
+                            'dependencies!': [
+                                '<(DEPTH)/third_party/libxslt/libxslt.gyp:libxslt',
+                            ],
+                        }],
                     ],
                     'msvs_settings': {
                       'VCLinkerTool': {

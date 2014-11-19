@@ -61,7 +61,13 @@
             'V8WorkerCustom.cpp',
             'V8WorkerGlobalScopeCustom.cpp',
             'V8XMLHttpRequestCustom.cpp',
-            'V8XSLTProcessorCustom.cpp',
+        ],
+        'conditions': [
+            ['disable_xslt==0', {
+                'bindings_core_v8_custom_files': [
+                    'V8XSLTProcessorCustom.cpp',
+                ],
+            }],
         ],
     },
 }
