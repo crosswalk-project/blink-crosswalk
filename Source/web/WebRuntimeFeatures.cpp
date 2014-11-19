@@ -255,7 +255,11 @@ void WebRuntimeFeatures::enableWebMIDI(bool enable)
 
 void WebRuntimeFeatures::enableXSLT(bool enable)
 {
+#if defined(DISABLE_XSLT)
+    RuntimeEnabledFeatures::setXSLTEnabled(false);
+#else
     RuntimeEnabledFeatures::setXSLTEnabled(enable);
+#endif
 }
 
 void WebRuntimeFeatures::enableOverlayScrollbars(bool enable)

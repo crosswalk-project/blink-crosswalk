@@ -90,7 +90,9 @@ private:
     void process(const String& href, const String& charset);
 
     virtual void setCSSStyleSheet(const String& href, const KURL& baseURL, const String& charset, const CSSStyleSheetResource*) override;
+#if !defined(DISABLE_XSLT)
     virtual void setXSLStyleSheet(const String& href, const KURL& baseURL, const String& sheet) override;
+#endif
 
     virtual bool sheetLoaded() override;
 

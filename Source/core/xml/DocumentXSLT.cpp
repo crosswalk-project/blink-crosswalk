@@ -16,8 +16,10 @@
 #include "core/events/EventListener.h"
 #include "core/frame/UseCounter.h"
 #include "core/inspector/InspectorInstrumentation.h"
+#if !defined(DISABLE_XSLT)
 #include "core/xml/XSLStyleSheet.h"
 #include "core/xml/XSLTProcessor.h"
+#endif
 
 namespace blink {
 
@@ -100,6 +102,7 @@ DocumentXSLT::DocumentXSLT()
 
 void DocumentXSLT::applyXSLTransform(Document& document, ProcessingInstruction* pi)
 {
+#if !defined(DISABLE_XSLT)
     ASSERT(!pi->isLoading());
     UseCounter::count(document, UseCounter::XSLProcessingInstruction);
     XSLTProcessor* processor = XSLTProcessor::create(document);
@@ -117,6 +120,7 @@ void DocumentXSLT::applyXSLTransform(Document& document, ProcessingInstruction* 
     processor->createDocumentFromSource(newSource, resultEncoding, resultMIMEType, &document, ownerFrame);
     InspectorInstrumentation::frameDocumentUpdated(ownerFrame);
     document.setParsingState(Document::FinishedParsing);
+#endif
 }
 
 ProcessingInstruction* DocumentXSLT::findXSLStyleSheet(Document& document)
