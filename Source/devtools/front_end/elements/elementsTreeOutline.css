@@ -100,6 +100,7 @@
     min-width: 100%;
     min-height: 100%;
     -webkit-transform: translateZ(0);
+    padding-left: 2px;
 }
 
 .outline-disclosure ol:focus li.selected {
@@ -271,3 +272,8 @@ body.inactive button.text-button, .text-button:disabled {
 .outline-disclosure .nowrap li {
     word-wrap: normal;
 }
+
+.outline-disclosure.single-node li {
+    padding-left: 2px;
+}
+
