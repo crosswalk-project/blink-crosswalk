@@ -30,9 +30,12 @@
 #include "core/fetch/CSSStyleSheetResource.h"
 #include "core/fetch/FetchRequest.h"
 #include "core/fetch/ResourceFetcher.h"
+#include "core/xml/parser/XMLDocumentParser.h" // for parseAttributes()
+
+#if !defined(DISABLE_XSLT)
 #include "core/fetch/XSLStyleSheetResource.h"
 #include "core/xml/XSLStyleSheet.h"
-#include "core/xml/parser/XMLDocumentParser.h" // for parseAttributes()
+#endif
 
 namespace blink {
 
@@ -64,8 +67,10 @@ ProcessingInstruction::~ProcessingInstruction()
     if (inDocument()) {
         if (m_isCSS)
             document().styleEngine()->removeStyleSheetCandidateNode(this);
+#if !defined(DISABLE_XSLT)
         else if (m_isXSL)
             document().styleEngine()->removeXSLStyleSheet(this);
+#endif
     }
 #endif
 }
@@ -117,7 +122,9 @@ bool ProcessingInstruction::checkStyleSheet(String& href, String& charset)
         type = i->value;
 
     m_isCSS = type.isEmpty() || type == "text/css";
+#if !defined(DISABLE_XSLT)
     m_isXSL = (type == "text/xml" || type == "text/xsl" || type == "application/xml" || type == "application/xhtml+xml" || type == "application/rss+xml" || type == "application/atom+xml");
+#endif
     if (!m_isCSS && !m_isXSL)
         return false;
 
@@ -134,6 +141,7 @@ bool ProcessingInstruction::checkStyleSheet(String& href, String& charset)
 void ProcessingInstruction::process(const String& href, const String& charset)
 {
     if (href.length() > 1 && href[0] == '#') {
+#if !defined(DISABLE_XSLT)
         m_localHref = href.substring(1);
         // We need to make a synthetic XSLStyleSheet that is embedded.
         // It needs to be able to kick off import/include loads that
@@ -143,6 +151,7 @@ void ProcessingInstruction::process(const String& href, const String& charset)
             m_sheet = XSLStyleSheet::createEmbedded(this, finalURL);
             m_loading = false;
         }
+#endif
         return;
     }
 
@@ -153,7 +162,9 @@ void ProcessingInstruction::process(const String& href, const String& charset)
     ResourcePtr<StyleSheetResource> resource;
     FetchRequest request(ResourceRequest(document().completeURL(href)), FetchInitiatorTypeNames::processinginstruction);
     if (m_isXSL) {
+#if !defined(DISABLE_XSLT)
         resource = document().fetcher()->fetchXSLStyleSheet(request);
+#endif
     } else {
         request.setCharset(charset.isEmpty() ? document().charset() : charset);
         resource = document().fetcher()->fetchCSSStyleSheet(request);
@@ -209,6 +220,7 @@ void ProcessingInstruction::setCSSStyleSheet(const String& href, const KURL& bas
     parseStyleSheet(sheet->sheetText(true));
 }
 
+#if !defined(DISABLE_XSLT)
 void ProcessingInstruction::setXSLStyleSheet(const String& href, const KURL& baseURL, const String& sheet)
 {
     if (!inDocument()) {
@@ -221,21 +233,26 @@ void ProcessingInstruction::setXSLStyleSheet(const String& href, const KURL& bas
     RefPtrWillBeRawPtr<Document> protect(&document());
     parseStyleSheet(sheet);
 }
+#endif
 
 void ProcessingInstruction::parseStyleSheet(const String& sheet)
 {
     if (m_isCSS)
         toCSSStyleSheet(m_sheet.get())->contents()->parseString(sheet);
+#if !defined(DISABLE_XSLT)
     else if (m_isXSL)
         toXSLStyleSheet(m_sheet.get())->parseString(sheet);
+#endif
 
     clearResource();
     m_loading = false;
 
     if (m_isCSS)
         toCSSStyleSheet(m_sheet.get())->contents()->checkLoaded();
+#if !defined(DISABLE_XSLT)
     else if (m_isXSL)
         toXSLStyleSheet(m_sheet.get())->checkLoaded();
+#endif
 }
 
 void ProcessingInstruction::setCSSStyleSheet(PassRefPtrWillBeRawPtr<CSSStyleSheet> sheet)
@@ -258,8 +275,10 @@ Node::InsertionNotificationRequest ProcessingInstruction::insertedInto(Container
     bool isValid = checkStyleSheet(href, charset);
     if (m_isCSS)
         document().styleEngine()->addStyleSheetCandidateNode(this, m_createdByParser);
+#if !defined(DISABLE_XSLT)
     else if (m_isXSL)
         document().styleEngine()->addXSLStyleSheet(this, m_createdByParser);
+#endif
     if (isValid)
         process(href, charset);
     return InsertionDone;
@@ -273,8 +292,10 @@ void ProcessingInstruction::removedFrom(ContainerNode* insertionPoint)
 
     if (m_isCSS)
         document().styleEngine()->removeStyleSheetCandidateNode(this);
+#if !defined(DISABLE_XSLT)
     else if (m_isXSL)
         document().styleEngine()->removeXSLStyleSheet(this);
+#endif
 
     RefPtrWillBeRawPtr<StyleSheet> removedSheet = m_sheet;
 
