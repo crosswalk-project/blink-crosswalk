@@ -303,6 +303,11 @@
             '<(DEPTH)/third_party/libxslt/libxslt.gyp:libxslt',
           ]
         }],
+        ['disable_webp==1', {
+          'dependencies!': [
+            '<(DEPTH)/third_party/libwebp/libwebp.gyp:libwebp',
+          ],
+        }],
       ],
     },
     {
@@ -379,6 +384,14 @@
           ],
           'export_dependent_settings!': [
             '<(DEPTH)/third_party/libxslt/libxslt.gyp:libxslt',
+          ],
+        }],
+        ['disable_webp==1', {
+          'dependencies!': [
+            '<(DEPTH)/third_party/libwebp/libwebp.gyp:libwebp',
+          ],
+          'export_dependent_settings!': [
+            '<(DEPTH)/third_party/libwebp/libwebp.gyp:libwebp',
           ],
         }],
         ['OS=="win" and component=="shared_library"', {
