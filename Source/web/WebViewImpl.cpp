@@ -1653,6 +1653,7 @@ void WebViewImpl::resizePinchViewport(const WebSize& newSize)
         return;
 
     page()->frameHost().pinchViewport().setSize(newSize);
+    page()->frameHost().pinchViewport().clampToBoundaries();
 }
 
 WebLocalFrameImpl* WebViewImpl::localFrameRootTemporary() const
