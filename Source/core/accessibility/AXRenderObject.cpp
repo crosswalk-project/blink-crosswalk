@@ -883,6 +883,19 @@ KURL AXRenderObject::url() const
 }
 
 //
+// Load inline text boxes.
+//
+
+void AXRenderObject::loadInlineTextBoxes()
+{
+    if (!renderer() || !renderer()->isText())
+        return;
+
+    clearChildren();
+    addInlineTextBoxChildren(true);
+}
+
+//
 // Properties of interactive elements.
 //
 
@@ -1532,7 +1545,7 @@ void AXRenderObject::addChildren()
     addTextFieldChildren();
     addCanvasChildren();
     addRemoteSVGChildren();
-    addInlineTextBoxChildren();
+    addInlineTextBoxChildren(false);
 
     for (unsigned i = 0; i < m_children.size(); ++i) {
         if (!m_children[i].get()->cachedParentObject())
@@ -1875,10 +1888,10 @@ int AXRenderObject::indexForVisiblePosition(const VisiblePosition& pos) const
     return TextIterator::rangeLength(range.get());
 }
 
-void AXRenderObject::addInlineTextBoxChildren()
+void AXRenderObject::addInlineTextBoxChildren(bool force)
 {
     Settings* settings = document()->settings();
-    if (!settings || !settings->inlineTextBoxAccessibilityEnabled())
+    if (!force && (!settings || !settings->inlineTextBoxAccessibilityEnabled()))
         return;
 
     if (!renderer() || !renderer()->isText())
