@@ -37,13 +37,9 @@
             'V8HTMLOptionsCollectionCustom.cpp',
             'V8HTMLPlugInElementCustom.cpp',
             'V8HistoryCustom.cpp',
-            'V8InjectedScriptHostCustom.cpp',
-            'V8InjectedScriptManager.cpp',
-            'V8InspectorFrontendHostCustom.cpp',
             'V8Int16ArrayCustom.h',
             'V8Int32ArrayCustom.h',
             'V8Int8ArrayCustom.h',
-            'V8JavaScriptCallFrameCustom.cpp',
             'V8LocationCustom.cpp',
             'V8MessageChannelCustom.cpp',
             'V8MessageEventCustom.cpp',
@@ -66,6 +62,14 @@
             ['disable_xslt==0', {
                 'bindings_core_v8_custom_files': [
                     'V8XSLTProcessorCustom.cpp',
+                ],
+            }],
+            ['disable_inspector==0', {
+                'bindings_core_v8_custom_files': [
+                    'V8InjectedScriptHostCustom.cpp',
+                    'V8InjectedScriptManager.cpp',
+                    'V8InspectorFrontendHostCustom.cpp',
+                    'V8JavaScriptCallFrameCustom.cpp',
                 ],
             }],
         ],

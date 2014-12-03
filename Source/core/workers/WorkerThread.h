@@ -47,7 +47,9 @@ namespace blink {
 
     class KURL;
     class WorkerGlobalScope;
+#if ENABLE(INSPECTOR)
     class WorkerInspectorController;
+#endif
     class WorkerLoaderProxy;
     class WorkerReportingProxy;
     class WorkerSharedTimer;
@@ -96,7 +98,9 @@ namespace blink {
         PlatformThreadId platformThreadId() const;
 
         void interruptAndDispatchInspectorCommands();
+#if ENABLE(INSPECTOR)
         void setWorkerInspectorController(WorkerInspectorController*);
+#endif
 
     protected:
         WorkerThread(WorkerLoaderProxy&, WorkerReportingProxy&, PassOwnPtrWillBeRawPtr<WorkerThreadStartupData>);
@@ -126,8 +130,10 @@ namespace blink {
         WorkerLoaderProxy& m_workerLoaderProxy;
         WorkerReportingProxy& m_workerReportingProxy;
 
+#if ENABLE(INSPECTOR)
         RefPtrWillBePersistent<WorkerInspectorController> m_workerInspectorController;
         Mutex m_workerInspectorControllerMutex;
+#endif
 
         Mutex m_threadCreationMutex;
         RefPtrWillBePersistent<WorkerGlobalScope> m_workerGlobalScope;

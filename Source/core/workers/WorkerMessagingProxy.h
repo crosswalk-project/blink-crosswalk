@@ -44,7 +44,9 @@ class DedicatedWorkerThread;
 class ExecutionContext;
 class Worker;
 class WorkerClients;
+#if ENABLE(INSPECTOR)
 class WorkerInspectorProxy;
+#endif
 
 class WorkerMessagingProxy FINAL : public WorkerGlobalScopeProxy, public WorkerLoaderProxy {
     WTF_MAKE_NONCOPYABLE(WorkerMessagingProxy); WTF_MAKE_FAST_ALLOCATED;
@@ -65,7 +67,9 @@ public:
     void reportException(const String& errorMessage, int lineNumber, int columnNumber, const String& sourceURL);
     void reportConsoleMessage(MessageSource, MessageLevel, const String& message, int lineNumber, const String& sourceURL);
     void postMessageToPageInspector(const String&);
+#if ENABLE(INSPECTOR)
     WorkerInspectorProxy* workerInspectorProxy();
+#endif
     void confirmMessageFromWorkerObject(bool hasPendingActivity);
     void reportPendingActivity(bool hasPendingActivity);
     void workerGlobalScopeClosed();
@@ -98,7 +102,9 @@ private:
     bool m_askedToTerminate;
 
     Vector<OwnPtr<ExecutionContextTask> > m_queuedEarlyTasks; // Tasks are queued here until there's a thread object created.
+#if ENABLE(INSPECTOR)
     OwnPtr<WorkerInspectorProxy> m_workerInspectorProxy;
+#endif
 
     OwnPtrWillBePersistent<WorkerClients> m_workerClients;
 };

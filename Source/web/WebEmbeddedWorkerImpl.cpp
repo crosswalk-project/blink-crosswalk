@@ -34,13 +34,17 @@
 #include "core/dom/CrossThreadTask.h"
 #include "core/dom/Document.h"
 #include "core/inspector/InspectorInstrumentation.h"
+#if ENABLE(INSPECTOR)
 #include "core/inspector/WorkerDebuggerAgent.h"
 #include "core/inspector/WorkerInspectorController.h"
+#endif
 #include "core/loader/FrameLoadRequest.h"
 #include "core/loader/SubstituteData.h"
 #include "core/workers/WorkerClients.h"
 #include "core/workers/WorkerGlobalScope.h"
+#if ENABLE(INSPECTOR)
 #include "core/workers/WorkerInspectorProxy.h"
+#endif
 #include "core/workers/WorkerLoaderProxy.h"
 #include "core/workers/WorkerScriptLoader.h"
 #include "core/workers/WorkerScriptLoaderClient.h"
@@ -160,7 +164,9 @@ WebEmbeddedWorkerImpl::WebEmbeddedWorkerImpl(
     PassOwnPtr<WebWorkerPermissionClientProxy> permissionClient)
     : m_workerContextClient(client)
     , m_permissionClient(permissionClient)
+#if ENABLE(INSPECTOR)
     , m_workerInspectorProxy(WorkerInspectorProxy::create())
+#endif
     , m_webView(0)
     , m_mainFrame(0)
     , m_askedToTerminate(false)
@@ -222,7 +228,9 @@ void WebEmbeddedWorkerImpl::terminateWorkerContext()
     }
     if (m_workerThread)
         m_workerThread->stop();
+#if ENABLE(INSPECTOR)
     m_workerInspectorProxy->workerThreadTerminated();
+#endif
 }
 
 void WebEmbeddedWorkerImpl::resumeAfterDownload()
@@ -276,10 +284,12 @@ void WebEmbeddedWorkerImpl::dispatchDevToolsMessage(const WebString& message)
 
 void WebEmbeddedWorkerImpl::postMessageToPageInspector(const String& message)
 {
+#if ENABLE(INSPECTOR)
     WorkerInspectorProxy::PageInspector* pageInspector = m_workerInspectorProxy->pageInspector();
     if (!pageInspector)
         return;
     pageInspector->dispatchMessageFromWorker(message);
+#endif
 }
 
 void WebEmbeddedWorkerImpl::prepareShadowPageForLoader()
@@ -424,7 +434,9 @@ void WebEmbeddedWorkerImpl::startWorkerThread()
     m_loaderProxy = LoaderProxy::create(*this);
     m_workerThread = ServiceWorkerThread::create(*m_loaderProxy, *m_workerGlobalScopeProxy, startupData.release());
     m_workerThread->start();
+#if ENABLE(INSPECTOR)
     m_workerInspectorProxy->workerThreadCreated(document, m_workerThread.get(), scriptURL);
+#endif
 }
 
 } // namespace blink

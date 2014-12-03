@@ -54,7 +54,9 @@ class ExceptionState;
 class ScheduledAction;
 class WorkerClients;
 class WorkerConsole;
+#if ENABLE(INSPECTOR)
 class WorkerInspectorController;
+#endif
 class WorkerLocation;
 class WorkerNavigator;
 class WorkerThread;
@@ -110,7 +112,9 @@ public:
 
     virtual double timerAlignmentInterval() const OVERRIDE FINAL;
 
+#if ENABLE(INSPECTOR)
     WorkerInspectorController* workerInspectorController() { return m_workerInspectorController.get(); }
+#endif
 
     bool isClosing() { return m_closing; }
 
@@ -161,7 +165,9 @@ private:
     OwnPtr<WorkerScriptController> m_script;
     WorkerThread* m_thread;
 
+#if ENABLE(INSPECTOR)
     RefPtrWillBeMember<WorkerInspectorController> m_workerInspectorController;
+#endif
     bool m_closing;
 
     OwnPtrWillBeMember<WorkerEventQueue> m_eventQueue;

@@ -31,7 +31,9 @@
 #ifndef ScriptCallStack_h
 #define ScriptCallStack_h
 
+#if ENABLE(INSPECTOR)
 #include "core/InspectorTypeBuilder.h"
+#endif
 #include "core/inspector/ScriptCallFrame.h"
 #include "platform/heap/Handle.h"
 #include "wtf/Forward.h"
@@ -55,7 +57,9 @@ public:
     PassRefPtrWillBeRawPtr<ScriptAsyncCallStack> asyncCallStack() const;
     void setAsyncCallStack(PassRefPtrWillBeRawPtr<ScriptAsyncCallStack>);
 
+#if ENABLE(INSPECTOR)
     PassRefPtr<TypeBuilder::Array<TypeBuilder::Console::CallFrame> > buildInspectorArray() const;
+#endif
 
     void trace(Visitor*);
 

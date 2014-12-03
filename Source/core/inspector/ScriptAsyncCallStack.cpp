@@ -22,6 +22,7 @@ ScriptAsyncCallStack::ScriptAsyncCallStack(const String& description, PassRefPtr
     ASSERT(m_callStack);
 }
 
+#if ENABLE(INSPECTOR)
 PassRefPtr<TypeBuilder::Console::AsyncStackTrace> ScriptAsyncCallStack::buildInspectorObject() const
 {
     RefPtr<TypeBuilder::Console::AsyncStackTrace> result = TypeBuilder::Console::AsyncStackTrace::create()
@@ -32,6 +33,7 @@ PassRefPtr<TypeBuilder::Console::AsyncStackTrace> ScriptAsyncCallStack::buildIns
         result->setAsyncStackTrace(m_asyncStackTrace->buildInspectorObject());
     return result.release();
 }
+#endif // ENABLE(INSPECTOR)
 
 void ScriptAsyncCallStack::trace(Visitor* visitor)
 {

@@ -85,10 +85,12 @@
 #include "core/rendering/TextAutosizer.h"
 #include "core/rendering/compositing/RenderLayerCompositor.h"
 #include "modules/credentialmanager/CredentialManagerClient.h"
+#if ENABLE(INSPECTOR)
 #include "modules/device_orientation/DeviceOrientationInspectorAgent.h"
-#include "modules/encryptedmedia/MediaKeysController.h"
 #include "modules/filesystem/InspectorFileSystemAgent.h"
 #include "modules/indexeddb/InspectorIndexedDBAgent.h"
+#endif
+#include "modules/encryptedmedia/MediaKeysController.h"
 #include "modules/push_messaging/PushController.h"
 #include "platform/ContextMenu.h"
 #include "platform/ContextMenuItem.h"
@@ -437,11 +439,15 @@ WebViewImpl::WebViewImpl(WebViewClient* client)
     provideNavigatorContentUtilsTo(*m_page, NavigatorContentUtilsClientImpl::create(this));
 
     provideContextFeaturesTo(*m_page, ContextFeaturesClientImpl::create());
+#if ENABLE(INSPECTOR)
     DeviceOrientationInspectorAgent::provideTo(*m_page);
 
     m_page->inspectorController().registerModuleAgent(InspectorFileSystemAgent::create(m_page.get()));
+#endif
     provideDatabaseClientTo(*m_page, DatabaseClientImpl::create());
+#if ENABLE(INSPECTOR)
     InspectorIndexedDBAgent::provideTo(m_page.get());
+#endif
     provideStorageQuotaClientTo(*m_page, StorageQuotaClientImpl::create());
     m_page->setValidationMessageClient(ValidationMessageClientImpl::create(*this));
     provideWorkerGlobalScopeProxyProviderTo(*m_page, WorkerGlobalScopeProxyProviderImpl::create());

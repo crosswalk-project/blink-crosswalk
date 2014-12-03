@@ -36,7 +36,9 @@
 #include "core/events/ProgressEvent.h"
 #include "core/frame/LocalFrame.h"
 #include "core/frame/Settings.h"
+#if ENABLE(INSPECTOR)
 #include "core/inspector/InspectorApplicationCacheAgent.h"
+#endif
 #include "core/inspector/InspectorInstrumentation.h"
 #include "core/loader/DocumentLoader.h"
 #include "core/loader/FrameLoader.h"

@@ -58,7 +58,9 @@ class EventTarget;
 class ExecutionContext;
 class GraphicsContext;
 class GraphicsLayer;
+#if ENABLE(INSPECTOR)
 class InspectorTimelineAgent;
+#endif
 class InstrumentingAgents;
 class RenderLayer;
 class ThreadableLoaderClient;
@@ -101,7 +103,9 @@ inline bool hasFrontends() { return FrontendCounter::s_frontendCounter; }
 void registerInstrumentingAgents(InstrumentingAgents*);
 void unregisterInstrumentingAgents(InstrumentingAgents*);
 
+#if ENABLE(INSPECTOR)
 InspectorTimelineAgent* retrieveTimelineAgent(const InspectorInstrumentationCookie&);
+#endif
 
 // Called from generated instrumentation code.
 InstrumentingAgents* instrumentingAgentsFor(Page*);

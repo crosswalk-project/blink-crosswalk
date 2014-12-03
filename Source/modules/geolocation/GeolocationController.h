@@ -35,7 +35,9 @@
 
 namespace blink {
 
+#if ENABLE(INSPECTOR)
 class GeolocationInspectorAgent;
+#endif
 class GeolocationClient;
 class GeolocationError;
 class GeolocationPosition;
@@ -87,7 +89,9 @@ private:
     ObserversSet m_observers;
     ObserversSet m_highAccuracyObservers;
     bool m_isClientUpdating;
+#if ENABLE(INSPECTOR)
     RawPtrWillBeMember<GeolocationInspectorAgent> m_inspectorAgent;
+#endif
 };
 
 } // namespace blink

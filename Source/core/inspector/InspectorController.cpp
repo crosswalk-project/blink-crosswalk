@@ -32,6 +32,7 @@
 #include "core/inspector/InspectorController.h"
 
 #include "bindings/core/v8/DOMWrapperWorld.h"
+#if ENABLE(INSPECTOR)
 #include "core/InspectorBackendDispatcher.h"
 #include "core/InspectorFrontend.h"
 #include "core/inspector/IdentifiersFactory.h"
@@ -40,16 +41,13 @@
 #include "core/inspector/InspectorApplicationCacheAgent.h"
 #include "core/inspector/InspectorCSSAgent.h"
 #include "core/inspector/InspectorCanvasAgent.h"
-#include "core/inspector/InspectorClient.h"
 #include "core/inspector/InspectorDOMAgent.h"
 #include "core/inspector/InspectorDOMDebuggerAgent.h"
 #include "core/inspector/InspectorDOMStorageAgent.h"
 #include "core/inspector/InspectorDebuggerAgent.h"
-#include "core/inspector/InspectorFrontendClient.h"
 #include "core/inspector/InspectorHeapProfilerAgent.h"
 #include "core/inspector/InspectorInputAgent.h"
 #include "core/inspector/InspectorInspectorAgent.h"
-#include "core/inspector/InspectorInstrumentation.h"
 #include "core/inspector/InspectorLayerTreeAgent.h"
 #include "core/inspector/InspectorMemoryAgent.h"
 #include "core/inspector/InspectorOverlay.h"
@@ -60,16 +58,22 @@
 #include "core/inspector/InspectorTimelineAgent.h"
 #include "core/inspector/InspectorTracingAgent.h"
 #include "core/inspector/InspectorWorkerAgent.h"
-#include "core/inspector/InstrumentingAgents.h"
 #include "core/inspector/PageConsoleAgent.h"
 #include "core/inspector/PageDebuggerAgent.h"
 #include "core/inspector/PageRuntimeAgent.h"
+#endif
+#include "core/inspector/InspectorClient.h"
+#include "core/inspector/InspectorFrontendClient.h"
+#include "core/inspector/InspectorInstrumentation.h"
+#include "core/inspector/InstrumentingAgents.h"
 #include "core/page/ContextMenuProvider.h"
 #include "core/page/Page.h"
 #include "core/rendering/RenderLayer.h"
 #include "platform/PlatformMouseEvent.h"
 
 namespace blink {
+
+#if ENABLE(INSPECTOR)
 
 InspectorController::InspectorController(Page* page, InspectorClient* inspectorClient)
     : m_instrumentingAgents(InstrumentingAgents::create())
@@ -522,5 +526,64 @@ void InspectorController::didRemovePageOverlay(const GraphicsLayer* layer)
     if (m_layerTreeAgent)
         m_layerTreeAgent->didRemovePageOverlay(layer);
 }
+
+#else
+
+InspectorController::InspectorController(Page* page, InspectorClient* inspectorClient)
+    : m_isUnderTest(false)
+    , m_deferredAgentsInitialized(false)
+{
+}
+
+InspectorController::~InspectorController() {}
+
+void InspectorController::trace(Visitor* visitor) {}
+PassOwnPtrWillBeRawPtr<InspectorController> InspectorController::create(Page* page, InspectorClient* client) { return adoptPtrWillBeNoop(new InspectorController(page, client)); }
+
+void InspectorController::setTextAutosizingEnabled(bool enabled) {}
+void InspectorController::setDeviceScaleAdjustment(float deviceScaleAdjustment) {}
+void InspectorController::setPreferCompositingToLCDTextEnabled(bool enabled) {}
+void InspectorController::initializeDeferredAgents() {}
+void InspectorController::willBeDestroyed() {}
+
+void InspectorController::setInspectorFrontendClient(InspectorFrontendClient* inspectorFrontendClient) {}
+void InspectorController::didClearDocumentOfWindowObject(LocalFrame* frame) {}
+void InspectorController::connectFrontend(const String& hostId, InspectorFrontendChannel* frontendChannel) {}
+void InspectorController::disconnectFrontend() {}
+void InspectorController::reconnectFrontend() {}
+void InspectorController::reuseFrontend(const String& hostId, InspectorFrontendChannel* frontendChannel, const String& inspectorStateCookie) {}
+void InspectorController::setProcessId(long processId) {}
+void InspectorController::setLayerTreeId(int id) {}
+bool InspectorController::isUnderTest() { return m_isUnderTest; }
+void InspectorController::evaluateForTestInFrontend(long callId, const String& script) {}
+void InspectorController::drawHighlight(GraphicsContext& context) const {}
+void InspectorController::inspect(Node* node) {}
+void InspectorController::setInjectedScriptForOrigin(const String& origin, const String& source) {}
+void InspectorController::showContextMenu(float x, float y, PassRefPtr<ContextMenuProvider> menuProvider) {}
+void InspectorController::dispatchMessageFromFrontend(const String& message) {}
+bool InspectorController::handleGestureEvent(LocalFrame* frame, const PlatformGestureEvent& event) { return false; }
+bool InspectorController::handleMouseEvent(LocalFrame* frame, const PlatformMouseEvent& event) { return false; }
+bool InspectorController::handleTouchEvent(LocalFrame* frame, const PlatformTouchEvent& event) { return false; }
+bool InspectorController::handleKeyboardEvent(LocalFrame* frame, const PlatformKeyboardEvent& event) { return false; }
+void InspectorController::deviceOrPageScaleFactorChanged() {}
+bool InspectorController::deviceEmulationEnabled() { return false; }
+bool InspectorController::screencastEnabled() { return false; }
+void InspectorController::resume() {}
+void InspectorController::setResourcesDataSizeLimitsFromInternals(int maximumResourcesContentSize, int maximumSingleResourceContentSize) {}
+void InspectorController::willProcessTask() {}
+void InspectorController::didProcessTask() {}
+void InspectorController::flushPendingFrontendMessages() {}
+
+void InspectorController::didCommitLoadForMainFrame() {}
+void InspectorController::didBeginFrame(int frameId) {}
+void InspectorController::didCancelFrame() {}
+void InspectorController::willComposite() {}
+void InspectorController::didComposite() {}
+void InspectorController::processGPUEvent(double timestamp, int phase, bool foreign, uint64_t usedGPUMemoryBytes, uint64_t limitGPUMemoryBytes) {}
+void InspectorController::scriptsEnabled(bool  enabled) {}
+void InspectorController::willAddPageOverlay(const GraphicsLayer* layer) {}
+void InspectorController::didRemovePageOverlay(const GraphicsLayer* layer) {}
+
+#endif // ENABLE(INSPECTOR)
 
 } // namespace blink

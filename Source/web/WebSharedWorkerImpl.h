@@ -58,7 +58,9 @@ class WebURL;
 class WebView;
 class WebWorker;
 class WebSharedWorkerClient;
+#if ENABLE(INSPECTOR)
 class WorkerInspectorProxy;
+#endif
 
 // This class is used by the worker process code to talk to the SharedWorker implementation.
 // It can't use it directly since it uses WebKit types, so this class converts the data types.
@@ -140,7 +142,9 @@ private:
     WebFrame* m_mainFrame;
     bool m_askedToTerminate;
 
+#if ENABLE(INSPECTOR)
     OwnPtr<WorkerInspectorProxy> m_workerInspectorProxy;
+#endif
 
     RefPtr<WorkerThread> m_workerThread;
 

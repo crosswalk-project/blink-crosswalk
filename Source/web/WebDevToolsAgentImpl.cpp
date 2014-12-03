@@ -31,6 +31,7 @@
 #include "config.h"
 #include "web/WebDevToolsAgentImpl.h"
 
+#if ENABLE(INSPECTOR)
 #include "bindings/core/v8/PageScriptDebugServer.h"
 #include "bindings/core/v8/ScriptController.h"
 #include "bindings/core/v8/V8Binding.h"
@@ -74,6 +75,7 @@
 #include "wtf/Noncopyable.h"
 #include "wtf/ProcessID.h"
 #include "wtf/text/WTFString.h"
+#endif // ENABLE(INSPECTOR)
 
 namespace OverlayZOrders {
 // Use 99 as a big z-order number so that highlight is above other overlays.
@@ -82,6 +84,7 @@ static const int highlight = 99;
 
 namespace blink {
 
+#if ENABLE(INSPECTOR)
 static int s_nextDebuggerId = 1;
 
 class ClientMessageLoopAdapter : public PageScriptDebugServer::ClientMessageLoop {
@@ -655,5 +658,104 @@ void WebDevToolsAgent::processPendingMessages()
 {
     PageScriptDebugServer::shared().runPendingTasks();
 }
+
+#else
+
+WebDevToolsAgentImpl::WebDevToolsAgentImpl(WebViewImpl* webViewImpl, WebDevToolsAgentClient* client) {}
+
+WebDevToolsAgentImpl::~WebDevToolsAgentImpl() {}
+
+void WebDevToolsAgentImpl::attach(const WebString& hostId) {}
+
+void WebDevToolsAgentImpl::reattach(const WebString& hostId, const WebString& savedState) {}
+
+void WebDevToolsAgentImpl::detach() {}
+
+void WebDevToolsAgentImpl::continueProgram() {}
+
+void WebDevToolsAgentImpl::didBeginFrame(int frameId) {}
+
+void WebDevToolsAgentImpl::didCancelFrame() {}
+
+void WebDevToolsAgentImpl::willComposite() {}
+
+void WebDevToolsAgentImpl::didComposite() {}
+
+void WebDevToolsAgentImpl::didCreateScriptContext(WebLocalFrameImpl* webframe, int worldId) {}
+
+bool WebDevToolsAgentImpl::handleInputEvent(Page* page, const WebInputEvent& inputEvent) { return false; }
+
+void WebDevToolsAgentImpl::didLayout() {}
+
+void WebDevToolsAgentImpl::setDeviceMetricsOverride(int width, int height, float deviceScaleFactor, bool mobile, bool fitWindow, float scale, float offsetX, float offsetY) {}
+
+void WebDevToolsAgentImpl::clearDeviceMetricsOverride() {}
+
+void WebDevToolsAgentImpl::setTouchEventEmulationEnabled(bool enabled) {}
+
+void WebDevToolsAgentImpl::enableMobileEmulation() {}
+
+void WebDevToolsAgentImpl::disableMobileEmulation() {}
+
+void WebDevToolsAgentImpl::updatePageScaleFactorLimits() {}
+
+void WebDevToolsAgentImpl::setTraceEventCallback(const String& categoryFilter, TraceEventCallback callback) {}
+
+void WebDevToolsAgentImpl::resetTraceEventCallback() {}
+
+void WebDevToolsAgentImpl::enableTracing(const String& categoryFilter) {}
+
+void WebDevToolsAgentImpl::disableTracing() {}
+
+void WebDevToolsAgentImpl::startGPUEventsRecording() {}
+
+void WebDevToolsAgentImpl::stopGPUEventsRecording() {}
+
+void WebDevToolsAgentImpl::processGPUEvent(const GPUEvent& event) {}
+
+void WebDevToolsAgentImpl::dispatchKeyEvent(const PlatformKeyboardEvent& event) {}
+
+void WebDevToolsAgentImpl::dispatchMouseEvent(const PlatformMouseEvent& event) {}
+
+void WebDevToolsAgentImpl::dispatchOnInspectorBackend(const WebString& message) {}
+
+void WebDevToolsAgentImpl::inspectElementAt(const WebPoint& point) {}
+
+InspectorController* WebDevToolsAgentImpl::inspectorController() { return 0; }
+
+LocalFrame* WebDevToolsAgentImpl::mainFrame() { return 0; }
+
+// WebPageOverlay
+void WebDevToolsAgentImpl::paintPageOverlay(WebCanvas* canvas) {}
+
+void WebDevToolsAgentImpl::highlight() {}
+
+void WebDevToolsAgentImpl::hideHighlight() {}
+
+void WebDevToolsAgentImpl::sendMessageToFrontend(PassRefPtr<JSONObject> message) {}
+
+void WebDevToolsAgentImpl::flush() {}
+
+void WebDevToolsAgentImpl::updateInspectorStateCookie(const String& state) {}
+
+void WebDevToolsAgentImpl::resumeStartup() {}
+
+void WebDevToolsAgentImpl::setLayerTreeId(int layerTreeId) {}
+
+void WebDevToolsAgentImpl::evaluateInWebInspector(long callId, const WebString& script) {}
+
+void WebDevToolsAgentImpl::flushPendingFrontendMessages() {}
+
+void WebDevToolsAgentImpl::willProcessTask() {}
+
+void WebDevToolsAgentImpl::didProcessTask() {}
+
+void WebDevToolsAgent::interruptAndDispatch(MessageDescriptor* rawDescriptor) {}
+
+bool WebDevToolsAgent::shouldInterruptForMessage(const WebString& message) { return false; }
+
+void WebDevToolsAgent::processPendingMessages() {}
+
+#endif // ENABLE(INSPECTOR)
 
 } // namespace blink

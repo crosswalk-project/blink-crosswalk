@@ -31,7 +31,9 @@
 #ifndef ScriptProfile_h
 #define ScriptProfile_h
 
+#if ENABLE(INSPECTOR)
 #include "core/InspectorTypeBuilder.h"
+#endif
 #include "platform/heap/Handle.h"
 #include "wtf/RefCounted.h"
 #include "wtf/text/WTFString.h"
@@ -54,9 +56,11 @@ public:
     double startTime() const;
     double endTime() const;
 
+#if ENABLE(INSPECTOR)
     PassRefPtr<TypeBuilder::Profiler::CPUProfileNode> buildInspectorObjectForHead() const;
     PassRefPtr<TypeBuilder::Array<int> > buildInspectorObjectForSamples() const;
     PassRefPtr<TypeBuilder::Array<double> > buildInspectorObjectForTimestamps() const;
+#endif
 
 private:
     ScriptProfile(v8::CpuProfile* profile, double idleTime)

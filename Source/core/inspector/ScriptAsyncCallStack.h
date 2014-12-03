@@ -5,7 +5,9 @@
 #ifndef ScriptAsyncCallStack_h
 #define ScriptAsyncCallStack_h
 
+#if ENABLE(INSPECTOR)
 #include "core/InspectorTypeBuilder.h"
+#endif
 #include "core/inspector/ScriptCallStack.h"
 #include "platform/heap/Handle.h"
 #include "wtf/Forward.h"
@@ -18,7 +20,9 @@ class ScriptAsyncCallStack : public RefCountedWillBeGarbageCollectedFinalized<Sc
 public:
     static PassRefPtrWillBeRawPtr<ScriptAsyncCallStack> create(const String&, PassRefPtrWillBeRawPtr<ScriptCallStack>, PassRefPtrWillBeRawPtr<ScriptAsyncCallStack>);
 
+#if ENABLE(INSPECTOR)
     PassRefPtr<TypeBuilder::Console::AsyncStackTrace> buildInspectorObject() const;
+#endif
 
     void trace(Visitor*);
 

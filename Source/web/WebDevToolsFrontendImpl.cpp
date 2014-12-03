@@ -31,6 +31,7 @@
 #include "config.h"
 #include "web/WebDevToolsFrontendImpl.h"
 
+#if ENABLE(INSPECTOR)
 #include "bindings/core/v8/ScriptController.h"
 #include "bindings/core/v8/V8InspectorFrontendHost.h"
 #include "core/frame/LocalFrame.h"
@@ -39,6 +40,7 @@
 #include "core/page/Page.h"
 #include "public/platform/WebString.h"
 #include "public/web/WebDevToolsFrontendClient.h"
+#endif
 #include "web/WebViewImpl.h"
 
 namespace blink {
@@ -50,6 +52,8 @@ WebDevToolsFrontend* WebDevToolsFrontend::create(
 {
     return new WebDevToolsFrontendImpl(toWebViewImpl(view), client);
 }
+
+#if ENABLE(INSPECTOR)
 
 WebDevToolsFrontendImpl::WebDevToolsFrontendImpl(
     WebViewImpl* webViewImpl,
@@ -180,5 +184,23 @@ bool WebDevToolsFrontendImpl::isUnderTest()
 {
     return m_client ? m_client->isUnderTest() : false;
 }
+
+#else
+
+WebDevToolsFrontendImpl::WebDevToolsFrontendImpl(WebViewImpl* webViewImpl, WebDevToolsFrontendClient* client) {}
+
+WebDevToolsFrontendImpl::~WebDevToolsFrontendImpl() {}
+
+void WebDevToolsFrontendImpl::dispose() {}
+
+void WebDevToolsFrontendImpl::windowObjectCleared() {}
+
+void WebDevToolsFrontendImpl::sendMessageToBackend(const String& message) {}
+
+void WebDevToolsFrontendImpl::sendMessageToEmbedder(const String& message) {}
+
+bool WebDevToolsFrontendImpl::isUnderTest() { return false; }
+
+#endif // ENABLE(INSPECTOR)
 
 } // namespace blink
