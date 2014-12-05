@@ -39,7 +39,6 @@
 
 namespace blink {
 
-class DisplayList;
 class Node;
 class RenderLayer;
 class RenderObject;
@@ -86,7 +85,6 @@ private:
     OwnPtr<WebContentLayer> m_contentLayer;
     OwnPtr<WebLayer> m_clipLayer;
     Path m_path;
-    RefPtr<DisplayList> m_displayList;
 
     RefPtrWillBePersistent<Node> m_node;
     WebViewImpl* m_owningWebViewImpl;
