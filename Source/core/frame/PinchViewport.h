@@ -116,6 +116,11 @@ public:
     // The viewport rect relative to the document origin, in partial CSS pixels.
     FloatRect visibleRectInDocument() const;
 
+    // Convert the given rect in the main FrameView's coordinates into a rect
+    // in the viewport. The given and returned rects are in CSS pixels, meaning
+    // scale isn't applied.
+    FloatRect mainViewToViewportCSSPixels(const FloatRect&) const;
+
     // Scroll the main frame and pinch viewport so that the given rect in the
     // top-level document is centered in the viewport. This method will avoid
     // scrolling the pinch viewport unless necessary.
