@@ -114,6 +114,7 @@ public:
     FloatRect visibleRect() const;
 
     // The viewport rect relative to the document origin, in partial CSS pixels.
+    // FIXME: This should be a DoubleRect since scroll offsets are now doubles.
     FloatRect visibleRectInDocument() const;
 
     // Convert the given rect in the main FrameView's coordinates into a rect
