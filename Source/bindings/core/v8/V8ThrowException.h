@@ -58,6 +58,7 @@ public:
     static v8::Handle<v8::Value> throwSyntaxError(v8::Isolate*, const String&);
     static v8::Handle<v8::Value> createReferenceError(v8::Isolate*, const String&);
     static v8::Handle<v8::Value> throwReferenceError(v8::Isolate*, const String&);
+    static v8::Handle<v8::Value> createWebCLException(int, const String&, const String&, const v8::Handle<v8::Object>&, v8::Isolate*);
 };
 
 } // namespace blink
