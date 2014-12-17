@@ -65,6 +65,17 @@ void ExceptionState::throwDOMException(const ExceptionCode& ec, const String& me
     setException(V8ThrowException::createDOMException(m_isolate, ec, processedMessage, m_creationContext));
 }
 
+void ExceptionState::throwWebCLException(const ExceptionCode& ec, const String& message)
+{
+    ASSERT(ec);
+    ASSERT(m_isolate);
+
+    m_code = ec;
+    m_message = message;
+    String finalMessage = addExceptionContext("WEBCL_IMPL_" + message);
+    setException(V8ThrowException::createWebCLException(ec, message, finalMessage, m_creationContext, m_isolate));
+}
+
 void ExceptionState::throwSecurityError(const String& sanitizedMessage, const String& unsanitizedMessage)
 {
     ASSERT(m_isolate);

@@ -28,8 +28,10 @@
 #include "bindings/core/v8/BindingSecurity.h"
 #include "bindings/core/v8/V8Binding.h"
 #include "bindings/core/v8/V8DOMException.h"
+#include "bindings/modules/v8/V8WebCLException.h"
 #include "core/dom/DOMException.h"
 #include "core/dom/ExceptionCode.h"
+#include "modules/webcl/WebCLException.h"
 
 namespace blink {
 
@@ -163,4 +165,20 @@ v8::Handle<v8::Value> V8ThrowException::throwException(v8::Handle<v8::Value> exc
     return v8::Undefined(isolate);
 }
 
+v8::Handle<v8::Value> V8ThrowException::createWebCLException(int ec, const String& name, const String& message, const v8::Handle<v8::Object>& creationContext, v8::Isolate* isolate)
+{
+    if (ec <= 0 || v8::V8::IsExecutionTerminating())
+        return v8Undefined();
+
+    if (ec == V8TypeError)
+        return V8ThrowException::createTypeError(isolate, message);
+
+    RefPtr<WebCLException> webclException = WebCLException::create(ec, name, message);
+    v8::Handle<v8::Value> exception = toV8(webclException, creationContext, isolate);
+
+    if (exception.IsEmpty())
+        return v8Undefined();
+
+    return exception;
+}
 } // namespace blink
