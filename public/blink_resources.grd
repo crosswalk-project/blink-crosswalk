@@ -9,7 +9,9 @@
   </outputs>
   <release seq="1">
     <includes>
-      <include name="IDR_UASTYLE_HTML_CSS" file="../Source/core/css/html.css" type="BINDATA"/>
+      <if expr="not pp_ifdef('use_minimum_resources')">
+        <include name="IDR_UASTYLE_HTML_CSS" file="../Source/core/css/html.css" type="BINDATA"/>
+      </if>
       <include name="IDR_UASTYLE_QUIRKS_CSS" file="../Source/core/css/quirks.css" type="BINDATA"/>
       <include name="IDR_UASTYLE_VIEW_SOURCE_CSS" file="../Source/core/css/view-source.css" type="BINDATA"/>
       <include name="IDR_UASTYLE_THEME_CHROMIUM_CSS" file="../Source/core/css/themeChromium.css" type="BINDATA"/>
