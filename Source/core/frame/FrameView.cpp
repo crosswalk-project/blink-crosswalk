@@ -3033,6 +3033,10 @@ void FrameView::willRemoveScrollbar(Scrollbar* scrollbar, ScrollbarOrientation o
 
 void FrameView::setTopControlsViewportAdjustment(float adjustment)
 {
+#if !OS(ANDROID)
+    // The adjustment is done only for top controls which are android only.
+    ASSERT(!adjustment);
+#endif
     m_topControlsViewportAdjustment = adjustment;
 }
 
