@@ -136,10 +136,10 @@ private:
     InspectorController* inspectorController();
     LocalFrame* mainFrame();
 
-    WebDevToolsAgentClient* m_client;
 #if ENABLE(INSPECTOR)
     int m_debuggerId;
     int m_layerTreeId;
+    WebDevToolsAgentClient* m_client;
     WebViewImpl* m_webViewImpl;
     bool m_attached;
     bool m_generatingEvent;
@@ -161,6 +161,8 @@ private:
 
     typedef Vector<RefPtr<JSONObject> > FrontendMessageQueue;
     FrontendMessageQueue m_frontendMessageQueue;
+#else
+    WebDevToolsAgentClient* m_client;
 #endif // ENABLE(INSPECTOR)
 };
 

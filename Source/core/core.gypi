@@ -5,6 +5,12 @@
     'variables': {
         # Files for which bindings (.cpp and .h files) will be generated
         'core_idl_files': [
+            # Bring the following four lines back when tring to enable inspector.
+            # 'inspector/InjectedScriptHost.idl',
+            # 'inspector/InspectorFrontendHost.idl',
+            # 'inspector/InspectorOverlayHost.idl',
+            # 'inspector/JavaScriptCallFrame.idl',
+
             'animation/Animation.idl',
             'animation/AnimationEffect.idl',
             'animation/AnimationPlayer.idl',
