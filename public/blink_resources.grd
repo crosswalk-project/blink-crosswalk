@@ -9,7 +9,9 @@
   </outputs>
   <release seq="1">
     <includes>
-      <include name="IDR_UASTYLE_HTML_CSS" file="../Source/core/css/html.css" type="BINDATA"/>
+      <if expr="not pp_ifdef('use_minimum_resources')">
+        <include name="IDR_UASTYLE_HTML_CSS" file="../Source/core/css/html.css" type="BINDATA"/>
+      </if>
       <include name="IDR_UASTYLE_QUIRKS_CSS" file="../Source/core/css/quirks.css" type="BINDATA"/>
       <include name="IDR_UASTYLE_VIEW_SOURCE_CSS" file="../Source/core/css/view-source.css" type="BINDATA"/>
       <include name="IDR_UASTYLE_THEME_CHROMIUM_CSS" file="../Source/core/css/themeChromium.css" type="BINDATA"/>
@@ -55,10 +57,10 @@
         <include name="IDR_COLOR_SUGGESTION_PICKER_CSS" file="../Source/web/resources/colorSuggestionPicker.css" type="BINDATA"/>
         <include name="IDR_COLOR_SUGGESTION_PICKER_JS" file="../Source/web/resources/colorSuggestionPicker.js" type="BINDATA"/>
       </if>
-      <if expr="pp_ifdef('use_concatenated_impulse_responses')">
+      <if expr="pp_ifdef('use_concatenated_impulse_responses') and not pp_ifdef('disable_webaudio_hrtf')">
         <include name="IDR_AUDIO_SPATIALIZATION_COMPOSITE" file="../Source/platform/audio/resources/Composite.wav" type="BINDATA"/>
       </if>
-      <if expr="not pp_ifdef('use_concatenated_impulse_responses')">
+      <if expr="not pp_ifdef('use_concatenated_impulse_responses') and not pp_ifdef('disable_webaudio_hrtf')">
         <include name="IDR_AUDIO_SPATIALIZATION_T000_P000" file="..\Source\platform\audio\resources\IRC_Composite_C_R0195_T000_P000.wav" type="BINDATA"/>
         <include name="IDR_AUDIO_SPATIALIZATION_T000_P015" file="..\Source\platform\audio\resources\IRC_Composite_C_R0195_T000_P015.wav" type="BINDATA"/>
         <include name="IDR_AUDIO_SPATIALIZATION_T000_P030" file="..\Source\platform\audio\resources\IRC_Composite_C_R0195_T000_P030.wav" type="BINDATA"/>
