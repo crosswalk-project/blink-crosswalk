@@ -78,7 +78,6 @@ class WaveShaperNode;
 
 class AudioContext : public RefCountedGarbageCollectedEventTargetWithInlineData<AudioContext>, public ActiveDOMObject {
     DEFINE_EVENT_TARGET_REFCOUNTING_WILL_BE_REMOVED(RefCountedGarbageCollected<AudioContext>);
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(AudioContext);
     DEFINE_WRAPPERTYPEINFO();
 public:
     // The state of an audio context.  On creation, the state is Suspended. The state is Running if

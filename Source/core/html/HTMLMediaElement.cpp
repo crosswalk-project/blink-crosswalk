@@ -4054,7 +4054,6 @@ void HTMLMediaElement::trace(Visitor* visitor)
     HeapSupplementable<HTMLMediaElement>::trace(visitor);
 #endif
     HTMLElement::trace(visitor);
-    ActiveDOMObject::trace(visitor);
 }
 
 void HTMLMediaElement::createPlaceholderTracksIfNecessary()

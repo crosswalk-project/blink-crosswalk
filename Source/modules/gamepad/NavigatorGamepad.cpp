@@ -112,7 +112,6 @@ void NavigatorGamepad::trace(Visitor* visitor)
     WillBeHeapSupplement<Navigator>::trace(visitor);
     DOMWindowProperty::trace(visitor);
     PlatformEventController::trace(visitor);
-    DOMWindowLifecycleObserver::trace(visitor);
 }
 
 void NavigatorGamepad::didUpdateData()

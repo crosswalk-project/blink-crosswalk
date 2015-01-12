@@ -41,14 +41,13 @@ class SecurityOrigin;
 class DatabaseContext final
     : public GarbageCollectedFinalized<DatabaseContext>
     , public ActiveDOMObject {
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(DatabaseContext);
 public:
     friend class DatabaseManager;
 
     static DatabaseContext* create(ExecutionContext*);
 
     virtual ~DatabaseContext();
-    virtual void trace(Visitor*) override;
+    void trace(Visitor*);
 
     // For life-cycle management (inherited from ActiveDOMObject):
     virtual void contextDestroyed() override;

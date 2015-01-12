@@ -43,7 +43,6 @@ class MediaQuerySet;
 class MediaQueryList final : public EventTargetWithInlineData, public RefCountedWillBeNoBase<MediaQueryList>, public ActiveDOMObject {
     DEFINE_EVENT_TARGET_REFCOUNTING_WILL_BE_REMOVED(RefCounted<MediaQueryList>);
     DEFINE_WRAPPERTYPEINFO();
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(MediaQueryList);
 public:
     static PassRefPtrWillBeRawPtr<MediaQueryList> create(ExecutionContext*, PassRefPtrWillBeRawPtr<MediaQueryMatcher>, PassRefPtrWillBeRawPtr<MediaQuerySet>);
     virtual ~MediaQueryList();
@@ -65,7 +64,7 @@ public:
     // Will return true if a DOM event should be scheduled.
     bool mediaFeaturesChanged(WillBeHeapVector<RefPtrWillBeMember<MediaQueryListListener> >* listenersToNotify);
 
-    virtual void trace(Visitor*) override;
+    void trace(Visitor*);
 
     // From ActiveDOMObject
     virtual bool hasPendingActivity() const override;

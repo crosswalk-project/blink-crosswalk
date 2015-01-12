@@ -48,7 +48,6 @@ class ExecutionContext;
 
 class AbstractWorker : public EventTargetWithInlineData, public RefCountedWillBeNoBase<AbstractWorker>, public ActiveDOMObject {
     REFCOUNTED_EVENT_TARGET(AbstractWorker);
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(AbstractWorker);
 public:
     // EventTarget APIs
     virtual ExecutionContext* executionContext() const override final { return ActiveDOMObject::executionContext(); }
@@ -58,7 +57,10 @@ public:
     AbstractWorker(ExecutionContext*);
     virtual ~AbstractWorker();
 
-    virtual void trace(Visitor*) override;
+    virtual void trace(Visitor* visitor)
+    {
+        EventTargetWithInlineData::trace(visitor);
+    }
 
 protected:
     // Helper function that converts a URL to an absolute URL and checks the result for validity.

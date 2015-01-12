@@ -173,10 +173,4 @@ void DOMFileSystem::createFile(const FileEntry* fileEntry, FileCallback* success
     fileSystem()->createSnapshotFileAndReadMetadata(fileSystemURL, SnapshotFileCallback::create(this, fileEntry->name(), fileSystemURL, successCallback, errorCallback, m_context));
 }
 
-void DOMFileSystem::trace(Visitor* visitor)
-{
-    DOMFileSystemBase::trace(visitor);
-    ActiveDOMObject::trace(visitor);
-}
-
 } // namespace blink

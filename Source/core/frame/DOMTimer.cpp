@@ -215,9 +215,4 @@ double DOMTimer::alignedFireTime(double fireTime) const
     return fireTime;
 }
 
-void DOMTimer::trace(Visitor* visitor)
-{
-    SuspendableTimer::trace(visitor);
-}
-
 } // namespace blink

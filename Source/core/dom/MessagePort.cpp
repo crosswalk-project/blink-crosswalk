@@ -262,7 +262,6 @@ PassOwnPtrWillBeRawPtr<MessagePortArray> MessagePort::entanglePorts(ExecutionCon
 
 void MessagePort::trace(Visitor* visitor)
 {
-    ActiveDOMObject::trace(visitor);
     EventTargetWithInlineData::trace(visitor);
 }
 

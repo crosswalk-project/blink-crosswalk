@@ -179,7 +179,6 @@ void MIDIAccess::trace(Visitor* visitor)
     visitor->trace(m_inputs);
     visitor->trace(m_outputs);
     RefCountedGarbageCollectedEventTargetWithInlineData<MIDIAccess>::trace(visitor);
-    ActiveDOMObject::trace(visitor);
 }
 
 } // namespace blink

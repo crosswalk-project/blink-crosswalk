@@ -58,7 +58,7 @@ public:
 
     VibrationPattern pattern() const { return m_pattern; }
 
-    virtual void trace(Visitor*) override;
+    virtual void trace(Visitor* visitor) override { WillBeHeapSupplement<Page>::trace(visitor); }
 
 private:
     explicit NavigatorVibration(Page&);

@@ -90,7 +90,6 @@ void RTCStatsRequestImpl::trace(Visitor* visitor)
     visitor->trace(m_successCallback);
     visitor->trace(m_requester);
     RTCStatsRequest::trace(visitor);
-    ActiveDOMObject::trace(visitor);
 }
 
 } // namespace blink

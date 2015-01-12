@@ -20,7 +20,6 @@ class ScriptValue;
 // and notified the client of the result. Created for each instance of
 // CrossOriginConnectEvent.
 class AcceptConnectionObserver final : public GarbageCollectedFinalized<AcceptConnectionObserver>, public ContextLifecycleObserver {
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(AcceptConnectionObserver);
 public:
     static AcceptConnectionObserver* create(ExecutionContext*, int eventID);
 
@@ -37,7 +36,7 @@ public:
     void connectionWasRejected();
     void connectionWasAccepted(const ScriptValue&);
 
-    virtual void trace(Visitor*) override;
+    virtual void trace(Visitor*) { }
 
 private:
     class ThenFunction;

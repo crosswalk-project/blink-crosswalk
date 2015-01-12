@@ -190,9 +190,4 @@ v8::Handle<v8::String> ScriptPromisePropertyBase::resolverName()
     return v8::Handle<v8::String>();
 }
 
-void ScriptPromisePropertyBase::trace(Visitor* visitor)
-{
-    ContextLifecycleObserver::trace(visitor);
-}
-
 } // namespace blink

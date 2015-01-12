@@ -34,18 +34,13 @@
 
 namespace blink {
 
-class DOMWindowEventQueueTimer final : public NoBaseWillBeGarbageCollectedFinalized<DOMWindowEventQueueTimer>, public SuspendableTimer {
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(DOMWindowEventQueueTimer);
+class DOMWindowEventQueueTimer : public NoBaseWillBeGarbageCollectedFinalized<DOMWindowEventQueueTimer>, public SuspendableTimer {
     WTF_MAKE_NONCOPYABLE(DOMWindowEventQueueTimer);
 public:
     DOMWindowEventQueueTimer(DOMWindowEventQueue* eventQueue, ExecutionContext* context)
         : SuspendableTimer(context)
         , m_eventQueue(eventQueue) { }
-    virtual void trace(Visitor* visitor) override
-    {
-        visitor->trace(m_eventQueue);
-        SuspendableTimer::trace(visitor);
-    }
+    void trace(Visitor* visitor) { visitor->trace(m_eventQueue); }
 
 private:
     virtual void fired() { m_eventQueue->pendingEventTimerFired(); }

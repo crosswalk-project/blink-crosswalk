@@ -25,7 +25,6 @@ class UnderlyingSource;
 
 class ReadableStream : public GarbageCollectedFinalized<ReadableStream>, public ScriptWrappable, public ActiveDOMObject {
     DEFINE_WRAPPERTYPEINFO();
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(ReadableStream);
 public:
     enum State {
         Readable,
@@ -57,7 +56,7 @@ public:
     void didSourceStart();
 
     bool hasPendingActivity() const override;
-    virtual void trace(Visitor*) override;
+    virtual void trace(Visitor*);
 
 protected:
     bool enqueuePreliminaryCheck();

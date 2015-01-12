@@ -139,7 +139,6 @@ void MediaQueryList::trace(Visitor* visitor)
     visitor->trace(m_listeners);
 #endif
     EventTargetWithInlineData::trace(visitor);
-    ActiveDOMObject::trace(visitor);
 }
 
 const AtomicString& MediaQueryList::interfaceName() const

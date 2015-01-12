@@ -1805,7 +1805,6 @@ void XMLHttpRequest::trace(Visitor* visitor)
     visitor->trace(m_blobLoader);
     XMLHttpRequestEventTarget::trace(visitor);
     DocumentParserClient::trace(visitor);
-    ActiveDOMObject::trace(visitor);
 }
 
 } // namespace blink

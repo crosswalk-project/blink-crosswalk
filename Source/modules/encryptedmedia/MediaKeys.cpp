@@ -193,7 +193,6 @@ WebContentDecryptionModule* MediaKeys::contentDecryptionModule()
 void MediaKeys::trace(Visitor* visitor)
 {
     visitor->trace(m_pendingActions);
-    ContextLifecycleObserver::trace(visitor);
 }
 
 void MediaKeys::contextDestroyed()

@@ -29,12 +29,6 @@ V8TestCallbackInterface::~V8TestCallbackInterface()
 {
 }
 
-void V8TestCallbackInterface::trace(Visitor* visitor)
-{
-    TestCallbackInterface::trace(visitor);
-    ActiveDOMCallback::trace(visitor);
-}
-
 void V8TestCallbackInterface::voidMethod()
 {
     if (!canInvokeCallback())

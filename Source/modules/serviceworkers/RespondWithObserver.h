@@ -19,7 +19,6 @@ class ScriptValue;
 // This class observes the service worker's handling of a FetchEvent and
 // notifies the client.
 class RespondWithObserver final : public GarbageCollectedFinalized<RespondWithObserver>, public ContextLifecycleObserver {
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(RespondWithObserver);
 public:
     static RespondWithObserver* create(ExecutionContext*, int eventID, WebURLRequest::FetchRequestMode, WebURLRequest::FrameType);
 
@@ -34,7 +33,7 @@ public:
     void responseWasRejected();
     void responseWasFulfilled(const ScriptValue&);
 
-    virtual void trace(Visitor*) override;
+    void trace(Visitor*) { }
 
 private:
     class ThenFunction;

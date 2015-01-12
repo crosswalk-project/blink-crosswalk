@@ -173,10 +173,4 @@ const char* NavigatorVibration::supplementName()
     return "NavigatorVibration";
 }
 
-void NavigatorVibration::trace(Visitor* visitor)
-{
-    WillBeHeapSupplement<Page>::trace(visitor);
-    PageLifecycleObserver::trace(visitor);
-}
-
 } // namespace blink

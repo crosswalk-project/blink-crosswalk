@@ -45,7 +45,6 @@ class WebContentDecryptionModule;
 // References are held by JS and HTMLMediaElement.
 // The WebContentDecryptionModule has the same lifetime as this object.
 class MediaKeys : public GarbageCollectedFinalized<MediaKeys>, public ContextLifecycleObserver, public ScriptWrappable {
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(MediaKeys);
     DEFINE_WRAPPERTYPEINFO();
 public:
     MediaKeys(ExecutionContext*, const String& keySystem, PassOwnPtr<WebContentDecryptionModule>);
@@ -61,7 +60,7 @@ public:
 
     blink::WebContentDecryptionModule* contentDecryptionModule();
 
-    virtual void trace(Visitor*) override;
+    void trace(Visitor*);
 
     // ContextLifecycleObserver
     virtual void contextDestroyed() override;

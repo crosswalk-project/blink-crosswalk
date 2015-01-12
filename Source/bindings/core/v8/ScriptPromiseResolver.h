@@ -26,7 +26,6 @@ namespace blink {
 //    resolve or reject will be delayed. When it is stopped, resolve or reject
 //    will be ignored.
 class ScriptPromiseResolver : public RefCountedWillBeRefCountedGarbageCollected<ScriptPromiseResolver>, public ActiveDOMObject {
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(ScriptPromiseResolver);
     WTF_MAKE_NONCOPYABLE(ScriptPromiseResolver);
 public:
     static PassRefPtrWillBeRawPtr<ScriptPromiseResolver> create(ScriptState* scriptState)
@@ -85,7 +84,7 @@ public:
     // promise is pending and the associated ExecutionContext isn't stopped.
     void keepAliveWhilePending();
 
-    virtual void trace(Visitor*) override;
+    virtual void trace(Visitor*) { }
 
 protected:
     // You need to call suspendIfNeeded after the construction because

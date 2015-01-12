@@ -661,7 +661,6 @@ void DOMWebSocket::trace(Visitor* visitor)
     visitor->trace(m_eventQueue);
     WebSocketChannelClient::trace(visitor);
     RefCountedGarbageCollectedEventTargetWithInlineData<DOMWebSocket>::trace(visitor);
-    ActiveDOMObject::trace(visitor);
 }
 
 } // namespace blink

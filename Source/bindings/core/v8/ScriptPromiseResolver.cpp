@@ -97,9 +97,4 @@ void ScriptPromiseResolver::clear()
     }
 }
 
-void ScriptPromiseResolver::trace(Visitor* visitor)
-{
-    ActiveDOMObject::trace(visitor);
-}
-
 } // namespace blink

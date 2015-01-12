@@ -44,7 +44,6 @@ namespace blink {
 class ExecutionContext;
 
 class Stream final : public RefCountedWillBeGarbageCollectedFinalized<Stream>, public ScriptWrappable, public ActiveDOMObject {
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(Stream);
     DEFINE_WRAPPERTYPEINFO();
 public:
     static PassRefPtrWillBeRawPtr<Stream> create(ExecutionContext* context, const String& mediaType)
@@ -85,7 +84,7 @@ public:
     virtual void resume() override;
     virtual void stop() override;
 
-    virtual void trace(Visitor*) override;
+    void trace(Visitor*) { }
 
 protected:
     Stream(ExecutionContext*, const String& mediaType);

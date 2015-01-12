@@ -169,7 +169,6 @@ void RTCDTMFSender::trace(Visitor* visitor)
     visitor->trace(m_track);
     visitor->trace(m_scheduledEvents);
     RefCountedGarbageCollectedEventTargetWithInlineData<RTCDTMFSender>::trace(visitor);
-    ActiveDOMObject::trace(visitor);
 }
 
 } // namespace blink

@@ -45,7 +45,6 @@ class Prerender;
 class PrerenderClient;
 
 class PrerenderHandle final : public NoBaseWillBeGarbageCollectedFinalized<PrerenderHandle>, public DocumentLifecycleObserver {
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(PrerenderHandle);
     WTF_MAKE_NONCOPYABLE(PrerenderHandle);
 public:
     static PassOwnPtrWillBeRawPtr<PrerenderHandle> create(Document&, PrerenderClient*, const KURL&, unsigned prerenderRelTypes);
@@ -58,7 +57,7 @@ public:
     // From DocumentLifecycleObserver:
     virtual void documentWasDetached() override;
 
-    virtual void trace(Visitor*) override;
+    void trace(Visitor*) { }
 
 private:
     PrerenderHandle(Document&, PassRefPtr<Prerender>);

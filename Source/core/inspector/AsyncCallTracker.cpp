@@ -58,7 +58,6 @@ static const char enqueueMutationRecordName[] = "Mutation";
 namespace blink {
 
 class AsyncCallTracker::ExecutionContextData final : public NoBaseWillBeGarbageCollectedFinalized<ExecutionContextData>, public ContextLifecycleObserver {
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(AsyncCallTracker::ExecutionContextData);
     WTF_MAKE_FAST_ALLOCATED_WILL_BE_REMOVED;
 public:
     ExecutionContextData(AsyncCallTracker* tracker, ExecutionContext* executionContext)
@@ -96,7 +95,7 @@ public:
         return m_circularSequentialId;
     }
 
-    virtual void trace(Visitor* visitor) override
+    void trace(Visitor* visitor)
     {
         visitor->trace(m_tracker);
 #if ENABLE(OILPAN)
@@ -108,7 +107,6 @@ public:
         visitor->trace(m_executionContextTaskCallChains);
         visitor->trace(m_asyncOperationCallChains);
 #endif
-        ContextLifecycleObserver::trace(visitor);
     }
 
     void dispose()

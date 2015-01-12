@@ -163,6 +163,7 @@ void Notification::dispatchShowEvent()
 void Notification::dispatchClickEvent()
 {
     UserGestureIndicator gestureIndicator(DefinitelyProcessingNewUserGesture);
+    ASSERT(executionContext());
     ScopedWindowFocusAllowedIndicator windowFocusAllowed(executionContext());
     dispatchEvent(Event::create(EventTypeNames::click));
 }
@@ -257,7 +258,6 @@ bool Notification::hasPendingActivity() const
 void Notification::trace(Visitor* visitor)
 {
     RefCountedGarbageCollectedEventTargetWithInlineData<Notification>::trace(visitor);
-    ActiveDOMObject::trace(visitor);
 }
 
 } // namespace blink

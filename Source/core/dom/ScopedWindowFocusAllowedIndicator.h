@@ -25,7 +25,6 @@ public:
 
 private:
     class Observer final : public NoBaseWillBeGarbageCollectedFinalized<Observer>, public ContextLifecycleObserver {
-        WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(Observer);
     public:
         explicit Observer(ExecutionContext* executionContext)
             : ContextLifecycleObserver(executionContext)
@@ -40,10 +39,7 @@ private:
                 executionContext()->consumeWindowFocus();
         }
 
-        void trace(Visitor* visitor)
-        {
-            ContextLifecycleObserver::trace(visitor);
-        }
+        void trace(Visitor*) { }
     };
 
     // In Oilpan, destructors are not allowed to touch other on-heap objects.

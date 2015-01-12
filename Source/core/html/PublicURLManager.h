@@ -42,7 +42,6 @@ class URLRegistry;
 class URLRegistrable;
 
 class PublicURLManager final : public NoBaseWillBeGarbageCollectedFinalized<PublicURLManager>, public ActiveDOMObject {
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(PublicURLManager);
     WTF_MAKE_FAST_ALLOCATED_WILL_BE_REMOVED;
 public:
     static PassOwnPtrWillBeRawPtr<PublicURLManager> create(ExecutionContext*);
@@ -54,7 +53,7 @@ public:
     // ActiveDOMObject interface.
     virtual void stop() override;
 
-    virtual void trace(Visitor*) override;
+    void trace(Visitor*) { }
 
 private:
     explicit PublicURLManager(ExecutionContext*);

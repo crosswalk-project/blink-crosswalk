@@ -119,7 +119,6 @@ DatabaseContext::~DatabaseContext()
 void DatabaseContext::trace(Visitor* visitor)
 {
     visitor->trace(m_databaseThread);
-    ActiveDOMObject::trace(visitor);
 }
 
 // This is called if the associated ExecutionContext is destructing while

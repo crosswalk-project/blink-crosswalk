@@ -592,7 +592,6 @@ void DocumentWebSocketChannel::trace(Visitor* visitor)
     visitor->trace(m_blobLoader);
     visitor->trace(m_client);
     WebSocketChannel::trace(visitor);
-    ContextLifecycleObserver::trace(visitor);
 }
 
 } // namespace blink

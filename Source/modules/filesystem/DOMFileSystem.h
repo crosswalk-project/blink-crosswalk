@@ -48,7 +48,6 @@ class FileWriterCallback;
 
 class DOMFileSystem final : public DOMFileSystemBase, public ScriptWrappable, public ActiveDOMObject {
     DEFINE_WRAPPERTYPEINFO();
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(DOMFileSystem);
 public:
     static DOMFileSystem* create(ExecutionContext*, const String& name, FileSystemType, const KURL& rootURL);
 
@@ -105,8 +104,6 @@ public:
     {
         scheduleCallback(executionContext(), callback, callbackArg);
     }
-
-    virtual void trace(Visitor*) override;
 
 private:
     DOMFileSystem(ExecutionContext*, const String& name, FileSystemType, const KURL& rootURL);

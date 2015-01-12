@@ -104,7 +104,6 @@ void Geolocation::trace(Visitor* visitor)
     visitor->trace(m_pendingForPermissionNotifiers);
     visitor->trace(m_lastPosition);
     visitor->trace(m_requestsAwaitingCachedPosition);
-    ActiveDOMObject::trace(visitor);
 }
 
 Document* Geolocation::document() const

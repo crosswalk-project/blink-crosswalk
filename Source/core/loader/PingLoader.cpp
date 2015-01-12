@@ -223,9 +223,4 @@ void PingLoader::didFailLoading(Page* page)
     frame->console().didFailLoading(m_identifier, ResourceError::cancelledError(m_url));
 }
 
-void PingLoader::trace(Visitor* visitor)
-{
-    PageLifecycleObserver::trace(visitor);
-}
-
 }

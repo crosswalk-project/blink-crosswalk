@@ -15,7 +15,6 @@
 namespace blink {
 
 class {{v8_class}} final : public {{cpp_class}}, public ActiveDOMCallback {
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN({{v8_class}});
 public:
     static {{v8_class}}* create(v8::Local<v8::Function> callback, ScriptState* scriptState)
     {
@@ -23,8 +22,6 @@ public:
     }
 
     virtual ~{{v8_class}}();
-
-    virtual void trace(Visitor*) override;
 
 {% for method in methods %}
     virtual {{method.cpp_type}} {{method.name}}({{method.argument_declarations | join(', ')}}) override;

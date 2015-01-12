@@ -146,7 +146,6 @@ void LocalDOMWindow::WindowFrameObserver::willDetachFrameHost()
 }
 
 class PostMessageTimer final : public NoBaseWillBeGarbageCollectedFinalized<PostMessageTimer>, public SuspendableTimer {
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(PostMessageTimer);
 public:
     PostMessageTimer(LocalDOMWindow& window, PassRefPtr<SerializedScriptValue> message, const String& sourceOrigin, PassRefPtrWillBeRawPtr<LocalDOMWindow> source, PassOwnPtr<MessagePortChannelArray> channels, SecurityOrigin* targetOrigin, PassRefPtrWillBeRawPtr<ScriptCallStack> stackTrace, UserGestureToken* userGestureToken)
         : SuspendableTimer(window.document())
@@ -172,12 +171,11 @@ public:
     UserGestureToken* userGestureToken() const { return m_userGestureToken.get(); }
     LocalDOMWindow* source() const { return m_source.get(); }
 
-    virtual void trace(Visitor* visitor) override
+    void trace(Visitor* visitor)
     {
         visitor->trace(m_window);
         visitor->trace(m_source);
         visitor->trace(m_stackTrace);
-        SuspendableTimer::trace(visitor);
     }
 
 private:

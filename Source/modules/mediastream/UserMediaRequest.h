@@ -48,7 +48,6 @@ class MediaStreamDescriptor;
 class UserMediaController;
 
 class UserMediaRequest final : public GarbageCollectedFinalized<UserMediaRequest>, public ContextLifecycleObserver {
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(UserMediaRequest);
 public:
     static UserMediaRequest* create(ExecutionContext*, UserMediaController*, const Dictionary& options, NavigatorUserMediaSuccessCallback*, NavigatorUserMediaErrorCallback*, ExceptionState&);
     virtual ~UserMediaRequest();
@@ -72,7 +71,7 @@ public:
     // ContextLifecycleObserver
     virtual void contextDestroyed() override;
 
-    virtual void trace(Visitor*) override;
+    void trace(Visitor*);
 
 private:
     UserMediaRequest(ExecutionContext*, UserMediaController*, WebMediaConstraints audio, WebMediaConstraints video, NavigatorUserMediaSuccessCallback*, NavigatorUserMediaErrorCallback*);

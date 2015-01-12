@@ -117,9 +117,4 @@ AcceptConnectionObserver::AcceptConnectionObserver(ExecutionContext* context, in
 {
 }
 
-void AcceptConnectionObserver::trace(Visitor* visitor)
-{
-    ContextLifecycleObserver::trace(visitor);
-}
-
 } // namespace blink

@@ -15,7 +15,6 @@
 namespace blink {
 
 class V8TestCallbackInterface final : public TestCallbackInterface, public ActiveDOMCallback {
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(V8TestCallbackInterface);
 public:
     static V8TestCallbackInterface* create(v8::Local<v8::Function> callback, ScriptState* scriptState)
     {
@@ -23,8 +22,6 @@ public:
     }
 
     virtual ~V8TestCallbackInterface();
-
-    virtual void trace(Visitor*) override;
 
     virtual void voidMethod() override;
     virtual bool booleanMethod() override;

@@ -39,7 +39,6 @@ class ExceptionState;
 class UserMediaController;
 
 class MediaDevicesRequest final : public GarbageCollectedFinalized<MediaDevicesRequest>, public ActiveDOMObject {
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(MediaDevicesRequest);
 public:
     static MediaDevicesRequest* create(ExecutionContext*, UserMediaController*, MediaDeviceInfoCallback*, ExceptionState&);
     virtual ~MediaDevicesRequest();
@@ -54,7 +53,7 @@ public:
     // ActiveDOMObject
     virtual void stop() override;
 
-    virtual void trace(Visitor*) override;
+    void trace(Visitor*);
 
 private:
     MediaDevicesRequest(ExecutionContext*, UserMediaController*, MediaDeviceInfoCallback*);

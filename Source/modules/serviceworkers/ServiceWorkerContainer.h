@@ -58,14 +58,13 @@ class ServiceWorkerContainer final
     , public WebServiceWorkerProviderClient {
     DEFINE_WRAPPERTYPEINFO();
     DEFINE_EVENT_TARGET_REFCOUNTING_WILL_BE_REMOVED(RefCountedGarbageCollected<ServiceWorkerContainer>);
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(ServiceWorkerContainer);
 public:
     static ServiceWorkerContainer* create(ExecutionContext*);
     ~ServiceWorkerContainer();
 
     void willBeDetachedFromFrame();
 
-    virtual void trace(Visitor*) override;
+    void trace(Visitor*);
 
     PassRefPtrWillBeRawPtr<ServiceWorker> controller() { return m_controller.get(); }
     ScriptPromise ready(ScriptState*);

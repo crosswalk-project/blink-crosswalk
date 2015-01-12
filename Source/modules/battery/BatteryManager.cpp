@@ -157,7 +157,6 @@ void BatteryManager::trace(Visitor* visitor)
     visitor->trace(m_batteryStatus);
     PlatformEventController::trace(visitor);
     RefCountedGarbageCollectedEventTargetWithInlineData<BatteryManager>::trace(visitor);
-    ActiveDOMObject::trace(visitor);
 }
 
 } // namespace blink

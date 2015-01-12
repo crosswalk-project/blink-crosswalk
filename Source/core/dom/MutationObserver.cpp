@@ -282,7 +282,6 @@ void MutationObserver::trace(Visitor* visitor)
     visitor->trace(m_callback);
     visitor->trace(m_records);
     visitor->trace(m_registrations);
-    visitor->trace(m_callback);
 #endif
 }
 

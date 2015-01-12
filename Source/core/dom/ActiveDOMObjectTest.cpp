@@ -40,14 +40,10 @@ using namespace blink;
 namespace {
 
 class MockActiveDOMObject final : public GarbageCollectedFinalized<MockActiveDOMObject>, public ActiveDOMObject {
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(MockActiveDOMObject);
 public:
     explicit MockActiveDOMObject(ExecutionContext* context) : ActiveDOMObject(context) { }
 
-    virtual void trace(Visitor* visitor) override
-    {
-        ActiveDOMObject::trace(visitor);
-    }
+    void trace(Visitor*) { }
 
     MOCK_METHOD0(suspend, void());
     MOCK_METHOD0(resume, void());

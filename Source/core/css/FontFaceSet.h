@@ -108,7 +108,9 @@ public:
 
     void addFontFacesToFontFaceCache(FontFaceCache*, CSSFontSelector*);
 
+#if ENABLE(OILPAN)
     virtual void trace(Visitor*) override;
+#endif
 
 private:
     static PassRefPtrWillBeRawPtr<FontFaceSet> create(Document& document)

@@ -62,7 +62,6 @@ template<> void unobserverContext(DummyContext* context, LifecycleObserver<Dummy
 }
 
 class TestingObserver final : public GarbageCollectedFinalized<TestingObserver>, public LifecycleObserver<DummyContext> {
-    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(TestingObserver);
 public:
     explicit TestingObserver(DummyContext* context)
         : LifecycleObserver<DummyContext>(context)
@@ -75,10 +74,7 @@ public:
         m_contextDestroyedCalled = true;
     }
 
-    void trace(Visitor* visitor)
-    {
-        LifecycleObserver<DummyContext>::trace(visitor);
-    }
+    void trace(Visitor*) { }
 
     bool m_contextDestroyedCalled;
 
