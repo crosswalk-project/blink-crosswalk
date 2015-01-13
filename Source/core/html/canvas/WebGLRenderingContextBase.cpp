@@ -5930,6 +5930,7 @@ void WebGLRenderingContextBase::trace(Visitor* visitor)
     visitor->trace(m_requestedAttributes);
     visitor->trace(m_extensions);
     CanvasRenderingContext::trace(visitor);
+    ActiveDOMObject::trace(visitor);
 }
 
 int WebGLRenderingContextBase::externallyAllocatedBytesPerPixel()
