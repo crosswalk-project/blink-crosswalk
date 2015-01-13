@@ -533,6 +533,11 @@ PeriodicWave* AudioContext::createPeriodicWave(DOMFloat32Array* real, DOMFloat32
     return PeriodicWave::create(sampleRate(), real->view(), imag->view());
 }
 
+void AudioContext::notifyNodeStartedProcessing(AudioNode* node)
+{
+    refNode(node);
+}
+
 void AudioContext::notifyNodeFinishedProcessing(AudioNode* node)
 {
     ASSERT(isAudioThread());
