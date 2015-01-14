@@ -647,14 +647,14 @@ bool EventHandler::handleMouseDraggedEvent(const MouseEventWithHitTestResults& e
 {
     TRACE_EVENT0("blink", "EventHandler::handleMouseDraggedEvent");
 
-    if (!m_mousePressed || event.event().button() != LeftButton)
+    if (!m_mousePressed)
         return false;
 
     if (handleDrag(event, DragInitiator::Mouse))
         return true;
 
     Node* targetNode = event.innerNode();
-    if (!targetNode)
+    if (event.event().button() != LeftButton || !targetNode)
         return false;
 
     RenderObject* renderer = targetNode->renderer();
@@ -3239,6 +3239,16 @@ bool EventHandler::handleDrag(const MouseEventWithHitTestResults& event, DragIni
     ASSERT(m_frame->view());
     if (!m_frame->page())
         return false;
+
+    // FIXME: Does this ever get hit??
+    if (event.event().button() != LeftButton || event.event().type() != PlatformEvent::MouseMoved) {
+        // If we allowed the other side of the bridge to handle a drag
+        // last time, then m_mousePressed might still be set. So we
+        // clear it now to make sure the next move after a drag
+        // doesn't look like a drag.
+        m_mousePressed = false;
+        return false;
+    }
 
     if (m_mouseDownMayStartDrag) {
         HitTestRequest request(HitTestRequest::ReadOnly);
