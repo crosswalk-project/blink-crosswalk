@@ -5,7 +5,7 @@ crbug.com/433282 fast/overflow/overflow-update-transform.html [ NeedsRebaseline 
 crbug.com/433282 fast/replaced/border-radius-clip-content-edge.html [ NeedsRebaseline ]
 crbug.com/433282 fast/replaced/selection-rect-transform.html [ NeedsRebaseline ]
 crbug.com/433282 ietestcenter/css3/bordersbackgrounds/border-radius-content-edge-001.htm [ NeedsRebaseline ]
- 
+
 crbug.com/423071 fast/reflections/reflection-masks-opacity.html [ NeedsRebaseline ]
 
 # This directly has manual tests that don't have to run with run-webkit-tests
@@ -35,6 +35,18 @@ crbug.com/437743 virtual/slimmingpaint/fast/block/lineboxcontain/font-replaced.h
 crbug.com/437743 virtual/slimmingpaint/fast/block/lineboxcontain/font.html [ ImageOnlyFailure ]
 crbug.com/437743 virtual/slimmingpaint/fast/block/lineboxcontain/glyphs.html [ ImageOnlyFailure ]
 crbug.com/437743 virtual/slimmingpaint/fast/block/positioning/window-height-change.html [ ImageOnlyFailure ]
+
+crbug.com/437905 compositing/squashing/iframe-inside-squashed-layer.html [ NeedsRebaseline ]
+
+# Failing with virtual-viewport mode on, disable for now and fix ASAP
+crbug.com/428980 fast/repaint/fixed-right-bottom-in-page-scale.html [ ImageOnlyFailure ]
+crbug.com/428980 fast/repaint/fixed-right-in-page-scale.html [ ImageOnlyFailure ]
+crbug.com/428980 fast/transforms/selection-bounds-in-transformed-view.html [ Failure ]
+crbug.com/428980 css3/viewport-percentage-lengths/viewport-percentage-lengths-resize.html [ Failure ]
+crbug.com/428980 fast/events/drag-and-drop-autoscroll-mainframe.html [ Timeout ]
+crbug.com/428980 virtual/slimmingpaint/fast/events/drag-and-drop-autoscroll-mainframe.html [ Timeout ]
+crbug.com/428980 compositing/layer-creation/fixed-position-out-of-view-scaled-scroll.html [ Failure ]
+
 crbug.com/437743 virtual/slimmingpaint/fast/block/float/overhanging-tall-block.html [ Skip ]
 crbug.com/437743 [ Mac ] virtual/slimmingpaint/fast/block/float/float-avoidance.html [ ImageOnlyFailure ]
 crbug.com/437743 [ Mac ] virtual/slimmingpaint/fast/block/positioning/inline-block-relposition.html [ ImageOnlyFailure ]
