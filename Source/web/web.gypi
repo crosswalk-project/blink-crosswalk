@@ -294,7 +294,7 @@
       'tests/PrerenderingTest.cpp',
       'tests/ProgrammaticScrollTest.cpp',
       'tests/RenderGeometryMapTest.cpp',
-      'tests/ScrollingCoordinatorChromiumTest.cpp',
+      'tests/ScrollingCoordinatorTest.cpp',
       'tests/SpinLockTest.cpp',
       'tests/TextFinderTest.cpp',
       'tests/TouchActionTest.cpp',
