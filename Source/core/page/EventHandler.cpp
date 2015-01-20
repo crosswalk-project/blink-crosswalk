@@ -2549,8 +2549,6 @@ bool EventHandler::shouldApplyTouchAdjustment(const PlatformGestureEvent& event)
 {
     if (m_frame->settings() && !m_frame->settings()->touchAdjustmentEnabled())
         return false;
-    if (m_frame->page() && m_frame->page()->chrome().client().shouldDisableDesktopWorkarounds())
-        return false;
     return !event.area().isEmpty();
 }
 
