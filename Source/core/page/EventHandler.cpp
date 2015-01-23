@@ -2237,6 +2237,7 @@ bool EventHandler::handleGestureTap(const GestureEventWithHitTestResults& target
     RefPtrWillBeRawPtr<FrameView> frameView(m_frame->view());
     const PlatformGestureEvent& gestureEvent = targetedEvent.event();
     HitTestRequest::HitTestRequestType hitType = getHitTypeForGestureType(gestureEvent.type());
+    uint64_t preDispatchDomTreeVersion = m_frame->document()->domTreeVersion();
 
     UserGestureIndicator gestureIndicator(DefinitelyProcessingUserGesture);
 
@@ -2268,6 +2269,11 @@ bool EventHandler::handleGestureTap(const GestureEventWithHitTestResults& target
         currentHitTest = hitTestResultInFrame(m_frame, adjustedPoint, hitType);
     }
     m_clickNode = currentHitTest.innerNode();
+
+    // Capture data for showUnhandledTapUIIfNeeded.
+    RefPtrWillBeRawPtr<Node> tappedNode = m_clickNode;
+    IntPoint tappedPosition = gestureEvent.position();
+
     if (m_clickNode && m_clickNode->isTextNode())
         m_clickNode = NodeRenderingTraversal::parent(*m_clickNode);
 
@@ -2314,7 +2320,12 @@ bool EventHandler::handleGestureTap(const GestureEventWithHitTestResults& target
     if (!swallowMouseUpEvent)
         swallowMouseUpEvent = handleMouseReleaseEvent(MouseEventWithHitTestResults(fakeMouseUp, currentHitTest));
 
-    return swallowMouseDownEvent | swallowMouseUpEvent | swallowClickEvent;
+    bool swallowed = swallowMouseDownEvent | swallowMouseUpEvent | swallowClickEvent;
+    if (!swallowed && tappedNode) {
+        bool pageChanged = preDispatchDomTreeVersion != m_frame->document()->domTreeVersion();
+        m_frame->chromeClient().showUnhandledTapUIIfNeeded(tappedPosition, tappedNode.get(), pageChanged);
+    }
+    return swallowed;
 }
 
 bool EventHandler::handleGestureLongPress(const GestureEventWithHitTestResults& targetedEvent)
