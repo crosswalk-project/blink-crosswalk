@@ -1437,14 +1437,19 @@ void RenderText::setText(PassRefPtr<StringImpl> text, bool force)
         cache->textChanged(this);
 }
 
-void RenderText::dirtyLineBoxes(bool fullLayout)
+void RenderText::dirtyOrDeleteLineBoxesIfNeeded(bool fullLayout)
 {
     if (fullLayout)
         deleteTextBoxes();
-    else if (!m_linesDirty) {
-        for (InlineTextBox* box = firstTextBox(); box; box = box->nextTextBox())
-            box->dirtyLineBoxes();
-    }
+    else if (!m_linesDirty)
+        dirtyLineBoxes();
+    m_linesDirty = false;
+}
+
+void RenderText::dirtyLineBoxes()
+{
+    for (InlineTextBox* box = firstTextBox(); box; box = box->nextTextBox())
+        box->dirtyLineBoxes();
     m_linesDirty = false;
 }
 

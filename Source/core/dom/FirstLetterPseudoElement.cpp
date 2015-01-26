@@ -183,6 +183,7 @@ void FirstLetterPseudoElement::updateTextFragments()
 
     unsigned length = FirstLetterPseudoElement::firstLetterLength(oldText);
     m_remainingTextRenderer->setTextFragment(oldText.impl()->substring(length, oldText.length()), length, oldText.length() - length);
+    m_remainingTextRenderer->dirtyLineBoxes();
 
     for (auto child = renderer()->slowFirstChild(); child; child = child->nextSibling()) {
         if (!child->isText() || !toRenderText(child)->isTextFragment())
@@ -192,6 +193,7 @@ void FirstLetterPseudoElement::updateTextFragments()
             continue;
 
         childFragment->setTextFragment(oldText.impl()->substring(0, length), 0, length);
+        childFragment->dirtyLineBoxes();
         break;
     }
 }
