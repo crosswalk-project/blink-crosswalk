@@ -113,7 +113,6 @@ static bool needsHistoryItemRestore(FrameLoadType type)
 FrameLoader::FrameLoader(LocalFrame* frame)
     : m_frame(frame)
     , m_progressTracker(ProgressTracker::create(frame))
-    , m_state(FrameStateProvisional)
     , m_loadType(FrameLoadTypeStandard)
     , m_fetchContext(FrameFetchContext::create(frame))
     , m_inStopAllLoaders(false)
@@ -939,7 +938,6 @@ void FrameLoader::notifyIfInitialDocumentAccessed()
 void FrameLoader::commitProvisionalLoad()
 {
     ASSERT(client()->hasWebView());
-    ASSERT(m_state == FrameStateProvisional);
     RefPtr<DocumentLoader> pdl = m_provisionalDocumentLoader;
     RefPtrWillBeRawPtr<LocalFrame> protect(m_frame.get());
 
@@ -963,7 +961,6 @@ void FrameLoader::commitProvisionalLoad()
     if (m_documentLoader)
         m_documentLoader->detachFromFrame();
     m_documentLoader = m_provisionalDocumentLoader.release();
-    m_state = FrameStateCommittedPage;
 
     if (isLoadingMainFrame())
         m_frame->page()->chrome().client().needTouchEvents(false);
@@ -1001,19 +998,15 @@ bool FrameLoader::checkLoadCompleteForThisFrame()
     for (RefPtrWillBeRawPtr<Frame> child = m_frame->tree().firstChild(); child; child = child->tree().nextSibling()) {
         allChildrenAreDoneLoading &= child->checkLoadComplete();
     }
-
     if (!allChildrenAreDoneLoading)
         return false;
 
-    if (m_state == FrameStateComplete)
+    if (!m_frame->isLoading())
         return true;
     if (m_provisionalDocumentLoader || !m_documentLoader)
         return false;
     if (!m_frame->document()->loadEventFinished())
         return false;
-
-    m_state = FrameStateComplete;
-
     if (!m_stateMachine.committedFirstRealDocumentLoad())
         return true;
 
@@ -1045,7 +1038,7 @@ void FrameLoader::restoreScrollPositionAndViewState()
     // height.
     float mainFrameScale = m_frame->settings()->pinchVirtualViewportEnabled() ? 1 : m_currentItem->pageScaleFactor();
     bool canRestoreWithoutClamping = view->clampOffsetAtScale(m_currentItem->scrollPoint(), mainFrameScale) == m_currentItem->scrollPoint();
-    bool canRestoreWithoutAnnoyingUser = !view->wasScrolledByUser() && (canRestoreWithoutClamping || m_state == FrameStateComplete);
+    bool canRestoreWithoutAnnoyingUser = !view->wasScrolledByUser() && (canRestoreWithoutClamping || m_frame->document()->loadEventFinished());
     if (!canRestoreWithoutAnnoyingUser)
         return;
 
@@ -1130,7 +1123,6 @@ void FrameLoader::receivedMainResourceError(DocumentLoader* loader, const Resour
         m_provisionalDocumentLoader->detachFromFrame();
         m_provisionalDocumentLoader = nullptr;
         m_progressTracker->progressCompleted();
-        m_state = FrameStateComplete;
     } else {
         ASSERT(loader == m_documentLoader);
         if (m_frame->document()->parser())
@@ -1138,7 +1130,6 @@ void FrameLoader::receivedMainResourceError(DocumentLoader* loader, const Resour
         if (!m_provisionalDocumentLoader && m_frame->isLoading()) {
             client()->dispatchDidFailLoad(error);
             m_progressTracker->progressCompleted();
-            m_state = FrameStateComplete;
         }
     }
 
@@ -1273,8 +1264,6 @@ void FrameLoader::startLoad(FrameLoadRequest& frameLoadRequest, FrameLoadType ty
     if ((!m_policyDocumentLoader->shouldContinueForNavigationPolicy(request, frameLoadRequest.shouldCheckMainWorldContentSecurityPolicy(), navigationPolicy, isTransitionNavigation) || !shouldClose()) && m_policyDocumentLoader) {
         m_policyDocumentLoader->detachFromFrame();
         m_policyDocumentLoader = nullptr;
-        if (!m_stateMachine.committedFirstRealDocumentLoad())
-            m_state = FrameStateComplete;
         checkCompleted();
         return;
     }
@@ -1298,7 +1287,6 @@ void FrameLoader::startLoad(FrameLoadRequest& frameLoadRequest, FrameLoadType ty
 
     m_provisionalDocumentLoader = m_policyDocumentLoader.release();
     m_loadType = type;
-    m_state = FrameStateProvisional;
 
     if (FormState* formState = frameLoadRequest.formState())
         client()->dispatchWillSubmitForm(formState->form());

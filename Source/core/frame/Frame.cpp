@@ -291,6 +291,7 @@ Frame::Frame(FrameClient* client, FrameHost* host, FrameOwner* owner)
     , m_owner(owner)
     , m_client(client)
     , m_remotePlatformLayer(nullptr)
+    , m_isLoading(false)
 {
     ASSERT(page());
 

@@ -111,7 +111,6 @@ public:
     DocumentLoader* documentLoader() const { return m_documentLoader.get(); }
     DocumentLoader* policyDocumentLoader() const { return m_policyDocumentLoader.get(); }
     DocumentLoader* provisionalDocumentLoader() const { return m_provisionalDocumentLoader.get(); }
-    FrameState state() const { return m_state; }
     FetchContext& fetchContext() const { return *m_fetchContext; }
 
     void receivedMainResourceError(DocumentLoader*, const ResourceError&);
@@ -221,7 +220,6 @@ private:
 
     OwnPtrWillBeMember<ProgressTracker> m_progressTracker;
 
-    FrameState m_state;
     FrameLoadType m_loadType;
 
     // Document loaders for the three phases of frame loading. Note that while
