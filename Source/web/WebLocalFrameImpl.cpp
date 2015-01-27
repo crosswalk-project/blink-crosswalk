@@ -570,7 +570,7 @@ WebVector<WebIconURL> WebLocalFrameImpl::iconURLs(int iconTypesMask) const
 {
     // The URL to the icon may be in the header. As such, only
     // ask the loader for the icon if it's finished loading.
-    if (frame()->document()->loadEventFinished())
+    if (frame()->loader().state() == FrameStateComplete)
         return frame()->document()->iconURLs(iconTypesMask);
     return WebVector<WebIconURL>();
 }

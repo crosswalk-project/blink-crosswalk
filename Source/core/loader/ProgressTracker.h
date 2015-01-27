@@ -69,6 +69,7 @@ private:
     void reset();
 
     RawPtrWillBeMember<LocalFrame> m_frame;
+    bool m_inProgress;
     long long m_totalPageAndResourceBytesToLoad;
     long long m_totalBytesReceived;
     double m_lastNotifiedProgressValue;

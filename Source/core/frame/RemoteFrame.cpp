@@ -18,6 +18,7 @@ inline RemoteFrame::RemoteFrame(RemoteFrameClient* client, FrameHost* host, Fram
     : Frame(client, host, owner)
     , m_securityContext(RemoteSecurityContext::create())
     , m_domWindow(RemoteDOMWindow::create(*this))
+    , m_isLoading(false)
 {
 }
 
@@ -72,7 +73,7 @@ RemoteSecurityContext* RemoteFrame::securityContext() const
 
 bool RemoteFrame::checkLoadComplete()
 {
-    if (isLoading())
+    if (m_isLoading)
         return false;
 
     bool allChildrenAreDoneLoading = true;
