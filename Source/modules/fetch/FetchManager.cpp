@@ -28,10 +28,17 @@
 
 namespace blink {
 
-class FetchManager::Loader : public ThreadableLoaderClient, public ContextLifecycleObserver {
+class FetchManager::Loader final : public NoBaseWillBeGarbageCollectedFinalized<FetchManager::Loader>, public ThreadableLoaderClient, public ContextLifecycleObserver {
+    WILL_BE_USING_GARBAGE_COLLECTED_MIXIN(FetchManager::Loader);
 public:
-    Loader(ExecutionContext*, FetchManager*, PassRefPtrWillBeRawPtr<ScriptPromiseResolver>, const FetchRequestData*);
+    static PassOwnPtrWillBeRawPtr<Loader> create(ExecutionContext* executionContext, FetchManager* fetchManager, PassRefPtrWillBeRawPtr<ScriptPromiseResolver> resolver, const FetchRequestData* request)
+    {
+        return adoptPtrWillBeNoop(new Loader(executionContext, fetchManager, resolver, request));
+    }
+
     ~Loader() override;
+    void trace(Visitor*) override;
+
     void didReceiveResponse(unsigned long, const ResourceResponse&, PassOwnPtr<WebDataConsumerHandle>) override;
     void didReceiveData(const char*, unsigned) override;
     void didFinishLoading(unsigned long, double) override;
@@ -43,16 +50,18 @@ public:
     void cleanup();
 
 private:
+    Loader(ExecutionContext*, FetchManager*, PassRefPtrWillBeRawPtr<ScriptPromiseResolver>, const FetchRequestData*);
+
     void performBasicFetch();
     void performNetworkError(const String& message);
     void performHTTPFetch(bool corsFlag, bool corsPreflightFlag);
     void failed(const String& message);
     void notifyFinished();
 
-    FetchManager* m_fetchManager;
-    RefPtrWillBePersistent<ScriptPromiseResolver> m_resolver;
-    Persistent<FetchRequestData> m_request;
-    Persistent<BodyStreamBuffer> m_responseBuffer;
+    RawPtrWillBeMember<FetchManager> m_fetchManager;
+    RefPtrWillBeMember<ScriptPromiseResolver> m_resolver;
+    PersistentWillBeMember<FetchRequestData> m_request;
+    PersistentWillBeMember<BodyStreamBuffer> m_responseBuffer;
     RefPtr<ThreadableLoader> m_loader;
     bool m_failed;
 };
@@ -70,6 +79,15 @@ FetchManager::Loader::~Loader()
 {
     if (m_loader)
         m_loader->cancel();
+}
+
+void FetchManager::Loader::trace(Visitor* visitor)
+{
+    visitor->trace(m_fetchManager);
+    visitor->trace(m_resolver);
+    visitor->trace(m_request);
+    visitor->trace(m_responseBuffer);
+    ContextLifecycleObserver::trace(visitor);
 }
 
 void FetchManager::Loader::didReceiveResponse(unsigned long, const ResourceResponse& response, PassOwnPtr<WebDataConsumerHandle> handle)
@@ -371,8 +389,10 @@ FetchManager::FetchManager(ExecutionContext* executionContext)
 
 FetchManager::~FetchManager()
 {
+#if !ENABLE(OILPAN)
     if (!m_isStopped)
         stop();
+#endif
 }
 
 ScriptPromise FetchManager::fetch(ScriptState* scriptState, const FetchRequestData* request)
@@ -380,7 +400,7 @@ ScriptPromise FetchManager::fetch(ScriptState* scriptState, const FetchRequestDa
     RefPtrWillBeRawPtr<ScriptPromiseResolver> resolver = ScriptPromiseResolver::create(scriptState);
     ScriptPromise promise = resolver->promise();
 
-    OwnPtr<Loader> ownLoader(adoptPtr(new Loader(m_executionContext, this, resolver.release(), request)));
+    OwnPtrWillBeRawPtr<Loader> ownLoader = Loader::create(m_executionContext, this, resolver.release(), request);
     Loader* loader = m_loaders.add(ownLoader.release()).storedValue->get();
     loader->start();
     return promise;
@@ -403,7 +423,10 @@ void FetchManager::onLoaderFinished(Loader* loader)
 
 void FetchManager::trace(Visitor* visitor)
 {
+#if ENABLE(OILPAN)
     visitor->trace(m_executionContext);
+    visitor->trace(m_loaders);
+#endif
 }
 
 } // namespace blink
