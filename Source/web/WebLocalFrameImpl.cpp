@@ -152,7 +152,6 @@
 #include "modules/notifications/NotificationPermissionClient.h"
 #include "modules/push_messaging/PushController.h"
 #include "modules/screen_orientation/ScreenOrientationController.h"
-#include "modules/speech/SpeechRecognitionController.h"
 #include "platform/TraceEvent.h"
 #include "platform/UserGestureIndicator.h"
 #include "platform/clipboard/ClipboardUtilities.h"
@@ -195,7 +194,6 @@
 #include "public/web/WebScriptSource.h"
 #include "public/web/WebSecurityOrigin.h"
 #include "public/web/WebSerializedScriptValue.h"
-#include "public/web/WebViewClient.h"
 #include "web/AssociatedURLLoader.h"
 #include "web/CompositionUnderlineVectorBuilder.h"
 #include "web/FindInPageCoordinates.h"
@@ -205,7 +203,6 @@
 #include "web/NotificationPermissionClientImpl.h"
 #include "web/PageOverlay.h"
 #include "web/SharedWorkerRepositoryClientImpl.h"
-#include "web/SpeechRecognitionClientProxy.h"
 #include "web/SuspendableScriptExecutor.h"
 #include "web/TextFinder.h"
 #include "web/WebDataSourceImpl.h"
@@ -1609,11 +1606,6 @@ void WebLocalFrameImpl::setCoreFrame(PassRefPtrWillBeRawPtr<LocalFrame> frame)
         m_geolocationClientProxy->setController(GeolocationController::from(m_frame.get()));
         provideMIDITo(*m_frame, MIDIClientProxy::create(m_client ? m_client->webMIDIClient() : nullptr));
         provideLocalFileSystemTo(*m_frame, LocalFileSystemClient::create());
-        // FIXME: using WebViewClient as a temporary measure if there is no client on the WebFrame.
-        if (m_client && m_client->speechRecognizer())
-            SpeechRecognitionController::provideTo(*m_frame, SpeechRecognitionClientProxy::create(m_client->speechRecognizer()));
-        else
-            SpeechRecognitionController::provideTo(*m_frame, SpeechRecognitionClientProxy::create(viewImpl()->client() ? viewImpl()->client()->speechRecognizer() : nullptr));
 
         if (RuntimeEnabledFeatures::screenOrientationEnabled())
             ScreenOrientationController::provideTo(*m_frame, m_client ? m_client->webScreenOrientationClient() : nullptr);
