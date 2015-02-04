@@ -239,10 +239,6 @@ void BasicShapeInset::path(Path& path, const FloatRect& boundingBox)
         floatSizeForLengthSize(m_bottomLeftRadius, boundingBox),
         floatSizeForLengthSize(m_bottomRightRadius, boundingBox)
     );
-
-    FloatRoundedRect finalRect(rect, radii);
-    finalRect.constrainRadii();
-    path.addRoundedRect(finalRect);
 }
 
 PassRefPtr<BasicShape> BasicShapeInset::blend(const BasicShape* other, double) const

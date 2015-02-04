@@ -1845,6 +1845,8 @@ inline bool RenderStyle::hasPseudoElementStyle() const
     return noninherited_flags.pseudoBits & PSEUDO_ELEMENT_MASK;
 }
 
+float calcBorderRadiiConstraintScaleFor(const FloatRect&, const FloatRoundedRect::Radii&);
+
 } // namespace blink
 
 #endif // RenderStyle_h
