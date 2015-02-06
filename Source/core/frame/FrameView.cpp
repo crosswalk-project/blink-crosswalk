@@ -2379,7 +2379,7 @@ void FrameView::updateScrollableAreaSet()
 
 bool FrameView::shouldSuspendScrollAnimations() const
 {
-    return !m_frame->document()->loadEventFinished();
+    return m_frame->loader().state() != FrameStateComplete;
 }
 
 void FrameView::scrollbarStyleChanged()

@@ -69,6 +69,7 @@ PassOwnPtrWillBeRawPtr<ProgressTracker> ProgressTracker::create(LocalFrame* fram
 
 ProgressTracker::ProgressTracker(LocalFrame* frame)
     : m_frame(frame)
+    , m_inProgress(false)
     , m_totalPageAndResourceBytesToLoad(0)
     , m_totalBytesReceived(0)
     , m_lastNotifiedProgressValue(0)
@@ -82,6 +83,7 @@ ProgressTracker::ProgressTracker(LocalFrame* frame)
 
 ProgressTracker::~ProgressTracker()
 {
+    ASSERT(!m_inProgress);
 }
 
 void ProgressTracker::trace(Visitor* visitor)
@@ -91,7 +93,7 @@ void ProgressTracker::trace(Visitor* visitor)
 
 void ProgressTracker::dispose()
 {
-    if (m_frame->isLoading())
+    if (m_inProgress)
         progressCompleted();
     ASSERT(!m_frame->isLoading());
 }
@@ -115,19 +117,19 @@ void ProgressTracker::reset()
 
 void ProgressTracker::progressStarted()
 {
-    if (!m_frame->isLoading()) {
+    if (!m_inProgress) {
         reset();
         m_progressValue = initialProgressValue;
         m_frame->loader().client()->didStartLoading(NavigationToDifferentDocument);
     }
-    m_frame->setIsLoading(true);
+    m_inProgress = true;
     InspectorInstrumentation::frameStartedLoading(m_frame);
 }
 
 void ProgressTracker::progressCompleted()
 {
-    ASSERT(m_frame->isLoading());
-    m_frame->setIsLoading(false);
+    ASSERT(m_inProgress);
+    m_inProgress = false;
     if (!m_finalProgressChangedSent) {
         m_progressValue = 1;
         m_frame->loader().client()->progressEstimateChanged(m_progressValue);
@@ -139,7 +141,7 @@ void ProgressTracker::progressCompleted()
 
 void ProgressTracker::incrementProgress(unsigned long identifier, const ResourceResponse& response)
 {
-    if (!m_frame->isLoading())
+    if (!m_inProgress)
         return;
 
     long long estimatedLength = response.expectedContentLength();

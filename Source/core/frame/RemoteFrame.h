@@ -38,6 +38,7 @@ public:
 
     void setView(PassRefPtrWillBeRawPtr<RemoteFrameView>);
     void createView();
+    void setIsLoading(bool isLoading) { m_isLoading = isLoading; }
 
     RemoteFrameView* view() const;
 
@@ -50,6 +51,8 @@ private:
     RefPtrWillBeMember<RemoteFrameView> m_view;
     RefPtr<RemoteSecurityContext> m_securityContext;
     RefPtrWillBeMember<RemoteDOMWindow> m_domWindow;
+
+    bool m_isLoading;
 };
 
 inline RemoteFrameView* RemoteFrame::view() const
