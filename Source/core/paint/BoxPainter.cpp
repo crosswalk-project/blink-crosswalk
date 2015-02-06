@@ -1903,7 +1903,6 @@ void BoxPainter::paintBoxShadow(const PaintInfo& info, const LayoutRect& paintRe
     GraphicsContext* context = info.context;
     if (!s->boxShadow())
         return;
-
     FloatRoundedRect border = (shadowStyle == Inset) ? s->getRoundedInnerBorderFor(paintRect, includeLogicalLeftEdge, includeLogicalRightEdge)
         : s->getRoundedBorderFor(paintRect, includeLogicalLeftEdge, includeLogicalRightEdge);
 
@@ -2004,6 +2003,7 @@ void BoxPainter::paintBoxShadow(const PaintInfo& info, const LayoutRect& paintRe
                         roundedFillRect.shrinkRadii(-shadowSpread);
                     if (!roundedFillRect.isRenderable())
                         roundedFillRect.adjustRadii();
+                    roundedFillRect.constrainRadii();
                     context->fillRoundedRect(roundedFillRect, Color::black);
                 }
             } else {
