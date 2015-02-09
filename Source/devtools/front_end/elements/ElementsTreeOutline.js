@@ -1901,8 +1901,10 @@ WebInspector.ElementsTreeUpdater.prototype = {
      * @param {!WebInspector.ElementsTreeElement} child
      * @param {number} targetIndex
      */
-    moveChild: function(treeElement, child, targetIndex)
+    _moveChild: function(treeElement, child, targetIndex)
     {
+        if (treeElement.children.indexOf(child) === targetIndex)
+            return;
         var wasSelected = child.selected;
         treeElement.removeChild(child);
         treeElement.insertChild(child, targetIndex);
@@ -1963,7 +1965,7 @@ WebInspector.ElementsTreeUpdater.prototype = {
             var child = visibleChildren[i];
             if (existingTreeElements.has(child)) {
                 // If an existing element was found, just move it.
-                this.moveChild(treeElement, existingTreeElements.get(child), i);
+                this._moveChild(treeElement, existingTreeElements.get(child), i);
             } else {
                 // No existing element found, insert a new element.
                 var newElement = this.insertChildElement(treeElement, child, i);
