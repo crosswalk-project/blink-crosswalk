@@ -1443,7 +1443,7 @@ WebInspector.StylePropertiesSection = function(parentPane, styleRule)
     this.propertiesElement.classList.remove("properties-tree");
 
     var selectorContainer = createElement("div");
-    this._selectorElement = createElement("span");
+    this._selectorElement = createElementWithClass("span", "selector");
     this._selectorElement.textContent = styleRule.selectorText();
     selectorContainer.appendChild(this._selectorElement);
 
@@ -1856,11 +1856,8 @@ WebInspector.StylePropertiesSection.prototype = {
 
         this._mediaListElement.classList.toggle("media-matches", this.styleRule.mediaMatches());
 
-        // .selector is rendered as non-affecting selector by default.
-        if (!this.styleRule.hasMatchingSelectors()) {
-            this._selectorElement.className = "selector";
+        if (!this.styleRule.hasMatchingSelectors())
             return;
-        }
 
         var selectors = rule.selectors;
         var fragment = createDocumentFragment();
