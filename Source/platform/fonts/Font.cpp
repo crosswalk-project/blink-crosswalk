@@ -153,7 +153,7 @@ void Font::drawText(GraphicsContext* context, const TextRunPaintInfo& runInfo,
         FloatRect blobBounds = runInfo.bounds;
         blobBounds.moveBy(-point);
 
-        textBlob = buildTextBlob(glyphBuffer, blobBounds, context->couldUseLCDRenderedText());
+        textBlob = buildTextBlob(glyphBuffer, blobBounds);
         if (textBlob) {
             drawTextBlob(context, textBlob.get(), point.data());
             return;
@@ -266,8 +266,7 @@ static bool requiresRecomputingBounds(const Font& font, const FloatRect& bounds)
     return fontDescription.letterSpacing() < 0 || fontDescription.wordSpacing() < 0;
 }
 
-PassTextBlobPtr Font::buildTextBlob(const GlyphBuffer& glyphBuffer, const FloatRect& bounds,
-    bool couldUseLCD) const
+PassTextBlobPtr Font::buildTextBlob(const GlyphBuffer& glyphBuffer, const FloatRect& bounds) const
 {
     ASSERT(RuntimeEnabledFeatures::textBlobEnabled());
 
@@ -292,9 +291,6 @@ PassTextBlobPtr Font::buildTextBlob(const GlyphBuffer& glyphBuffer, const FloatR
         SkPaint paint;
         fontData->platformData().setupPaint(&paint, 0, this);
         paint.setTextEncoding(SkPaint::kGlyphID_TextEncoding);
-
-        // FIXME: this should go away after the big LCD cleanup.
-        paint.setLCDRenderText(paint.isLCDRenderText() && couldUseLCD);
 
         unsigned start = i++;
         while (i < glyphBuffer.size() && glyphBuffer.fontDataAt(i) == fontData)
