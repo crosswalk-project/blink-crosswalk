@@ -2996,19 +2996,19 @@ void Document::processHttpEquivSetCookie(const AtomicString& content)
 
 void Document::processHttpEquivXFrameOptions(const AtomicString& content)
 {
-    LocalFrame* frame = this->frame();
-    if (!frame)
+    if (!m_frame)
         return;
 
-    FrameLoader& frameLoader = frame->loader();
     unsigned long requestIdentifier = loader()->mainResourceIdentifier();
-    if (frameLoader.shouldInterruptLoadForXFrameOptions(content, url(), requestIdentifier)) {
+    if (m_frame->loader().shouldInterruptLoadForXFrameOptions(content, url(), requestIdentifier)) {
         String message = "Refused to display '" + url().elidedString() + "' in a frame because it set 'X-Frame-Options' to '" + content + "'.";
-        frameLoader.stopAllLoaders();
+        m_frame->loader().stopAllLoaders();
+        if (!m_frame)
+            return;
         // Stopping the loader isn't enough, as we're already parsing the document; to honor the header's
         // intent, we must navigate away from the possibly partially-rendered document to a location that
         // doesn't inherit the parent's SecurityOrigin.
-        frame->navigationScheduler().scheduleLocationChange(this, SecurityOrigin::urlWithUniqueSecurityOrigin());
+        m_frame->navigationScheduler().scheduleLocationChange(this, SecurityOrigin::urlWithUniqueSecurityOrigin());
         RefPtrWillBeRawPtr<ConsoleMessage> consoleMessage = ConsoleMessage::create(SecurityMessageSource, ErrorMessageLevel, message);
         consoleMessage->setRequestIdentifier(requestIdentifier);
         addConsoleMessage(consoleMessage.release());
