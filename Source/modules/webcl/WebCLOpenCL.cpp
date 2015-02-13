@@ -179,7 +179,8 @@ cl_mem (CL_API_CALL *web_clCreateFromGLTexture)(cl_context context, cl_mem_flags
 cl_int (CL_API_CALL *web_clGetGLTextureInfo)(cl_mem, cl_gl_texture_info, size_t, void *, size_t *);
 
 #if defined(WTF_OS_LINUX) || OS(ANDROID)
-#define MAP_FUNC(fn)  { *(void**)(&fn) = dlsym(handle, #fn); if(!fn) return false; }
+#define MAP_FUNC(fn)  { *(void**)(&fn) = dlsym(handle, #fn); }
+#define MAP_FUNC_OR_BAIL(fn)  { *(void**)(&fn) = dlsym(handle, #fn); if(!fn) return false; }
 
 static const char* DEFAULT_SO[] = LIBS;
 static const int DEFAULT_SO_LEN = SO_LEN;
@@ -204,70 +205,81 @@ bool init(const char** libs, int length)
 
     if (!getCLHandle(mLibs, mLength))
         return false;
-    MAP_FUNC(clGetImageInfo);
-    MAP_FUNC(clCreateBuffer);
-    MAP_FUNC(clCreateSubBuffer);
-    MAP_FUNC(clGetCommandQueueInfo);
-    MAP_FUNC(clEnqueueWriteBuffer);
-    MAP_FUNC(clFinish);
-    MAP_FUNC(clFlush);
-    MAP_FUNC(clEnqueueReadBuffer);
-    MAP_FUNC(clReleaseCommandQueue);
-    MAP_FUNC(clEnqueueWriteImage);
-    MAP_FUNC(clEnqueueCopyBuffer);
-    MAP_FUNC(clEnqueueBarrierWithWaitList);
+
+    MAP_FUNC_OR_BAIL(clBuildProgram);
+    MAP_FUNC_OR_BAIL(clCreateBuffer);
+    MAP_FUNC_OR_BAIL(clCreateCommandQueue);
+    MAP_FUNC_OR_BAIL(clCreateContext);
+    MAP_FUNC_OR_BAIL(clCreateContextFromType);
+    MAP_FUNC_OR_BAIL(clCreateImage);
+    MAP_FUNC_OR_BAIL(clCreateKernel);
+    MAP_FUNC_OR_BAIL(clCreateKernelsInProgram);
+    MAP_FUNC_OR_BAIL(clCreateProgramWithSource);
+    MAP_FUNC_OR_BAIL(clCreateSampler);
+    MAP_FUNC_OR_BAIL(clCreateSubBuffer);
+    MAP_FUNC_OR_BAIL(clCreateUserEvent);
+
+    MAP_FUNC_OR_BAIL(clEnqueueCopyBuffer);
+    MAP_FUNC_OR_BAIL(clEnqueueReadBuffer);
+    MAP_FUNC_OR_BAIL(clEnqueueWriteBuffer);
+    MAP_FUNC_OR_BAIL(clEnqueueCopyImage);
+    MAP_FUNC_OR_BAIL(clEnqueueReadImage);
+    MAP_FUNC_OR_BAIL(clEnqueueWriteImage);
+    MAP_FUNC_OR_BAIL(clEnqueueCopyBufferRect);
+    MAP_FUNC_OR_BAIL(clEnqueueCopyBufferToImage);
+    MAP_FUNC_OR_BAIL(clEnqueueCopyImageToBuffer);
+    MAP_FUNC_OR_BAIL(clEnqueueReadBufferRect);
+    MAP_FUNC_OR_BAIL(clEnqueueWriteBufferRect);
+    MAP_FUNC_OR_BAIL(clEnqueueBarrierWithWaitList);
+    MAP_FUNC_OR_BAIL(clEnqueueMarkerWithWaitList);
+    MAP_FUNC_OR_BAIL(clEnqueueNDRangeKernel);
+    MAP_FUNC_OR_BAIL(clEnqueueTask);
+
+    MAP_FUNC_OR_BAIL(clFinish);
+    MAP_FUNC_OR_BAIL(clFlush);
+
+    MAP_FUNC_OR_BAIL(clGetContextInfo);
+    MAP_FUNC_OR_BAIL(clGetCommandQueueInfo);
+    MAP_FUNC_OR_BAIL(clGetDeviceIDs);
+    MAP_FUNC_OR_BAIL(clGetDeviceInfo);
+    MAP_FUNC_OR_BAIL(clGetEventInfo);
+    MAP_FUNC_OR_BAIL(clGetEventProfilingInfo);
+    MAP_FUNC_OR_BAIL(clGetImageInfo);
+    MAP_FUNC_OR_BAIL(clGetKernelInfo);
+    MAP_FUNC_OR_BAIL(clGetKernelWorkGroupInfo);
+    MAP_FUNC_OR_BAIL(clGetPlatformIDs);
+    MAP_FUNC_OR_BAIL(clGetSamplerInfo);
+    MAP_FUNC_OR_BAIL(clGetSupportedImageFormats);
+
+    MAP_FUNC_OR_BAIL(clGetMemObjectInfo);
+    MAP_FUNC_OR_BAIL(clGetPlatformInfo);
+    MAP_FUNC_OR_BAIL(clGetProgramBuildInfo);
+    MAP_FUNC_OR_BAIL(clGetProgramInfo);
+
+    MAP_FUNC_OR_BAIL(clReleaseCommandQueue);
+    MAP_FUNC_OR_BAIL(clReleaseContext);
+    MAP_FUNC_OR_BAIL(clReleaseDevice);
+    MAP_FUNC_OR_BAIL(clReleaseEvent);
+    MAP_FUNC_OR_BAIL(clReleaseKernel);
+    MAP_FUNC_OR_BAIL(clReleaseMemObject);
+    MAP_FUNC_OR_BAIL(clReleaseProgram);
+    MAP_FUNC_OR_BAIL(clReleaseSampler);
+
+    MAP_FUNC_OR_BAIL(clSetEventCallback);
+    MAP_FUNC_OR_BAIL(clSetKernelArg);
+    MAP_FUNC_OR_BAIL(clSetUserEventStatus);
+
+    MAP_FUNC_OR_BAIL(clUnloadPlatformCompiler);
+    MAP_FUNC_OR_BAIL(clWaitForEvents);
+
+    // They depends on whether OpenCL library support gl_sharing extension.
+    // which aren't required mandatorily for OpenCL spec.
     MAP_FUNC(clEnqueueAcquireGLObjects);
     MAP_FUNC(clEnqueueReleaseGLObjects);
-    MAP_FUNC(clEnqueueMarkerWithWaitList);
-    MAP_FUNC(clEnqueueTask);
-    MAP_FUNC(clEnqueueWriteBufferRect);
-    MAP_FUNC(clEnqueueReadBufferRect);
-    MAP_FUNC(clEnqueueReadImage);
-    MAP_FUNC(clEnqueueNDRangeKernel);
-    MAP_FUNC(clEnqueueCopyBufferRect);
-    MAP_FUNC(clEnqueueCopyImage);
-    MAP_FUNC(clEnqueueCopyImageToBuffer);
-    MAP_FUNC(clEnqueueCopyBufferToImage);
-    MAP_FUNC(clCreateCommandQueue);
-    MAP_FUNC(clGetContextInfo);
-    MAP_FUNC(clCreateProgramWithSource);
-    MAP_FUNC(clCreateImage);
     MAP_FUNC(clCreateFromGLBuffer);
     MAP_FUNC(clCreateFromGLRenderbuffer);
-    MAP_FUNC(clCreateSampler);
     MAP_FUNC(clCreateFromGLTexture);
-    MAP_FUNC(clCreateUserEvent);
-    MAP_FUNC(clWaitForEvents);
-    MAP_FUNC(clReleaseContext);
-    MAP_FUNC(clGetSupportedImageFormats);
-    MAP_FUNC(clCreateContext);
-    MAP_FUNC(clCreateContextFromType);
-    MAP_FUNC(clGetPlatformIDs);
-    MAP_FUNC(clUnloadPlatformCompiler);
-    MAP_FUNC(clGetDeviceIDs);
-    MAP_FUNC(clGetDeviceInfo);
-    MAP_FUNC(clReleaseDevice);
-    MAP_FUNC(clGetEventInfo);
-    MAP_FUNC(clSetUserEventStatus);
-    MAP_FUNC(clReleaseEvent);
-    MAP_FUNC(clSetEventCallback);
-    MAP_FUNC(clGetEventProfilingInfo);
     MAP_FUNC(clGetGLTextureInfo);
-    MAP_FUNC(clGetKernelInfo);
-    MAP_FUNC(clGetKernelWorkGroupInfo);
-    MAP_FUNC(clSetKernelArg);
-    MAP_FUNC(clReleaseKernel);
-    MAP_FUNC(clGetMemObjectInfo);
-    MAP_FUNC(clReleaseMemObject);
-    MAP_FUNC(clGetPlatformInfo);
-    MAP_FUNC(clGetProgramInfo);
-    MAP_FUNC(clCreateKernel);
-    MAP_FUNC(clGetProgramBuildInfo);
-    MAP_FUNC(clBuildProgram);
-    MAP_FUNC(clCreateKernelsInProgram);
-    MAP_FUNC(clReleaseProgram);
-    MAP_FUNC(clGetSamplerInfo);
-    MAP_FUNC(clReleaseSampler);
 
     return true;
 }
