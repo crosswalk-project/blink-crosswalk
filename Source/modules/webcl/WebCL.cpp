@@ -45,7 +45,7 @@ static inline void getAllEnabledExtensions(WebCL* cl, PassRefPtr<WebCLPlatform> 
 
 PassRefPtr<WebCL> WebCL::create()
 {
-    static int  libraryLoaded = false;
+    static bool libraryLoaded = false;
     /*  load libs in lib list. */
     if (!libraryLoaded) {
         if (init(nullptr, 0))
