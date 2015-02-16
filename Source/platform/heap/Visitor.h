@@ -35,6 +35,7 @@
 #include "platform/heap/StackFrameDepth.h"
 #include "platform/heap/ThreadState.h"
 #include "wtf/Assertions.h"
+#include "wtf/Atomics.h"
 #include "wtf/Deque.h"
 #include "wtf/Forward.h"
 #include "wtf/HashMap.h"
@@ -883,7 +884,7 @@ private:
 #define RETURN_GCINFO_INDEX()                                  \
     static size_t gcInfoIndex = 0;                             \
     ASSERT(s_gcInfoTable);                                     \
-    if (!gcInfoIndex)                                          \
+    if (!acquireLoad(&gcInfoIndex))                            \
         GCInfoTable::ensureGCInfoIndex(&gcInfo, &gcInfoIndex); \
     ASSERT(gcInfoIndex >= 1);                                  \
     ASSERT(gcInfoIndex < GCInfoTable::maxIndex);               \
