@@ -377,7 +377,7 @@ void AXTable::addChildren()
     if (HTMLTableElement* tableElement = toHTMLTableElement(table->node())) {
         if (HTMLTableCaptionElement* caption = tableElement->caption()) {
             AXObject* captionObject = axCache->getOrCreate(caption);
-            if (!captionObject->accessibilityIsIgnored())
+            if (captionObject && !captionObject->accessibilityIsIgnored())
                 m_children.append(captionObject);
         }
     }
@@ -400,7 +400,7 @@ void AXTable::addChildren()
                 continue;
 
             AXObject* rowObject = axCache->getOrCreate(renderRow);
-            if (!rowObject->isTableRow())
+            if (!rowObject || !rowObject->isTableRow())
                 continue;
 
             AXTableRow* row = toAXTableRow(rowObject);
