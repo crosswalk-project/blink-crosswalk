@@ -439,7 +439,7 @@ WebInspector.NetworkLogView.prototype = {
      */
     _dataGridMouseDown: function(event)
     {
-        if (!this._dataGrid.selectedNode && event.button)
+        if ((!this._dataGrid.selectedNode && event.button) || event.target.enclosingNodeOrSelfWithNodeName("a"))
             event.consume();
     },
 
