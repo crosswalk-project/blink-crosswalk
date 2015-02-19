@@ -256,7 +256,7 @@ Vector<RefPtr<WebCLKernel>> WebCLProgram::createKernelsInProgram(ExceptionState&
     }
 
     Vector<char> kernelName;
-    cl_uint bytesOfKernelName = 0;
+    size_t bytesOfKernelName = 0;
     Vector<RefPtr<WebCLKernel>> m_kernelList;
     for (size_t i = 0 ; i < num; i++) {
         err = clGetKernelInfo(kernelBuf[i], CL_KERNEL_FUNCTION_NAME, 0, nullptr, &bytesOfKernelName);
