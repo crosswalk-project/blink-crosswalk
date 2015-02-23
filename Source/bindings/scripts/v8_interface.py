@@ -1120,6 +1120,7 @@ def property_getter(getter, cpp_arguments):
     return {
         'cpp_type': idl_type.cpp_type,
         'cpp_value': cpp_value,
+        'do_not_check_security': 'DoNotCheckSecurity' in extended_attributes,
         'is_custom':
             'Custom' in extended_attributes and
             (not extended_attributes['Custom'] or
