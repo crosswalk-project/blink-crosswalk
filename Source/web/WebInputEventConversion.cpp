@@ -444,6 +444,7 @@ PlatformTouchEventBuilder::PlatformTouchEventBuilder(Widget* widget, const WebTo
     m_type = toPlatformTouchEventType(event.type);
     m_modifiers = toPlatformEventModifiers(event.modifiers);
     m_timestamp = event.timeStampSeconds;
+    m_causesScrollingIfUncanceled = event.causesScrollingIfUncanceled;
 
     for (unsigned i = 0; i < event.touchesLength; ++i)
         m_touchPoints.append(PlatformTouchPointBuilder(widget, event.touches[i]));
@@ -776,6 +777,7 @@ WebTouchEventBuilder::WebTouchEventBuilder(const Widget* widget, const RenderObj
     modifiers = getWebInputModifiers(event);
     timeStampSeconds = event.timeStamp() / millisPerSecond;
     cancelable = event.cancelable();
+    causesScrollingIfUncanceled = event.causesScrollingIfUncanceled();
 
     addTouchPointsIfNotYetAdded(widget, toWebTouchPointState(event.type()), event.changedTouches(), touches, &touchesLength, renderObject);
     addTouchPointsIfNotYetAdded(widget, WebTouchPoint::StateStationary, event.touches(), touches, &touchesLength, renderObject);
