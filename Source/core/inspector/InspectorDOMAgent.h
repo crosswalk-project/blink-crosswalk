@@ -100,6 +100,7 @@ public:
     }
 
     static String toErrorString(ExceptionState&);
+    static bool getPseudoElementType(PseudoId, TypeBuilder::DOM::PseudoType::Enum*);
 
     virtual ~InspectorDOMAgent();
     virtual void trace(Visitor*) override;
