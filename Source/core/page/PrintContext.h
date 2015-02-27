@@ -77,7 +77,7 @@ public:
     virtual void trace(Visitor*);
 
 protected:
-    void outputLinkAndLinkedDestinations(GraphicsContext&, Node*, const IntRect& pageRect);
+    void outputLinkAndLinkedDestinations(GraphicsContext&, const IntRect& pageRect);
 
     RawPtrWillBeMember<LocalFrame> m_frame;
     Vector<IntRect> m_pageRects;
