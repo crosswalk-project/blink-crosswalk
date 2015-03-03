@@ -600,6 +600,19 @@ LayoutUnit RenderBox::constrainContentBoxLogicalHeightByMinMax(LayoutUnit logica
     return std::max(logicalHeight, computeContentLogicalHeight(styleToUse.logicalMinHeight(), intrinsicContentHeight));
 }
 
+void RenderBox::setLocationAndUpdateOverflowControlsIfNeeded(const LayoutPoint& location)
+{
+    if (LayerScrollableArea* scrollableArea = this->scrollableArea()) {
+        IntSize oldPixelSnappedBorderRectSize = pixelSnappedBorderBoxRect().size();
+        setLocation(location);
+        if (pixelSnappedBorderBoxRect().size() != oldPixelSnappedBorderRectSize)
+            scrollableArea->updateAfterLayout();
+        return;
+    }
+
+    setLocation(location);
+}
+ 
 IntRect RenderBox::absoluteContentBox() const
 {
     // This is wrong with transforms and flipped writing modes.
@@ -1717,7 +1730,7 @@ void RenderBox::positionLineBox(InlineBox* box)
     } else if (isReplaced()) {
         // FIXME: the call to roundedLayoutPoint() below is temporary and should be removed once
         // the transition to LayoutUnit-based types is complete (crbug.com/321237)
-        setLocation(box->topLeft().roundedLayoutPoint());
+        setLocationAndUpdateOverflowControlsIfNeeded(box->topLeft().roundedLayoutPoint());
         setInlineBoxWrapper(box);
     }
 }

@@ -583,9 +583,9 @@ LayoutPoint RenderFlexibleBox::flowAwareLocationForChild(RenderBox& child) const
 void RenderFlexibleBox::setFlowAwareLocationForChild(RenderBox& child, const LayoutPoint& location)
 {
     if (isHorizontalFlow())
-        child.setLocation(location);
+        child.setLocationAndUpdateOverflowControlsIfNeeded(location);
     else
-        child.setLocation(location.transposedPoint());
+        child.setLocationAndUpdateOverflowControlsIfNeeded(location.transposedPoint());
 }
 
 LayoutUnit RenderFlexibleBox::mainAxisBorderAndPaddingExtentForChild(RenderBox& child) const
