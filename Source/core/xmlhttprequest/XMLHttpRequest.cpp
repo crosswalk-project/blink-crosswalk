@@ -74,12 +74,33 @@ namespace blink {
 
 DEFINE_DEBUG_ONLY_GLOBAL(WTF::RefCountedLeakCounter, xmlHttpRequestCounter, ("XMLHttpRequest"));
 
-static bool isSetCookieHeader(const AtomicString& name)
+namespace {
+
+// This class protects the wrapper of the associated XMLHttpRequest object
+// via hasPendingActivity method which returns true if
+// m_eventDispatchRecursionLevel is positive.
+class ScopedEventDispatchProtect final {
+public:
+    explicit ScopedEventDispatchProtect(int* level) : m_level(level)
+    {
+        ++*m_level;
+    }
+    ~ScopedEventDispatchProtect()
+    {
+        ASSERT(*m_level > 0);
+        --*m_level;
+    }
+
+private:
+    int* const m_level;
+};
+
+bool isSetCookieHeader(const AtomicString& name)
 {
     return equalIgnoringCase(name, "set-cookie") || equalIgnoringCase(name, "set-cookie2");
 }
 
-static void replaceCharsetInMediaType(String& mediaType, const String& charsetValue)
+void replaceCharsetInMediaType(String& mediaType, const String& charsetValue)
 {
     unsigned pos = 0, len = 0;
 
@@ -98,7 +119,7 @@ static void replaceCharsetInMediaType(String& mediaType, const String& charsetVa
     }
 }
 
-static void logConsoleError(ExecutionContext* context, const String& message)
+void logConsoleError(ExecutionContext* context, const String& message)
 {
     if (!context)
         return;
@@ -106,6 +127,8 @@ static void logConsoleError(ExecutionContext* context, const String& message)
     // We should pass additional parameters so we can tell the console where the mistake occurred.
     context->addConsoleMessage(ConsoleMessage::create(JSMessageSource, ErrorMessageLevel, message));
 }
+
+} // namespace
 
 using Result = WebDataConsumerHandle::Result;
 
@@ -307,6 +330,7 @@ XMLHttpRequest::XMLHttpRequest(ExecutionContext* context, PassRefPtr<SecurityOri
     , m_progressEventThrottle(this)
     , m_responseTypeCode(ResponseTypeDefault)
     , m_securityOrigin(securityOrigin)
+    , m_eventDispatchRecursionLevel(0)
     , m_async(true)
     , m_includeCredentials(false)
     , m_parsedResponse(false)
@@ -1118,7 +1142,7 @@ bool XMLHttpRequest::internalAbort()
     // If abort() called internalAbort() and a nested open() ended up
     // clearing the error flag, but didn't send(), make sure the error
     // flag is still set.
-    bool newLoadStarted = hasPendingActivity();
+    bool newLoadStarted = m_loader;
     if (!newLoadStarted)
         m_error = true;
 
@@ -1183,10 +1207,6 @@ void XMLHttpRequest::handleNetworkError()
     long long expectedLength = m_response.expectedContentLength();
     long long receivedLength = m_receivedLength;
 
-    // Prevent the XMLHttpRequest instance from being destoryed during
-    // |internalAbort()|.
-    RefPtrWillBeRawPtr<XMLHttpRequest> protect(this);
-
     if (!internalAbort())
         return;
 
@@ -1200,10 +1220,6 @@ void XMLHttpRequest::handleDidCancel()
     // Response is cleared next, save needed progress event data.
     long long expectedLength = m_response.expectedContentLength();
     long long receivedLength = m_receivedLength;
-
-    // Prevent the XMLHttpRequest instance from being destoryed during
-    // |internalAbort()|.
-    RefPtrWillBeRawPtr<XMLHttpRequest> protect(this);
 
     if (!internalAbort())
         return;
@@ -1404,6 +1420,7 @@ String XMLHttpRequest::statusText() const
 void XMLHttpRequest::didFail(const ResourceError& error)
 {
     WTF_LOG(Network, "XMLHttpRequest %p didFail()", this);
+    ScopedEventDispatchProtect protect(&m_eventDispatchRecursionLevel);
 
     // If we are already in an error state, for instance we called abort(), bail out early.
     if (m_error)
@@ -1432,6 +1449,7 @@ void XMLHttpRequest::didFail(const ResourceError& error)
 void XMLHttpRequest::didFailRedirectCheck()
 {
     WTF_LOG(Network, "XMLHttpRequest %p didFailRedirectCheck()", this);
+    ScopedEventDispatchProtect protect(&m_eventDispatchRecursionLevel);
 
     handleNetworkError();
     // Now the XMLHttpRequest instance may be dead.
@@ -1440,6 +1458,7 @@ void XMLHttpRequest::didFailRedirectCheck()
 void XMLHttpRequest::didFinishLoading(unsigned long identifier, double)
 {
     WTF_LOG(Network, "XMLHttpRequest %p didFinishLoading(%lu)", this, identifier);
+    ScopedEventDispatchProtect protect(&m_eventDispatchRecursionLevel);
 
     if (m_error)
         return;
@@ -1493,6 +1512,7 @@ void XMLHttpRequest::didFinishLoadingInternal()
 void XMLHttpRequest::didFinishLoadingFromBlob()
 {
     WTF_LOG(Network, "XMLHttpRequest %p didFinishLoadingFromBlob", this);
+    ScopedEventDispatchProtect protect(&m_eventDispatchRecursionLevel);
 
     didFinishLoadingInternal();
 }
@@ -1500,6 +1520,7 @@ void XMLHttpRequest::didFinishLoadingFromBlob()
 void XMLHttpRequest::didFailLoadingFromBlob()
 {
     WTF_LOG(Network, "XMLHttpRequest %p didFailLoadingFromBlob()", this);
+    ScopedEventDispatchProtect protect(&m_eventDispatchRecursionLevel);
 
     if (m_error)
         return;
@@ -1524,6 +1545,8 @@ PassRefPtr<BlobDataHandle> XMLHttpRequest::createBlobDataHandleFromResponse()
 
 void XMLHttpRequest::notifyParserStopped()
 {
+    ScopedEventDispatchProtect protect(&m_eventDispatchRecursionLevel);
+
     // This should only be called when response document is parsed asynchronously.
     ASSERT(m_responseDocumentParser);
     ASSERT(!m_responseDocumentParser->isParsing());
@@ -1560,6 +1583,7 @@ void XMLHttpRequest::endLoading()
 void XMLHttpRequest::didSendData(unsigned long long bytesSent, unsigned long long totalBytesToBeSent)
 {
     WTF_LOG(Network, "XMLHttpRequest %p didSendData(%llu, %llu)", this, bytesSent, totalBytesToBeSent);
+    ScopedEventDispatchProtect protect(&m_eventDispatchRecursionLevel);
 
     if (!m_upload)
         return;
@@ -1577,6 +1601,7 @@ void XMLHttpRequest::didSendData(unsigned long long bytesSent, unsigned long lon
 void XMLHttpRequest::didReceiveResponse(unsigned long identifier, const ResourceResponse& response, PassOwnPtr<WebDataConsumerHandle> handle)
 {
     WTF_LOG(Network, "XMLHttpRequest %p didReceiveResponse(%lu)", this, identifier);
+    ScopedEventDispatchProtect protect(&m_eventDispatchRecursionLevel);
 
     m_response = response;
     if (!m_mimeTypeOverride.isEmpty()) {
@@ -1594,9 +1619,6 @@ void XMLHttpRequest::didReceiveResponse(unsigned long identifier, const Resource
         m_responseStream = new ReadableStreamImpl<ReadableStreamChunkTypeTraits<DOMArrayBuffer> >(executionContext(), m_responseStreamSource);
         m_responseStreamSource->startStream(m_responseStream);
 
-        // This protection seems needed to keep |this| alive after changeState
-        // calling which may call event listeners.
-        RefPtrWillBeRawPtr<XMLHttpRequest> protect(this);
         changeState(HEADERS_RECEIVED);
         if (m_error) {
             // We need to check for |m_error| because |changeState| may trigger
@@ -1653,6 +1675,7 @@ PassOwnPtr<TextResourceDecoder> XMLHttpRequest::createDecoder() const
 
 void XMLHttpRequest::didReceiveData(const char* data, unsigned len)
 {
+    ScopedEventDispatchProtect protect(&m_eventDispatchRecursionLevel);
     if (m_error)
         return;
 
@@ -1707,6 +1730,7 @@ void XMLHttpRequest::didReceiveData(const char* data, unsigned len)
 
 void XMLHttpRequest::didDownloadData(int dataLength)
 {
+    ScopedEventDispatchProtect protect(&m_eventDispatchRecursionLevel);
     if (m_error)
         return;
 
@@ -1735,10 +1759,6 @@ void XMLHttpRequest::handleDidTimeout()
     // Response is cleared next, save needed progress event data.
     long long expectedLength = m_response.expectedContentLength();
     long long receivedLength = m_receivedLength;
-
-    // Prevent the XMLHttpRequest instance from being destoryed during
-    // |internalAbort()|.
-    RefPtrWillBeRawPtr<XMLHttpRequest> protect(this);
 
     if (!internalAbort())
         return;
@@ -1773,7 +1793,7 @@ bool XMLHttpRequest::hasPendingActivity() const
         return true;
     if (m_responseStream && (m_responseStream->state() == ReadableStream::Readable || m_responseStream->state() == ReadableStream::Waiting))
         return true;
-    return false;
+    return m_eventDispatchRecursionLevel > 0;
 }
 
 void XMLHttpRequest::contextDestroyed()
