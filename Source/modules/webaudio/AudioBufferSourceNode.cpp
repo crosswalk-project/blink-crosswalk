@@ -469,7 +469,9 @@ void AudioBufferSourceNode::start(double when, double grainOffset, double grainD
     m_grainOffset = grainOffset;
     m_grainDuration = grainDuration;
 
-    m_startTime = when;
+    // If |when| < currentTime, the source must start now according to the spec.
+    // So just set startTime to currentTime in this case to start the source now.
+    m_startTime = std::max(when, context()->currentTime());
 
     if (buffer())
         clampGrainParameters(buffer());
