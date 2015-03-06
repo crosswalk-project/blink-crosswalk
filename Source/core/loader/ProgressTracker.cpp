@@ -95,7 +95,7 @@ void ProgressTracker::dispose()
 {
     if (m_inProgress)
         progressCompleted();
-    ASSERT(!m_frame->isLoading());
+    ASSERT(!m_inProgress);
 }
 
 double ProgressTracker::estimatedProgress() const
