@@ -398,7 +398,8 @@ void WebPluginContainerImpl::scrollRect(const WebRect& rect)
 
 void WebPluginContainerImpl::reportGeometry()
 {
-    if (!parent())
+    // We cannot compute geometry without a parent or renderer.
+    if (!parent() || !m_element->renderer())
         return;
 
     IntRect windowRect, clipRect;
