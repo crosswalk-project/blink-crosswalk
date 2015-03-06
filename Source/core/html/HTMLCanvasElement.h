@@ -142,8 +142,6 @@ public:
 
     bool shouldAccelerate(const IntSize&) const;
 
-    bool shouldBeDirectComposited() const;
-
     virtual const AtomicString imageSourceURL() const override;
 
     virtual InsertionNotificationRequest insertedInto(ContainerNode*) override;
