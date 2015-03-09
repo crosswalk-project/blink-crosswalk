@@ -1323,7 +1323,10 @@ void AudioContext::updateChangedChannelCountMode()
 
 SecurityOrigin* AudioContext::securityOrigin() const
 {
-    return executionContext()->securityOrigin();
+    if (executionContext())
+        return executionContext()->securityOrigin();
+
+    return nullptr;
 }
 
 ScriptPromise AudioContext::closeContext(ScriptState* scriptState)
