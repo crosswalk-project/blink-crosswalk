@@ -28,12 +28,12 @@ public:
     void configureAutoSizeMode(const IntSize& minSize, const IntSize& maxSize);
     void autoSizeIfNeeded();
 
-    void trace(Visitor*);
+    DECLARE_TRACE();
 
 private:
     explicit FrameViewAutoSizeInfo(FrameView*);
 
-    RefPtrWillBeMember<FrameView> m_frameView;
+    RawPtrWillBeMember<FrameView> m_frameView;
 
     // The lower bound on the size when autosizing.
     IntSize m_minAutoSize;
