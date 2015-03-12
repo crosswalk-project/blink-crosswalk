@@ -21,6 +21,7 @@
 #include "public/platform/WebLayerTreeView.h"
 #include "public/platform/WebUnitTestSupport.h"
 #include "public/web/WebContextMenuData.h"
+#include "public/web/WebDocument.h"
 #include "public/web/WebFrameClient.h"
 #include "public/web/WebInputEvent.h"
 #include "public/web/WebScriptSource.h"
@@ -1446,6 +1447,35 @@ TEST_F(PinchViewportTest, TestMainFrameInitializationSizing)
 
     FrameView& frameView = *localFrame->frameView();
     EXPECT_SIZE_EQ(IntSize(200, 400), frameView.frameRect().size());
+}
+
+static void accessibilitySettings(WebSettings* settings)
+{
+    PinchViewportTest::configureSettings(settings);
+    settings->setAccessibilityEnabled(true);
+}
+
+TEST_F(PinchViewportTest, AccessibilityHitTestWhileZoomedIn)
+{
+    initializeWithDesktopSettings(accessibilitySettings);
+
+    registerMockedHttpURLLoad("hit-test.html");
+    navigateTo(m_baseURL + "hit-test.html");
+
+    webViewImpl()->resize(IntSize(500, 500));
+    webViewImpl()->layout();
+
+    WebDocument webDoc = webViewImpl()->mainFrame()->document();
+    FrameView& frameView = *webViewImpl()->mainFrameImpl()->frameView();
+
+    webViewImpl()->setPageScaleFactor(2);
+    webViewImpl()->setPinchViewportOffset(WebFloatPoint(200, 230));
+    frameView.setScrollPosition(DoublePoint(400, 1100));
+
+    // Because of where the pinch viewport is located, this should hit the bottom right
+    // target (target 4).
+    WebAXObject hitNode = webDoc.accessibilityObject().hitTest(WebPoint(154, 165));
+    EXPECT_EQ(std::string("Target4"), hitNode.title().utf8());
 }
 
 } // namespace
