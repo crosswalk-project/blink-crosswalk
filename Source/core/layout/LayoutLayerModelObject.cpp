@@ -89,6 +89,20 @@ void LayoutLayerModelObject::willBeDestroyed()
 
 void LayoutLayerModelObject::styleWillChange(StyleDifference diff, const LayoutStyle& newStyle)
 {
+    // This object's layer may cease to be a stacking context, in which case the paint
+    // invalidation container of the children may change. Thus we need to invalidate paint
+    // eagerly for all such children.
+    if (hasLayer()
+        && enclosingLayer()->stackingNode()
+        && enclosingLayer()->stackingNode()->isStackingContext()
+        && newStyle.hasAutoZIndex()) {
+        // The following disablers are valid because we need to invalidate based on the current
+        // status.
+        DisableCompositingQueryAsserts compositingDisabler;
+        DisablePaintInvalidationStateAsserts paintDisabler;
+        invalidatePaintIncludingNonCompositingDescendants();
+    }
+
     s_wasFloating = isFloating();
 
     if (const LayoutStyle* oldStyle = style()) {
