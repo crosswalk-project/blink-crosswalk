@@ -6,7 +6,8 @@
 #include "config.h"
 
 #if ENABLE(WEBCL)
-
+#include "core/html/canvas/WebGLBuffer.h"
+#include "core/html/canvas/WebGLRenderingContext.h"
 #include "modules/webcl/WebCL.h"
 #include "modules/webcl/WebCLBuffer.h"
 #include "modules/webcl/WebCLContext.h"
@@ -60,6 +61,25 @@ PassRefPtr<WebCLBuffer> WebCLBuffer::create(WebCLContext* context, unsigned memo
     }
     RefPtr<WebCLBuffer> buffer = adoptRef(new WebCLBuffer(clMemObject, context, memoryFlags, sizeInBytes));
     return buffer.release();
+}
+
+PassRefPtr<WebCLBuffer> WebCLBuffer::create(WebCLContext* context, unsigned memoryFlags, WebGLBuffer* webGLBuffer, ExceptionState& es)
+{
+    Platform3DObject platform3DObject = webGLBuffer->object();
+    ASSERT(platform3DObject);
+    cl_int err = CL_SUCCESS;
+    cl_mem buffer = clCreateFromGLBuffer(context->getContext(), memoryFlags, platform3DObject, &err);
+    if (err != CL_SUCCESS) {
+        WebCLException::throwException(err, es);
+        return nullptr;
+    }
+
+    WebGLRenderingContext* glContext = context->getGLContext(es);
+    GLint value = 0;
+    glContext->webContext()->getBufferParameteriv(webGLBuffer->getTarget(), GL_BUFFER_SIZE, &value);
+    RefPtr<WebCLBuffer> clglBuffer = adoptRef(new WebCLBuffer(buffer, context, memoryFlags, value));
+    clglBuffer->cacheGLObjectInfo(0, 0, webGLBuffer);
+    return clglBuffer.release();
 }
 
 PassRefPtr<WebCLBuffer> WebCLBuffer::createSubBuffer(unsigned memoryFlags, unsigned origin, unsigned size, ExceptionState& es)

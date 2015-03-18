@@ -27,6 +27,8 @@ bool isValidFilterMode(unsigned);
 bool isValidChannelType(unsigned);
 bool isValidChannelOrder(unsigned);
 bool isValidCommandQueueProperty(unsigned);
+bool isValidGLTextureInfo(unsigned long);
+bool isValidGLTextureTarget(GLenum);
 bool isValidKernelArgIndex(WebCLKernel*, unsigned index);
 bool isValidDataSizeForDOMArrayBufferView(unsigned size, DOMArrayBufferView*);
 bool isValidRegionForMemoryObject(const Vector<size_t>& origin, const Vector<size_t>& region, size_t rowPitch, size_t slicePitch, size_t length);

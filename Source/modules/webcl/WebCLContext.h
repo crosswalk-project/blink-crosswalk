@@ -10,6 +10,7 @@
 #include "bindings/core/v8/Nullable.h"
 #include "modules/webcl/WebCLConfig.h"
 #include "modules/webcl/WebCLDevice.h"
+#include "public/platform/WebGraphicsContext3D.h"
 #include <wtf/RefCounted.h>
 #include <wtf/RefPtr.h>
 #include <wtf/PassRefPtr.h>
@@ -36,12 +37,16 @@ class WebCLObject;
 class WebCLProgram;
 class WebCLSampler;
 class WebCLUserEvent;
+class WebGLBuffer;
+class WebGLRenderbuffer;
+class WebGLTexture;
+class WebGLRenderingContext;
 
 class WebCLContext : public RefCounted<WebCLContext>, public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
 public:
     ~WebCLContext();
-    static PassRefPtr<WebCLContext> create(cl_context, WebCL*, const Vector<RefPtr<WebCLDevice>>&, HashSet<String>&);
+    static PassRefPtr<WebCLContext> create(WebGLRenderingContext*, cl_context, WebCL*, const Vector<RefPtr<WebCLDevice>>&, HashSet<String>&);
 
     ScriptValue getInfo(ScriptState*, int, ExceptionState&);
     PassRefPtr<WebCLCommandQueue> createCommandQueue(WebCLDevice*, unsigned, ExceptionState&);
@@ -64,6 +69,11 @@ public:
     PassRefPtr<WebCLImage> createImage(unsigned, HTMLVideoElement*, ExceptionState&);
     Nullable<Vector<WebCLImageDescriptor>> getSupportedImageFormats(ExceptionState&);
     Nullable<Vector<WebCLImageDescriptor>> getSupportedImageFormats(unsigned, ExceptionState&);
+    /*  WebGL related function */
+    PassRefPtr<WebCLBuffer> createFromGLBuffer(unsigned, WebGLBuffer*, ExceptionState&);
+    PassRefPtr<WebCLImage> createFromGLRenderbuffer(unsigned, WebGLRenderbuffer*, ExceptionState&);
+    PassRefPtr<WebCLImage> createFromGLTexture(unsigned, unsigned, WGC3Dint, WebGLTexture*, ExceptionState&);
+    WebGLRenderingContext* getGLContext(ExceptionState&) const;
     void release();
     void releaseAll();
 
@@ -76,9 +86,10 @@ public:
     void setDevices(const Vector<RefPtr<WebCLDevice>>& deviceList) { m_devices = deviceList; }
     WebCLHTMLUtil* getHTMLUtil() const { return m_HTMLUtil.get(); }
     cl_context getContext() const { return m_clContext; }
+    bool isGLCapableContext() const;
 
 private:
-    WebCLContext(cl_context, WebCL*, const Vector<RefPtr<WebCLDevice>>&, HashSet<String>&);
+    WebCLContext(WebGLRenderingContext*, cl_context, WebCL*, const Vector<RefPtr<WebCLDevice>>&, HashSet<String>&);
     bool isReleased() const { return !m_clContext; }
 
     typedef HashMap<WebCLDevice*, std::pair<unsigned, unsigned>> MaximumWidthAndHeightForDevice;
@@ -86,6 +97,7 @@ private:
     PassRefPtr<WebCLBuffer> createBufferBase(unsigned memoryFlags, unsigned size, void* data, ExceptionState&);
     bool supportsWidthHeight(unsigned width, unsigned height, ExceptionState&);
 
+    WebGLRenderingContext* m_glContext;
     Vector<RefPtr<WebCLDevice>> m_devices;
     HashSet<String> m_enabledExtensions;
     MaximumWidthAndHeightForDevice m_deviceMaxValues;

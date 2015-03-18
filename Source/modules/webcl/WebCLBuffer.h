@@ -15,12 +15,14 @@ namespace blink {
 
 class WebCL;
 class WebCLContext;
+class WebGLBuffer;
 
 class WebCLBuffer : public WebCLMemoryObject {
     DEFINE_WRAPPERTYPEINFO();
 public:
     ~WebCLBuffer() override;
     static PassRefPtr<WebCLBuffer> create(WebCLContext*, unsigned, unsigned, void*, ExceptionState&);
+    static PassRefPtr<WebCLBuffer> create(WebCLContext*, unsigned, WebGLBuffer*, ExceptionState&);
     PassRefPtr<WebCLBuffer> createSubBuffer(unsigned, unsigned, unsigned, ExceptionState&);
 
     int type() override { return BUFFER; }

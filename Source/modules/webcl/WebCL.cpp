@@ -6,6 +6,7 @@
 #include "config.h"
 
 #if ENABLE(WEBCL)
+#include "core/html/canvas/WebGLRenderingContext.h"
 #include "modules/webcl/WebCL.h"
 #include "modules/webcl/WebCLOpenCL.h"
 #include "modules/webcl/WebCLCallback.h"
@@ -115,24 +116,79 @@ static void validateWebCLEventList(const Vector<RefPtr<WebCLEvent>>& events, Exc
 
 PassRefPtr<WebCLContext> WebCL::createContext(ExceptionState& es)
 {
-    return createContext(CL_DEVICE_TYPE_DEFAULT, es);
+    WebGLRenderingContext* glContext = nullptr;
+    return createContext(glContext, es);
 }
 
 PassRefPtr<WebCLContext> WebCL::createContext(unsigned deviceType, ExceptionState& es)
 {
-    if (!m_platforms.size())
-        return nullptr;
-
-    return createContext(m_platforms[0].get(), deviceType, es);
+    WebGLRenderingContext* glContext = nullptr;
+    return createContext(glContext, deviceType, es);
 }
 
 PassRefPtr<WebCLContext> WebCL::createContext(WebCLPlatform* platform, ExceptionState& es)
 {
-    return createContext(platform, CL_DEVICE_TYPE_DEFAULT, es);
+    return createContext(nullptr, platform, es);
 }
 
 PassRefPtr<WebCLContext> WebCL::createContext(WebCLPlatform* platform, unsigned deviceType, ExceptionState& es)
 {
+    return createContext(nullptr, platform, deviceType, es);
+}
+
+PassRefPtr<WebCLContext> WebCL::createContext(WebCLDevice* device, ExceptionState& es)
+{
+    return createContext(nullptr, device, es);
+}
+
+PassRefPtr<WebCLContext> WebCL::createContext(const Vector<RefPtr<WebCLDevice>>& devices, ExceptionState& es)
+{
+    return createContext(nullptr, devices, es);
+}
+
+PassRefPtr<WebCLContext> WebCL::createContext(WebGLRenderingContext* glContext, ExceptionState& es)
+{
+    if (glContext && !m_extension.isEnabledExtension("KHR_gl_sharing")) {
+        es.throwWebCLException(WebCLException::EXTENSION_NOT_ENABLED, WebCLException::extensionNotEnabledMessage);
+        return nullptr;
+    }
+
+    return createContext(glContext, CL_DEVICE_TYPE_DEFAULT, es);
+}
+
+PassRefPtr<WebCLContext> WebCL::createContext(WebGLRenderingContext* glContext, unsigned deviceType, ExceptionState& es)
+{
+    if (glContext && !m_extension.isEnabledExtension("KHR_gl_sharing")) {
+        es.throwWebCLException(WebCLException::EXTENSION_NOT_ENABLED, WebCLException::extensionNotEnabledMessage);
+        return nullptr;
+    }
+
+    for (auto platform : m_platforms) {
+        RefPtr<WebCLContext> context = createContext(glContext, platform.get(), deviceType, es);
+        if (context)
+            return context;
+    }
+
+    return nullptr;
+}
+
+PassRefPtr<WebCLContext> WebCL::createContext(WebGLRenderingContext* glContext, WebCLPlatform* platform, ExceptionState& es)
+{
+    if (glContext && !m_extension.isEnabledExtension("KHR_gl_sharing")) {
+        es.throwWebCLException(WebCLException::EXTENSION_NOT_ENABLED, WebCLException::extensionNotEnabledMessage);
+        return nullptr;
+    }
+
+    return createContext(glContext, platform, CL_DEVICE_TYPE_DEFAULT, es);
+}
+
+PassRefPtr<WebCLContext> WebCL::createContext(WebGLRenderingContext* glContext, WebCLPlatform* platform, unsigned deviceType, ExceptionState& es)
+{
+    if (glContext && !m_extension.isEnabledExtension("KHR_gl_sharing")) {
+        es.throwWebCLException(WebCLException::EXTENSION_NOT_ENABLED, WebCLException::extensionNotEnabledMessage);
+        return nullptr;
+    }
+
     if (!platform) {
         es.throwWebCLException(WebCLException::INVALID_PLATFORM, WebCLException::invalidPlatformMessage);
         return nullptr;
@@ -163,7 +219,7 @@ PassRefPtr<WebCLContext> WebCL::createContext(WebCLPlatform* platform, unsigned 
     // Check all the enabled extensions and cache it to avoid enabling after context creation.
     HashSet<String> enabledExtensions;
     getAllEnabledExtensions(this, platform, devices, enabledExtensions);
-    RefPtr<WebCLContext> context = WebCLContext::create(clContextId, this, devices, enabledExtensions);
+    RefPtr<WebCLContext> context = WebCLContext::create(glContext, clContextId, this, devices, enabledExtensions);
     if (!context) {
         es.throwWebCLException(WebCLException::FAILURE, WebCLException::failureMessage);
         return nullptr;
@@ -171,15 +227,25 @@ PassRefPtr<WebCLContext> WebCL::createContext(WebCLPlatform* platform, unsigned 
     return context;
 }
 
-PassRefPtr<WebCLContext> WebCL::createContext(WebCLDevice* device, ExceptionState& es)
+PassRefPtr<WebCLContext> WebCL::createContext(WebGLRenderingContext* glContext, WebCLDevice* device, ExceptionState& es)
 {
+    if (glContext && !m_extension.isEnabledExtension("KHR_gl_sharing")) {
+        es.throwWebCLException(WebCLException::EXTENSION_NOT_ENABLED, WebCLException::extensionNotEnabledMessage);
+        return nullptr;
+    }
+
     Vector<RefPtr<WebCLDevice>> devices;
     devices.append(device);
-    return createContext(devices, es);
+    return createContext(glContext, devices, es);
 }
 
-PassRefPtr<WebCLContext> WebCL::createContext(const Vector<RefPtr<WebCLDevice>>& devices, ExceptionState& es)
+PassRefPtr<WebCLContext> WebCL::createContext(WebGLRenderingContext* glContext, const Vector<RefPtr<WebCLDevice>>& devices, ExceptionState& es)
 {
+    if (glContext && !m_extension.isEnabledExtension("KHR_gl_sharing")) {
+        es.throwWebCLException(WebCLException::EXTENSION_NOT_ENABLED, WebCLException::extensionNotEnabledMessage);
+        return nullptr;
+    }
+
     cl_int err = CL_SUCCESS;
     cl_context clContextId = 0;
 
@@ -206,7 +272,7 @@ PassRefPtr<WebCLContext> WebCL::createContext(const Vector<RefPtr<WebCLDevice>>&
     // Check all the enabled extensions and cache it to avoid enabling after context creation.
     HashSet<String> enabledExtensions;
     getAllEnabledExtensions(this, devices[0]->getPlatform(), devices, enabledExtensions);
-    RefPtr<WebCLContext> context = WebCLContext::create(clContextId, this, devices, enabledExtensions);
+    RefPtr<WebCLContext> context = WebCLContext::create(glContext, clContextId, this, devices, enabledExtensions);
     if (!context) {
         es.throwWebCLException(WebCLException::FAILURE, WebCLException::failureMessage);
         return nullptr;

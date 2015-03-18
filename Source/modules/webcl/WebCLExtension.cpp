@@ -36,6 +36,13 @@ bool WebCLExtension::enableExtension(const String& name)
         return khrFP16;
     }
 
+    if (equalIgnoringCase(name, "KHR_gl_sharing")) {
+        bool khrGLSharing = m_supportedCLExtensions.contains("cl_khr_gl_sharing");
+        if (khrGLSharing)
+            m_enabledExtensions.append("KHR_gl_sharing");
+        return khrGLSharing;
+    }
+
     return false;
 }
 
@@ -50,6 +57,9 @@ Vector<String> WebCLExtension::getSupportedExtensions()
 
     if (m_supportedCLExtensions.contains("cl_khr_fp16"))
         result.append("KHR_fp16");
+
+    if (m_supportedCLExtensions.contains("cl_khr_gl_sharing"))
+        result.append("KHR_gl_sharing");
 
     return result;
 }

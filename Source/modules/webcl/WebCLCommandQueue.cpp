@@ -1202,6 +1202,104 @@ void WebCLCommandQueue::enqueueCopyBufferToImage(WebCLBuffer* srcBuffer, WebCLIm
         WebCLException::throwException(err, es);
 }
 
+void WebCLCommandQueue::enqueueAcquireGLObjects(const Vector<RefPtr<WebCLMemoryObject>>& memoryObjects, const Vector<RefPtr<WebCLEvent>>& events, ExceptionState& es)
+{
+    enqueueAcquireGLObjects(memoryObjects, events, nullptr, es);
+}
+
+void WebCLCommandQueue::enqueueAcquireGLObjects(const Vector<RefPtr<WebCLMemoryObject>>& memoryObjects, ExceptionState& es)
+{
+    Vector<RefPtr<WebCLEvent>> events;
+    enqueueAcquireGLObjects(memoryObjects, events, nullptr, es);
+}
+
+void WebCLCommandQueue::enqueueAcquireGLObjects(const Vector<RefPtr<WebCLMemoryObject>>& memoryObjects, const Vector<RefPtr<WebCLEvent>>& events, WebCLEvent* event, ExceptionState& es)
+{
+    if (!isExtensionEnabled(m_context, "KHR_gl_sharing")) {
+        es.throwWebCLException(WebCLException::EXTENSION_NOT_ENABLED, WebCLException::extensionNotEnabledMessage);
+        return;
+    }
+
+    if (isReleased()) {
+        es.throwWebCLException(WebCLException::INVALID_COMMAND_QUEUE, WebCLException::invalidCommandQueueMessage);
+        return;
+    }
+
+    Vector<cl_mem> clMemoryObjects;
+    for (size_t i = 0; i < memoryObjects.size(); ++i) {
+        if (!memoryObjects[i].get() || memoryObjects[i]->isReleased()) {
+            es.throwWebCLException(WebCLException::INVALID_MEM_OBJECT, WebCLException::invalidMemObjectMessage);
+            return;
+        }
+        if (!memoryObjects[i]->hasGLObjectInfo()) {
+            es.throwWebCLException(WebCLException::INVALID_GL_OBJECT, WebCLException::invalidGLObjectMessage);
+            return;
+        }
+        clMemoryObjects.append(memoryObjects[i]->getMem());
+    }
+
+    Vector<cl_event> clEvents = WebCLEventVectorToCLEventVector(false, events, es);
+    if (events.size() && clEvents.size() != events.size())
+        return;
+
+    cl_event* clEventId = WebCLEventPtrToCLEventPtr(event, es);
+    if (event && !clEventId)
+        return;
+
+    cl_int err = clEnqueueAcquireGLObjects(m_clCommandQueue, clMemoryObjects.size(), clMemoryObjects.data(), clEvents.size(), clEvents.data(), clEventId);
+    if (err != CL_SUCCESS)
+        WebCLException::throwException(err, es);
+}
+
+void WebCLCommandQueue::enqueueReleaseGLObjects(const Vector<RefPtr<WebCLMemoryObject>>& memoryObjects, const Vector<RefPtr<WebCLEvent>>& events, ExceptionState& es)
+{
+    enqueueReleaseGLObjects(memoryObjects, events, nullptr, es);
+}
+
+void WebCLCommandQueue::enqueueReleaseGLObjects(const Vector<RefPtr<WebCLMemoryObject>>& memoryObjects, ExceptionState& es)
+{
+    Vector<RefPtr<WebCLEvent>> events;
+    enqueueReleaseGLObjects(memoryObjects, events, nullptr, es);
+}
+
+void WebCLCommandQueue::enqueueReleaseGLObjects(const Vector<RefPtr<WebCLMemoryObject>>& memoryObjects, const Vector<RefPtr<WebCLEvent>>& events, WebCLEvent* event, ExceptionState& es)
+{
+    if (!isExtensionEnabled(m_context, "KHR_gl_sharing")) {
+        es.throwWebCLException(WebCLException::EXTENSION_NOT_ENABLED, WebCLException::extensionNotEnabledMessage);
+        return;
+    }
+
+    if (isReleased()) {
+        es.throwWebCLException(WebCLException::INVALID_COMMAND_QUEUE, WebCLException::invalidCommandQueueMessage);
+        return;
+    }
+
+    Vector<cl_mem> clMemoryObjects;
+    for (size_t i = 0; i < memoryObjects.size(); ++i) {
+        if (!memoryObjects[i].get() || memoryObjects[i]->isReleased()) {
+            es.throwWebCLException(WebCLException::INVALID_MEM_OBJECT, WebCLException::invalidMemObjectMessage);
+            return;
+        }
+        if (!memoryObjects[i]->hasGLObjectInfo()) {
+            es.throwWebCLException(WebCLException::INVALID_GL_OBJECT, WebCLException::invalidGLObjectMessage);
+            return;
+        }
+        clMemoryObjects.append(memoryObjects[i]->getMem());
+    }
+
+    Vector<cl_event> clEvents = WebCLEventVectorToCLEventVector(false, events, es);
+    if (events.size() && clEvents.size() != events.size())
+        return;
+
+    cl_event* clEventId = WebCLEventPtrToCLEventPtr(event, es);
+    if (event && !clEventId)
+        return;
+
+    cl_int err = clEnqueueReleaseGLObjects(m_clCommandQueue, clMemoryObjects.size(), clMemoryObjects.data(), clEvents.size(), clEvents.data(), clEventId);
+    if (err != CL_SUCCESS)
+        WebCLException::throwException(err, es);
+}
+
 WebCLCommandQueue::WebCLCommandQueue(cl_command_queue commandQueue, WebCLContext* context, WebCLDevice* device)
     : WebCLObject(context)
     , m_whenFinishCallback(nullptr)

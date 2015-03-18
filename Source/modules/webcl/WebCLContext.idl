@@ -4,7 +4,9 @@
 
 typedef unsigned long CLenum;
 typedef unsigned long CLuint;
+typedef long CLint;
 typedef boolean CLboolean;
+typedef unsigned long GLenum;
 [
     Conditional=WEBCL,
 ] interface WebCLContext {
@@ -24,6 +26,10 @@ typedef boolean CLboolean;
     [CallWith=ScriptState, RaisesException] any getInfo(CLenum name);
     [RaisesException] sequence<WebCLImageDescriptor>? getSupportedImageFormats(CLenum memFlags);
     [RaisesException] sequence<WebCLImageDescriptor>? getSupportedImageFormats();
+    [RaisesException] WebGLRenderingContext getGLContext();
+    [RaisesException] WebCLBuffer createFromGLBuffer(CLenum memFlags, WebGLBuffer buffer);
+    [RaisesException] WebCLImage createFromGLRenderbuffer(CLenum memFlags, WebGLRenderbuffer renderbuffer);
+    [RaisesException] WebCLImage createFromGLTexture(CLenum memFlags, GLenum textureTarget, CLint miplevel, WebGLTexture texture);
     void release();
     void releaseAll();
 };
