@@ -603,6 +603,7 @@ void LocalDOMWindow::willDetachFrameHost()
 void LocalDOMWindow::frameDestroyed()
 {
     willDestroyDocumentInFrame();
+    resetLocation();
     m_properties.clear();
 }
 
