@@ -13,8 +13,8 @@
 #include "modules/webcl/WebCLException.h"
 #include "modules/webcl/WebCLOpenCL.h"
 
-#include <wtf/MainThread.h>
-#include <wtf/Threading.h>
+#include "public/platform/Platform.h"
+#include "public/platform/WebTraceLocation.h"
 
 namespace blink {
 
@@ -193,7 +193,7 @@ WebCLEvent::WebCLEvent(cl_event clEvent)
 void WebCLEvent::callbackProxy(cl_event event, cl_int type, void* userData)
 {
     if (!isMainThread()) {
-        callOnMainThread(WTF::bind(callbackProxyOnMainThread, event, type, userData));
+        Platform::current()->mainThread()->postTask(FROM_HERE, bind(callbackProxyOnMainThread, event, type, userData));
         return;
     }
 

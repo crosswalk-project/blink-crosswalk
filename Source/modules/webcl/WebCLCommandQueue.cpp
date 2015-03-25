@@ -25,7 +25,7 @@
 #include "modules/webcl/WebCLKernel.h"
 #include "modules/webcl/WebCLOpenCL.h"
 
-#include <wtf/MainThread.h>
+#include "public/platform/Platform.h"
 
 namespace blink {
 
@@ -1258,7 +1258,7 @@ bool WebCLCommandQueue::isExtensionEnabled(WebCLContext* context, const String& 
 void WebCLCommandQueue::callbackProxy(cl_event event, cl_int type, void* userData)
 {
     if (!isMainThread()) {
-        callOnMainThread(WTF::bind(callbackProxyOnMainThread, event, type, userData));
+        Platform::current()->mainThread()->postTask(FROM_HERE, bind(callbackProxyOnMainThread, event, type, userData));
         return;
     }
 

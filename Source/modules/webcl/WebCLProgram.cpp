@@ -13,6 +13,9 @@
 #include "modules/webcl/WebCLOpenCL.h"
 #include "modules/webcl/WebCLProgram.h"
 
+#include "public/platform/Platform.h"
+#include "public/platform/WebTraceLocation.h"
+
 namespace blink {
 
 // The holder of WebCLProgram.
@@ -470,7 +473,7 @@ void WebCLProgram::callbackProxy(cl_program program, void* userData)
         return;
     }
 
-    callOnMainThread(WTF::bind(callbackProxyOnMainThread, program, userData));
+    Platform::current()->mainThread()->postTask(FROM_HERE, bind(callbackProxyOnMainThread, program, userData));
 }
 
 void WebCLProgram::callbackProxyOnMainThread(cl_program program, void* userData)

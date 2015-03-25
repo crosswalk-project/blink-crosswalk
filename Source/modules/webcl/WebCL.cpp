@@ -25,6 +25,8 @@
 #include "modules/webcl/WebCLProgram.h"
 #include "modules/webcl/WebCLSampler.h"
 
+#include "public/platform/Platform.h"
+#include "public/platform/WebTraceLocation.h"
 #include <wtf/MainThread.h>
 
 namespace blink {
@@ -293,7 +295,7 @@ Vector<RefPtr<WebCLCallback>> WebCL::updateCallbacksFromCLEvent(cl_event event)
 void WebCL::callbackProxy(cl_event event, cl_int type, void* userData)
 {
     if (!isMainThread()) {
-        callOnMainThread(WTF::bind(callbackProxyOnMainThread, event, type, userData));
+        Platform::current()->mainThread()->postTask(FROM_HERE, bind(callbackProxyOnMainThread, event, type, userData));
         return;
     }
 
