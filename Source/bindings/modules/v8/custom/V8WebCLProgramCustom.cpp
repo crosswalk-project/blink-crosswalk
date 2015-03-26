@@ -20,10 +20,16 @@ void V8WebCLProgram::buildMethodCustom(const v8::FunctionCallbackInfo<v8::Value>
     V8StringResource<TreatNullAndUndefinedAsNullString> options;
     WebCLCallback* whenFinished = nullptr;
     {
-        if (info.Length() > 0 && !isUndefinedOrNull(info[0]))
-            TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(devices, (toRefPtrNativeArray<WebCLDevice, V8WebCLDevice>(info[0], 1, info.GetIsolate(), es)), es);
+        if (info.Length() > 0 && !isUndefinedOrNull(info[0])) {
+            devices = toRefPtrNativeArray<WebCLDevice, V8WebCLDevice>(info[0], 1, info.GetIsolate(), es);
+            if(es.throwIfNeeded())
+                return;
+        }
 
-        TOSTRING_VOID_INTERNAL(options, info[1]);
+        options = info[1];
+        if(!options.prepare())
+            return;
+
         if (!isUndefinedOrNull(info[2])) {
             if (!info[2]->IsFunction()) {
                 es.throwTypeError("The callback provided as parameter 3 is not a function.");

@@ -52,12 +52,24 @@ void V8WebCLCommandQueue::enqueueCopyBufferMethodCustom(const v8::FunctionCallba
         }
 
         dstBuffer = V8WebCLBuffer::toImplWithTypeCheck(info.GetIsolate(), info[1]);
-        TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(srcOffset, toUInt32(info[2], EnforceRange, exceptionState), exceptionState);
-        TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(dstOffset, toUInt32(info[3], EnforceRange, exceptionState), exceptionState);
-        TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(numBytes, toUInt32(info[4], EnforceRange, exceptionState), exceptionState);
-        if (info.Length() > 5 && !isUndefinedOrNull(info[5]))
-            TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(eventWaitList, (toRefPtrNativeArray<WebCLEvent, V8WebCLEvent>(info[5], 6, info.GetIsolate(), exceptionState)), exceptionState);
 
+        srcOffset = toUInt32(info.GetIsolate(), info[2], EnforceRange, exceptionState);
+        if(exceptionState.throwIfNeeded())
+            return;
+
+        dstOffset = toUInt32(info.GetIsolate(), info[3], EnforceRange, exceptionState);
+        if(exceptionState.throwIfNeeded())
+            return;
+
+        numBytes = toUInt32(info.GetIsolate(), info[4], EnforceRange, exceptionState);
+        if(exceptionState.throwIfNeeded())
+            return;
+
+        if (info.Length() > 5 && !isUndefinedOrNull(info[5])) {
+            eventWaitList = toRefPtrNativeArray<WebCLEvent, V8WebCLEvent>(info[5], 6, info.GetIsolate(), exceptionState);
+            if(exceptionState.throwIfNeeded())
+                return;
+        }
         if (info.Length() > 6) {
             if (!isUndefinedOrNull(info[6]) && !V8WebCLEvent::hasInstance(info[6], info.GetIsolate())) {
                 exceptionState.throwTypeError("parameter 7 is not of type 'WebCLEvent'.");
@@ -109,15 +121,40 @@ void V8WebCLCommandQueue::enqueueCopyBufferRectMethodCustom(const v8::FunctionCa
         }
 
         dstBuffer = V8WebCLBuffer::toImplWithTypeCheck(info.GetIsolate(), info[1]);
-        TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(srcOrigin, toImplArray<unsigned>(info[2], 3, info.GetIsolate(), exceptionState), exceptionState);
-        TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(dstOrigin, toImplArray<unsigned>(info[3], 4, info.GetIsolate(), exceptionState), exceptionState);
-        TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(region, toImplArray<unsigned>(info[4], 5, info.GetIsolate(), exceptionState), exceptionState);
-        TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(srcRowPitch, toUInt32(info[5], EnforceRange, exceptionState), exceptionState);
-        TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(srcSlicePitch, toUInt32(info[6], EnforceRange, exceptionState), exceptionState);
-        TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(dstRowPitch, toUInt32(info[7], EnforceRange, exceptionState), exceptionState);
-        TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(dstSlicePitch, toUInt32(info[8], EnforceRange, exceptionState), exceptionState);
-        if (info.Length() > 9 && !isUndefinedOrNull(info[9]))
-            TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(eventWaitList, (toRefPtrNativeArray<WebCLEvent, V8WebCLEvent>(info[9], 10, info.GetIsolate(), exceptionState)), exceptionState);
+
+        srcOrigin = toImplArray<unsigned>(info[2], 3, info.GetIsolate(), exceptionState);
+        if(exceptionState.throwIfNeeded())
+            return;
+
+        dstOrigin = toImplArray<unsigned>(info[3], 4, info.GetIsolate(), exceptionState);
+        if(exceptionState.throwIfNeeded())
+            return;
+
+        region = toImplArray<unsigned>(info[4], 5, info.GetIsolate(), exceptionState);
+        if(exceptionState.throwIfNeeded())
+            return;
+
+        srcRowPitch = toUInt32(info.GetIsolate(), info[5], EnforceRange, exceptionState);
+        if(exceptionState.throwIfNeeded())
+            return;
+
+        srcSlicePitch = toUInt32(info.GetIsolate(), info[6], EnforceRange, exceptionState);
+        if(exceptionState.throwIfNeeded())
+            return;
+
+        dstRowPitch = toUInt32(info.GetIsolate(), info[7], EnforceRange, exceptionState);
+        if(exceptionState.throwIfNeeded())
+            return;
+
+        dstSlicePitch = toUInt32(info.GetIsolate(), info[8], EnforceRange, exceptionState);
+        if(exceptionState.throwIfNeeded())
+            return;
+
+        if (info.Length() > 9 && !isUndefinedOrNull(info[9])) {
+            eventWaitList = toRefPtrNativeArray<WebCLEvent, V8WebCLEvent>(info[9], 10, info.GetIsolate(), exceptionState);
+            if(exceptionState.throwIfNeeded())
+                return;
+        }
 
         if (info.Length() > 10) {
             if (!isUndefinedOrNull(info[10]) && !V8WebCLEvent::hasInstance(info[10], info.GetIsolate())) {
@@ -166,11 +203,23 @@ void V8WebCLCommandQueue::enqueueCopyImageMethodCustom(const v8::FunctionCallbac
         }
 
         dstImage = V8WebCLImage::toImplWithTypeCheck(info.GetIsolate(), info[1]);
-        TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(srcOrigin, toImplArray<unsigned>(info[2], 3, info.GetIsolate(), exceptionState), exceptionState);
-        TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(dstOrigin, toImplArray<unsigned>(info[3], 4, info.GetIsolate(), exceptionState), exceptionState);
-        TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(region, toImplArray<unsigned>(info[4], 5, info.GetIsolate(), exceptionState), exceptionState);
-        if (info.Length() > 5 && !isUndefinedOrNull(info[5]))
-            TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(eventWaitList, (toRefPtrNativeArray<WebCLEvent, V8WebCLEvent>(info[5], 6, info.GetIsolate(), exceptionState)), exceptionState);
+        srcOrigin = toImplArray<unsigned>(info[2], 3, info.GetIsolate(), exceptionState);
+        if(exceptionState.throwIfNeeded())
+            return;
+
+        dstOrigin = toImplArray<unsigned>(info[3], 4, info.GetIsolate(), exceptionState);
+        if(exceptionState.throwIfNeeded())
+            return;
+
+        region = toImplArray<unsigned>(info[4], 5, info.GetIsolate(), exceptionState);
+        if(exceptionState.throwIfNeeded())
+            return;
+
+        if (info.Length() > 5 && !isUndefinedOrNull(info[5])) {
+            eventWaitList = toRefPtrNativeArray<WebCLEvent, V8WebCLEvent>(info[5], 6, info.GetIsolate(), exceptionState);
+            if(exceptionState.throwIfNeeded())
+                return;
+        }
 
         if (info.Length() > 6) {
             if (!isUndefinedOrNull(info[6]) && !V8WebCLEvent::hasInstance(info[6], info.GetIsolate())) {
@@ -220,12 +269,24 @@ void V8WebCLCommandQueue::enqueueCopyImageToBufferMethodCustom(const v8::Functio
         }
 
         dstBuffer = V8WebCLBuffer::toImplWithTypeCheck(info.GetIsolate(), info[1]);
-        TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(srcOrigin, toImplArray<unsigned>(info[2], 3, info.GetIsolate(), exceptionState), exceptionState);
-        TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(srcRegion, toImplArray<unsigned>(info[3], 4, info.GetIsolate(), exceptionState), exceptionState);
-        TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(dstOffset, toUInt32(info[4], EnforceRange, exceptionState), exceptionState);
-        if (info.Length() > 5 && !isUndefinedOrNull(info[5]))
-            TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(eventWaitList, (toRefPtrNativeArray<WebCLEvent, V8WebCLEvent>(info[5], 6, info.GetIsolate(), exceptionState)), exceptionState);
 
+        srcOrigin = toImplArray<unsigned>(info[2], 3, info.GetIsolate(), exceptionState);
+        if(exceptionState.throwIfNeeded())
+            return;
+
+        srcRegion = toImplArray<unsigned>(info[3], 4, info.GetIsolate(), exceptionState);
+        if(exceptionState.throwIfNeeded())
+            return;
+
+        dstOffset = toUInt32(info.GetIsolate(), info[4], EnforceRange, exceptionState);
+        if(exceptionState.throwIfNeeded())
+            return;
+
+        if (info.Length() > 5 && !isUndefinedOrNull(info[5])) {
+            eventWaitList = toRefPtrNativeArray<WebCLEvent, V8WebCLEvent>(info[5], 6, info.GetIsolate(), exceptionState);
+            if(exceptionState.throwIfNeeded())
+                return;
+        }
         if (info.Length() > 6) {
             if (!isUndefinedOrNull(info[6]) && !V8WebCLEvent::hasInstance(info[6], info.GetIsolate())) {
                 exceptionState.throwTypeError("parameter 7 is not of type 'WebCLEvent'.");
@@ -274,11 +335,24 @@ void V8WebCLCommandQueue::enqueueCopyBufferToImageMethodCustom(const v8::Functio
         }
 
         dstImage = V8WebCLImage::toImplWithTypeCheck(info.GetIsolate(), info[1]);
-        TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(srcOffset, toUInt32(info[2], EnforceRange, exceptionState), exceptionState);
-        TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(dstOrigin, toImplArray<unsigned>(info[3], 4, info.GetIsolate(), exceptionState), exceptionState);
-        TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(dstRegion, toImplArray<unsigned>(info[4], 5, info.GetIsolate(), exceptionState), exceptionState);
-        if (info.Length() > 5 && !isUndefinedOrNull(info[5]))
-            TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(eventWaitList, (toRefPtrNativeArray<WebCLEvent, V8WebCLEvent>(info[5], 6, info.GetIsolate(), exceptionState)), exceptionState);
+
+        srcOffset = toUInt32(info.GetIsolate(), info[2], EnforceRange, exceptionState);
+        if(exceptionState.throwIfNeeded())
+            return;
+
+        dstOrigin = toImplArray<unsigned>(info[3], 4, info.GetIsolate(), exceptionState);
+        if(exceptionState.throwIfNeeded())
+            return;
+
+        dstRegion = toImplArray<unsigned>(info[4], 5, info.GetIsolate(), exceptionState);
+        if(exceptionState.throwIfNeeded())
+            return;
+
+        if (info.Length() > 5 && !isUndefinedOrNull(info[5])) {
+            eventWaitList = toRefPtrNativeArray<WebCLEvent, V8WebCLEvent>(info[5], 6, info.GetIsolate(), exceptionState);
+            if(exceptionState.throwIfNeeded())
+                return;
+        }
 
         if (info.Length() > 6) {
             if (!isUndefinedOrNull(info[6]) && !V8WebCLEvent::hasInstance(info[6], info.GetIsolate())) {
@@ -322,8 +396,15 @@ static void enqueueReadBuffer1Method(const v8::FunctionCallbackInfo<v8::Value>& 
 
         buffer = V8WebCLBuffer::toImplWithTypeCheck(info.GetIsolate(), info[0]);
         blockingRead = info[1]->BooleanValue();
-        TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(bufferOffset, toUInt32(info[2], exceptionState), exceptionState);
-        TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(numBytes, toUInt32(info[3], exceptionState), exceptionState);
+
+        bufferOffset = toUInt32(info.GetIsolate(), info[2], EnforceRange, exceptionState);
+        if(exceptionState.throwIfNeeded())
+            return;
+
+        numBytes = toUInt32(info.GetIsolate(), info[3], EnforceRange, exceptionState);
+        if(exceptionState.throwIfNeeded())
+            return;
+
         if (info.Length() > 4 && !V8HTMLCanvasElement::hasInstance(info[4], info.GetIsolate())) {
             exceptionState.throwTypeError("parameter 5 is not of type 'HTMLCanvasElement'.");
             exceptionState.throwIfNeeded();
@@ -331,8 +412,11 @@ static void enqueueReadBuffer1Method(const v8::FunctionCallbackInfo<v8::Value>& 
         }
 
         canvas = V8HTMLCanvasElement::toImplWithTypeCheck(info.GetIsolate(), info[4]);
-        if (info.Length() > 5 && !isUndefinedOrNull(info[5]))
-            TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(eventWaitList, (toRefPtrNativeArray<WebCLEvent, V8WebCLEvent>(info[5], 6, info.GetIsolate(), exceptionState)), exceptionState);
+        if (info.Length() > 5 && !isUndefinedOrNull(info[5])) {
+            eventWaitList = toRefPtrNativeArray<WebCLEvent, V8WebCLEvent>(info[5], 6, info.GetIsolate(), exceptionState);
+            if(exceptionState.throwIfNeeded())
+                return;
+        }
 
         if (info.Length() > 6) {
             if (!isUndefinedOrNull(info[6]) && !V8WebCLEvent::hasInstance(info[6], info.GetIsolate())) {
@@ -376,8 +460,14 @@ static void enqueueReadBuffer2Method(const v8::FunctionCallbackInfo<v8::Value>& 
 
         buffer = V8WebCLBuffer::toImplWithTypeCheck(info.GetIsolate(), info[0]);
         blockingRead = info[1]->BooleanValue();
-        TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(bufferOffset, toUInt32(info[2], exceptionState), exceptionState);
-        TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(numBytes, toUInt32(info[3], exceptionState), exceptionState);
+        bufferOffset = toUInt32(info.GetIsolate(), info[2], EnforceRange, exceptionState);
+        if(exceptionState.throwIfNeeded())
+            return;
+
+        numBytes = toUInt32(info.GetIsolate(), info[3], EnforceRange, exceptionState);
+        if(exceptionState.throwIfNeeded())
+            return;
+
         if (info.Length() > 4 && !V8ArrayBufferView::hasInstance(info[4], info.GetIsolate())) {
             exceptionState.throwTypeError("parameter 5 is not of type 'ArrayBufferView'.");
             exceptionState.throwIfNeeded();
@@ -385,8 +475,11 @@ static void enqueueReadBuffer2Method(const v8::FunctionCallbackInfo<v8::Value>& 
         }
 
         hostPtr = info[4]->IsArrayBufferView() ? V8ArrayBufferView::toImpl(v8::Handle<v8::ArrayBufferView>::Cast(info[4])) : 0;
-        if (info.Length() > 5 && !isUndefinedOrNull(info[5]))
-            TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(eventWaitList, (toRefPtrNativeArray<WebCLEvent, V8WebCLEvent>(info[5], 6, info.GetIsolate(), exceptionState)), exceptionState);
+        if (info.Length() > 5 && !isUndefinedOrNull(info[5])) {
+            eventWaitList = toRefPtrNativeArray<WebCLEvent, V8WebCLEvent>(info[5], 6, info.GetIsolate(), exceptionState);
+            if(exceptionState.throwIfNeeded())
+                return;
+        }
 
         if (info.Length() > 6) {
             if (!isUndefinedOrNull(info[6]) && !V8WebCLEvent::hasInstance(info[6], info.GetIsolate())) {
@@ -455,11 +548,26 @@ static void enqueueReadBufferRect1Method(const v8::FunctionCallbackInfo<v8::Valu
 
         buffer = V8WebCLBuffer::toImplWithTypeCheck(info.GetIsolate(), info[0]);
         blockingRead = info[1]->BooleanValue();
-        TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(bufferOrigin, toImplArray<unsigned>(info[2], 3, info.GetIsolate(), exceptionState), exceptionState);
-        TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(hostOrigin, toImplArray<unsigned>(info[3], 4, info.GetIsolate(), exceptionState), exceptionState);
-        TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(region, toImplArray<unsigned>(info[4], 5, info.GetIsolate(), exceptionState), exceptionState);
-        TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(hostRowPitch, toUInt32(info[5], EnforceRange, exceptionState), exceptionState);
-        TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(hostSlicePitch, toUInt32(info[6], EnforceRange, exceptionState), exceptionState);
+        bufferOrigin = toImplArray<unsigned>(info[2], 3, info.GetIsolate(), exceptionState);
+        if(exceptionState.throwIfNeeded())
+            return;
+
+        hostOrigin = toImplArray<unsigned>(info[3], 4, info.GetIsolate(), exceptionState);
+        if(exceptionState.throwIfNeeded())
+            return;
+
+        region = toImplArray<unsigned>(info[4], 5, info.GetIsolate(), exceptionState);
+        if(exceptionState.throwIfNeeded())
+            return;
+
+        hostRowPitch = toUInt32(info.GetIsolate(), info[5], EnforceRange, exceptionState);
+        if(exceptionState.throwIfNeeded())
+            return;
+
+        hostSlicePitch = toUInt32(info.GetIsolate(), info[6], EnforceRange, exceptionState);
+        if(exceptionState.throwIfNeeded())
+            return;
+
         if (info.Length() > 7 && !V8HTMLCanvasElement::hasInstance(info[7], info.GetIsolate())) {
             exceptionState.throwTypeError("parameter 8 is not of type 'HTMLCanvasElement'.");
             exceptionState.throwIfNeeded();
@@ -467,8 +575,11 @@ static void enqueueReadBufferRect1Method(const v8::FunctionCallbackInfo<v8::Valu
         }
 
         canvas = V8HTMLCanvasElement::toImplWithTypeCheck(info.GetIsolate(), info[7]);
-        if (info.Length() > 8 && !isUndefinedOrNull(info[8]))
-            TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(eventWaitList, (toRefPtrNativeArray<WebCLEvent, V8WebCLEvent>(info[8], 9, info.GetIsolate(), exceptionState)), exceptionState);
+        if (info.Length() > 8 && !isUndefinedOrNull(info[8])) {
+            eventWaitList = toRefPtrNativeArray<WebCLEvent, V8WebCLEvent>(info[8], 9, info.GetIsolate(), exceptionState);
+            if(exceptionState.throwIfNeeded())
+                return;
+        }
 
         if (info.Length() > 9) {
             if (!isUndefinedOrNull(info[9]) && !V8WebCLEvent::hasInstance(info[9], info.GetIsolate())) {
@@ -517,13 +628,34 @@ static void enqueueReadBufferRect2Method(const v8::FunctionCallbackInfo<v8::Valu
 
         buffer = V8WebCLBuffer::toImplWithTypeCheck(info.GetIsolate(), info[0]);
         blockingRead = info[1]->BooleanValue();
-        TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(bufferOrigin, toImplArray<unsigned>(info[2], 3, info.GetIsolate(), exceptionState), exceptionState);
-        TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(hostOrigin, toImplArray<unsigned>(info[3], 4, info.GetIsolate(), exceptionState), exceptionState);
-        TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(region, toImplArray<unsigned>(info[4], 5, info.GetIsolate(), exceptionState), exceptionState);
-        TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(bufferRowPitch, toUInt32(info[5], EnforceRange, exceptionState), exceptionState);
-        TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(bufferSlicePitch, toUInt32(info[6], EnforceRange, exceptionState), exceptionState);
-        TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(hostRowPitch, toUInt32(info[7], EnforceRange, exceptionState), exceptionState);
-        TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(hostSlicePitch, toUInt32(info[8], EnforceRange, exceptionState), exceptionState);
+        bufferOrigin = toImplArray<unsigned>(info[2], 3, info.GetIsolate(), exceptionState);
+        if(exceptionState.throwIfNeeded())
+            return;
+
+        hostOrigin = toImplArray<unsigned>(info[3], 4, info.GetIsolate(), exceptionState);
+        if(exceptionState.throwIfNeeded())
+            return;
+
+        region = toImplArray<unsigned>(info[4], 5, info.GetIsolate(), exceptionState);
+        if(exceptionState.throwIfNeeded())
+            return;
+
+        bufferRowPitch = toUInt32(info.GetIsolate(), info[5], EnforceRange, exceptionState);
+        if(exceptionState.throwIfNeeded())
+            return;
+
+        bufferSlicePitch = toUInt32(info.GetIsolate(), info[6], EnforceRange, exceptionState);
+        if(exceptionState.throwIfNeeded())
+            return;
+
+        hostRowPitch = toUInt32(info.GetIsolate(), info[7], EnforceRange, exceptionState);
+        if(exceptionState.throwIfNeeded())
+            return;
+
+        hostSlicePitch = toUInt32(info.GetIsolate(), info[8], EnforceRange, exceptionState);
+        if(exceptionState.throwIfNeeded())
+            return;
+
         if (info.Length() > 9 && !V8ArrayBufferView::hasInstance(info[9], info.GetIsolate())) {
             exceptionState.throwTypeError("parameter 10 is not of type 'ArrayBufferView'.");
             exceptionState.throwIfNeeded();
@@ -531,8 +663,11 @@ static void enqueueReadBufferRect2Method(const v8::FunctionCallbackInfo<v8::Valu
         }
 
         hostPtr = info[9]->IsArrayBufferView() ? V8ArrayBufferView::toImpl(v8::Handle<v8::ArrayBufferView>::Cast(info[9])) : 0;
-        if (info.Length() > 10 && !isUndefinedOrNull(info[10]))
-            TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(eventWaitList, (toRefPtrNativeArray<WebCLEvent, V8WebCLEvent>(info[10], 11, info.GetIsolate(), exceptionState)), exceptionState);
+        if (info.Length() > 10 && !isUndefinedOrNull(info[10])) {
+            eventWaitList = toRefPtrNativeArray<WebCLEvent, V8WebCLEvent>(info[10], 11, info.GetIsolate(), exceptionState);
+            if(exceptionState.throwIfNeeded())
+                return;
+        }
 
         if (info.Length() > 11) {
             if (!isUndefinedOrNull(info[11]) && !V8WebCLEvent::hasInstance(info[11], info.GetIsolate())) {
@@ -598,8 +733,14 @@ static void enqueueReadImage1Method(const v8::FunctionCallbackInfo<v8::Value>& i
 
         image = V8WebCLImage::toImplWithTypeCheck(info.GetIsolate(), info[0]);
         blockingRead = info[1]->BooleanValue();
-        TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(origin, toImplArray<unsigned>(info[2], 3, info.GetIsolate(), exceptionState), exceptionState);
-        TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(region, toImplArray<unsigned>(info[3], 4, info.GetIsolate(), exceptionState), exceptionState);
+        origin = toImplArray<unsigned>(info[2], 3, info.GetIsolate(), exceptionState);
+        if(exceptionState.throwIfNeeded())
+            return;
+
+        region = toImplArray<unsigned>(info[3], 4, info.GetIsolate(), exceptionState);
+        if(exceptionState.throwIfNeeded())
+            return;
+
         if (info.Length() > 4 && !V8HTMLCanvasElement::hasInstance(info[4], info.GetIsolate())) {
             exceptionState.throwTypeError("parameter 5 is not of type 'HTMLCanvasElement'.");
             exceptionState.throwIfNeeded();
@@ -607,8 +748,12 @@ static void enqueueReadImage1Method(const v8::FunctionCallbackInfo<v8::Value>& i
         }
 
         canvas = V8HTMLCanvasElement::toImplWithTypeCheck(info.GetIsolate(), info[4]);
-        if (info.Length() > 5 && !isUndefinedOrNull(info[5]))
-            TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(eventWaitList, (toRefPtrNativeArray<WebCLEvent, V8WebCLEvent>(info[5], 6, info.GetIsolate(), exceptionState)), exceptionState);
+        if (info.Length() > 5 && !isUndefinedOrNull(info[5])) {
+            eventWaitList = toRefPtrNativeArray<WebCLEvent, V8WebCLEvent>(info[5], 6, info.GetIsolate(), exceptionState);
+            if(exceptionState.throwIfNeeded())
+                return;
+        }
+
 
         if (info.Length() > 6) {
             if (!isUndefinedOrNull(info[6]) && !V8WebCLEvent::hasInstance(info[6], info.GetIsolate())) {
@@ -653,9 +798,18 @@ static void enqueueReadImage2Method(const v8::FunctionCallbackInfo<v8::Value>& i
 
         image = V8WebCLImage::toImplWithTypeCheck(info.GetIsolate(), info[0]);
         blockingRead = info[1]->BooleanValue();
-        TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(origin, toImplArray<unsigned>(info[2], 3, info.GetIsolate(), exceptionState), exceptionState);
-        TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(region, toImplArray<unsigned>(info[3], 4, info.GetIsolate(), exceptionState), exceptionState);
-        TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(hostRowPitch, toUInt32(info[4], EnforceRange, exceptionState), exceptionState);
+        origin = toImplArray<unsigned>(info[2], 3, info.GetIsolate(), exceptionState);
+        if(exceptionState.throwIfNeeded())
+            return;
+
+        region = toImplArray<unsigned>(info[3], 4, info.GetIsolate(), exceptionState);
+        if(exceptionState.throwIfNeeded())
+            return;
+
+        hostRowPitch = toUInt32(info.GetIsolate(), info[4], EnforceRange, exceptionState);
+        if(exceptionState.throwIfNeeded())
+            return;
+
         if (info.Length() > 5 && !V8ArrayBufferView::hasInstance(info[5], info.GetIsolate())) {
             exceptionState.throwTypeError("parameter 6 is not of type 'ArrayBufferView'.");
             exceptionState.throwIfNeeded();
@@ -663,8 +817,11 @@ static void enqueueReadImage2Method(const v8::FunctionCallbackInfo<v8::Value>& i
         }
 
         hostPtr = info[5]->IsArrayBufferView() ? V8ArrayBufferView::toImpl(v8::Handle<v8::ArrayBufferView>::Cast(info[5])) : 0;
-        if (info.Length() > 6 && !isUndefinedOrNull(info[6]))
-            TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(eventWaitList, (toRefPtrNativeArray<WebCLEvent, V8WebCLEvent>(info[6], 7, info.GetIsolate(), exceptionState)), exceptionState);
+        if (info.Length() > 6 && !isUndefinedOrNull(info[6])) {
+            eventWaitList = toRefPtrNativeArray<WebCLEvent, V8WebCLEvent>(info[6], 7, info.GetIsolate(), exceptionState);
+            if(exceptionState.throwIfNeeded())
+                return;
+        }
 
         if (info.Length() > 7) {
             if (!isUndefinedOrNull(info[7]) && !V8WebCLEvent::hasInstance(info[7], info.GetIsolate())) {
@@ -729,7 +886,10 @@ static void enqueueWriteBuffer1Method(const v8::FunctionCallbackInfo<v8::Value>&
 
         buffer = V8WebCLBuffer::toImplWithTypeCheck(info.GetIsolate(), info[0]);
         blockingWrite = info[1]->BooleanValue();
-        TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(bufferOffset, toUInt32(info[2], EnforceRange, exceptionState), exceptionState);
+        bufferOffset = toUInt32(info.GetIsolate(), info[2], EnforceRange, exceptionState);
+        if(exceptionState.throwIfNeeded())
+            return;
+
         if (V8ImageData::hasInstance(info[3], info.GetIsolate())) {
             if (info.Length() > 3 && !V8ImageData::hasInstance(info[3], info.GetIsolate())) {
                 exceptionState.throwTypeError("parameter 4 is not of type 'ImageData'.");
@@ -756,8 +916,11 @@ static void enqueueWriteBuffer1Method(const v8::FunctionCallbackInfo<v8::Value>&
             image = V8HTMLImageElement::toImplWithTypeCheck(info.GetIsolate(), info[3]);
         }
 
-        if (info.Length() > 4 && !isUndefinedOrNull(info[4]))
-            TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(eventWaitList, (toRefPtrNativeArray<WebCLEvent, V8WebCLEvent>(info[4], 5, info.GetIsolate(), exceptionState)), exceptionState);
+        if (info.Length() > 4 && !isUndefinedOrNull(info[4])) {
+            eventWaitList = toRefPtrNativeArray<WebCLEvent, V8WebCLEvent>(info[4], 5, info.GetIsolate(), exceptionState);
+            if(exceptionState.throwIfNeeded())
+                return;
+        }
 
         if (info.Length() > 5) {
             if (!isUndefinedOrNull(info[5]) && !V8WebCLEvent::hasInstance(info[5], info.GetIsolate())) {
@@ -807,8 +970,14 @@ static void enqueueWriteBuffer2Method(const v8::FunctionCallbackInfo<v8::Value>&
 
         bufferId = V8WebCLBuffer::toImplWithTypeCheck(info.GetIsolate(), info[0]);
         blockingWrite = info[1]->BooleanValue();
-        TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(bufferOffset, toUInt32(info[2], EnforceRange, exceptionState), exceptionState);
-        TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(numBytes, toUInt32(info[3], EnforceRange, exceptionState), exceptionState);
+        bufferOffset = toUInt32(info.GetIsolate(), info[2], EnforceRange, exceptionState);
+        if(exceptionState.throwIfNeeded())
+            return;
+
+        numBytes = toUInt32(info.GetIsolate(), info[3], EnforceRange, exceptionState);
+        if(exceptionState.throwIfNeeded())
+            return;
+
         if (info.Length() > 4 && !V8ArrayBufferView::hasInstance(info[4], info.GetIsolate())) {
             exceptionState.throwTypeError("parameter 5 is not of type 'ArrayBufferView'.");
             exceptionState.throwIfNeeded();
@@ -816,8 +985,11 @@ static void enqueueWriteBuffer2Method(const v8::FunctionCallbackInfo<v8::Value>&
         }
 
         hostPtr = info[4]->IsArrayBufferView() ? V8ArrayBufferView::toImpl(v8::Handle<v8::ArrayBufferView>::Cast(info[4])) : 0;
-        if (info.Length() > 5 && !isUndefinedOrNull(info[5]))
-            TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(eventWaitList, (toRefPtrNativeArray<WebCLEvent, V8WebCLEvent>(info[5], 6, info.GetIsolate(), exceptionState)), exceptionState);
+        if (info.Length() > 5 && !isUndefinedOrNull(info[5])) {
+            eventWaitList = toRefPtrNativeArray<WebCLEvent, V8WebCLEvent>(info[5], 6, info.GetIsolate(), exceptionState);
+            if(exceptionState.throwIfNeeded())
+                return;
+        }
 
         if (info.Length() > 6) {
             if (!isUndefinedOrNull(info[6]) && !V8WebCLEvent::hasInstance(info[6], info.GetIsolate())) {
@@ -888,11 +1060,26 @@ static void enqueueWriteBufferRect1Method(const v8::FunctionCallbackInfo<v8::Val
 
         buffer = V8WebCLBuffer::toImplWithTypeCheck(info.GetIsolate(), info[0]);
         blockingWrite = info[1]->BooleanValue();
-        TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(bufferOrigin, toImplArray<unsigned>(info[2], 3, info.GetIsolate(), exceptionState), exceptionState);
-        TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(hostOrigin, toImplArray<unsigned>(info[3], 4, info.GetIsolate(), exceptionState), exceptionState);
-        TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(region, toImplArray<unsigned>(info[4], 5, info.GetIsolate(), exceptionState), exceptionState);
-        TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(hostRowPitch, toUInt32(info[5], EnforceRange, exceptionState), exceptionState);
-        TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(hostSlicePitch, toUInt32(info[6], EnforceRange, exceptionState), exceptionState);
+        bufferOrigin = toImplArray<unsigned>(info[2], 3, info.GetIsolate(), exceptionState);
+        if(exceptionState.throwIfNeeded())
+            return;
+
+        hostOrigin = toImplArray<unsigned>(info[3], 4, info.GetIsolate(), exceptionState);
+        if(exceptionState.throwIfNeeded())
+            return;
+
+        region = toImplArray<unsigned>(info[4], 5, info.GetIsolate(), exceptionState);
+        if(exceptionState.throwIfNeeded())
+            return;
+
+        hostRowPitch = toUInt32(info.GetIsolate(), info[5], EnforceRange, exceptionState);
+        if(exceptionState.throwIfNeeded())
+            return;
+
+        hostSlicePitch = toUInt32(info.GetIsolate(), info[6], EnforceRange, exceptionState);
+        if(exceptionState.throwIfNeeded())
+            return;
+
         if (V8ImageData::hasInstance(info[7], info.GetIsolate())) {
             if (info.Length() > 7 && !V8ImageData::hasInstance(info[7], info.GetIsolate())) {
                 exceptionState.throwTypeError("parameter 8 is not of type 'ImageData'.");
@@ -918,8 +1105,12 @@ static void enqueueWriteBufferRect1Method(const v8::FunctionCallbackInfo<v8::Val
 
             image = V8HTMLImageElement::toImplWithTypeCheck(info.GetIsolate(), info[7]);
         }
-        if (info.Length() > 8 && !isUndefinedOrNull(info[8]))
-            TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(eventWaitList, (toRefPtrNativeArray<WebCLEvent, V8WebCLEvent>(info[8], 9, info.GetIsolate(), exceptionState)), exceptionState);
+        if (info.Length() > 8 && !isUndefinedOrNull(info[8])) {
+            eventWaitList = toRefPtrNativeArray<WebCLEvent, V8WebCLEvent>(info[8], 9, info.GetIsolate(), exceptionState);
+            if(exceptionState.throwIfNeeded())
+                return;
+        }
+
 
         if (info.Length() > 9) {
             if (!isUndefinedOrNull(info[9]) && !V8WebCLEvent::hasInstance(info[9], info.GetIsolate())) {
@@ -974,13 +1165,34 @@ static void enqueueWriteBufferRect2Method(const v8::FunctionCallbackInfo<v8::Val
 
         buffer = V8WebCLBuffer::toImplWithTypeCheck(info.GetIsolate(), info[0]);
         blockingWrite = info[1]->BooleanValue();
-        TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(bufferOrigin, toImplArray<unsigned>(info[2], 3, info.GetIsolate(), exceptionState), exceptionState);
-        TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(hostOrigin, toImplArray<unsigned>(info[3], 4, info.GetIsolate(), exceptionState), exceptionState);
-        TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(region, toImplArray<unsigned>(info[4], 5, info.GetIsolate(), exceptionState), exceptionState);
-        TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(bufferRowPitch, toUInt32(info[5], EnforceRange, exceptionState), exceptionState);
-        TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(bufferSlicePitch, toUInt32(info[6], EnforceRange, exceptionState), exceptionState);
-        TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(hostRowPitch, toUInt32(info[7], EnforceRange, exceptionState), exceptionState);
-        TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(hostSlicePitch, toUInt32(info[8], EnforceRange, exceptionState), exceptionState);
+        bufferOrigin = toImplArray<unsigned>(info[2], 3, info.GetIsolate(), exceptionState);
+        if(exceptionState.throwIfNeeded())
+            return;
+
+        hostOrigin = toImplArray<unsigned>(info[3], 4, info.GetIsolate(), exceptionState);
+        if(exceptionState.throwIfNeeded())
+            return;
+
+        region = toImplArray<unsigned>(info[4], 5, info.GetIsolate(), exceptionState);
+        if(exceptionState.throwIfNeeded())
+            return;
+
+        bufferRowPitch = toUInt32(info.GetIsolate(), info[5], EnforceRange, exceptionState);
+        if(exceptionState.throwIfNeeded())
+            return;
+
+        bufferSlicePitch = toUInt32(info.GetIsolate(), info[6], EnforceRange, exceptionState);
+        if(exceptionState.throwIfNeeded())
+            return;
+
+        hostRowPitch = toUInt32(info.GetIsolate(), info[7], EnforceRange, exceptionState);
+        if(exceptionState.throwIfNeeded())
+            return;
+
+        hostSlicePitch = toUInt32(info.GetIsolate(), info[8], EnforceRange, exceptionState);
+        if(exceptionState.throwIfNeeded())
+            return;
+
         if (info.Length() > 9 && !V8ArrayBufferView::hasInstance(info[9], info.GetIsolate())) {
             exceptionState.throwTypeError("parameter 10 is not of type 'ArrayBufferView'.");
             exceptionState.throwIfNeeded();
@@ -988,8 +1200,11 @@ static void enqueueWriteBufferRect2Method(const v8::FunctionCallbackInfo<v8::Val
         }
 
         hostPtr = info[9]->IsArrayBufferView() ? V8ArrayBufferView::toImpl(v8::Handle<v8::ArrayBufferView>::Cast(info[9])) : 0;
-        if (info.Length() > 10 && !isUndefinedOrNull(info[10]))
-            TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(eventWaitList, (toRefPtrNativeArray<WebCLEvent, V8WebCLEvent>(info[10], 11, info.GetIsolate(), exceptionState)), exceptionState);
+        if (info.Length() > 10 && !isUndefinedOrNull(info[10])) {
+            eventWaitList = toRefPtrNativeArray<WebCLEvent, V8WebCLEvent>(info[10], 11, info.GetIsolate(), exceptionState);
+            if(exceptionState.throwIfNeeded())
+                return;
+        }
 
         if (info.Length() > 11) {
             if (!isUndefinedOrNull(info[11]) && !V8WebCLEvent::hasInstance(info[11], info.GetIsolate())) {
@@ -1054,10 +1269,19 @@ static void enqueueWriteImage3Method(const v8::FunctionCallbackInfo<v8::Value>& 
 
         image = V8WebCLImage::toImplWithTypeCheck(info.GetIsolate(), info[0]);
         blockingWrite = info[1]->BooleanValue();
-        TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(origin, toImplArray<unsigned>(info[2], 3, info.GetIsolate(), exceptionState), exceptionState);
-        TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(region, toImplArray<unsigned>(info[3], 4, info.GetIsolate(), exceptionState), exceptionState);
-        if (info.Length() > 5 && !isUndefinedOrNull(info[5]))
-            TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(eventWaitList, (toRefPtrNativeArray<WebCLEvent, V8WebCLEvent>(info[5], 6, info.GetIsolate(), exceptionState)), exceptionState);
+        origin = toImplArray<unsigned>(info[2], 3, info.GetIsolate(), exceptionState);
+        if(exceptionState.throwIfNeeded())
+            return;
+
+        region = toImplArray<unsigned>(info[3], 4, info.GetIsolate(), exceptionState);
+        if(exceptionState.throwIfNeeded())
+            return;
+
+        if (info.Length() > 5 && !isUndefinedOrNull(info[5])) {
+            eventWaitList = toRefPtrNativeArray<WebCLEvent, V8WebCLEvent>(info[5], 6, info.GetIsolate(), exceptionState);
+            if(exceptionState.throwIfNeeded())
+                return;
+        }
 
         if (info.Length() > 6) {
             if (!isUndefinedOrNull(info[6]) && !V8WebCLEvent::hasInstance(info[6], info.GetIsolate())) {
@@ -1137,8 +1361,11 @@ static void enqueueWriteImage1Method(const v8::FunctionCallbackInfo<v8::Value>& 
         }
 
         video = V8HTMLVideoElement::toImplWithTypeCheck(info.GetIsolate(), info[2]);
-        if (info.Length() > 3 && !isUndefinedOrNull(info[3]))
-            TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(eventWaitList, (toRefPtrNativeArray<WebCLEvent, V8WebCLEvent>(info[3], 4, info.GetIsolate(), exceptionState)), exceptionState);
+        if (info.Length() > 3 && !isUndefinedOrNull(info[3])) {
+            eventWaitList = toRefPtrNativeArray<WebCLEvent, V8WebCLEvent>(info[3], 4, info.GetIsolate(), exceptionState);
+            if(exceptionState.throwIfNeeded())
+                return;
+        }
 
         if (info.Length() > 4) {
             if (!isUndefinedOrNull(info[4]) && !V8WebCLEvent::hasInstance(info[4], info.GetIsolate())) {
@@ -1184,9 +1411,18 @@ static void enqueueWriteImage2Method(const v8::FunctionCallbackInfo<v8::Value>& 
 
         image = V8WebCLImage::toImplWithTypeCheck(info.GetIsolate(), info[0]);
         blockingWrite = info[1]->BooleanValue();
-        TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(origin, toImplArray<unsigned>(info[2], 3, info.GetIsolate(), exceptionState), exceptionState);
-        TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(region, toImplArray<unsigned>(info[3], 4, info.GetIsolate(), exceptionState), exceptionState);
-        TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(hostRowPitch, toUInt32(info[4], EnforceRange, exceptionState), exceptionState);
+        origin = toImplArray<unsigned>(info[2], 3, info.GetIsolate(), exceptionState);
+        if(exceptionState.throwIfNeeded())
+            return;
+
+        region = toImplArray<unsigned>(info[3], 4, info.GetIsolate(), exceptionState);
+        if(exceptionState.throwIfNeeded())
+            return;
+
+        hostRowPitch = toUInt32(info.GetIsolate(), info[4], EnforceRange, exceptionState);
+        if(exceptionState.throwIfNeeded())
+            return;
+
         if (info.Length() > 5 && !V8ArrayBufferView::hasInstance(info[5], info.GetIsolate())) {
             exceptionState.throwTypeError("parameter 6 is not of type 'ArrayBufferView'.");
             exceptionState.throwIfNeeded();
@@ -1194,8 +1430,11 @@ static void enqueueWriteImage2Method(const v8::FunctionCallbackInfo<v8::Value>& 
         }
 
         hostPtr = info[5]->IsArrayBufferView() ? V8ArrayBufferView::toImpl(v8::Handle<v8::ArrayBufferView>::Cast(info[5])) : 0;
-        if (info.Length() > 6 && !isUndefinedOrNull(info[6]))
-            TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(eventWaitList, (toRefPtrNativeArray<WebCLEvent, V8WebCLEvent>(info[6], 7, info.GetIsolate(), exceptionState)), exceptionState);
+        if (info.Length() > 6 && !isUndefinedOrNull(info[6])) {
+            eventWaitList = toRefPtrNativeArray<WebCLEvent, V8WebCLEvent>(info[6], 7, info.GetIsolate(), exceptionState);
+            if(exceptionState.throwIfNeeded())
+                return;
+        }
 
         if (info.Length() > 7) {
             if (!isUndefinedOrNull(info[7]) && !V8WebCLEvent::hasInstance(info[7], info.GetIsolate())) {
@@ -1267,16 +1506,31 @@ void V8WebCLCommandQueue::enqueueNDRangeKernelMethodCustom(const v8::FunctionCal
         }
 
         kernel = V8WebCLKernel::toImplWithTypeCheck(info.GetIsolate(), info[0]);
-        TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(workDim, toUInt32(info[1], EnforceRange, exceptionState), exceptionState);
-        if (info.Length() > 2 && !isUndefinedOrNull(info[2]))
-            TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(offsets, toImplArray<double>(info[2], 3, info.GetIsolate(), exceptionState), exceptionState);
+        workDim = toUInt32(info.GetIsolate(), info[1], EnforceRange, exceptionState);
+        if(exceptionState.throwIfNeeded())
+            return;
 
-        TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(globalWorkSize, toImplArray<double>(info[3], 4, info.GetIsolate(), exceptionState), exceptionState);
-        if (info.Length() > 4 && !isUndefinedOrNull(info[4]))
-            TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(localWorkSize, toImplArray<double>(info[4], 5, info.GetIsolate(), exceptionState), exceptionState);
+        if (info.Length() > 2 && !isUndefinedOrNull(info[2])){
+            offsets = toImplArray<double>(info[2], 3, info.GetIsolate(), exceptionState);
+            if(exceptionState.throwIfNeeded())
+                return;
+        }
 
-        if (info.Length() > 5 && !isUndefinedOrNull(info[5]))
-            TONATIVE_VOID_EXCEPTIONSTATE_INTERNAL(eventWaitList, (toRefPtrNativeArray<WebCLEvent, V8WebCLEvent>(info[5], 6, info.GetIsolate(), exceptionState)), exceptionState);
+        globalWorkSize = toImplArray<double>(info[3], 4, info.GetIsolate(), exceptionState);
+        if(exceptionState.throwIfNeeded())
+            return;
+
+        if (info.Length() > 4 && !isUndefinedOrNull(info[4])) {
+            localWorkSize = toImplArray<double>(info[4], 5, info.GetIsolate(), exceptionState);
+            if(exceptionState.throwIfNeeded())
+                return;
+        }
+
+        if (info.Length() > 5 && !isUndefinedOrNull(info[5])) {
+            eventWaitList = toRefPtrNativeArray<WebCLEvent, V8WebCLEvent>(info[5], 6, info.GetIsolate(), exceptionState);
+            if(exceptionState.throwIfNeeded())
+                return;
+        }
 
         if (info.Length() > 6) {
             if (!isUndefinedOrNull(info[6]) && !V8WebCLEvent::hasInstance(info[6], info.GetIsolate())) {
