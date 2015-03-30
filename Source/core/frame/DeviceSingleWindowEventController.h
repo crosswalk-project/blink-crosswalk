@@ -29,8 +29,6 @@ public:
     virtual void didRemoveAllEventListeners(LocalDOMWindow*) override;
 
 protected:
-    Document& document() const { return *m_document; }
-
     explicit DeviceSingleWindowEventController(Document&);
 
     void dispatchDeviceEvent(const PassRefPtrWillBeRawPtr<Event>);
@@ -40,6 +38,8 @@ protected:
     virtual bool isNullEvent(Event*) const = 0;
 
 private:
+    Document& document() const { return *m_document; }
+
     bool m_needsCheckingNullEvents;
     RawPtrWillBeMember<Document> m_document;
 };
