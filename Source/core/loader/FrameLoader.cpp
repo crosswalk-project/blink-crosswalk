@@ -778,12 +778,9 @@ void FrameLoader::load(const FrameLoadRequest& passedRequest)
 
     RefPtrWillBeRawPtr<LocalFrame> targetFrame = toLocalFrame(request.formState() ? nullptr : m_frame->findFrameForNavigation(AtomicString(request.frameName()), *m_frame));
     if (targetFrame && targetFrame.get() != m_frame) {
-        bool wasInSamePage = targetFrame->page() == m_frame->page();
-
         request.setFrameName("_self");
         targetFrame->loader().load(request);
-        Page* page = targetFrame->page();
-        if (!wasInSamePage && page)
+        if (Page* page = targetFrame->page())
             page->chrome().focus();
         return;
     }
