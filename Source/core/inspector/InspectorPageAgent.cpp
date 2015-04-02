@@ -48,6 +48,7 @@
 #include "core/fetch/Resource.h"
 #include "core/fetch/ResourceFetcher.h"
 #include "core/fetch/ScriptResource.h"
+#include "core/frame/FrameHost.h"
 #include "core/frame/FrameView.h"
 #include "core/frame/LocalFrame.h"
 #include "core/frame/Settings.h"
@@ -1217,10 +1218,16 @@ void InspectorPageAgent::viewportChanged()
     if (!m_enabled || !m_deviceMetricsOverridden || !inspectedFrame()->isMainFrame())
         return;
     IntSize contentsSize = inspectedFrame()->view()->contentsSize();
-    IntRect viewRect = inspectedFrame()->view()->visibleContentRect();
+    FloatPoint scrollOffset;
+
+    if (frameHost()->settings().pinchVirtualViewportEnabled())
+        scrollOffset = frameHost()->pinchViewport().visibleRectInDocument().location();
+    else
+        scrollOffset = inspectedFrame()->view()->visibleContentRect().location();
+
     RefPtr<TypeBuilder::Page::Viewport> viewport = TypeBuilder::Page::Viewport::create()
-        .setScrollX(viewRect.x())
-        .setScrollY(viewRect.y())
+        .setScrollX(scrollOffset.x())
+        .setScrollY(scrollOffset.y())
         .setContentsWidth(contentsSize.width())
         .setContentsHeight(contentsSize.height())
         .setPageScaleFactor(m_page->pageScaleFactor())

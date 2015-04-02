@@ -35,6 +35,7 @@
 #include "core/frame/FrameView.h"
 #include "core/frame/LocalFrame.h"
 #include "core/frame/Settings.h"
+#include "core/inspector/InspectorInstrumentation.h"
 #include "core/layout/compositing/LayerCompositor.h"
 #include "core/loader/FrameLoaderClient.h"
 #include "core/page/Chrome.h"
@@ -213,6 +214,7 @@ void PinchViewport::setScaleAndLocation(float scale, const FloatPoint& location)
         document->enqueueScrollEventForNode(document);
 
         mainFrame()->loader().client()->didChangeScrollOffset();
+        InspectorInstrumentation::didScroll(mainFrame());
         valuesChanged = true;
     }
 
