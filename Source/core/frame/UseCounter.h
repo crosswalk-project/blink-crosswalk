@@ -682,6 +682,7 @@ public:
         BackgroundSync = 745,
         TabStopProperty = 746,
         TabStopAttribute = 747,
+        SVGFilterRes = 749,
 
         // Add new features immediately above this line. Don't change assigned
         // numbers of any item, and don't reuse removed slots.
