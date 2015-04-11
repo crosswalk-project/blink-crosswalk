@@ -7,5 +7,6 @@ typedef unsigned long CLenum;
     Conditional=WEBCL,
 ] interface WebCLMemoryObject {
     [CallWith=ScriptState, RaisesException] any getInfo(CLenum name);
+    [RaisesException] WebCLGLObjectInfo getGLObjectInfo();
     void release();
 };

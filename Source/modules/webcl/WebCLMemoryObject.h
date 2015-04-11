@@ -17,6 +17,8 @@ namespace blink {
 class ExceptionState;
 class WebCL;
 class WebCLContext;
+class WebCLGLObjectInfo;
+class WebGLSharedObject;
 
 class WebCLMemoryObject : public WebCLObject, public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
@@ -32,8 +34,12 @@ public:
     static PassRefPtr<WebCLMemoryObject> create(cl_mem, unsigned, WebCLContext*);
 
     virtual ScriptValue getInfo(ScriptState*, int, ExceptionState&);
+    virtual WebCLGLObjectInfo* getGLObjectInfo(ExceptionState&);
     void release() override;
 
+    bool hasGLObjectInfo() const;
+    bool isExtensionEnabled(const String&) const;
+    virtual void cacheGLObjectInfo(unsigned textureTarget, int mipmapLevel, WebGLSharedObject*);
     size_t sizeInBytes() const { return m_sizeInBytes; }
     virtual int type() { return MEMORY; }
     cl_mem getMem() const { return m_clMem; }
@@ -42,6 +48,7 @@ public:
 protected:
     WebCLMemoryObject(cl_mem, unsigned, WebCLContext*, WebCLMemoryObject* parentBuffer = nullptr);
 
+    RefPtr<WebCLGLObjectInfo> m_glObjectInfo;
     WebCLMemoryObject* m_parentMemObject;
     size_t m_sizeInBytes;
     cl_mem m_clMem;

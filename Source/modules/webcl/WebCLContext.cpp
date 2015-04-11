@@ -7,6 +7,9 @@
 
 #if ENABLE(WEBCL)
 #include "bindings/modules/v8/V8WebCLDevice.h"
+#include "core/html/canvas/WebGLRenderbuffer.h"
+#include "core/html/canvas/WebGLRenderingContext.h"
+#include "core/html/canvas/WebGLTexture.h"
 #include "core/html/HTMLCanvasElement.h"
 #include "core/html/HTMLImageElement.h"
 #include "core/html/HTMLVideoElement.h"
@@ -40,9 +43,9 @@ WebCLContext::~WebCLContext()
     ASSERT(!m_clContext);
 }
 
-PassRefPtr<WebCLContext> WebCLContext::create(cl_context contextId, WebCL* webCL, const Vector<RefPtr<WebCLDevice>>& devices, HashSet<String>& enabledExtensions)
+PassRefPtr<WebCLContext> WebCLContext::create(WebGLRenderingContext* glContext, cl_context contextId, WebCL* webCL, const Vector<RefPtr<WebCLDevice>>& devices, HashSet<String>& enabledExtensions)
 {
-    return adoptRef(new WebCLContext(contextId, webCL, devices, enabledExtensions));
+    return adoptRef(new WebCLContext(glContext, contextId, webCL, devices, enabledExtensions));
 }
 
 ScriptValue WebCLContext::getInfo(ScriptState* scriptState, int paramName, ExceptionState& es)
@@ -619,6 +622,150 @@ void WebCLContext::releaseAll()
     release();
 }
 
+WebGLRenderingContext* WebCLContext::getGLContext(ExceptionState& es) const
+{
+    if (!isGLCapableContext()) {
+        es.throwWebCLException(WebCLException::EXTENSION_NOT_ENABLED, WebCLException::extensionNotEnabledMessage);
+        return nullptr;
+    }
+
+    return m_glContext;
+}
+
+bool WebCLContext::isGLCapableContext() const
+{
+    if (!isExtensionEnabled("KHR_gl_sharing"))
+        return false;
+
+    return !!m_glContext;
+}
+
+PassRefPtr<WebCLBuffer> WebCLContext::createFromGLBuffer(unsigned flags, WebGLBuffer* webGLBuffer, ExceptionState& es)
+{
+    if (!isGLCapableContext()) {
+        es.throwWebCLException(WebCLException::EXTENSION_NOT_ENABLED, WebCLException::extensionNotEnabledMessage);
+        return nullptr;
+    }
+
+    if (isReleased()) {
+        es.throwWebCLException(WebCLException::INVALID_CONTEXT, WebCLException::invalidContextMessage);
+        return nullptr;
+    }
+
+    if (!webGLBuffer || !webGLBuffer->object()) {
+        es.throwWebCLException(WebCLException::INVALID_GL_OBJECT, WebCLException::invalidGLObjectMessage);
+        return nullptr;
+    }
+
+    if (!WebCLInputChecker::isValidMemoryObjectFlag(flags)) {
+        es.throwWebCLException(WebCLException::INVALID_VALUE, WebCLException::invalidValueMessage);
+        return nullptr;
+    }
+
+    return WebCLBuffer::create(this, flags, webGLBuffer, es);
+}
+
+PassRefPtr<WebCLImage> WebCLContext::createFromGLRenderbuffer(unsigned flags, WebGLRenderbuffer* renderbuffer, ExceptionState& es)
+{
+    if (!isGLCapableContext()) {
+        es.throwWebCLException(WebCLException::EXTENSION_NOT_ENABLED, WebCLException::extensionNotEnabledMessage);
+        return nullptr;
+    }
+
+    if (isReleased()) {
+        es.throwWebCLException(WebCLException::INVALID_CONTEXT, WebCLException::invalidContextMessage);
+        return nullptr;
+    }
+
+    if (!renderbuffer || !renderbuffer->width() || !renderbuffer->height()) {
+        es.throwWebCLException(WebCLException::INVALID_GL_OBJECT, WebCLException::invalidGLObjectMessage);
+        return nullptr;
+    }
+
+    if (!WebCLInputChecker::isValidMemoryObjectFlag(flags)) {
+        es.throwWebCLException(WebCLException::INVALID_VALUE, WebCLException::invalidValueMessage);
+        return nullptr;
+    }
+
+    GLuint renderbufferID = renderbuffer->object();
+    if (!renderbufferID) {
+        es.throwWebCLException(WebCLException::INVALID_GL_OBJECT, WebCLException::invalidGLObjectMessage);
+        return nullptr;
+    }
+
+    GLsizei width = renderbuffer->width();
+    GLsizei height = renderbuffer->height();
+
+    cl_int err;
+    cl_mem memoryObject = clCreateFromGLRenderbuffer(m_clContext, flags, renderbufferID, &err);
+    if (err != CL_SUCCESS) {
+        WebCLException::throwException(err, es);
+        return nullptr;
+    }
+
+    WebCLImageDescriptor imageDescriptor;
+    imageDescriptor.setWidth(width);
+    imageDescriptor.setHeight(height);
+    RefPtr<WebCLImage> imageObject = WebCLImage::create(memoryObject, imageDescriptor, this);
+    imageObject->cacheGLObjectInfo(0, 0, renderbuffer);
+    return imageObject.release();
+}
+
+PassRefPtr<WebCLImage> WebCLContext::createFromGLTexture(unsigned flags, unsigned textureTarget, WGC3Dint miplevel, WebGLTexture* texture, ExceptionState& es)
+{
+    if (!isGLCapableContext()) {
+        es.throwWebCLException(WebCLException::EXTENSION_NOT_ENABLED, WebCLException::extensionNotEnabledMessage);
+        return nullptr;
+    }
+
+    if (isReleased()) {
+        es.throwWebCLException(WebCLException::INVALID_CONTEXT, WebCLException::invalidContextMessage);
+        return nullptr;
+    }
+
+    if (!WebCLInputChecker::isValidGLTextureTarget(textureTarget)) {
+        es.throwWebCLException(WebCLException::INVALID_VALUE, WebCLException::invalidValueMessage);
+        return nullptr;
+    }
+    if (miplevel < 0) {
+        es.throwWebCLException(WebCLException::INVALID_MIP_LEVEL, WebCLException::invalidMIPLevelMessage);
+        return nullptr;
+    }
+
+    if (!texture || textureTarget != texture->getTarget()) {
+        es.throwWebCLException(WebCLException::INVALID_GL_OBJECT, WebCLException::invalidGLObjectMessage);
+        return nullptr;
+    }
+
+    if (!WebCLInputChecker::isValidMemoryObjectFlag(flags)) {
+        es.throwWebCLException(WebCLException::INVALID_VALUE, WebCLException::invalidValueMessage);
+        return nullptr;
+    }
+
+    GLuint textureID = texture->object();
+    if (!textureID) {
+        es.throwWebCLException(WebCLException::INVALID_GL_OBJECT, WebCLException::invalidGLObjectMessage);
+        return nullptr;
+    }
+
+    GLsizei width = texture->getWidth(textureTarget, miplevel);
+    GLsizei height = texture->getHeight(textureTarget, miplevel);
+
+    cl_int err;
+    cl_mem memoryObject = clCreateFromGLTexture(m_clContext, flags, textureTarget, miplevel, textureID, &err);
+    if (err != CL_SUCCESS) {
+        WebCLException::throwException(err, es);
+        return nullptr;
+    }
+
+    WebCLImageDescriptor imageDescriptor;
+    imageDescriptor.setWidth(width);
+    imageDescriptor.setHeight(height);
+    RefPtr<WebCLImage> imageObject = WebCLImage::create(memoryObject, imageDescriptor, this);
+    imageObject->cacheGLObjectInfo(textureTarget, miplevel, texture);
+    return imageObject.release();
+}
+
 void WebCLContext::trackReleaseableWebCLObject(WeakPtr<WebCLObject> object)
 {
     m_webCLObjects.append(object);
@@ -683,8 +830,9 @@ unsigned WebCLContext::numberOfChannelsForChannelOrder(unsigned order)
     return 0;
 }
 
-WebCLContext::WebCLContext(cl_context context, WebCL* webCL, const Vector<RefPtr<WebCLDevice>>& devices, HashSet<String>& enabledExtensions)
-    : m_devices(devices)
+WebCLContext::WebCLContext(WebGLRenderingContext* glContext, cl_context context, WebCL* webCL, const Vector<RefPtr<WebCLDevice>>& devices, HashSet<String>& enabledExtensions)
+    : m_glContext(glContext)
+    , m_devices(devices)
     , m_enabledExtensions(enabledExtensions)
     , m_weakFactory(this)
     , m_clContext(context)

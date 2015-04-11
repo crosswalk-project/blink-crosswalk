@@ -79,6 +79,13 @@ public:
     void enqueueBarrier(ExceptionState&);
     void enqueueMarker(WebCLEvent*, ExceptionState&);
     void enqueueWaitForEvents(const Vector<RefPtr<WebCLEvent>>&, ExceptionState&);
+    /* WebGL related function */
+    void enqueueAcquireGLObjects(const Vector<RefPtr<WebCLMemoryObject>>&, const Vector<RefPtr<WebCLEvent>>&, WebCLEvent*, ExceptionState&);
+    void enqueueAcquireGLObjects(const Vector<RefPtr<WebCLMemoryObject>>&, const Vector<RefPtr<WebCLEvent>>&, ExceptionState&);
+    void enqueueAcquireGLObjects(const Vector<RefPtr<WebCLMemoryObject>>&, ExceptionState&);
+    void enqueueReleaseGLObjects(const Vector<RefPtr<WebCLMemoryObject>>&, const Vector<RefPtr<WebCLEvent>>&, WebCLEvent*, ExceptionState&);
+    void enqueueReleaseGLObjects(const Vector<RefPtr<WebCLMemoryObject>>&, const Vector<RefPtr<WebCLEvent>>&, ExceptionState&);
+    void enqueueReleaseGLObjects(const Vector<RefPtr<WebCLMemoryObject>>&, ExceptionState&);
 
     enum SyncMethod {
         ASYNC,

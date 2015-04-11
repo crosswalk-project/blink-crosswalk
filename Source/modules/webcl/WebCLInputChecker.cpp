@@ -6,7 +6,7 @@
 #include "config.h"
 
 #if ENABLE(WEBCL)
-
+#include "core/html/canvas/WebGLRenderingContext.h"
 #include "modules/webcl/WebCLBuffer.h"
 #include "modules/webcl/WebCLContext.h"
 #include "modules/webcl/WebCLImage.h"
@@ -190,6 +190,31 @@ bool isValidCommandQueueProperty(unsigned value)
         return true;
     }
 
+    return false;
+}
+
+bool isValidGLTextureInfo(unsigned long value)
+{
+    switch (value) {
+    case CL_GL_TEXTURE_TARGET:
+    case CL_GL_MIPMAP_LEVEL:
+        return true;
+    }
+    return false;
+}
+
+bool isValidGLTextureTarget(GLenum value)
+{
+    switch (value) {
+    case GL_TEXTURE_2D:
+    case GL_TEXTURE_CUBE_MAP_POSITIVE_X:
+    case GL_TEXTURE_CUBE_MAP_POSITIVE_Y:
+    case GL_TEXTURE_CUBE_MAP_POSITIVE_Z:
+    case GL_TEXTURE_CUBE_MAP_NEGATIVE_X:
+    case GL_TEXTURE_CUBE_MAP_NEGATIVE_Y:
+    case GL_TEXTURE_CUBE_MAP_NEGATIVE_Z:
+        return true;
+    }
     return false;
 }
 

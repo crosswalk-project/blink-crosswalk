@@ -229,6 +229,14 @@ typedef unsigned long CLuint;
                                                         optional sequence<WebCLEvent>? eventWaitList,
                                                         optional WebCLEvent? event = null);
 
+    [RaisesException] void enqueueAcquireGLObjects(sequence<WebCLMemoryObject> memObjects,
+                                                   optional sequence<WebCLEvent>? eventWaitList,
+                                                   optional WebCLEvent? event = null);
+
+    [RaisesException] void enqueueReleaseGLObjects(sequence<WebCLMemoryObject> memObjects,
+                                                   optional sequence<WebCLEvent>? eventWaitList,
+                                                   optional WebCLEvent? event = null);
+
     [RaisesException] void enqueueMarker(WebCLEvent event);
     [RaisesException] void enqueueBarrier();
     [RaisesException] void enqueueWaitForEvents(sequence<WebCLEvent> events);

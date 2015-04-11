@@ -323,21 +323,41 @@ typedef unsigned long CLenum; // Used for enumerated types, such as WebCL.DEVICE
     /* extensions */
     const CLint INVALID_GL_OBJECT                           = -60;
     const CLint INVALID_MIP_LEVEL                           = -62;
+    const CLint INVALID_GL_SHAREGROUP_REFERENCE_KHR         = -1000;
     const CLenum DEVICE_PREFERRED_VECTOR_WIDTH_DOUBLE       = 0x100B;
     const CLenum DEVICE_DOUBLE_FP_CONFIG                    = 0x1032;
     const CLenum DEVICE_HALF_FP_CONFIG                      = 0x1033;
     const CLenum DEVICE_PREFERRED_VECTOR_WIDTH_HALF         = 0x1034;
     const CLenum DEVICE_NATIVE_VECTOR_WIDTH_DOUBLE          = 0x103B;
     const CLenum DEVICE_NATIVE_VECTOR_WIDTH_HALF            = 0x103C;
+    /* cl_command_type */
     const CLenum COMMAND_ACQUIRE_GL_OBJECTS                 = 0x11FF;
     const CLenum COMMAND_RELEASE_GL_OBJECTS                 = 0x1200;
+    /* cl_gl_object_type */
+    const CLenum GL_OBJECT_BUFFER                           = 0x2000;
+    const CLenum GL_OBJECT_TEXTURE2D                        = 0x2001;
+    const CLenum GL_OBJECT_RENDERBUFFER                     = 0x2003;
+    /* cl_gl_texture_info */
+    const CLenum GL_TEXTURE_TARGET                          = 0x2004;
+    const CLenum GL_MIPMAP_LEVEL                            = 0x2005;
 
+    // IDL tool doesn't support that the first argument is optional,
+    // but other arguments are not optional for overload.
+    // So do it in the custom binding code.
+    [Custom, RaisesException] WebCLContext createContext();
+    /*
+    [RaisesException] WebCLContext createContext(WebGLRenderingContext gl, sequence<WebCLDevice> devices);
+    [RaisesException] WebCLContext createContext(WebGLRenderingContext gl, WebCLDevice device);
+    [RaisesException] WebCLContext createContext(WebGLRenderingContext gl, WebCLPlatform platform, CLenum deviceType);
+    [RaisesException] WebCLContext createContext(WebGLRenderingContext gl, WebCLPlatform platform);
+    [RaisesException] WebCLContext createContext(WebGLRenderingContext gl, CLenum deviceType);
+    [RaisesException] WebCLContext createContext(WebGLRenderingContext gl);
     [RaisesException] WebCLContext createContext(sequence<WebCLDevice> devices);
     [RaisesException] WebCLContext createContext(WebCLDevice device);
     [RaisesException] WebCLContext createContext(WebCLPlatform platform, CLenum deviceType);
     [RaisesException] WebCLContext createContext(WebCLPlatform platform);
     [RaisesException] WebCLContext createContext(CLenum deviceType);
-    [RaisesException] WebCLContext createContext();
+    [RaisesException] WebCLContext createContext();*/
     sequence<DOMString>? getSupportedExtensions();
     CLboolean enableExtension(DOMString extensionName);
     [RaisesException] void waitForEvents(sequence<WebCLEvent> eventWaitList,

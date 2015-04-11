@@ -37,6 +37,7 @@ namespace blink {
 typedef unsigned CLenum;
 class ExceptionState;
 class ExecutionContext;
+class WebGLRenderingContext;
 
 class WebCL : public RefCounted<WebCL>, public ScriptWrappable {
     DEFINE_WRAPPERTYPEINFO();
@@ -51,6 +52,12 @@ public:
     PassRefPtr<WebCLContext> createContext(WebCLPlatform*, unsigned, ExceptionState&);
     PassRefPtr<WebCLContext> createContext(WebCLDevice*, ExceptionState&);
     PassRefPtr<WebCLContext> createContext(const Vector<RefPtr<WebCLDevice>>&, ExceptionState&);
+    PassRefPtr<WebCLContext> createContext(WebGLRenderingContext*, ExceptionState&);
+    PassRefPtr<WebCLContext> createContext(WebGLRenderingContext*, unsigned, ExceptionState&);
+    PassRefPtr<WebCLContext> createContext(WebGLRenderingContext*, WebCLPlatform*, ExceptionState&);
+    PassRefPtr<WebCLContext> createContext(WebGLRenderingContext*, WebCLPlatform*, unsigned, ExceptionState&);
+    PassRefPtr<WebCLContext> createContext(WebGLRenderingContext*, WebCLDevice*, ExceptionState&);
+    PassRefPtr<WebCLContext> createContext(WebGLRenderingContext*, const Vector<RefPtr<WebCLDevice>>&, ExceptionState&);
     void waitForEvents(const Vector<RefPtr<WebCLEvent>>&, WebCLCallback*, ExceptionState&);
     void releaseAll();
     void trackReleaseableWebCLContext(WeakPtr<WebCLContext>);

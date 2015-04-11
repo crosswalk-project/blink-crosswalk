@@ -15,6 +15,7 @@
             'V8SQLResultSetRowListCustom.cpp',
             'V8SQLTransactionCustom.cpp',
             'V8ServiceWorkerCustom.cpp',
+            'V8WebCLCustom.cpp',
             'V8WebCLCommandQueueCustom.cpp',
             'V8WebCLProgramCustom.cpp',
         ],

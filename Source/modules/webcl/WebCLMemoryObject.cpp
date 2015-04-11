@@ -10,6 +10,7 @@
 #include "bindings/modules/v8/V8WebCLMemoryObject.h"
 #include "modules/webcl/WebCL.h"
 #include "modules/webcl/WebCLException.h"
+#include "modules/webcl/WebCLGLObjectInfo.h"
 #include "modules/webcl/WebCLMemoryObject.h"
 #include "modules/webcl/WebCLOpenCL.h"
 
@@ -79,6 +80,31 @@ ScriptValue WebCLMemoryObject::getInfo(ScriptState* scriptState, int paramName, 
     return ScriptValue(scriptState, v8::Null(isolate));
 }
 
+bool WebCLMemoryObject::hasGLObjectInfo() const
+{
+    return m_glObjectInfo.get() ? true:false;
+}
+
+bool WebCLMemoryObject::isExtensionEnabled(const String& name) const
+{
+    return m_context->isExtensionEnabled(name);
+}
+
+WebCLGLObjectInfo* WebCLMemoryObject::getGLObjectInfo(ExceptionState& es)
+{
+    if (!isExtensionEnabled("KHR_gl_sharing")) {
+        es.throwWebCLException(WebCLException::EXTENSION_NOT_ENABLED, WebCLException::extensionNotEnabledMessage);
+        return nullptr;
+    }
+
+    if (isReleased()) {
+        es.throwWebCLException(WebCLException::INVALID_MEM_OBJECT, WebCLException::invalidMemObjectMessage);
+        return nullptr;
+    }
+
+    return m_glObjectInfo.get();
+}
+
 void WebCLMemoryObject::release()
 {
     if (isReleased())
@@ -97,6 +123,11 @@ WebCLMemoryObject::WebCLMemoryObject(cl_mem mem, unsigned sizeInBytes, WebCLCont
     , m_sizeInBytes(sizeInBytes)
     , m_clMem(mem)
 {
+}
+
+void WebCLMemoryObject::cacheGLObjectInfo(unsigned textureTarget, int mipmapLevel, WebGLSharedObject* glObject)
+{
+    m_glObjectInfo = WebCLGLObjectInfo::create(textureTarget, mipmapLevel, glObject);
 }
 
 } // namespace blink
