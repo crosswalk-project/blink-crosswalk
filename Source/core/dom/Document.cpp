@@ -5173,7 +5173,7 @@ void Document::adjustFloatQuadsForScrollAndAbsoluteZoom(Vector<FloatQuad>& quads
     if (!view())
         return;
 
-    LayoutRect visibleContentRect(view()->visualViewportRect());
+    LayoutRect visibleContentRect(view()->visibleContentRect());
     for (size_t i = 0; i < quads.size(); ++i) {
         quads[i].move(-FloatSize(visibleContentRect.x().toFloat(), visibleContentRect.y().toFloat()));
         adjustFloatQuadForAbsoluteZoom(quads[i], renderer);
@@ -5185,7 +5185,7 @@ void Document::adjustFloatRectForScrollAndAbsoluteZoom(FloatRect& rect, LayoutOb
     if (!view())
         return;
 
-    LayoutRect visibleContentRect(view()->visualViewportRect());
+    LayoutRect visibleContentRect(view()->visibleContentRect());
     rect.move(-FloatSize(visibleContentRect.x().toFloat(), visibleContentRect.y().toFloat()));
     adjustFloatRectForAbsoluteZoom(rect, renderer);
 }

@@ -305,5 +305,7 @@
     DOMString selectedHTMLForClipboard();
     DOMString selectedTextForClipboard();
 
+    void setVisualViewportOffset(long x, long y);
+
     iterable<long>;
 };
