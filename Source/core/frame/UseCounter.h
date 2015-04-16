@@ -684,6 +684,10 @@ public:
         TabStopAttribute = 747,
         SVGFilterRes = 749,
         V8Permissions_Query_Method = 750,
+        V8HTMLInputElement_Autocapitalize_AttributeGetter = 754,
+        V8HTMLInputElement_Autocapitalize_AttributeSetter = 755,
+        V8HTMLTextAreaElement_Autocapitalize_AttributeGetter = 756,
+        V8HTMLTextAreaElement_Autocapitalize_AttributeSetter = 757,
 
         // Add new features immediately above this line. Don't change assigned
         // numbers of any item, and don't reuse removed slots.
