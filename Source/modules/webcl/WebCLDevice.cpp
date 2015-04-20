@@ -17,8 +17,13 @@ namespace blink {
 
 WebCLDevice::~WebCLDevice()
 {
-    release();
-    ASSERT(!m_clDeviceId);
+    // Unlike WebCLContext / WebCLCommandQueue / WebCLProgram / ...,
+    // WebCLDevice does not need to call a release() method here:
+    // 1) OpenCL 1.1 runtime has no clReleaseDevice() or an alternative, so
+    //    there's no need to release the device.
+    // 2) The OpenCL 1.2 (or above) spec implies that clReleaseDevice() is only
+    //    meaningful for sub devices, but no sub device is created in our WebCL
+    //    1.0 implementation.
 }
 
 PassRefPtr<WebCLDevice> WebCLDevice::create(cl_device_id deviceId)
@@ -453,18 +458,6 @@ Vector<String> WebCLDevice::getSupportedExtensions()
 void WebCLDevice::getEnabledExtensions(HashSet<String>& extensions)
 {
     m_extension.getEnabledExtensions(extensions);
-}
-
-void WebCLDevice::release()
-{
-    if (isReleased())
-        return;
-
-    cl_int err = clReleaseDevice(m_clDeviceId);
-    if (err != CL_SUCCESS)
-        ASSERT_NOT_REACHED();
-
-    m_clDeviceId = 0;
 }
 
 WebCLDevice::WebCLDevice(cl_device_id device, WebCLPlatform* platform)

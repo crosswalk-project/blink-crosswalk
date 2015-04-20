@@ -106,7 +106,7 @@ void WebCLCommandQueue::finish(WebCLCallback* whenFinished, ExceptionState& es)
 void WebCLCommandQueue::finishCommandQueues(SyncMethod method)
 {
     if (method == ASYNC) {
-        cl_int err = clEnqueueMarkerWithWaitList(m_clCommandQueue, 0, nullptr, &m_eventForCallback);
+        cl_int err = clEnqueueMarker(m_clCommandQueue, &m_eventForCallback);
         if (err != CL_SUCCESS || !m_eventForCallback)
             return;
         WebCLCommandQueueHolder* holder = new WebCLCommandQueueHolder;
@@ -154,7 +154,7 @@ void WebCLCommandQueue::enqueueBarrier(ExceptionState& es)
         return;
     }
 
-    cl_int err = clEnqueueBarrierWithWaitList(m_clCommandQueue, 0, nullptr, nullptr);
+    cl_int err = clEnqueueBarrier(m_clCommandQueue);
     if (err != CL_SUCCESS)
         WebCLException::throwException(err, es);
 }
@@ -175,7 +175,7 @@ void WebCLCommandQueue::enqueueMarker(WebCLEvent* event, ExceptionState& es)
     if (event && !clEventId)
         return;
 
-    cl_int err = clEnqueueMarkerWithWaitList(m_clCommandQueue, 0, nullptr, clEventId);
+    cl_int err = clEnqueueMarker(m_clCommandQueue, clEventId);
     if (err != CL_SUCCESS)
         WebCLException::throwException(err, es);
 }
@@ -196,7 +196,7 @@ void WebCLCommandQueue::enqueueWaitForEvents(const Vector<RefPtr<WebCLEvent>>& e
     if (clEvents.size() != events.size())
         return;
 
-    cl_int err = clEnqueueBarrierWithWaitList(m_clCommandQueue, clEvents.size(), clEvents.data(), nullptr);
+    cl_int err = clEnqueueWaitForEvents(m_clCommandQueue, clEvents.size(), clEvents.data());
     if (err != CL_SUCCESS)
         WebCLException::throwException(err, es);
 }
