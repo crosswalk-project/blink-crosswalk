@@ -34,7 +34,6 @@ public:
     bool enableExtension(const String& name);
     Vector<String> getSupportedExtensions();
     void getEnabledExtensions(HashSet<String>& extensions);
-    void releaseAll();
     cl_platform_id getPlatformId() { return m_clPlatformId; }
 
 private:

@@ -60,9 +60,6 @@ PassRefPtr<WebCL> WebCL::create()
 WebCL::~WebCL()
 {
     releaseAll();
-
-    for (auto platform : m_platforms)
-        platform->releaseAll();
 }
 
 Vector<RefPtr<WebCLPlatform>> WebCL::getPlatforms(ExceptionState& es)

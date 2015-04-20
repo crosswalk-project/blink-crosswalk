@@ -16,7 +16,6 @@ namespace blink {
 
 WebCLPlatform::~WebCLPlatform()
 {
-    releaseAll();
 }
 
 PassRefPtr<WebCLPlatform> WebCLPlatform::create(cl_platform_id m_clPlatformId)
@@ -173,12 +172,6 @@ Vector<String> WebCLPlatform::getSupportedExtensions()
 void WebCLPlatform::getEnabledExtensions(HashSet<String>& extensions)
 {
     m_extension.getEnabledExtensions(extensions);
-}
-
-void WebCLPlatform::releaseAll()
-{
-    for (auto device : m_devices)
-        device->release();
 }
 
 WebCLPlatform::WebCLPlatform(cl_platform_id platform)
