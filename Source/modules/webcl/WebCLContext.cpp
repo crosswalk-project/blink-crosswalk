@@ -390,10 +390,9 @@ PassRefPtr<WebCLImage> WebCLContext::createImage2DBase(unsigned flags, unsigned 
     imageDescriptor.setChannelOrder(channelOrder);
     imageDescriptor.setChannelType(channelType);
     cl_image_format image_format = {channelOrder, channelType};
-    cl_image_desc desc = {CL_MEM_OBJECT_IMAGE2D, static_cast<size_t>(width), static_cast<size_t>(height), 0, 0, static_cast<size_t>(rowPitch), 0, 0, 0, 0};
 
     cl_int err = CL_SUCCESS;
-    cl_mem clMemId = clCreateImage(m_clContext, flags, &image_format, &desc, data, &err);
+    cl_mem clMemId = clCreateImage2D(m_clContext, flags, &image_format, width, height, rowPitch, data, &err);
     if (err != CL_SUCCESS) {
         WebCLException::throwException(err, es);
         return nullptr;

@@ -40,13 +40,11 @@ public:
     unsigned getImage2DMaxHeight();
     unsigned getMaxWorkGroup();
     Vector<unsigned> getMaxWorkItem();
-    void release();
     PassRefPtr<WebCLPlatform> getPlatform() const { return m_platform; }
     cl_device_id getDeviceId() { return m_clDeviceId; }
 
 private:
     WebCLDevice(cl_device_id, WebCLPlatform* platform);
-    bool isReleased() { return !m_clDeviceId; }
 
     WebCLPlatform* m_platform;
     WebCLExtension m_extension;
