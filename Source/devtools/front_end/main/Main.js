@@ -958,7 +958,7 @@ WebInspector.DisableJavaScriptObserver = function()
 {
     this._setting = WebInspector.settings.javaScriptDisabled;
     this._setting.addChangeListener(this._settingChanged, this);
-    WebInspector.targetManager.observeTargets(this);
+    WebInspector.targetManager.observeTargets(this, WebInspector.Target.Type.Page);
 }
 
 WebInspector.DisableJavaScriptObserver.prototype = {
@@ -968,8 +968,7 @@ WebInspector.DisableJavaScriptObserver.prototype = {
      */
     targetAdded: function(target)
     {
-        if (WebInspector.OverridesSupport.targetSupportsEmulation(target))
-            target.emulationAgent().setScriptExecutionDisabled(this._setting.get());
+        target.emulationAgent().setScriptExecutionDisabled(this._setting.get());
     },
 
     /**
