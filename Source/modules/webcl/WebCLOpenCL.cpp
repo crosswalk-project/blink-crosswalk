@@ -43,6 +43,8 @@ cl_int (CL_API_CALL *web_clGetPlatformIDs)(cl_uint num_entries, cl_platform_id* 
 
 cl_int (CL_API_CALL *web_clGetPlatformInfo)(cl_platform_id platform, cl_platform_info param_name, size_t param_value_size, void* param_value, size_t* param_value_size_ret);
 
+cl_int (CL_API_CALL *web_clUnloadCompiler)(cl_platform_id platform);
+
 cl_int (CL_API_CALL *web_clUnloadPlatformCompiler)(cl_platform_id platform);
 
 /* Device APIs */
@@ -78,6 +80,8 @@ cl_int (CL_API_CALL *web_clGetMemObjectInfo)(cl_mem memobj, cl_mem_info param_na
 cl_int (CL_API_CALL *web_clReleaseMemObject)(cl_mem memobj);
 
 cl_int (CL_API_CALL *web_clGetImageInfo)(cl_mem image, cl_image_info param_name, size_t param_value_size, void* param_value, size_t* param_value_size_ret);
+
+cl_mem (CL_API_CALL *web_clCreateImage2D)(cl_context context, cl_mem_flags flags, const cl_image_format* image_format, size_t image_width, size_t image_height, size_t image_row_pitch, void* host_ptr, cl_int* errcode_ret);
 
 cl_mem (CL_API_CALL *web_clCreateImage)(cl_context context, cl_mem_flags flags, const cl_image_format* image_format, const cl_image_desc* image_desc, void* host_ptr, cl_int* errcode_ret);
 
@@ -145,7 +149,11 @@ cl_int (CL_API_CALL *web_clEnqueueWriteImage)(cl_command_queue command_queue, cl
 
 cl_int (CL_API_CALL *web_clEnqueueCopyBuffer)(cl_command_queue command_queue, cl_mem src_buffer, cl_mem dst_buffer, size_t src_offset, size_t dst_offset, size_t size, cl_uint num_events_in_wait_list, const cl_event* event_wait_list, cl_event* event);
 
+cl_int (CL_API_CALL *web_clEnqueueBarrier)(cl_command_queue command_queue);
+
 cl_int (CL_API_CALL *web_clEnqueueBarrierWithWaitList)(cl_command_queue command_queue, cl_uint num_events_in_wait_list, const cl_event* event_wait_list, cl_event* event);
+
+cl_int (CL_API_CALL *web_clEnqueueMarker)(cl_command_queue command_queue, cl_event* event);
 
 cl_int (CL_API_CALL *web_clEnqueueMarkerWithWaitList)(cl_command_queue command_queue, cl_uint num_events_in_wait_list, const cl_event* event_wait_list, cl_event* event);
 
@@ -165,6 +173,8 @@ cl_int (CL_API_CALL *web_clEnqueueCopyImageToBuffer)(cl_command_queue command_qu
 
 cl_int (CL_API_CALL *web_clEnqueueCopyBufferToImage)(cl_command_queue command_queue, cl_mem src_buffer, cl_mem dst_image, size_t src_offset, const size_t* dst_origin, const size_t* region, cl_uint num_events_in_wait_list, const cl_event* event_wait_list, cl_event* event);
 
+cl_int (CL_API_CALL *web_clEnqueueWaitForEvents)(cl_command_queue command_queue, cl_uint num_events, const cl_event* event_list);
+
 /* OpenCL Extention */
 cl_int (CL_API_CALL *web_clEnqueueAcquireGLObjects)(cl_command_queue command_queue, cl_uint num_objects, const cl_mem* mem_objects, cl_uint num_events_in_wait_list, const cl_event* event_wait_list, cl_event* event);
 
@@ -174,13 +184,27 @@ cl_mem (CL_API_CALL *web_clCreateFromGLBuffer)(cl_context context, cl_mem_flags 
 
 cl_mem (CL_API_CALL *web_clCreateFromGLRenderbuffer)(cl_context context, cl_mem_flags flags, GLuint renderbuffer, cl_int* errcode_ret);
 
+cl_mem (CL_API_CALL *web_clCreateFromGLTexture2D)(cl_context context, cl_mem_flags flags, GLenum texture_target, GLint miplevel, GLuint texture, cl_int* errcode_ret);
+
 cl_mem (CL_API_CALL *web_clCreateFromGLTexture)(cl_context context, cl_mem_flags flags, GLenum texture_target, GLint miplevel, GLuint texture, cl_int* errcode_ret);
 
 cl_int (CL_API_CALL *web_clGetGLTextureInfo)(cl_mem, cl_gl_texture_info, size_t, void *, size_t *);
 
+// These aliases are missing from WebCLOpenCL.h. Put them here for internal use only.
+#define clReleaseDevice web_clReleaseDevice
+#define clCreateImage web_clCreateImage
+#define clUnloadPlatformCompiler web_clUnloadPlatformCompiler
+#define clEnqueueMarkerWithWaitList web_clEnqueueMarkerWithWaitList
+#define clEnqueueBarrierWithWaitList web_clEnqueueBarrierWithWaitList
+#define clCreateFromGLTexture web_clCreateFromGLTexture
+
 #if defined(WTF_OS_LINUX) || OS(ANDROID)
 #define MAP_FUNC(fn)  { *(void**)(&fn) = dlsym(handle, #fn); }
 #define MAP_FUNC_OR_BAIL(fn)  { *(void**)(&fn) = dlsym(handle, #fn); if(!fn) return false; }
+// In case `fn' is not defined or deprecated in the OpenCL spec tagged by
+// `major' and `minor', map `fn' to a wrapper implemented with APIs defined
+// by this spec.
+#define MAP_FUNC_TO_WRAPPER(fn, major, minor) { *(void**)(&fn) = (void*)fn##Impl##major##minor; }
 
 static const char* DEFAULT_SO[] = LIBS;
 static const int DEFAULT_SO_LEN = SO_LEN;
@@ -198,6 +222,49 @@ static bool getCLHandle(const char** libs, int length)
 }
 #endif // defined(WTF_OS_LINUX) || OS(ANDROID)
 
+// In OpenCL 1.1 spec, no release opertion is needed for device.
+static cl_int CL_API_CALL clReleaseDeviceImpl11(cl_device_id device)
+{
+    return CL_SUCCESS;
+}
+
+static cl_mem CL_API_CALL clCreateImage2DImpl12(cl_context context, cl_mem_flags flags, const cl_image_format* format, size_t width, size_t height, size_t rowPitch, void* hostPtr, cl_int* err)
+{
+    cl_image_desc desc = {CL_MEM_OBJECT_IMAGE2D, static_cast<size_t>(width), static_cast<size_t>(height), 0, 0, static_cast<size_t>(rowPitch), 0, 0, 0, 0};
+    ASSERT(clCreateImage);
+    return clCreateImage(context, flags, format, &desc, hostPtr, err);
+}
+
+static cl_int CL_API_CALL clUnloadCompilerImpl12(cl_platform_id platform)
+{
+    ASSERT(clUnloadPlatformCompiler);
+    return clUnloadPlatformCompiler(platform);
+}
+
+static cl_int CL_API_CALL clEnqueueMarkerImpl12(cl_command_queue queue, cl_event* event)
+{
+    ASSERT(clEnqueueMarkerWithWaitList);
+    return clEnqueueMarkerWithWaitList(queue, 0, nullptr, event);
+}
+
+static cl_int CL_API_CALL clEnqueueBarrierImpl12(cl_command_queue queue)
+{
+    ASSERT(clEnqueueBarrierWithWaitList);
+    return clEnqueueBarrierWithWaitList(queue, 0, nullptr, nullptr);
+}
+
+static cl_int CL_API_CALL clEnqueueWaitForEventsImpl12(cl_command_queue queue, cl_uint numEvents, const cl_event* eventList)
+{
+    ASSERT(clEnqueueBarrierWithWaitList);
+    return clEnqueueBarrierWithWaitList(queue, numEvents, eventList, nullptr);
+}
+
+static cl_mem CL_API_CALL clCreateFromGLTexture2DImpl12(cl_context context, cl_mem_flags flags, GLenum textureTarget, GLint miplevel, GLuint texture, cl_int* err)
+{
+    ASSERT(clCreateFromGLTexture);
+    return clCreateFromGLTexture(context, flags, textureTarget, miplevel, texture, err);
+}
+
 bool init(const char** libs, int length)
 {
     const char** mLibs = (libs == 0 ? DEFAULT_SO : libs);
@@ -211,7 +278,6 @@ bool init(const char** libs, int length)
     MAP_FUNC_OR_BAIL(clCreateCommandQueue);
     MAP_FUNC_OR_BAIL(clCreateContext);
     MAP_FUNC_OR_BAIL(clCreateContextFromType);
-    MAP_FUNC_OR_BAIL(clCreateImage);
     MAP_FUNC_OR_BAIL(clCreateKernel);
     MAP_FUNC_OR_BAIL(clCreateKernelsInProgram);
     MAP_FUNC_OR_BAIL(clCreateProgramWithSource);
@@ -230,8 +296,6 @@ bool init(const char** libs, int length)
     MAP_FUNC_OR_BAIL(clEnqueueCopyImageToBuffer);
     MAP_FUNC_OR_BAIL(clEnqueueReadBufferRect);
     MAP_FUNC_OR_BAIL(clEnqueueWriteBufferRect);
-    MAP_FUNC_OR_BAIL(clEnqueueBarrierWithWaitList);
-    MAP_FUNC_OR_BAIL(clEnqueueMarkerWithWaitList);
     MAP_FUNC_OR_BAIL(clEnqueueNDRangeKernel);
     MAP_FUNC_OR_BAIL(clEnqueueTask);
 
@@ -258,7 +322,6 @@ bool init(const char** libs, int length)
 
     MAP_FUNC_OR_BAIL(clReleaseCommandQueue);
     MAP_FUNC_OR_BAIL(clReleaseContext);
-    MAP_FUNC_OR_BAIL(clReleaseDevice);
     MAP_FUNC_OR_BAIL(clReleaseEvent);
     MAP_FUNC_OR_BAIL(clReleaseKernel);
     MAP_FUNC_OR_BAIL(clReleaseMemObject);
@@ -269,7 +332,6 @@ bool init(const char** libs, int length)
     MAP_FUNC_OR_BAIL(clSetKernelArg);
     MAP_FUNC_OR_BAIL(clSetUserEventStatus);
 
-    MAP_FUNC_OR_BAIL(clUnloadPlatformCompiler);
     MAP_FUNC_OR_BAIL(clWaitForEvents);
 
     // They depends on whether OpenCL library support gl_sharing extension.
@@ -278,8 +340,48 @@ bool init(const char** libs, int length)
     MAP_FUNC(clEnqueueReleaseGLObjects);
     MAP_FUNC(clCreateFromGLBuffer);
     MAP_FUNC(clCreateFromGLRenderbuffer);
-    MAP_FUNC(clCreateFromGLTexture);
     MAP_FUNC(clGetGLTextureInfo);
+
+    // The following APIs are not available in all versions of the OpenCL
+    // spec, so wrappers may be needed if they are not exported by the OpenCL
+    // runtime library.
+    MAP_FUNC(clReleaseDevice)
+    if (!clReleaseDevice)
+        MAP_FUNC_TO_WRAPPER(clReleaseDevice, 1, 1)
+
+    MAP_FUNC(clCreateImage)
+    if (clCreateImage)
+        MAP_FUNC_TO_WRAPPER(clCreateImage2D, 1, 2)
+    else
+        MAP_FUNC_OR_BAIL(clCreateImage2D)
+
+    MAP_FUNC(clUnloadPlatformCompiler)
+    if (clUnloadPlatformCompiler)
+        MAP_FUNC_TO_WRAPPER(clUnloadCompiler, 1, 2)
+    else
+        MAP_FUNC_OR_BAIL(clUnloadCompiler)
+
+    MAP_FUNC(clEnqueueMarkerWithWaitList)
+    if (clEnqueueMarkerWithWaitList)
+        MAP_FUNC_TO_WRAPPER(clEnqueueMarker, 1, 2)
+    else
+        MAP_FUNC_OR_BAIL(clEnqueueMarker)
+
+    MAP_FUNC(clEnqueueBarrierWithWaitList)
+    if (clEnqueueBarrierWithWaitList)
+        MAP_FUNC_TO_WRAPPER(clEnqueueBarrier, 1, 2)
+    else
+        MAP_FUNC_OR_BAIL(clEnqueueBarrier)
+
+    MAP_FUNC(clEnqueueWaitForEvents)
+    if (!clEnqueueWaitForEvents)
+        MAP_FUNC_TO_WRAPPER(clEnqueueWaitForEvents, 1, 2)
+
+    MAP_FUNC(clCreateFromGLTexture)
+    if (clCreateFromGLTexture)
+        MAP_FUNC_TO_WRAPPER(clCreateFromGLTexture2D, 1, 2)
+    else
+        MAP_FUNC(clCreateFromGLTexture2D)
 
     return true;
 }
