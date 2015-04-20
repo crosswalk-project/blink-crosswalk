@@ -215,9 +215,6 @@ void WebCLException::throwException(int& code, ExceptionState& es)
     case CL_INVALID_PROPERTY:
         es.throwWebCLException(WebCLException::INVALID_PROPERTY, WebCLException::invalidPropertyMessage);
         break;
-    case CL_INVALID_IMAGE_DESCRIPTOR:
-        es.throwWebCLException(WebCLException::INVALID_IMAGE_FORMAT_DESCRIPTOR, WebCLException::invalidImageFormatDescriptorMessage);
-        break;
     default:
         es.throwWebCLException(WebCLException::FAILURE, WebCLException::failureMessage);
         break;
