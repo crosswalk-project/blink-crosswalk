@@ -75,9 +75,9 @@ function registerServiceWorker(jsonArgs)
     navigator.serviceWorker.register(args.script, {scope: args.scope})
         .then(function(reg){
             registrations[args.scope] = reg;
-            console.log("registerServiceWorker success");
+            output("registerServiceWorker success");
         }).catch(function() {
-            console.log("registerServiceWorker fail");
+            output("registerServiceWorker fail");
         });
 }
 
@@ -86,14 +86,14 @@ function unregisterServiceWorker(jsonArgs)
     var args = JSON.parse(jsonArgs);
     var registration = registrations[args.scope];
     if (!registration) {
-        console.log("ServiceWorker for " + args.scope + " is not registered");
-        console.log("unregisterServiceWorker fail");
+        output("ServiceWorker for " + args.scope + " is not registered");
+        output("unregisterServiceWorker fail");
         return;
     }
     registration.unregister()
         .then(function(){
-            console.log("unregisterServiceWorker success");
+            output("unregisterServiceWorker success");
         }).catch(function() {
-            console.log("unregisterServiceWorker fail");
+            output("unregisterServiceWorker fail");
         });
 }
