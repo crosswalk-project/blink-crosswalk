@@ -288,6 +288,7 @@ void HTMLCanvasElement::didDraw(const FloatRect& rect)
     m_dirtyRect.unite(rect);
     if (m_context && m_context->is2d() && hasImageBuffer())
         buffer()->didDraw(rect);
+    notifyObserversCanvasChanged(m_dirtyRect);
 }
 
 void HTMLCanvasElement::didFinalizeFrame()
@@ -306,7 +307,6 @@ void HTMLCanvasElement::didFinalizeFrame()
         DisableCompositingQueryAsserts disabler;
         ro->invalidatePaintRectangle(enclosingIntRect(mappedDirtyRect));
     }
-    notifyObserversCanvasChanged(m_dirtyRect);
     m_dirtyRect = FloatRect();
 }
 
