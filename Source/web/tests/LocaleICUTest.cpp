@@ -253,7 +253,7 @@ TEST_F(LocaleICUTest, localizedDecimalSeparator)
 
 void testNumberIsReversible(const AtomicString& localeIdentifier, const char* original, const char* shouldHave = 0)
 {
-    OwnPtr<Locale> locale = Locale::create(localeIdentifier);
+    OwnPtr<blink::Locale> locale = blink::Locale::create(localeIdentifier);
     String localized = locale->convertToLocalizedNumber(original);
     if (shouldHave)
         EXPECT_TRUE(localized.contains(shouldHave));
