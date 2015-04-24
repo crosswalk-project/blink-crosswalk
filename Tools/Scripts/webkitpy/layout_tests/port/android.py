@@ -253,7 +253,6 @@ class AndroidCommands(object):
             error_handler = self._executive.ignore_error
         else:
             error_handler = None
-
         result = self._executive.run_command(self.adb_command() + command, error_handler=error_handler, debug_logging=self._debug_logging)
 
         # We limit the length to avoid outputting too verbose commands, such as "adb logcat".
@@ -349,10 +348,11 @@ class AndroidDevices(object):
         # Example "adb devices" command output:
         #   List of devices attached
         #   0123456789ABCDEF        device
-        re_device = re.compile('^([a-zA-Z0-9_:.-]+)\tdevice$', re.MULTILINE)
+        re_device = re.compile('^([a-zA-Z0-9_:.-]+)\\tdevice$', re.MULTILINE)
 
         result = executive.run_command([AndroidCommands.adb_command_path(executive, debug_logging=self._debug_logging), 'devices'],
                                        error_handler=executive.ignore_error, debug_logging=self._debug_logging)
+
         devices = re_device.findall(result)
         if not devices:
             return []
@@ -801,6 +801,7 @@ class ChromiumAndroidDriver(driver.Driver):
         self._created_cmd_line = False
         self._device_failed = False
 
+        print("##hkdebug,in chromiumandroidDriver::__init__")
         # FIXME: If we taught ProfileFactory about "target" devices we could
         # just use the logic in Driver instead of duplicating it here.
         if self._port.get_option("profile"):
@@ -823,6 +824,7 @@ class ChromiumAndroidDriver(driver.Driver):
         self._teardown_performance()
         self._clean_up_cmd_line()
         super(ChromiumAndroidDriver, self).__del__()
+        #print("##hkdebug,in chromiumandroidDriver::__del__")
 
     def _update_kallsyms_cache(self, output_dir):
         kallsyms_name = "%s-kallsyms" % self._android_commands.get_serial()
@@ -882,7 +884,7 @@ class ChromiumAndroidDriver(driver.Driver):
         if self._android_devices.is_device_prepared(self._android_commands.get_serial()):
             return
 
-        self._android_commands.restart_adb()
+        #self._android_commands.restart_adb()
         self._android_commands.restart_as_root()
         self._setup_md5sum_and_push_data_if_needed(log_callback)
         self._setup_performance()

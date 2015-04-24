@@ -347,7 +347,7 @@ class Executive(object):
                     error_handler=None,
                     return_exit_code=False,
                     return_stderr=True,
-                    decode_output=True, debug_logging=True):
+                    decode_output=False, debug_logging=True):
         """Popen wrapper for convenience and to work around python bugs."""
         assert(isinstance(args, list) or isinstance(args, tuple))
         start_time = time.time()
@@ -355,6 +355,8 @@ class Executive(object):
         stdin, string_to_communicate = self._compute_stdin(input)
         stderr = self.STDOUT if return_stderr else None
 
+        #if args:
+        #        print("###hkdebug, executive::run_command:%s"%(args))
         process = self.popen(args,
                              stdin=stdin,
                              stdout=self.PIPE,
@@ -366,7 +368,7 @@ class Executive(object):
 
         # run_command automatically decodes to unicode() unless explicitly told not to.
         if decode_output:
-            output = output.decode(self._child_process_encoding())
+                output = output.decode(self._child_process_encoding())
 
         # wait() is not threadsafe and can throw OSError due to:
         # http://bugs.python.org/issue1731717
