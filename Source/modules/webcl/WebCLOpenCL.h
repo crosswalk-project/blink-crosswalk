@@ -18,14 +18,12 @@ extern cl_int (CL_API_CALL *web_clGetPlatformIDs)(cl_uint num_entries, cl_platfo
 
 extern cl_int (CL_API_CALL *web_clGetPlatformInfo)(cl_platform_id platform, cl_platform_info param_name, size_t param_value_size, void* param_value, size_t* param_value_size_ret);
 
-extern cl_int (CL_API_CALL *web_clUnloadPlatformCompiler)(cl_platform_id platform);
+extern cl_int (CL_API_CALL *web_clUnloadCompiler)(cl_platform_id platform);
 
 /* Device APIs */
 extern cl_int (CL_API_CALL *web_clGetDeviceInfo)(cl_device_id device, cl_device_info param_name, size_t param_value_size, void* param_value, size_t* param_value_size_ret);
 
 extern cl_int (CL_API_CALL *web_clGetDeviceIDs)(cl_platform_id platform, cl_device_type device_type, cl_uint num_entries, cl_device_id* devices, cl_uint* num_devices);
-
-extern cl_int (CL_API_CALL *web_clReleaseDevice)(cl_device_id device);
 
 /* Context APIs */
 extern cl_int (CL_API_CALL *web_clGetContextInfo)(cl_context context, cl_context_info param_name, size_t param_value_size, void* param_value, size_t* param_value_size_ret);
@@ -54,7 +52,7 @@ extern cl_int (CL_API_CALL *web_clReleaseMemObject)(cl_mem memobj);
 
 extern cl_int (CL_API_CALL *web_clGetImageInfo)(cl_mem image, cl_image_info param_name, size_t param_value_size, void* param_value, size_t* param_value_size_ret);
 
-extern cl_mem (CL_API_CALL *web_clCreateImage)(cl_context context, cl_mem_flags flags, const cl_image_format* image_format, const cl_image_desc* image_desc, void* host_ptr, cl_int* errcode_ret);
+extern cl_mem (CL_API_CALL *web_clCreateImage2D)(cl_context context, cl_mem_flags flags, const cl_image_format* image_format, size_t image_width, size_t image_height, size_t image_row_pitch, void* host_ptr, cl_int* errcode_ret);
 
 extern cl_int (CL_API_CALL *web_clGetSupportedImageFormats)(cl_context context, cl_mem_flags flags, cl_mem_object_type image_type, cl_uint num_entries, cl_image_format* image_formats, cl_uint* num_image_formats);
 
@@ -120,9 +118,9 @@ extern cl_int (CL_API_CALL *web_clEnqueueWriteImage)(cl_command_queue command_qu
 
 extern cl_int (CL_API_CALL *web_clEnqueueCopyBuffer)(cl_command_queue command_queue, cl_mem src_buffer, cl_mem dst_buffer, size_t src_offset, size_t dst_offset, size_t size, cl_uint num_events_in_wait_list, const cl_event* event_wait_list, cl_event* event);
 
-extern cl_int (CL_API_CALL *web_clEnqueueBarrierWithWaitList)(cl_command_queue command_queue, cl_uint num_events_in_wait_list, const cl_event* event_wait_list, cl_event* event);
+extern cl_int (CL_API_CALL *web_clEnqueueBarrier)(cl_command_queue command_queue);
 
-extern cl_int (CL_API_CALL *web_clEnqueueMarkerWithWaitList)(cl_command_queue command_queue, cl_uint num_events_in_wait_list, const cl_event* event_wait_list, cl_event* event);
+extern cl_int (CL_API_CALL *web_clEnqueueMarker)(cl_command_queue command_queue, cl_event* event);
 
 extern cl_int (CL_API_CALL *web_clEnqueueTask)(cl_command_queue command_queue, cl_kernel kernel, cl_uint num_events_in_wait_list, const cl_event* event_wait_list, cl_event* event);
 
@@ -140,6 +138,8 @@ extern cl_int (CL_API_CALL *web_clEnqueueCopyImageToBuffer)(cl_command_queue com
 
 extern cl_int (CL_API_CALL *web_clEnqueueCopyBufferToImage)(cl_command_queue command_queue, cl_mem src_buffer, cl_mem dst_image, size_t src_offset, const size_t* dst_origin, const size_t* region, cl_uint num_events_in_wait_list, const cl_event* event_wait_list, cl_event* event);
 
+extern cl_int (CL_API_CALL *web_clEnqueueWaitForEvents)(cl_command_queue command_queue, cl_uint num_events, const cl_event* event_list);
+
 /* OpenCL Extention */
 extern cl_int (CL_API_CALL *web_clEnqueueAcquireGLObjects)(cl_command_queue command_queue, cl_uint num_objects, const cl_mem* mem_objects, cl_uint num_events_in_wait_list, const cl_event* event_wait_list, cl_event* event);
 
@@ -149,7 +149,7 @@ extern cl_mem (CL_API_CALL *web_clCreateFromGLBuffer)(cl_context context, cl_mem
 
 extern cl_mem (CL_API_CALL *web_clCreateFromGLRenderbuffer)(cl_context context, cl_mem_flags flags, GLuint renderbuffer, cl_int* errcode_ret);
 
-extern cl_mem (CL_API_CALL *web_clCreateFromGLTexture)(cl_context context, cl_mem_flags flags, GLenum texture_target, GLint miplevel, GLuint texture, cl_int* errcode_ret);
+extern cl_mem (CL_API_CALL *web_clCreateFromGLTexture2D)(cl_context context, cl_mem_flags flags, GLenum texture_target, GLint miplevel, GLuint texture, cl_int* errcode_ret);
 
 extern cl_int (CL_API_CALL *web_clGetGLTextureInfo)(cl_mem, cl_gl_texture_info, size_t, void *, size_t *);
 
@@ -171,8 +171,8 @@ extern cl_int (CL_API_CALL *web_clGetGLTextureInfo)(cl_mem, cl_gl_texture_info, 
 #define clEnqueueAcquireGLObjects web_clEnqueueAcquireGLObjects
 #define clEnqueueReleaseGLObjects web_clEnqueueReleaseGLObjects
 #define clEnqueueCopyBuffer web_clEnqueueCopyBuffer
-#define clEnqueueBarrierWithWaitList web_clEnqueueBarrierWithWaitList
-#define clEnqueueMarkerWithWaitList web_clEnqueueMarkerWithWaitList
+#define clEnqueueBarrier web_clEnqueueBarrier
+#define clEnqueueMarker web_clEnqueueMarker
 #define clEnqueueTask web_clEnqueueTask
 #define clEnqueueWriteBufferRect web_clEnqueueWriteBufferRect
 #define clEnqueueReadBufferRect web_clEnqueueReadBufferRect
@@ -182,14 +182,15 @@ extern cl_int (CL_API_CALL *web_clGetGLTextureInfo)(cl_mem, cl_gl_texture_info, 
 #define clEnqueueCopyImage web_clEnqueueCopyImage
 #define clEnqueueCopyImageToBuffer web_clEnqueueCopyImageToBuffer
 #define clEnqueueCopyBufferToImage web_clEnqueueCopyBufferToImage
+#define clEnqueueWaitForEvents web_clEnqueueWaitForEvents
 #define clCreateCommandQueue web_clCreateCommandQueue
 #define clGetContextInfo web_clGetContextInfo
 #define clCreateProgramWithSource web_clCreateProgramWithSource
-#define clCreateImage web_clCreateImage
+#define clCreateImage2D web_clCreateImage2D
 #define clCreateFromGLBuffer web_clCreateFromGLBuffer
 #define clCreateFromGLRenderbuffer web_clCreateFromGLRenderbuffer
 #define clCreateSampler web_clCreateSampler
-#define clCreateFromGLTexture web_clCreateFromGLTexture
+#define clCreateFromGLTexture2D web_clCreateFromGLTexture2D
 #define clCreateUserEvent web_clCreateUserEvent
 #define clWaitForEvents web_clWaitForEvents
 #define clReleaseContext web_clReleaseContext
@@ -197,10 +198,9 @@ extern cl_int (CL_API_CALL *web_clGetGLTextureInfo)(cl_mem, cl_gl_texture_info, 
 #define clCreateContext web_clCreateContext
 #define clCreateContextFromType web_clCreateContextFromType
 #define clGetPlatformIDs web_clGetPlatformIDs
-#define clUnloadPlatformCompiler web_clUnloadPlatformCompiler
+#define clUnloadCompiler web_clUnloadCompiler
 #define clGetDeviceIDs web_clGetDeviceIDs
 #define clGetDeviceInfo web_clGetDeviceInfo
-#define clReleaseDevice web_clReleaseDevice
 #define clGetEventInfo web_clGetEventInfo
 #define clSetUserEventStatus web_clSetUserEventStatus
 #define clReleaseEvent web_clReleaseEvent
