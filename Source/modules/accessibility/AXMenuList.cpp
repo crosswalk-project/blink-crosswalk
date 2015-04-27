@@ -52,6 +52,9 @@ AccessibilityRole AXMenuList::roleValue() const
 
 bool AXMenuList::press() const
 {
+    if (!m_layoutObject)
+        return false;
+
     LayoutMenuList* menuList = toLayoutMenuList(m_layoutObject);
     if (menuList->popupIsVisible())
         menuList->hidePopup();
@@ -104,6 +107,11 @@ void AXMenuList::childrenChanged()
 
 bool AXMenuList::isCollapsed() const
 {
+    // Collapsed is the "default" state, so if the LayoutObject doesn't exist
+    // this makes slightly more sense than returning false.
+    if (!m_layoutObject)
+        return true;
+
     return !toLayoutMenuList(m_layoutObject)->popupIsVisible();
 }
 
