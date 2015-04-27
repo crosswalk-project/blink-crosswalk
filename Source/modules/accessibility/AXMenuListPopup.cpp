@@ -82,11 +82,11 @@ AXMenuListOption* AXMenuListPopup::menuListOptionAXObject(HTMLElement* element) 
 
 int AXMenuListPopup::getSelectedIndex() const
 {
-    Node* selectNode = m_parent->node();
-    if (!selectNode)
+    Node* parentNode = m_parent->node();
+    if (!isHTMLSelectElement(parentNode))
         return -1;
 
-    HTMLSelectElement* htmlSelectElement = toHTMLSelectElement(selectNode);
+    HTMLSelectElement* htmlSelectElement = toHTMLSelectElement(parentNode);
     return htmlSelectElement->selectedIndex();
 }
 
@@ -104,11 +104,11 @@ void AXMenuListPopup::addChildren()
     if (!m_parent)
         return;
 
-    Node* selectNode = m_parent->node();
-    if (!selectNode)
+    Node* parentNode = m_parent->node();
+    if (!isHTMLSelectElement(parentNode))
         return;
 
-    HTMLSelectElement* htmlSelectElement = toHTMLSelectElement(selectNode);
+    HTMLSelectElement* htmlSelectElement = toHTMLSelectElement(parentNode);
     m_haveChildren = true;
 
     m_activeIndex = getSelectedIndex();
