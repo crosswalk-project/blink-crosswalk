@@ -34,7 +34,6 @@
 #include "platform/graphics/media/MediaPlayer.h"
 #include "platform/weborigin/SecurityOrigin.h"
 #include "wtf/Locker.h"
-#include "wtf/MainThread.h"
 
 namespace blink {
 
@@ -43,9 +42,7 @@ MediaElementAudioSourceHandler::MediaElementAudioSourceHandler(AudioNode& node, 
     , m_mediaElement(mediaElement)
     , m_sourceNumberOfChannels(0)
     , m_sourceSampleRate(0)
-    , m_passesCurrentSrcCORSAccessCheck(passesCurrentSrcCORSAccessCheck(mediaElement.currentSrc()))
 {
-    ASSERT(isMainThread());
     // Default to stereo. This could change depending on what the media element
     // .src is set to.
     addOutput(2);
@@ -56,7 +53,6 @@ MediaElementAudioSourceHandler::MediaElementAudioSourceHandler(AudioNode& node, 
 MediaElementAudioSourceHandler::~MediaElementAudioSourceHandler()
 {
     ASSERT(!isInitialized());
-    ASSERT(isMainThread());
 }
 
 void MediaElementAudioSourceHandler::dispose()
@@ -106,23 +102,7 @@ bool MediaElementAudioSourceHandler::passesCORSAccessCheck()
     ASSERT(mediaElement());
 
     return (mediaElement()->webMediaPlayer() && mediaElement()->webMediaPlayer()->didPassCORSAccessCheck())
-        || m_passesCurrentSrcCORSAccessCheck;
-}
-
-void MediaElementAudioSourceHandler::onCurrentSrcChanged(const KURL& currentSrc)
-{
-    ASSERT(isMainThread());
-
-    // Synchronize with process().
-    Locker<MediaElementAudioSourceHandler> locker(*this);
-
-    m_passesCurrentSrcCORSAccessCheck = passesCurrentSrcCORSAccessCheck(currentSrc);
-}
-
-bool MediaElementAudioSourceHandler::passesCurrentSrcCORSAccessCheck(const KURL& currentSrc)
-{
-    ASSERT(isMainThread());
-    return context()->securityOrigin() && context()->securityOrigin()->canRequest(currentSrc);
+        || (context()->securityOrigin() && context()->securityOrigin()->canRequest(mediaElement()->currentSrc()));
 }
 
 void MediaElementAudioSourceHandler::process(size_t numberOfFrames)
