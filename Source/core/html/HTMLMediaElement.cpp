@@ -3065,6 +3065,10 @@ void HTMLMediaElement::stop()
     if (m_playing && m_initialPlayWithoutUserGestures)
         gesturelessInitialPlayHalted();
 
+    // Close the async event queue so that no events are enqueued by userCancelledLoad.
+    cancelPendingEventsAndCallbacks();
+    m_asyncEventQueue->close();
+
     userCancelledLoad();
 
     // Stop the playback without generating events
@@ -3076,10 +3080,6 @@ void HTMLMediaElement::stop()
         layoutObject()->updateFromElement();
 
     stopPeriodicTimers();
-    cancelPendingEventsAndCallbacks();
-
-    m_asyncEventQueue->close();
-
     // Ensure that hasPendingActivity() is not preventing garbage collection, since otherwise this
     // media element will simply leak.
     ASSERT(!hasPendingActivity());
