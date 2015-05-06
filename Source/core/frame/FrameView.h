@@ -776,6 +776,7 @@ private:
     bool m_verticalOverflow;
     LayoutObject* m_viewportLayoutObject;
 
+    // TODO(skobes): Move this to DocumentLoader::InitialScrollState.
     bool m_wasScrolledByUser;
     bool m_inProgrammaticScroll;
     bool m_safeToPropagateScrollToParent;

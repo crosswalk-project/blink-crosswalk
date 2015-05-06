@@ -124,6 +124,18 @@ namespace blink {
 
         PassRefPtr<ContentSecurityPolicy> releaseContentSecurityPolicy() { return m_contentSecurityPolicy.release(); }
 
+
+        struct InitialScrollState {
+            InitialScrollState()
+                : didRestoreFromHistory(false)
+            {
+            }
+
+            // TODO(skobes): Move FrameView::m_wasScrolledByUser into here.
+            bool didRestoreFromHistory;
+        };
+        InitialScrollState& initialScrollState() { return m_initialScrollState; }
+
     protected:
         DocumentLoader(LocalFrame*, const ResourceRequest&, const SubstituteData&);
 
@@ -204,6 +216,7 @@ namespace blink {
         OwnPtrWillBePersistent<ApplicationCacheHost> m_applicationCacheHost;
 
         RefPtr<ContentSecurityPolicy> m_contentSecurityPolicy;
+        InitialScrollState m_initialScrollState;
     };
 }
 
