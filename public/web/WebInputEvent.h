@@ -494,6 +494,7 @@ public:
         } flingCancel;
 
         struct {
+            bool zoomDisabled;
             float scale;
         } pinchUpdate;
     } data;
