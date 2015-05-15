@@ -388,6 +388,14 @@ bool CompositedDeprecatedPaintLayerMapping::owningLayerClippedByLayerNotAboveCom
     return parentClipRect != LayoutRect::infiniteIntRect();
 }
 
+DeprecatedPaintLayer* CompositedDeprecatedPaintLayerMapping::scrollParent()
+{
+    DeprecatedPaintLayer* scrollParent = m_owningLayer.scrollParent();
+    if (scrollParent && !scrollParent->needsCompositedScrolling())
+        return nullptr;
+    return scrollParent;
+}
+
 bool CompositedDeprecatedPaintLayerMapping::updateGraphicsLayerConfiguration()
 {
     ASSERT(m_owningLayer.compositor()->lifecycle().state() == DocumentLifecycle::InCompositingUpdate);
@@ -420,7 +428,7 @@ bool CompositedDeprecatedPaintLayerMapping::updateGraphicsLayerConfiguration()
     if (m_owningLayer.needsCompositedScrolling())
         needsDescendantsClippingLayer = false;
 
-    DeprecatedPaintLayer* scrollParent = compositor->preferCompositingToLCDTextEnabled() ? m_owningLayer.scrollParent() : 0;
+    DeprecatedPaintLayer* scrollParent = this->scrollParent();
 
     // This is required because compositing layers are parented
     // according to the z-order hierarchy, yet clipping goes down the renderer hierarchy.
@@ -731,7 +739,7 @@ void CompositedDeprecatedPaintLayerMapping::updateGraphicsLayerGeometry(const De
     updateRenderingContext();
     updateShouldFlattenTransform();
     updateChildrenTransform();
-    updateScrollParent(compositor()->preferCompositingToLCDTextEnabled() ? m_owningLayer.scrollParent() : 0);
+    updateScrollParent(scrollParent());
     registerScrollingLayers();
 
     updateScrollBlocksOn(layoutObject()->styleRef());
