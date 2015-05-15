@@ -343,15 +343,6 @@ void CSSAnimations::maybeApplyPendingUpdate(Element* element)
             player->update(TimingUpdateOnDemand);
     }
 
-    for (const auto& entry : update->animationsWithUpdates()) {
-        Animation* animation = toAnimation(entry.player->source());
-
-        animation->setEffect(entry.animation->effect());
-        animation->updateSpecifiedTiming(entry.animation->specifiedTiming());
-
-        m_animations.find(entry.name)->value->update(entry);
-    }
-
     for (const auto& styleUpdate : update->animationsWithStyleUpdates()) {
         styleUpdate.effect->forEachInterpolation([](Interpolation& interpolation) {
             if (interpolation.isStyleInterpolation() && toStyleInterpolation(interpolation).isDeferredLegacyStyleInterpolation())
@@ -369,6 +360,15 @@ void CSSAnimations::maybeApplyPendingUpdate(Element* element)
             styleUpdate.player->setOutdated();
             styleUpdate.player->setCompositorPending(true);
         }
+    }
+
+    for (const auto& entry : update->animationsWithUpdates()) {
+        Animation* animation = toAnimation(entry.player->source());
+
+        animation->setEffect(entry.animation->effect());
+        animation->updateSpecifiedTiming(entry.animation->specifiedTiming());
+
+        m_animations.find(entry.name)->value->update(entry);
     }
 
     for (const auto& entry : update->newAnimations()) {
