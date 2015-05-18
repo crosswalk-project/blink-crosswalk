@@ -183,6 +183,7 @@ WebInspector.NetworkOverview.prototype = {
         var width = this._overviewContainer.offsetWidth;
         var height = this._overviewContainer.offsetHeight;
         this._resetCanvas(width, height);
+        this._update();
     },
 
     /**
