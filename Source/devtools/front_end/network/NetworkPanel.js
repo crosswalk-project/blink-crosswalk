@@ -317,6 +317,7 @@ WebInspector.NetworkPanel.prototype = {
     _onShowOverviewButtonClicked: function(event)
     {
         this._toggleShowOverviewButton(!WebInspector.settings.networkLogShowOverview.get());
+        this.doResize();
     },
 
     /**
