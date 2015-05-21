@@ -3147,8 +3147,9 @@ void Element::setSavedLayerScrollOffset(const IntSize& size)
 PassRefPtrWillBeRawPtr<Attr> Element::attrIfExists(const QualifiedName& name)
 {
     if (AttrNodeList* attrNodeList = this->attrNodeList()) {
+        bool shouldIgnoreCase = shouldIgnoreAttributeCase();
         for (const auto& attr : *attrNodeList) {
-            if (attr->qualifiedName() == name)
+            if (attr->qualifiedName().matchesPossiblyIgnoringCase(name, shouldIgnoreCase))
                 return attr.get();
         }
     }
