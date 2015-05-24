@@ -14,6 +14,8 @@
             'V8DeviceMotionEventCustom.cpp',
             'V8DeviceOrientationEventCustom.cpp',
             'V8ServiceWorkerCustom.cpp',
+            'V8WebCLCommandQueueCustom.cpp',
+            'V8WebCLProgramCustom.cpp',
         ],
     },
 }
