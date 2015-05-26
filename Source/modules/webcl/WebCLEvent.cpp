@@ -211,7 +211,9 @@ void WebCLEvent::callbackProxyOnMainThread(PassOwnPtr<WebCLEventHolder> holder)
 {
     ASSERT(isMainThread());
     RefPtr<WebCLEvent> webEvent(static_cast<WebCLEvent*>(holder->event.get()));
+#ifndef NDEBUG
     cl_event event = holder->event2;
+#endif
     cl_int type = holder->type2;
 
     if (!webEvent)
