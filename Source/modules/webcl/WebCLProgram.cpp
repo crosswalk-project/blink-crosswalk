@@ -485,7 +485,9 @@ void WebCLProgram::callbackProxyOnMainThread(PassOwnPtr<WebCLProgramHolder> hold
 {
     ASSERT(isMainThread());
     RefPtr<WebCLProgram> webProgram(static_cast<WebCLProgram*>(holder->program.get()));
+#ifndef NDEBUG
     cl_program program = holder->program2;
+#endif
 
     if (!webProgram)
         return;
