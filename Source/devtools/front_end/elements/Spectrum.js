@@ -73,6 +73,7 @@ WebInspector.Spectrum = function()
         var inputValue = this._displayContainer.createChild("span", "spectrum-text-value");
         inputValue.maxLength = 4;
         this._textValues.push(inputValue);
+        inputValue.addEventListener("keydown", this._checkForTabEvent.bind(this));
         inputValue.addEventListener("keyup", this._inputChanged.bind(this));
         inputValue.addEventListener("mousewheel", this._inputChanged.bind(this));
     }
@@ -387,6 +388,18 @@ WebInspector.Spectrum.prototype = {
         else
             this._currentFormat = cf.RGB;
         this._onchange();
+    },
+
+    /**
+     * @param {!Event} event
+     */
+    _checkForTabEvent: function(event)
+    {
+        var sibling = event.shiftKey ? event.target.previousSibling : event.target.nextSibling;
+        if (event.code !== "Tab" || !sibling || !sibling.classList.contains("spectrum-text-value"))
+            return;
+        sibling.getComponentSelection().setBaseAndExtent(sibling, 0, sibling, 1);
+        event.consume(true);
     },
 
     /**
