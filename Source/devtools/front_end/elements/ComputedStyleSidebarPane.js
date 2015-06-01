@@ -150,6 +150,8 @@ WebInspector.ComputedStyleSidebarPane.prototype = {
             this._propertiesContainer.appendChild(item);
         }
 
+        this._updateFilter(this._filterRegex);
+
         /**
          * @param {!WebInspector.CSSProperty} a
          * @param {!WebInspector.CSSProperty} b
