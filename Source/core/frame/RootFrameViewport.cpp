@@ -301,4 +301,20 @@ bool RootFrameViewport::scroll(ScrollDirection direction, ScrollGranularity gran
     return false;
 }
 
+bool RootFrameViewport::scrollAnimatorEnabled() const
+{
+    return layoutViewport().scrollAnimatorEnabled();
+}
+
+HostWindow* RootFrameViewport::hostWindow() const
+{
+    return layoutViewport().hostWindow();
+}
+
+void RootFrameViewport::serviceScrollAnimations(double monotonicTime)
+{
+    ScrollableArea::serviceScrollAnimations(monotonicTime);
+    layoutViewport().serviceScrollAnimations(monotonicTime);
+}
+
 } // namespace blink
