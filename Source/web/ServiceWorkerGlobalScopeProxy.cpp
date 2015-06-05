@@ -51,9 +51,7 @@
 #include "modules/push_messaging/PushMessageData.h"
 #include "modules/serviceworkers/ExtendableEvent.h"
 #include "modules/serviceworkers/FetchEvent.h"
-#include "modules/serviceworkers/ServiceWorkerClient.h"
 #include "modules/serviceworkers/ServiceWorkerGlobalScope.h"
-#include "modules/serviceworkers/ServiceWorkerWindowClient.h"
 #include "modules/serviceworkers/WaitUntilObserver.h"
 #include "platform/RuntimeEnabledFeatures.h"
 #include "public/platform/WebCrossOriginServiceWorkerClient.h"
@@ -105,12 +103,7 @@ void ServiceWorkerGlobalScopeProxy::dispatchFetchEvent(int eventID, const WebSer
     request->headers()->setGuard(Headers::ImmutableGuard);
     FetchEventInit eventInit;
     eventInit.setRequest(request);
-    if (webRequest.client().clientType == WebServiceWorkerClientTypeWindow) {
-        eventInit.setClient(ServiceWorkerWindowClient::create(webRequest.client()));
-        eventInit.setIsReload(webRequest.isReload());
-    } else {
-        eventInit.setClient(ServiceWorkerClient::create(webRequest.client()));
-    }
+    eventInit.setIsReload(webRequest.isReload());
     RefPtrWillBeRawPtr<FetchEvent> fetchEvent(FetchEvent::create(EventTypeNames::fetch, eventInit, observer));
     defaultPrevented = !m_workerGlobalScope->dispatchEvent(fetchEvent.release());
     observer->didDispatchEvent(defaultPrevented);
