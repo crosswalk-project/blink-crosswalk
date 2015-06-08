@@ -35,7 +35,7 @@
 #include "public/platform/Platform.h"
 #include "wtf/PassOwnPtr.h"
 #include "wtf/text/StringBuilder.h"
-#if defined(USE_ICU_ALTERNATIVES_ON_ANDROID)
+#if !defined(USE_ICU_ALTERNATIVES_ON_ANDROID)
 #include <unicode/idna.h>
 #include <unicode/unistr.h>
 #endif
