@@ -66,6 +66,7 @@ InitializedByEventConstructor
 Iterable
 LegacyInterfaceTypeChecking
 LegacyTreatAsPartialInterface
+LenientThis
 LogActivity=|GetterOnly|SetterOnly
 LogAllWorlds
 NewObject

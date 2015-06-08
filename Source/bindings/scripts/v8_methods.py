@@ -119,6 +119,9 @@ def method_context(interface, method, is_visible=True):
     is_raises_exception = 'RaisesException' in extended_attributes
     is_custom_call_epilogue = has_extended_attribute_value(method, 'Custom', 'CallEpilogue')
 
+    if 'LenientThis' in extended_attributes:
+        raise Exception('[LenientThis] is not supported for operations.')
+
     return {
         'activity_logging_world_list': v8_utilities.activity_logging_world_list(method),  # [ActivityLogging]
         'arguments': [argument_context(interface, method, argument, index, is_visible=is_visible)
