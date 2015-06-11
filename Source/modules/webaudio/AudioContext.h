@@ -64,8 +64,10 @@ class ExceptionState;
 class GainNode;
 class HTMLMediaElement;
 class MediaElementAudioSourceNode;
+#if ENABLE(MEDIA_STREAM)
 class MediaStreamAudioDestinationNode;
 class MediaStreamAudioSourceNode;
+#endif
 class OscillatorNode;
 class PannerNode;
 class PeriodicWave;
@@ -250,8 +252,10 @@ public:
     // The AudioNode create methods are called on the main thread (from JavaScript).
     AudioBufferSourceNode* createBufferSource(ExceptionState&);
     MediaElementAudioSourceNode* createMediaElementSource(HTMLMediaElement*, ExceptionState&);
+#if ENABLE(MEDIA_STREAM)
     MediaStreamAudioSourceNode* createMediaStreamSource(MediaStream*, ExceptionState&);
     MediaStreamAudioDestinationNode* createMediaStreamDestination(ExceptionState&);
+#endif
     GainNode* createGain(ExceptionState&);
     BiquadFilterNode* createBiquadFilter(ExceptionState&);
     WaveShaperNode* createWaveShaper(ExceptionState&);

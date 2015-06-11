@@ -71,6 +71,15 @@
           'ENABLE_WEB_AUDIO=1',
         ],
       }],
+      ['OS=="android" and disable_media_stream==1', {
+        'feature_defines': [
+          'ENABLE_MEDIA_STREAM=0',
+        ],
+      }, {
+        'feature_defines': [
+          'ENABLE_MEDIA_STREAM=1',
+        ],
+      }],
       ['use_default_render_theme==1', {
         'feature_defines': [
           'WTF_USE_DEFAULT_RENDER_THEME=1',

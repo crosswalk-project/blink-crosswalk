@@ -63,8 +63,8 @@ enum AudioContextState {
 
     [RaisesException, MeasureAs=AudioContextCreateMediaElementSource] MediaElementAudioSourceNode createMediaElementSource(HTMLMediaElement mediaElement);
 
-    [RaisesException, MeasureAs=AudioContextCreateMediaStreamSource, RaisesException] MediaStreamAudioSourceNode createMediaStreamSource(MediaStream mediaStream);
-    [RaisesException, MeasureAs=AudioContextCreateMediaStreamDestination] MediaStreamAudioDestinationNode createMediaStreamDestination();
+    [Conditional=MEDIA_STREAM, RaisesException, MeasureAs=AudioContextCreateMediaStreamSource, RaisesException] MediaStreamAudioSourceNode createMediaStreamSource(MediaStream mediaStream);
+    [Conditional=MEDIA_STREAM, RaisesException, MeasureAs=AudioContextCreateMediaStreamDestination] MediaStreamAudioDestinationNode createMediaStreamDestination();
 
     // Processing nodes
     [RaisesException, MeasureAs=AudioContextCreateGain] GainNode createGain();

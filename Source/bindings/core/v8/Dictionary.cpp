@@ -43,6 +43,11 @@
 #include "core/html/track/TrackBase.h"
 #include "wtf/MathExtras.h"
 
+#if ENABLE(MEDIA_STREAM)
+#include "bindings/modules/v8/V8MediaStream.h"
+#include "modules/mediastream/MediaStream.h"
+#endif
+
 namespace blink {
 
 static ExceptionState& emptyExceptionState()
