@@ -912,6 +912,9 @@ String UseCounter::deprecationMessage(Feature feature)
     case DocumentGetCSSCanvasContext:
         return "The -webkit-canvas CSS feature is deprecated. Please use a positioned <canvas> element instead.";
 
+    case VideoFullscreenAllowedExemption:
+        return "Entering fullscreen in an <iframe> with no allowfullscreen attribute is deprecated and will stop working in M46, around October 2015. Please use the allowfullscreen attribute.";
+
     // Features that aren't deprecated don't have a deprecation message.
     default:
         return String();
