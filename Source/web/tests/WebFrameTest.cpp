@@ -7411,4 +7411,13 @@ TEST_F(WebFrameTest, CreateLocalChildWithPreviousSibling)
     view->close();
 }
 
+TEST_F(WebFrameTest, OrientationFrameDetach)
+{
+    RuntimeEnabledFeatures::setOrientationEventEnabled(true);
+    registerMockedHttpURLLoad("orientation-frame-detach.html");
+    FrameTestHelpers::WebViewHelper webViewHelper;
+    WebViewImpl* webViewImpl = webViewHelper.initializeAndLoad(m_baseURL + "orientation-frame-detach.html", true);
+    webViewImpl->mainFrameImpl()->sendOrientationChangeEvent();
+}
+
 } // namespace blink
