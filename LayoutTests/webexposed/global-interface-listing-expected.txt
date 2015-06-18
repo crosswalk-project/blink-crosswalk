@@ -3731,6 +3731,7 @@ interface PerformanceTiming
     getter unloadEventEnd
     getter unloadEventStart
     method constructor
+    method toJSON
 interface PeriodicSyncManager
     getter minPossiblePeriod
     method constructor
