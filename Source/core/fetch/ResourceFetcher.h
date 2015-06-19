@@ -51,7 +51,9 @@ class MHTMLArchive;
 class RawResource;
 class ScriptResource;
 class SubstituteData;
+#if !defined(DISABLE_XSLT)
 class XSLStyleSheetResource;
+#endif
 class KURL;
 class ResourceTimingInfo;
 class ResourceLoaderSet;
@@ -85,7 +87,9 @@ public:
     ResourcePtr<RawResource> fetchRawResource(FetchRequest&);
     ResourcePtr<RawResource> fetchMainResource(FetchRequest&, const SubstituteData&);
     ResourcePtr<DocumentResource> fetchSVGDocument(FetchRequest&);
+#if !defined(DISABLE_XSLT)
     ResourcePtr<XSLStyleSheetResource> fetchXSLStyleSheet(FetchRequest&);
+#endif
     ResourcePtr<Resource> fetchLinkResource(Resource::Type, FetchRequest&);
     ResourcePtr<RawResource> fetchImport(FetchRequest&);
     ResourcePtr<RawResource> fetchMedia(FetchRequest&);

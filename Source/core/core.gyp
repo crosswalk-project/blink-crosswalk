@@ -226,6 +226,16 @@
             '<!@(pkg-config --cflags-only-I ipp)',
           ],
         }],
+        ['disable_xslt==1', {
+          'dependencies!': [
+            '<(DEPTH)/third_party/libxslt/libxslt.gyp:libxslt',
+          ]
+        }],
+        ['disable_webp==1', {
+          'dependencies!': [
+            '<(DEPTH)/third_party/libwebp/libwebp.gyp:libwebp',
+          ],
+        }],
       ],
     },
     {
@@ -296,6 +306,22 @@
         },
       },
       'conditions': [
+        ['disable_xslt==1', {
+          'depencencies!': [
+            '<(DEPTH)/third_party/libxslt/libxslt.gyp:libxslt',
+          ],
+          'export_dependent_settings!': [
+            '<(DEPTH)/third_party/libxslt/libxslt.gyp:libxslt',
+          ],
+        }],
+        ['disable_webp==1', {
+          'dependencies!': [
+            '<(DEPTH)/third_party/libwebp/libwebp.gyp:libwebp',
+          ],
+          'export_dependent_settings!': [
+            '<(DEPTH)/third_party/libwebp/libwebp.gyp:libwebp',
+          ],
+        }],
         ['OS=="win" and component=="shared_library"', {
           'direct_dependent_settings': {
             'defines': [
@@ -516,6 +542,11 @@
             'layout/LayoutThemeFontProviderLinux.cpp',
           ],
         }],
+        ['OS=="android" and use_icu_alternatives_on_android==1', {
+          'sources!': [
+            'editing/SmartReplaceICU.cpp',
+          ],
+        }],
         ['OS!="android"', {
           'sources!': [
             'layout/LayoutThemeAndroid.cpp',
@@ -539,6 +570,11 @@
         # on link time code generation builds.
         ['OS=="win" and (buildtype=="Official" or (fastbuild==0 and win_z7==1))', {
           'msvs_shard': 19,
+        }],
+        ['OS=="android" and use_icu_alternatives_on_android==1', {
+          'sources!': [
+            'editing/SmartReplaceICU.cpp',
+          ],
         }],
         ['OS=="android"', {
           'cflags': [

@@ -112,8 +112,6 @@
       'SuspendableScriptExecutor.h',
       'TextFinder.cpp',
       'TextFinder.h',
-      'UserMediaClientImpl.cpp',
-      'UserMediaClientImpl.h',
       'ValidationMessageClientImpl.cpp',
       'ValidationMessageClientImpl.h',
       'ViewportAnchor.h',
@@ -134,7 +132,6 @@
       'WebDOMError.cpp',
       'WebDOMEvent.cpp',
       'WebDOMFileSystem.cpp',
-      'WebDOMMediaStreamTrack.cpp',
       'WebDOMMessageEvent.cpp',
       'WebDOMMouseEvent.cpp',
       'WebDOMProgressEvent.cpp',
@@ -195,10 +192,8 @@
       'WebLocalFrameImpl.h',
       'WebMIDIClientMock.cpp',
       'WebMIDIPermissionRequest.cpp',
-      'WebMediaDevicesRequest.cpp',
       'WebMediaPlayerClientImpl.cpp',
       'WebMediaPlayerClientImpl.h',
-      'WebMediaStreamRegistry.cpp',
       'WebNetworkStateNotifier.cpp',
       'WebNode.cpp',
       'WebNodeList.cpp',
@@ -254,7 +249,6 @@
       'WebTextRun.cpp',
       'WebUserGestureIndicator.cpp',
       'WebUserGestureToken.cpp',
-      'WebUserMediaRequest.cpp',
       'WebViewImpl.cpp',
       'WebViewImpl.h',
       'WorkerContentSettingsClient.cpp',
@@ -328,6 +322,18 @@
       'tests/WebViewTest.cpp',
     ],
     'conditions': [
+      ['disable_media_stream==0',
+        {
+          'web_files': [
+            'UserMediaClientImpl.cpp',
+            'UserMediaClientImpl.h',
+            'WebDOMMediaStreamTrack.cpp',
+            'WebMediaDevicesRequest.cpp',
+            'WebMediaStreamRegistry.cpp',
+            'WebUserMediaRequest.cpp',
+          ],
+        }
+      ],
       ['OS=="win"',
         {
           'web_unittest_files': [
