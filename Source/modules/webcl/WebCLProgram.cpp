@@ -309,7 +309,7 @@ void WebCLProgram::build(const Vector<RefPtr<WebCLDevice>>& devices, const Strin
         }
 
         size_t closeBraket = m_programSource.find(")", openBraket);
-        String arguments = m_programSource.substring(openBraket + 1, closeBraket - 1);
+        String arguments = m_programSource.substring(openBraket + 1, closeBraket - openBraket - 1);
         if (arguments.contains("struct ") || arguments.contains("image1d_array_t ") || arguments.contains("image1d_buffer_t ") || arguments.contains("image1d_t ") || arguments.contains("image2d_array_t ")) {
             // 1. Kernel structure parameters aren't allowed;
             // 2. Kernel argument "image1d_t", "image1d_array_t", "image2d_array_t" and "image1d_buffer_t" aren't allowed;
