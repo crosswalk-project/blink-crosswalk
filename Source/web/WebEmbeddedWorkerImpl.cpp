@@ -35,7 +35,9 @@
 #include "core/dom/Document.h"
 #include "core/fetch/SubstituteData.h"
 #include "core/frame/csp/ContentSecurityPolicy.h"
+#if defined(DSIABLE_INSEPCTOR)
 #include "core/inspector/InspectorInstrumentation.h"
+#endif
 #include "core/inspector/WorkerDebuggerAgent.h"
 #include "core/inspector/WorkerInspectorController.h"
 #include "core/loader/FrameLoadRequest.h"
@@ -401,8 +403,10 @@ void WebEmbeddedWorkerImpl::startWorkerThread()
     Document* document = toWebLocalFrameImpl(m_mainFrame)->frame()->document();
 
     WorkerThreadStartMode startMode = DontPauseWorkerGlobalScopeOnStart;
+#if defined(DSIABLE_INSEPCTOR)
     if (InspectorInstrumentation::shouldPauseDedicatedWorkerOnStart(document))
         startMode = PauseWorkerGlobalScopeOnStart;
+#endif
 
     // FIXME: this document's origin is pristine and without any extra privileges. (crbug.com/254993)
     SecurityOrigin* starterOrigin = document->securityOrigin();

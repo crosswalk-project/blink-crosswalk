@@ -56,7 +56,9 @@ class ConsoleMessageStorage;
 class ExceptionState;
 class WorkerClients;
 class WorkerConsole;
+#ifndef DISABLE_INSPECTOR
 class WorkerInspectorController;
+#endif
 class WorkerLocation;
 class WorkerNavigator;
 class WorkerThread;
@@ -117,8 +119,9 @@ public:
     virtual double timerAlignmentInterval() const override final;
     virtual DOMTimerCoordinator* timers() override final;
 
+#ifndef DISABLE_INSPECTOR
     WorkerInspectorController* workerInspectorController() { return m_workerInspectorController.get(); }
-
+#endif
     bool isClosing() { return m_closing; }
 
     double timeOrigin() const { return m_timeOrigin; }
@@ -176,7 +179,9 @@ private:
     OwnPtr<WorkerScriptController> m_script;
     WorkerThread* m_thread;
 
+#ifndef DISABLE_INSPECTOR
     RefPtrWillBeMember<WorkerInspectorController> m_workerInspectorController;
+#endif
     bool m_closing;
 
     OwnPtrWillBeMember<WorkerEventQueue> m_eventQueue;

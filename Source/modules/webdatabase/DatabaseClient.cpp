@@ -39,7 +39,9 @@
 namespace blink {
 
 DatabaseClient::DatabaseClient()
+#ifndef DISABLE_INSPECTOR
     : m_inspectorAgent(0)
+#endif
 { }
 
 DatabaseClient* DatabaseClient::fromPage(Page* page)
@@ -59,16 +61,18 @@ const char* DatabaseClient::supplementName()
 
 void DatabaseClient::didOpenDatabase(Database* database, const String& domain, const String& name, const String& version)
 {
+#ifndef DISABLE_INSPECTOR
     if (m_inspectorAgent)
         m_inspectorAgent->didOpenDatabase(database, domain, name, version);
+#endif
 }
-
+#ifndef DISABLE_INSPECTOR
 void DatabaseClient::setInspectorAgent(InspectorDatabaseAgent* agent)
 {
     ASSERT(!m_inspectorAgent);
     m_inspectorAgent = agent;
 }
-
+#endif
 void provideDatabaseClientTo(Page& page, PassOwnPtrWillBeRawPtr<DatabaseClient> client)
 {
     page.provideSupplement(DatabaseClient::supplementName(), client);

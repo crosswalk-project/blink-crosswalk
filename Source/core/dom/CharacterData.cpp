@@ -31,7 +31,9 @@
 #include "core/dom/Text.h"
 #include "core/editing/FrameSelection.h"
 #include "core/events/MutationEvent.h"
+#ifndef DISABLE_INSPECTOR
 #include "core/inspector/InspectorInstrumentation.h"
+#endif
 #include "wtf/CheckedArithmetic.h"
 
 namespace blink {
@@ -199,7 +201,9 @@ void CharacterData::didModifyData(const String& oldData, UpdateSource source)
             dispatchScopedEvent(MutationEvent::create(EventTypeNames::DOMCharacterDataModified, true, nullptr, oldData, m_data));
         dispatchSubtreeModifiedEvent();
     }
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::characterDataModified(this);
+#endif
 }
 
 int CharacterData::maxCharacterOffset() const

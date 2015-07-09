@@ -154,7 +154,9 @@
 #include "web/StorageQuotaClientImpl.h"
 #include "web/ValidationMessageClientImpl.h"
 #include "web/ViewportAnchor.h"
+#ifndef DISABLE_INSPECTOR
 #include "web/WebDevToolsAgentImpl.h"
+#endif
 #include "web/WebInputEventConversion.h"
 #include "web/WebLocalFrameImpl.h"
 #include "web/WebPagePopupImpl.h"
@@ -469,11 +471,13 @@ WebViewImpl::~WebViewImpl()
     ASSERT(!m_page);
 }
 
+#ifndef DISABLE_INSPECTOR
 WebDevToolsAgentImpl* WebViewImpl::devToolsAgentImpl()
 {
     WebLocalFrameImpl* mainFrame = mainFrameImpl();
     return mainFrame ? mainFrame->devToolsAgentImpl() : nullptr;
 }
+#endif
 
 InspectorOverlay* WebViewImpl::inspectorOverlay()
 {
@@ -783,8 +787,12 @@ bool WebViewImpl::handleGestureEvent(const WebGestureEvent& event)
         // Instead, assume that the page has been designed with big enough buttons and links.
         // Don't trigger a disambiguation popup when screencasting, since it's implemented outside of
         // compositor pipeline and is not being screencasted itself. This leads to bad user experience.
+#ifndef DISABLE_INSPECTOR
         WebDevToolsAgentImpl* devTools = devToolsAgentImpl();
         bool screencastEnabled = devTools && devTools->screencastEnabled();
+#else
+        bool screencastEnabled = false;
+#endif
         if (event.data.tap.width > 0 && !shouldDisableDesktopWorkarounds() && !screencastEnabled) {
             IntRect boundingBox(page()->frameHost().pinchViewport().viewportToRootFrame(IntRect(
                 event.x - event.data.tap.width / 2,
@@ -1695,7 +1703,9 @@ WebViewImpl* WebViewImpl::fromPage(Page* page)
 
 void WebViewImpl::close()
 {
+#ifndef DISABLE_INSPECTOR
     WebDevToolsAgentImpl::webViewImplClosed(this);
+#endif
     ASSERT(allInstances().contains(this));
     allInstances().remove(this);
 
@@ -2111,9 +2121,11 @@ bool WebViewImpl::handleInputEvent(const WebInputEvent& inputEvent)
     if (m_devToolsEmulator->handleInputEvent(inputEvent))
         return true;
 
+#ifndef DISABLE_INSPECTOR
     WebDevToolsAgentImpl* devTools = devToolsAgentImpl();
     if (devTools && devTools->handleInputEvent(inputEvent))
         return true;
+#endif
 
     if (m_inspectorOverlay && m_inspectorOverlay->handleInputEvent(inputEvent))
         return true;

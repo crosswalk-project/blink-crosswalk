@@ -35,7 +35,9 @@
 #include "core/dom/ExceptionCode.h"
 #include "core/events/ProgressEvent.h"
 #include "core/fileapi/Blob.h"
+#if defined(DSIABLE_INSEPCTOR)
 #include "core/inspector/InspectorInstrumentation.h"
+#endif
 #include "public/platform/WebFileWriter.h"
 #include "public/platform/WebURL.h"
 #include "wtf/CurrentTime.h"
@@ -253,7 +255,11 @@ void FileWriter::completeAbort()
 
 void FileWriter::doOperation(Operation operation)
 {
+#if defined(DSIABLE_INSEPCTOR)
     m_asyncOperationId = InspectorInstrumentation::traceAsyncOperationStarting(executionContext(), "FileWriter", m_asyncOperationId);
+#else
+    m_asyncOperationId = 0;
+#endif
     switch (operation) {
     case OperationWrite:
         ASSERT(m_operationInProgress == OperationNone);
@@ -301,19 +307,24 @@ void FileWriter::signalCompletion(FileError::ErrorCode code)
     } else
         fireEvent(EventTypeNames::write);
     fireEvent(EventTypeNames::writeend);
-
+#if defined(DSIABLE_INSEPCTOR)
     InspectorInstrumentation::traceAsyncOperationCompleted(executionContext(), m_asyncOperationId);
+#endif
     m_asyncOperationId = 0;
 }
 
 void FileWriter::fireEvent(const AtomicString& type)
 {
+#if defined(DSIABLE_INSEPCTOR)
     InspectorInstrumentationCookie cookie = InspectorInstrumentation::traceAsyncCallbackStarting(executionContext(), m_asyncOperationId);
+#endif
     ++m_recursionDepth;
     dispatchEvent(ProgressEvent::create(type, true, m_bytesWritten, m_bytesToWrite));
     --m_recursionDepth;
     ASSERT(m_recursionDepth >= 0);
+#if defined(DSIABLE_INSEPCTOR)
     InspectorInstrumentation::traceAsyncCallbackCompleted(cookie);
+#endif
 }
 
 void FileWriter::setError(FileError::ErrorCode errorCode, ExceptionState& exceptionState)

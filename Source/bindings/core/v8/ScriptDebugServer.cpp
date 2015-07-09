@@ -34,7 +34,11 @@
 #include "bindings/core/v8/ScriptCallStackFactory.h"
 #include "bindings/core/v8/ScriptSourceCode.h"
 #include "bindings/core/v8/ScriptValue.h"
+#if !defined(DISABLE_INSPECTOR)
 #include "bindings/core/v8/V8JavaScriptCallFrame.h"
+#else
+#include "bindings/core/v8/ToV8.h"
+#endif
 #include "bindings/core/v8/V8ScriptRunner.h"
 #include "core/inspector/JavaScriptCallFrame.h"
 #include "core/inspector/ScriptDebugListener.h"
@@ -406,6 +410,7 @@ int ScriptDebugServer::frameCount()
 
 PassRefPtrWillBeRawPtr<JavaScriptCallFrame> ScriptDebugServer::toJavaScriptCallFrameUnsafe(const ScriptValue& value)
 {
+#if !defined(DISABLE_INSPECTOR)
     if (value.isEmpty())
         return nullptr;
     ScriptState* scriptState = value.scriptState();
@@ -414,6 +419,9 @@ PassRefPtrWillBeRawPtr<JavaScriptCallFrame> ScriptDebugServer::toJavaScriptCallF
     ScriptState::Scope scope(scriptState);
     ASSERT(value.isObject());
     return V8JavaScriptCallFrame::toImpl(v8::Local<v8::Object>::Cast(value.v8ValueUnsafe()));
+#else
+    return nullptr;
+#endif
 }
 
 PassRefPtrWillBeRawPtr<JavaScriptCallFrame> ScriptDebugServer::wrapCallFrames(int maximumLimit, ScopeInfoDetails scopeDetails)

@@ -49,7 +49,9 @@
 #include "core/html/HTMLFrameElementBase.h"
 #include "core/html/HTMLPlugInElement.h"
 #include "core/inspector/ConsoleMessageStorage.h"
+#ifndef DISABLE_INSPECTOR
 #include "core/inspector/InspectorInstrumentation.h"
+#endif
 #include "core/inspector/InstrumentingAgents.h"
 #include "core/layout/HitTestResult.h"
 #include "core/layout/LayoutView.h"
@@ -125,7 +127,9 @@ inline float parentTextZoomFactor(LocalFrame* frame)
 PassRefPtrWillBeRawPtr<LocalFrame> LocalFrame::create(FrameLoaderClient* client, FrameHost* host, FrameOwner* owner)
 {
     RefPtrWillBeRawPtr<LocalFrame> frame = adoptRefWillBeNoop(new LocalFrame(client, host, owner));
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::frameAttachedToParent(frame.get());
+#endif
     return frame.release();
 }
 
@@ -277,7 +281,9 @@ void LocalFrame::detach()
     ScriptForbiddenScope forbidScript;
     setView(nullptr);
     willDetachFrameHost();
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::frameDetachedFromParent(this);
+#endif
     Frame::detach();
     // Clear the FrameLoader right here rather than during
     // finalization. Too late to access various heap objects at that

@@ -76,8 +76,10 @@ MainThreadTaskRunner::~MainThreadTaskRunner()
 
 void MainThreadTaskRunner::postTask(const WebTraceLocation& location, PassOwnPtr<ExecutionContextTask> task)
 {
+#if defined(DSIABLE_INSEPCTOR)
     if (!task->taskNameForInstrumentation().isEmpty())
         InspectorInstrumentation::didPostExecutionContextTask(m_context, task.get());
+#endif
     Platform::current()->mainThread()->postTask(location, new MainThreadTask(m_weakFactory.createWeakPtr(), task, false));
 }
 
@@ -93,12 +95,16 @@ void MainThreadTaskRunner::perform(PassOwnPtr<ExecutionContextTask> task, bool i
         return;
     }
 
+#if defined(DSIABLE_INSEPCTOR)
     const bool instrumenting = !isInspectorTask && !task->taskNameForInstrumentation().isEmpty();
     if (instrumenting)
         InspectorInstrumentation::willPerformExecutionContextTask(m_context, task.get());
+#endif
     task->performTask(m_context);
+#if defined(DSIABLE_INSEPCTOR)
     if (instrumenting)
         InspectorInstrumentation::didPerformExecutionContextTask(m_context);
+#endif
 }
 
 void MainThreadTaskRunner::suspend()
@@ -122,12 +128,16 @@ void MainThreadTaskRunner::pendingTasksTimerFired(Timer<MainThreadTaskRunner>*)
     while (!m_pendingTasks.isEmpty()) {
         OwnPtr<ExecutionContextTask> task = m_pendingTasks[0].release();
         m_pendingTasks.remove(0);
+#if defined(DSIABLE_INSEPCTOR)
         const bool instrumenting = !task->taskNameForInstrumentation().isEmpty();
         if (instrumenting)
             InspectorInstrumentation::willPerformExecutionContextTask(m_context, task.get());
+#endif
         task->performTask(m_context);
+#if defined(DSIABLE_INSEPCTOR)
         if (instrumenting)
             InspectorInstrumentation::didPerformExecutionContextTask(m_context);
+#endif
     }
 }
 

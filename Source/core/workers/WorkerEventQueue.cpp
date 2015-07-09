@@ -30,7 +30,9 @@
 #include "core/dom/ExecutionContext.h"
 #include "core/dom/ExecutionContextTask.h"
 #include "core/events/Event.h"
+#ifndef DISABLE_INSPECTOR
 #include "core/inspector/InspectorInstrumentation.h"
+#endif
 
 namespace blink {
 
@@ -107,7 +109,9 @@ private:
 
 void WorkerEventQueue::removeEvent(Event* event)
 {
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::didRemoveEvent(event->target(), event);
+#endif
     m_eventTaskMap.remove(event);
 }
 
@@ -116,7 +120,9 @@ bool WorkerEventQueue::enqueueEvent(PassRefPtrWillBeRawPtr<Event> prpEvent)
     if (m_isClosed)
         return false;
     RefPtrWillBeRawPtr<Event> event = prpEvent;
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::didEnqueueEvent(event->target(), event.get());
+#endif
     OwnPtr<EventDispatcherTask> task = EventDispatcherTask::create(event, this);
     m_eventTaskMap.add(event.release(), task.get());
     m_executionContext->postTask(FROM_HERE, task.release());
@@ -139,7 +145,11 @@ void WorkerEventQueue::close()
     for (const auto& entry : m_eventTaskMap) {
         Event* event = entry.key.get();
         EventDispatcherTask* task = entry.value;
+#ifndef DISABLE_INSPECTOR
         InspectorInstrumentation::didRemoveEvent(event->target(), event);
+#else
+        (void) event;
+#endif
         task->cancel();
     }
     m_eventTaskMap.clear();

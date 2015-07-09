@@ -5,7 +5,9 @@
 #include "config.h"
 #include "modules/storage/StorageNamespaceController.h"
 
+#ifndef DISABLE_INSPECTOR
 #include "modules/storage/InspectorDOMStorageAgent.h"
+#endif
 #include "modules/storage/StorageClient.h"
 #include "modules/storage/StorageNamespace.h"
 
@@ -18,7 +20,9 @@ const char* StorageNamespaceController::supplementName()
 
 StorageNamespaceController::StorageNamespaceController(StorageClient* client)
     : m_client(client)
+#ifndef DISABLE_INSPECTOR
     , m_inspectorAgent(nullptr)
+#endif
 {
 }
 
@@ -28,8 +32,10 @@ StorageNamespaceController::~StorageNamespaceController()
 
 DEFINE_TRACE(StorageNamespaceController)
 {
+#ifndef DISABLE_INSPECTOR
     WillBeHeapSupplement<Page>::trace(visitor);
     visitor->trace(m_inspectorAgent);
+#endif
 }
 
 StorageNamespace* StorageNamespaceController::sessionStorage(bool optionalCreate)

@@ -77,7 +77,9 @@
 #include "core/html/canvas/WebGLTexture.h"
 #include "core/html/canvas/WebGLUniformLocation.h"
 #include "core/inspector/ConsoleMessage.h"
+#if defined(DSIABLE_INSEPCTOR)
 #include "core/inspector/InspectorInstrumentation.h"
+#endif
 #include "core/layout/LayoutBox.h"
 #include "core/loader/FrameLoader.h"
 #include "core/loader/FrameLoaderClient.h"
@@ -135,7 +137,9 @@ void WebGLRenderingContextBase::forciblyLoseOldestContext(const String& reason)
     RefPtrWillBeRawPtr<WebGLRenderingContextBase> protect(candidate);
 
     candidate->printWarningToConsole(reason);
+#if defined(DSIABLE_INSEPCTOR)
     InspectorInstrumentation::didFireWebGLWarning(candidate->canvas());
+#endif
 
     // This will call deactivateContext once the context has actually been lost.
     candidate->forceLostContext(WebGLRenderingContextBase::SyntheticLostContext, WebGLRenderingContextBase::WhenAvailable);
@@ -534,7 +538,9 @@ public:
     {
         if (m_context->m_synthesizedErrorsToConsole)
             m_context->printGLErrorToConsole(message);
+#if defined(DSIABLE_INSEPCTOR)
         InspectorInstrumentation::didFireWebGLErrorOrWarning(m_context->canvas(), message);
+#endif
     }
 
     DEFINE_INLINE_TRACE()
@@ -5858,7 +5864,9 @@ void WebGLRenderingContextBase::synthesizeGLError(GLenum error, const char* func
         if (m_lostContextErrors.find(error) == WTF::kNotFound)
             m_lostContextErrors.append(error);
     }
+#if defined(DSIABLE_INSEPCTOR)
     InspectorInstrumentation::didFireWebGLError(canvas(), errorType);
+#endif
 }
 
 void WebGLRenderingContextBase::emitGLWarning(const char* functionName, const char* description)
@@ -5867,7 +5875,9 @@ void WebGLRenderingContextBase::emitGLWarning(const char* functionName, const ch
         String message = String("WebGL: ") + String(functionName) + ": " + String(description);
         printGLErrorToConsole(message);
     }
+#if defined(DSIABLE_INSEPCTOR)
     InspectorInstrumentation::didFireWebGLWarning(canvas());
+#endif
 }
 
 void WebGLRenderingContextBase::applyStencilTest()

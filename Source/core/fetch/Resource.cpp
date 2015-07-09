@@ -641,7 +641,9 @@ void Resource::cancelTimerFired(Timer<Resource>* timer)
 bool Resource::deleteIfPossible()
 {
     if (canDelete() && !memoryCache()->contains(this)) {
+#ifndef DISABLE_INSPECTOR
         InspectorInstrumentation::willDestroyResource(this);
+#endif
         dispose();
         memoryCache()->unregisterLiveResource(*this);
 #if !ENABLE(OILPAN)

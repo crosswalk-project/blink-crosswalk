@@ -44,7 +44,9 @@
 #include "core/html/HTMLFrameOwnerElement.h"
 #include "core/html/HTMLTagCollection.h"
 #include "core/html/RadioNodeList.h"
+#if defined(DSIABLE_INSEPCTOR)
 #include "core/inspector/InspectorInstrumentation.h"
+#endif
 #include "core/layout/LayoutInline.h"
 #include "core/layout/LayoutText.h"
 #include "core/layout/LayoutTheme.h"
@@ -219,7 +221,9 @@ PassRefPtrWillBeRawPtr<Node> ContainerNode::insertBefore(PassRefPtrWillBeRawPtr<
         return newChild;
     }
 
+#if defined(DSIABLE_INSEPCTOR)
     InspectorInstrumentation::willInsertDOMNode(this);
+#endif
 
     ChildListMutationScope mutation(*this);
     for (const auto& targetNode : targets) {
@@ -383,7 +387,9 @@ PassRefPtrWillBeRawPtr<Node> ContainerNode::replaceChild(PassRefPtrWillBeRawPtr<
         return child;
     }
 
+#if defined(DSIABLE_INSEPCTOR)
     InspectorInstrumentation::willInsertDOMNode(this);
+#endif
 
     // Add the new child(ren).
     for (const auto& targetNode : targets) {
@@ -719,7 +725,9 @@ PassRefPtrWillBeRawPtr<Node> ContainerNode::appendChild(PassRefPtrWillBeRawPtr<N
         return newChild;
     }
 
+#if defined(DSIABLE_INSEPCTOR)
     InspectorInstrumentation::willInsertDOMNode(this);
+#endif
 
     // Now actually add the child(ren).
     ChildListMutationScope mutation(*this);
@@ -778,7 +786,9 @@ void ContainerNode::notifyNodeInserted(Node& root, ChildrenChangeSource source)
     ASSERT(!EventDispatchForbiddenScope::isEventDispatchForbidden());
     ASSERT(!root.isShadowRoot());
 
+#if defined(DSIABLE_INSEPCTOR)
     InspectorInstrumentation::didInsertDOMNode(&root);
+#endif
 
     RefPtrWillBeRawPtr<Node> protect(this);
     RefPtrWillBeRawPtr<Node> protectNode(root);
@@ -1198,13 +1208,17 @@ static void dispatchChildInsertionEvents(Node& child)
 static void dispatchChildRemovalEvents(Node& child)
 {
     if (child.isInShadowTree()) {
+#if defined(DSIABLE_INSEPCTOR)
         InspectorInstrumentation::willRemoveDOMNode(&child);
+#endif
         return;
     }
 
     ASSERT(!EventDispatchForbiddenScope::isEventDispatchForbidden());
 
+#if defined(DSIABLE_INSEPCTOR)
     InspectorInstrumentation::willRemoveDOMNode(&child);
+#endif
 
     RefPtrWillBeRawPtr<Node> c(child);
     RefPtrWillBeRawPtr<Document> document(child.document());

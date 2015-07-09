@@ -43,7 +43,9 @@
 #include "core/html/HTMLIFrameElement.h"
 #include "core/html/HTMLLinkElement.h"
 #include "core/html/imports/HTMLImportsController.h"
+#if defined(DSIABLE_INSEPCTOR)
 #include "core/inspector/InspectorInstrumentation.h"
+#endif
 #include "core/page/InjectedStyleSheets.h"
 #include "core/page/Page.h"
 #include "core/svg/SVGStyleElement.h"
@@ -452,7 +454,9 @@ void StyleEngine::updateActiveStyleSheets(StyleResolverUpdateMode updateMode)
             m_activeTreeScopes.remove(*it);
     }
 
+#if defined(DSIABLE_INSEPCTOR)
     InspectorInstrumentation::activeStyleSheetsUpdated(m_document);
+#endif
     m_usesRemUnits = documentStyleSheetCollection()->usesRemUnits();
 
     m_dirtyTreeScopes.clear();

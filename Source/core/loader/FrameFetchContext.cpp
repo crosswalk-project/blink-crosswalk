@@ -41,7 +41,9 @@
 #include "core/html/HTMLFrameOwnerElement.h"
 #include "core/html/imports/HTMLImportsController.h"
 #include "core/inspector/ConsoleMessage.h"
+#ifndef DISABLE_INSPECTOR
 #include "core/inspector/InspectorInstrumentation.h"
+#endif
 #include "core/inspector/InspectorTraceEvents.h"
 #include "core/loader/AcceptClientHints.h"
 #include "core/loader/DocumentLoader.h"
@@ -226,7 +228,10 @@ void FrameFetchContext::dispatchWillSendRequest(unsigned long identifier, Resour
     frame()->loader().applyUserAgent(request);
     frame()->loader().client()->dispatchWillSendRequest(m_documentLoader, identifier, request, redirectResponse);
     TRACE_EVENT_INSTANT1(TRACE_DISABLED_BY_DEFAULT("devtools.timeline"), "ResourceSendRequest", "data", InspectorSendRequestEvent::data(identifier, frame(), request));
+
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::willSendRequest(frame(), identifier, ensureLoaderForNotifications(), request, redirectResponse, initiatorInfo);
+#endif
 }
 
 void FrameFetchContext::dispatchDidLoadResourceFromMemoryCache(const ResourceRequest& request, const ResourceResponse& response)
@@ -251,7 +256,9 @@ void FrameFetchContext::dispatchDidReceiveResponse(unsigned long identifier, con
     frame()->loader().client()->dispatchDidReceiveResponse(m_documentLoader, identifier, response);
     TRACE_EVENT_INSTANT1(TRACE_DISABLED_BY_DEFAULT("devtools.timeline"), "ResourceReceiveResponse", "data", InspectorReceiveResponseEvent::data(identifier, frame(), response));
     DocumentLoader* documentLoader = ensureLoaderForNotifications();
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::didReceiveResourceResponse(frame(), identifier, documentLoader, response, resourceLoader);
+#endif
     // It is essential that inspector gets resource response BEFORE console.
     frame()->console().reportResourceResponseReceived(documentLoader, identifier, response);
 }
@@ -263,7 +270,10 @@ void FrameFetchContext::dispatchDidReceiveData(unsigned long identifier, const c
 
     frame()->loader().progress().incrementProgress(identifier, dataLength);
     TRACE_EVENT_INSTANT1(TRACE_DISABLED_BY_DEFAULT("devtools.timeline"), "ResourceReceivedData", "data", InspectorReceiveDataEvent::data(identifier, frame(), encodedDataLength));
+
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::didReceiveData(frame(), identifier, data, dataLength, encodedDataLength);
+#endif
 }
 
 void FrameFetchContext::dispatchDidDownloadData(unsigned long identifier, int dataLength, int encodedDataLength)
@@ -273,7 +283,10 @@ void FrameFetchContext::dispatchDidDownloadData(unsigned long identifier, int da
 
     frame()->loader().progress().incrementProgress(identifier, dataLength);
     TRACE_EVENT_INSTANT1(TRACE_DISABLED_BY_DEFAULT("devtools.timeline"), "ResourceReceivedData", "data", InspectorReceiveDataEvent::data(identifier, frame(), encodedDataLength));
+
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::didReceiveData(frame(), identifier, 0, dataLength, encodedDataLength);
+#endif
 }
 
 void FrameFetchContext::dispatchDidFinishLoading(unsigned long identifier, double finishTime, int64_t encodedDataLength)
@@ -285,7 +298,10 @@ void FrameFetchContext::dispatchDidFinishLoading(unsigned long identifier, doubl
     frame()->loader().client()->dispatchDidFinishLoading(m_documentLoader, identifier);
 
     TRACE_EVENT_INSTANT1(TRACE_DISABLED_BY_DEFAULT("devtools.timeline"), "ResourceFinish", "data", InspectorResourceFinishEvent::data(identifier, finishTime, false));
+
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::didFinishLoading(frame(), identifier, finishTime, encodedDataLength);
+#endif
 }
 
 void FrameFetchContext::dispatchDidFail(unsigned long identifier, const ResourceError& error, bool isInternalRequest)
@@ -296,7 +312,10 @@ void FrameFetchContext::dispatchDidFail(unsigned long identifier, const Resource
     frame()->loader().progress().completeProgress(identifier);
     frame()->loader().client()->dispatchDidFinishLoading(m_documentLoader, identifier);
     TRACE_EVENT_INSTANT1(TRACE_DISABLED_BY_DEFAULT("devtools.timeline"), "ResourceFinish", "data", InspectorResourceFinishEvent::data(identifier, 0, true));
+
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::didFailLoading(frame(), identifier, error);
+#endif
     // Notification to FrameConsole should come AFTER InspectorInstrumentation call, DevTools front-end relies on this.
     if (!isInternalRequest)
         frame()->console().didFailLoading(identifier, error);
@@ -307,7 +326,9 @@ void FrameFetchContext::sendRemainingDelegateMessages(unsigned long identifier, 
     if (!frame())
         return;
 
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::markResourceAsCached(frame(), identifier);
+#endif
     if (!response.isNull())
         dispatchDidReceiveResponse(identifier, response);
 

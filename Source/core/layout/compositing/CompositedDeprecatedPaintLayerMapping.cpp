@@ -37,7 +37,9 @@
 #include "core/html/HTMLMediaElement.h"
 #include "core/html/HTMLVideoElement.h"
 #include "core/html/canvas/CanvasRenderingContext.h"
+#ifndef DISABLE_INSPECTOR
 #include "core/inspector/InspectorInstrumentation.h"
+#endif
 #include "core/layout/FilterEffectRenderer.h"
 #include "core/layout/LayoutEmbeddedObject.h"
 #include "core/layout/LayoutImage.h"
@@ -2252,7 +2254,9 @@ void CompositedDeprecatedPaintLayerMapping::paintContents(const GraphicsLayer* g
         ScrollableAreaPainter(*m_owningLayer.scrollableArea()).paintScrollCorner(&context, IntPoint(), transformedClip);
         ScrollableAreaPainter(*m_owningLayer.scrollableArea()).paintResizer(&context, IntPoint(), transformedClip);
     }
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::didPaint(m_owningLayer.layoutObject(), graphicsLayer, &context, LayoutRect(clip));
+#endif
 #if ENABLE(ASSERT)
     if (Page* page = layoutObject()->frame()->page())
         page->setIsPainting(false);

@@ -36,6 +36,13 @@
             # GN version: //third_party/WebKit/public:blink
             'target_name': 'blink',
             'type': 'none',
+            'conditions': [
+              ['disable_devtools==1', {
+                'defines': [
+                  'DISABLE_INSPECTOR',
+                ],
+              }],
+            ],
             'dependencies': [
                 '../Source/platform/blink_platform.gyp:blink_platform',
                 '../Source/web/web.gyp:blink_web',

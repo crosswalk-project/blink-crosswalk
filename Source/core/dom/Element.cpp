@@ -103,7 +103,9 @@
 #include "core/html/HTMLTableRowsCollection.h"
 #include "core/html/HTMLTemplateElement.h"
 #include "core/html/parser/HTMLParserIdioms.h"
+#if defined(DSIABLE_INSEPCTOR)
 #include "core/inspector/InspectorInstrumentation.h"
+#endif
 #include "core/layout/LayoutTextFragment.h"
 #include "core/layout/LayoutView.h"
 #include "core/page/Chrome.h"
@@ -2419,7 +2421,9 @@ String Element::outerHTML() const
 
 void Element::setInnerHTML(const String& html, ExceptionState& exceptionState)
 {
+#if defined(DSIABLE_INSEPCTOR)
     InspectorInstrumentation::willSetInnerHTML(this);
+#endif
 
     if (RefPtrWillBeRawPtr<DocumentFragment> fragment = createFragmentForInnerOuterHTML(html, this, AllowScriptingContent, "innerHTML", exceptionState)) {
         ContainerNode* container = this;
@@ -2791,7 +2795,9 @@ void Element::createPseudoElementIfNeeded(PseudoId pseudoId)
     element->insertedInto(this);
     element->attach();
 
+#if defined(DSIABLE_INSEPCTOR)
     InspectorInstrumentation::pseudoElementCreated(element.get());
+#endif
 
     ensureElementRareData().setPseudoElement(pseudoId, element.release());
 }
@@ -3048,27 +3054,35 @@ void Element::willModifyAttribute(const QualifiedName& name, const AtomicString&
 
     attributeWillChange(name, oldValue, newValue);
 
+#if defined(DSIABLE_INSEPCTOR)
     InspectorInstrumentation::willModifyDOMAttr(this, oldValue, newValue);
+#endif
 }
 
 void Element::didAddAttribute(const QualifiedName& name, const AtomicString& value)
 {
     attributeChanged(name, value);
+#if defined(DSIABLE_INSEPCTOR)
     InspectorInstrumentation::didModifyDOMAttr(this, name, value);
+#endif
     dispatchSubtreeModifiedEvent();
 }
 
 void Element::didModifyAttribute(const QualifiedName& name, const AtomicString& value)
 {
     attributeChanged(name, value);
+#if defined(DSIABLE_INSEPCTOR)
     InspectorInstrumentation::didModifyDOMAttr(this, name, value);
+#endif
     // Do not dispatch a DOMSubtreeModified event here; see bug 81141.
 }
 
 void Element::didRemoveAttribute(const QualifiedName& name)
 {
     attributeChanged(name, nullAtom);
+#if defined(DSIABLE_INSEPCTOR)
     InspectorInstrumentation::didRemoveDOMAttr(this, name);
+#endif
     dispatchSubtreeModifiedEvent();
 }
 
@@ -3373,7 +3387,9 @@ void Element::styleAttributeChanged(const AtomicString& newStyleString, Attribut
     elementData()->m_styleAttributeIsDirty = false;
 
     setNeedsStyleRecalc(LocalStyleChange, StyleChangeReasonForTracing::create(StyleChangeReason::StyleSheetChange));
+#if defined(DSIABLE_INSEPCTOR)
     InspectorInstrumentation::didInvalidateStyleAttr(this);
+#endif
 }
 
 void Element::inlineStyleChanged()
@@ -3382,7 +3398,9 @@ void Element::inlineStyleChanged()
     setNeedsStyleRecalc(LocalStyleChange, StyleChangeReasonForTracing::create(StyleChangeReason::Inline));
     ASSERT(elementData());
     elementData()->m_styleAttributeIsDirty = true;
+#if defined(DSIABLE_INSEPCTOR)
     InspectorInstrumentation::didInvalidateStyleAttr(this);
+#endif
 }
 
 bool Element::setInlineStyleProperty(CSSPropertyID propertyID, CSSValueID identifier, bool important)

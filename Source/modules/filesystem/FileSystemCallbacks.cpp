@@ -35,7 +35,9 @@
 #include "core/fileapi/File.h"
 #include "core/fileapi/FileError.h"
 #include "core/html/VoidCallback.h"
+#if defined(DSIABLE_INSEPCTOR)
 #include "core/inspector/InspectorInstrumentation.h"
+#endif
 #include "modules/filesystem/DOMFilePath.h"
 #include "modules/filesystem/DOMFileSystem.h"
 #include "modules/filesystem/DOMFileSystemBase.h"
@@ -64,16 +66,20 @@ FileSystemCallbacksBase::FileSystemCallbacksBase(ErrorCallback* errorCallback, D
 {
     if (m_fileSystem)
         m_fileSystem->addPendingCallbacks();
+#if defined(DSIABLE_INSEPCTOR)
     if (m_executionContext)
         m_asyncOperationId = InspectorInstrumentation::traceAsyncOperationStarting(m_executionContext.get(), "FileSystem");
+#endif
 }
 
 FileSystemCallbacksBase::~FileSystemCallbacksBase()
 {
     if (m_fileSystem)
         m_fileSystem->removePendingCallbacks();
+#if defined(DSIABLE_INSEPCTOR)
     if (m_asyncOperationId && m_executionContext)
         InspectorInstrumentation::traceAsyncOperationCompleted(m_executionContext.get(), m_asyncOperationId);
+#endif
 }
 
 void FileSystemCallbacksBase::didFail(int code)
@@ -99,39 +105,51 @@ template <typename CB, typename CBArg>
 void FileSystemCallbacksBase::handleEventOrScheduleCallback(RawPtr<CB> callback, CBArg* arg)
 {
     ASSERT(callback);
+#if defined(DSIABLE_INSEPCTOR)
     InspectorInstrumentationCookie cookie = InspectorInstrumentation::traceAsyncOperationCompletedCallbackStarting(m_executionContext.get(), m_asyncOperationId);
+#endif
     if (shouldScheduleCallback())
         DOMFileSystem::scheduleCallback(m_executionContext.get(), callback.get(), arg);
     else if (callback)
         callback->handleEvent(arg);
     m_executionContext.clear();
+#if defined(DSIABLE_INSEPCTOR)
     InspectorInstrumentation::traceAsyncCallbackCompleted(cookie);
+#endif
 }
 
 template <typename CB, typename CBArg>
 void FileSystemCallbacksBase::handleEventOrScheduleCallback(RawPtr<CB> callback, PassRefPtrWillBeRawPtr<CBArg> arg)
 {
     ASSERT(callback);
+#if defined(DSIABLE_INSEPCTOR)
     InspectorInstrumentationCookie cookie = InspectorInstrumentation::traceAsyncOperationCompletedCallbackStarting(m_executionContext.get(), m_asyncOperationId);
+#endif
     if (shouldScheduleCallback())
         DOMFileSystem::scheduleCallback(m_executionContext.get(), callback.get(), arg);
     else if (callback)
         callback->handleEvent(arg.get());
     m_executionContext.clear();
+#if defined(DSIABLE_INSEPCTOR)
     InspectorInstrumentation::traceAsyncCallbackCompleted(cookie);
+#endif
 }
 
 template <typename CB>
 void FileSystemCallbacksBase::handleEventOrScheduleCallback(RawPtr<CB> callback)
 {
     ASSERT(callback);
+#if defined(DSIABLE_INSEPCTOR)
     InspectorInstrumentationCookie cookie = InspectorInstrumentation::traceAsyncOperationCompletedCallbackStarting(m_executionContext.get(), m_asyncOperationId);
+#endif
     if (shouldScheduleCallback())
         DOMFileSystem::scheduleCallback(m_executionContext.get(), callback.get());
     else if (callback)
         callback->handleEvent();
     m_executionContext.clear();
+#if defined(DSIABLE_INSEPCTOR)
     InspectorInstrumentation::traceAsyncCallbackCompleted(cookie);
+#endif
 }
 
 // EntryCallbacks -------------------------------------------------------------
@@ -189,12 +207,16 @@ void EntriesCallbacks::didReadDirectoryEntries(bool hasMore)
     EntryHeapVector entries;
     entries.swap(m_entries);
     // FIXME: delay the callback iff shouldScheduleCallback() is true.
+#if defined(DSIABLE_INSEPCTOR)
     InspectorInstrumentationCookie cookie = InspectorInstrumentation::traceAsyncCallbackStarting(m_executionContext.get(), m_asyncOperationId);
+#endif
     if (m_successCallback)
         m_successCallback->handleEvent(entries);
+#if defined(DSIABLE_INSEPCTOR)
     InspectorInstrumentation::traceAsyncCallbackCompleted(cookie);
     if (!hasMore)
         InspectorInstrumentation::traceAsyncOperationCompleted(m_executionContext.get(), m_asyncOperationId);
+#endif
 }
 
 // FileSystemCallbacks --------------------------------------------------------

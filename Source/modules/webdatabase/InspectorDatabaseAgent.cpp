@@ -156,6 +156,7 @@ public:
 
     virtual bool handleEvent(SQLTransaction* transaction) override
     {
+#ifndef DISABLE_INSPECTOR
         if (!m_requestCallback->isActive())
             return true;
 
@@ -163,6 +164,7 @@ public:
         SQLStatementCallback* callback = StatementCallback::create(m_requestCallback.get());
         SQLStatementErrorCallback* errorCallback = StatementErrorCallback::create(m_requestCallback.get());
         transaction->executeSQL(m_sqlStatement, sqlValues, callback, errorCallback, IGNORE_EXCEPTION);
+#endif
         return true;
     }
 private:
@@ -296,6 +298,7 @@ void InspectorDatabaseAgent::getDatabaseTableNames(ErrorString* error, const Str
 
 void InspectorDatabaseAgent::executeSQL(ErrorString*, const String& databaseId, const String& query, PassRefPtrWillBeRawPtr<ExecuteSQLCallback> prpRequestCallback)
 {
+#ifndef DISABLE_INSPECTOR
     RefPtrWillBeRawPtr<ExecuteSQLCallback> requestCallback = prpRequestCallback;
 
     if (!m_enabled) {
@@ -313,6 +316,7 @@ void InspectorDatabaseAgent::executeSQL(ErrorString*, const String& databaseId, 
     SQLTransactionErrorCallback* errorCallback = TransactionErrorCallback::create(requestCallback.get());
     VoidCallback* successCallback = TransactionSuccessCallback::create();
     database->transaction(callback, errorCallback, successCallback);
+#endif
 }
 
 InspectorDatabaseResource* InspectorDatabaseAgent::findByFileName(const String& fileName)

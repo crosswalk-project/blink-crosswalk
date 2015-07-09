@@ -32,7 +32,9 @@
 #include "bindings/core/v8/ExceptionState.h"
 #include "core/dom/ExceptionCode.h"
 #include "core/html/VoidCallback.h"
+#if defined(DSIABLE_INSEPCTOR)
 #include "core/inspector/InspectorInstrumentation.h"
+#endif
 #include "modules/webdatabase/Database.h"
 #include "modules/webdatabase/DatabaseAuthorizer.h"
 #include "modules/webdatabase/DatabaseContext.h"
@@ -66,7 +68,11 @@ SQLTransaction::SQLTransaction(Database* db, SQLTransactionCallback* callback,
     , m_readOnly(readOnly)
 {
     ASSERT(m_database);
+#if defined(DSIABLE_INSEPCTOR)
     m_asyncOperationId = InspectorInstrumentation::traceAsyncOperationStarting(db->executionContext(), "SQLTransaction");
+#else
+    m_asyncOperationId = 0;
+#endif
 }
 
 SQLTransaction::~SQLTransaction()
@@ -155,9 +161,13 @@ SQLTransactionState SQLTransaction::deliverTransactionCallback()
     // Spec 4.3.2 4: Invoke the transaction callback with the new SQLTransaction object
     if (SQLTransactionCallback* callback = m_callback.release()) {
         m_executeSqlAllowed = true;
+#if defined(DSIABLE_INSEPCTOR)
         InspectorInstrumentationCookie cookie = InspectorInstrumentation::traceAsyncCallbackStarting(m_database->executionContext(), m_asyncOperationId);
+#endif
         shouldDeliverErrorCallback = !callback->handleEvent(this);
+#if defined(DSIABLE_INSEPCTOR)
         InspectorInstrumentation::traceAsyncCallbackCompleted(cookie);
+#endif
         m_executeSqlAllowed = false;
     }
 
@@ -174,8 +184,9 @@ SQLTransactionState SQLTransaction::deliverTransactionCallback()
 
 SQLTransactionState SQLTransaction::deliverTransactionErrorCallback()
 {
+#if defined(DSIABLE_INSEPCTOR)
     InspectorInstrumentationCookie cookie = InspectorInstrumentation::traceAsyncOperationCompletedCallbackStarting(m_database->executionContext(), m_asyncOperationId);
-
+#endif
     // Spec 4.3.2.10: If exists, invoke error callback with the last
     // error to have occurred in this transaction.
     if (SQLTransactionErrorCallback* errorCallback = m_errorCallback.release()) {
@@ -192,8 +203,9 @@ SQLTransactionState SQLTransaction::deliverTransactionErrorCallback()
 
         m_transactionError = nullptr;
     }
-
+#if defined(DSIABLE_INSEPCTOR)
     InspectorInstrumentation::traceAsyncCallbackCompleted(cookie);
+#endif
     clearCallbacks();
 
     // Spec 4.3.2.10: Rollback the transaction.
@@ -233,13 +245,15 @@ SQLTransactionState SQLTransaction::deliverQuotaIncreaseCallback()
 
 SQLTransactionState SQLTransaction::deliverSuccessCallback()
 {
+#if defined(DSIABLE_INSEPCTOR)
     InspectorInstrumentationCookie cookie = InspectorInstrumentation::traceAsyncOperationCompletedCallbackStarting(m_database->executionContext(), m_asyncOperationId);
-
+#endif
     // Spec 4.3.2.8: Deliver success callback.
     if (VoidCallback* successCallback = m_successCallback.release())
         successCallback->handleEvent();
-
+#if defined(DSIABLE_INSEPCTOR)
     InspectorInstrumentation::traceAsyncCallbackCompleted(cookie);
+#endif
     clearCallbacks();
 
     // Schedule a "post-success callback" step to return control to the database thread in case there
