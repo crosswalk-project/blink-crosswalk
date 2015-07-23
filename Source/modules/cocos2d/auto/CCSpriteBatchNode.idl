@@ -1,0 +1,42 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface CCSpriteBatchNode : CCNode {
+    void appendChild(any arg0);
+    void reorderBatch(boolean arg0);
+    [CallWith=ScriptState] any getTexture();
+    void visit();
+    void removeAllChildren(boolean arg0);
+    void setTexture(CCTexture2D arg0);
+    void addChild(any arg0, long arg1);
+    void addChild(any arg0);
+    void addChild(any arg0, long arg1, long arg2);
+    void removeChildAtIndex(unsigned long arg0, boolean arg1);
+    void removeSpriteFromAtlas(any arg0);
+    unsigned long atlasIndexForChild(any arg0, long arg1);
+    void increaseAtlasCapacity();
+    boolean init();
+    void insertChild(any arg0, unsigned long arg1);
+    unsigned long lowestAtlasIndexInChild(any arg0);
+    void draw();
+    boolean initWithTexture(CCTexture2D arg0, unsigned long arg1);
+    void sortAllChildren();
+    void reorderChild(any arg0, long arg1);
+    boolean initWithFile(DOMString arg0, unsigned long arg1);
+    unsigned long rebuildIndexInOrder(any arg0, unsigned long arg1);
+    [CallWith=ScriptState] any getDescendants();
+    void removeChild(any arg0, boolean arg1);
+    unsigned long highestAtlasIndexInChild(any arg0);
+    [CallWith=ScriptState]  static any createInternal(DOMString arg0);
+    [CallWith=ScriptState]  static any createInternal(DOMString arg0, unsigned long arg1);
+    [CallWith=ScriptState]  static any createWithTexture(CCTexture2D arg0);
+    [CallWith=ScriptState]  static any createWithTexture(CCTexture2D arg0, unsigned long arg1);
+    [Custom] void ctor();
+};

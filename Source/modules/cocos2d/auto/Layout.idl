@@ -1,0 +1,34 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface Layout : Widget {
+    void setBackGroundColorVector(CCPoint arg0);
+    void addChild(CCNode arg0, long arg1);
+    void addChild(CCNode arg0);
+    void addChild(CCNode arg0, long arg1, long arg2);
+    void setClippingType(short arg0);
+    void setBackGroundColorType(short arg0);
+    DOMString getDescription();
+    void removeBackGroundImage();
+    void setBackGroundImage(DOMString arg0, short arg1);
+    void setBackGroundColor(ccColor3B arg0, ccColor3B arg1);
+    void setBackGroundColor(ccColor3B arg0);
+    void requestDoLayout();
+    boolean isClippingEnabled();
+    void setClippingEnabled(boolean arg0);
+    void setBackGroundColorOpacity(long arg0);
+    short getLayoutType();
+    void sortAllChildren();
+    void setBackGroundImageCapInsets(CCRect arg0);
+    CCSize getBackGroundImageTextureSize();
+    void setBackGroundImageScale9Enabled(boolean arg0);
+    void setLayoutType(short arg0);
+    [CallWith=ScriptState]  static any createInternal();
+};

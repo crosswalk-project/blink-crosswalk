@@ -1,0 +1,20 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface TouchGroup : CCLayer {
+    void removeWidget(Widget arg0);
+    [CallWith=ScriptState] any getWidgetByTag(long arg0);
+    [CallWith=ScriptState] any getRootWidget();
+    boolean init();
+    [CallWith=ScriptState] any getWidgetByName(DOMString arg0);
+    void addWidget(Widget arg0);
+    void clear();
+    [CallWith=ScriptState]  static any createInternal();
+};

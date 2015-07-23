@@ -1,0 +1,33 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface Label : Widget {
+    [CallWith=ScriptState] any getVirtualRenderer();
+    DOMString getStringValue();
+    DOMString getDescription();
+    void setScale(float arg0);
+    void setTextVerticalAlignment(short arg0);
+    void setFontName(DOMString arg0);
+    void setTouchScaleChangeEnabled(boolean arg0);
+    boolean isFlipX();
+    boolean isFlipY();
+    CCSize getContentSize();
+    boolean isTouchScaleChangeEnabled();
+    void setTextAreaSize(CCSize arg0);
+    long getStringLength();
+    void setScaleY(float arg0);
+    void setScaleX(float arg0);
+    void setFlipY(boolean arg0);
+    void setFlipX(boolean arg0);
+    void setFontSize(long arg0);
+    void setText(DOMString arg0);
+    void setTextHorizontalAlignment(short arg0);
+    [CallWith=ScriptState]  static any createInternal();
+};

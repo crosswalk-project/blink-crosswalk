@@ -1,0 +1,24 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface CCActionManager : CCObject  {
+    [CallWith=ScriptState] any getActionByTag(unsigned long arg0, CCObject arg1);
+    void removeActionByTag(unsigned long arg0, CCObject arg1);
+    void removeAllActions();
+    void addAction(any arg0, any arg1, boolean arg2);
+    void resumeTarget(CCObject arg0);
+    void pauseTarget(CCObject arg0);
+    void removeAllActionsFromTarget(CCObject arg0);
+    void resumeTargets(CCSet arg0);
+    void removeAction(any arg0);
+    unsigned long numberOfRunningActionsInTarget(CCObject arg0);
+    [CallWith=ScriptState] any pauseAllRunningActions();
+    [Custom] void ctor();
+};

@@ -1,0 +1,19 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface CCTween : CCObject  {
+    void play(Uint8Array arg0, long arg1, long arg2, long arg3, long arg4);
+    void gotoAndPause(long arg0);
+    [CallWith=ScriptState] any getAnimation();
+    void gotoAndPlay(long arg0);
+    boolean init(CCBone arg0);
+    void setAnimation(CCArmatureAnimation arg0);
+    [CallWith=ScriptState]  static any createInternal(CCBone arg0);
+};

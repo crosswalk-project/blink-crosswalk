@@ -1,0 +1,19 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface LabelAtlas : Widget {
+    [CallWith=ScriptState] any getVirtualRenderer();
+    DOMString getStringValue();
+    DOMString getDescription();
+    CCSize getContentSize();
+    void setProperty(DOMString arg0, DOMString arg1, long arg2, long arg3, DOMString arg4);
+    void setStringValue(DOMString arg0);
+    [CallWith=ScriptState]  static any createInternal();
+};

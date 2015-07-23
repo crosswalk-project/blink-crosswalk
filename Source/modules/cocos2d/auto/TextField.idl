@@ -1,0 +1,42 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface TextField : Widget {
+    void setAttachWithIME(boolean arg0);
+    DOMString getStringValue();
+    DOMString getDescription();
+    [CallWith=ScriptState] any getVirtualRenderer();
+    boolean getDeleteBackward();
+    boolean getAttachWithIME();
+    void setFontName(DOMString arg0);
+    boolean getInsertText();
+    void initRenderer();
+    boolean getDetachWithIME();
+    boolean init();
+    CCSize getContentSize();
+    void didNotSelectSelf();
+    boolean isPasswordEnabled();
+    void attachWithIME();
+    void setPasswordEnabled(boolean arg0);
+    void update(float arg0);
+    void setMaxLengthEnabled(boolean arg0);
+    void setPasswordStyleText(DOMString arg0);
+    void setFontSize(long arg0);
+    void setPlaceHolder(DOMString arg0);
+    long getMaxLength();
+    boolean isMaxLengthEnabled();
+    void setDetachWithIME(boolean arg0);
+    void setText(DOMString arg0);
+    void setInsertText(boolean arg0);
+    void setMaxLength(long arg0);
+    void setTouchSize(CCSize arg0);
+    void setDeleteBackward(boolean arg0);
+    [CallWith=ScriptState]  static any createInternal();
+};

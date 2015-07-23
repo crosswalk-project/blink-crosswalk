@@ -1,0 +1,44 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface CCRenderTexture : CCNode {
+    void clearStencil(long arg0);
+    void begin();
+    void listenToForeground(CCObject arg0);
+    float getClearDepth();
+    long getClearStencil();
+    void end();
+    void setClearStencil(float arg0);
+    boolean initWithWidthAndHeight(long arg0, long arg1, short arg2, unsigned long arg3);
+    boolean initWithWidthAndHeight(long arg0, long arg1, short arg2);
+    void visit();
+    [CallWith=ScriptState] any getSprite();
+    boolean isAutoDraw();
+    void setClearFlags(unsigned long arg0);
+    void draw();
+    void setAutoDraw(boolean arg0);
+    void setClearColor(ccColor4F arg0);
+    void endToLua();
+    void beginWithClear(float arg0, float arg1, float arg2, float arg3, float arg4);
+    void beginWithClear(float arg0, float arg1, float arg2, float arg3);
+    void beginWithClear(float arg0, float arg1, float arg2, float arg3, float arg4, long arg5);
+    void clearDepth(float arg0);
+    ccColor4F getClearColor();
+    void listenToBackground(CCObject arg0);
+    void clear(float arg0, float arg1, float arg2, float arg3);
+    unsigned long getClearFlags();
+    [CallWith=ScriptState] any newCCImage(boolean arg0);
+    void setClearDepth(float arg0);
+    void setSprite(any arg0);
+    [CallWith=ScriptState]  static any createInternal(long arg0, long arg1, short arg2);
+    [CallWith=ScriptState]  static any createInternal(long arg0, long arg1, short arg2, unsigned long arg3);
+    [CallWith=ScriptState]  static any createInternal(long arg0, long arg1);
+    [Custom] void ctor();
+};

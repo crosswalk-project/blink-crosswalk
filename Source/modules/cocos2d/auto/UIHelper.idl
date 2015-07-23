@@ -1,0 +1,16 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface UIHelper : CCObject  {
+    [CallWith=ScriptState]  static any seekActionWidgetByActionTag(Widget arg0, long arg1);
+    [CallWith=ScriptState]  static any seekWidgetByTag(Widget arg0, long arg1);
+    [CallWith=ScriptState]  static any seekWidgetByRelativeName(Widget arg0, DOMString arg1);
+    [CallWith=ScriptState]  static any seekWidgetByName(Widget arg0, DOMString arg1);
+};

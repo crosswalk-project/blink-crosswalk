@@ -1,0 +1,58 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface ScrollView : Layout {
+    void addChild(CCNode arg0, long arg1);
+    void addChild(CCNode arg0);
+    void addChild(CCNode arg0, long arg1, long arg2);
+    void scrollToTop(float arg0, boolean arg1);
+    void scrollToPercentHorizontal(float arg0, float arg1, boolean arg2);
+    DOMString getDescription();
+    void removeAllChildren();
+    void scrollToPercentBothDirection(CCPoint arg0, float arg1, boolean arg2);
+    [CallWith=ScriptState] any getChildren();
+    short getDirection();
+    [CallWith=ScriptState] any getChildByTag(long arg0);
+    void scrollToBottomLeft(float arg0, boolean arg1);
+    [CallWith=ScriptState] any getInnerContainer();
+    void jumpToBottom();
+    [CallWith=ScriptState] any getChildByName(DOMString arg0);
+    void setDirection(short arg0);
+    void scrollToTopLeft(float arg0, boolean arg1);
+    void jumpToTopRight();
+    void jumpToBottomLeft();
+    void setInnerContainerSize(CCSize arg0);
+    boolean isInertiaScrollEnabled();
+    CCSize getInnerContainerSize();
+    boolean isBounceEnabled();
+    void jumpToPercentVertical(float arg0);
+    void setInertiaScrollEnabled(boolean arg0);
+    void jumpToTopLeft();
+    void jumpToPercentHorizontal(float arg0);
+    void jumpToBottomRight();
+    void update(float arg0);
+    short getLayoutType();
+    void removeAllChildrenWithCleanup(boolean arg0);
+    void setBounceEnabled(boolean arg0);
+    void jumpToTop();
+    void scrollToLeft(float arg0, boolean arg1);
+    void jumpToPercentBothDirection(CCPoint arg0);
+    void scrollToPercentVertical(float arg0, float arg1, boolean arg2);
+    void scrollToBottom(float arg0, boolean arg1);
+    void scrollToBottomRight(float arg0, boolean arg1);
+    void jumpToLeft();
+    void scrollToRight(float arg0, boolean arg1);
+    void removeChild(CCNode arg0, boolean arg1);
+    void setLayoutType(short arg0);
+    void jumpToRight();
+    unsigned long getChildrenCount();
+    void scrollToTopRight(float arg0, boolean arg1);
+    [CallWith=ScriptState]  static any createInternal();
+};

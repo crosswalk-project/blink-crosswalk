@@ -1,0 +1,23 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface CCClippingNode : CCNode {
+    void setInverted(boolean arg0);
+    void visit();
+    void setStencil(any arg0);
+    float getAlphaThreshold();
+    boolean init(any arg0);
+    boolean init();
+    [CallWith=ScriptState] any getStencil();
+    void setAlphaThreshold(float arg0);
+    boolean isInverted();
+    [CallWith=ScriptState]  static any createInternal(any arg0);
+    [CallWith=ScriptState]  static any createInternal();
+};

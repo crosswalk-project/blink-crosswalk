@@ -1,0 +1,49 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface CCLabelBMFont : CCSpriteBatchNode {
+    void createFontChars();
+    DOMString getString();
+    void setScale(float arg0);
+    void setOpacity(unsigned short arg0);
+    void setCascadeOpacityEnabled(boolean arg0);
+    DOMString getFntFile();
+    void updateLabel();
+    void setWidth(float arg0);
+    boolean isOpacityModifyRGB();
+    boolean isCascadeOpacityEnabled();
+    void setString(DOMString arg0, boolean arg1);
+    void setString(DOMString arg0);
+    boolean initWithString(DOMString arg0, DOMString arg1, float arg2, short arg3, CCPoint arg4);
+    void setCascadeColorEnabled(boolean arg0);
+    void setOpacityModifyRGB(boolean arg0);
+    void updateDisplayedOpacity(unsigned short arg0);
+    boolean init();
+    void setFntFile(DOMString arg0);
+    unsigned short getOpacity();
+    void setLineBreakWithoutSpace(boolean arg0);
+    void setScaleY(float arg0);
+    void setScaleX(float arg0);
+    ccColor3B getColor();
+    unsigned short getDisplayedOpacity();
+    boolean isCascadeColorEnabled();
+    void setColor(ccColor3B arg0);
+    void setCString(DOMString arg0);
+    ccColor3B getDisplayedColor();
+    void updateDisplayedColor(ccColor3B arg0);
+    void setAlignment(short arg0);
+     static void purgeCachedData();
+    [CallWith=ScriptState]  static any createInternal(DOMString arg0, DOMString arg1, float arg2, short arg3);
+    [CallWith=ScriptState]  static any createInternal(DOMString arg0, DOMString arg1, float arg2, short arg3, CCPoint arg4);
+    [CallWith=ScriptState]  static any createInternal(DOMString arg0, DOMString arg1, float arg2);
+    [CallWith=ScriptState]  static any createInternal(DOMString arg0, DOMString arg1);
+    [CallWith=ScriptState]  static any createInternal();
+    [Custom] void ctor();
+};

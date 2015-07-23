@@ -1,0 +1,24 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface CCTextureCache : CCObject  {
+    void dumpCachedTextureInfo();
+    [CallWith=ScriptState] any addUIImage(CCImage arg0, DOMString arg1);
+    void removeTextureForKey(DOMString arg0);
+    [CallWith=ScriptState] any textureForKey(DOMString arg0);
+    [CallWith=ScriptState] any snapshotTextures();
+    [CallWith=ScriptState] any addImage(DOMString arg0);
+    void removeAllTextures();
+    void removeUnusedTextures();
+    void removeTexture(CCTexture2D arg0);
+     static void purgeSharedTextureCache();
+     static void reloadAllTextures();
+    [CallWith=ScriptState]  static any getInstance();
+};

@@ -1,0 +1,38 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface SimpleAudioEngine : CCObject  {
+    void stopAllEffects();
+    float getMusicVolume();
+    boolean isMusicPlaying();
+    float getEffectsVolume();
+    void setMusicVolume(float arg0);
+    void stopEffect(unsigned long arg0);
+    void stopMusic();
+    void stopMusic(boolean arg0);
+    void playMusic(DOMString arg0);
+    void playMusic(DOMString arg0, boolean arg1);
+    void pauseAllEffects();
+    void preloadMusic(DOMString arg0);
+    void resumeMusic();
+    unsigned long playEffect(DOMString arg0);
+    unsigned long playEffect(DOMString arg0, boolean arg1);
+    void rewindMusic();
+    boolean willPlayMusic();
+    void unloadEffect(DOMString arg0);
+    void preloadEffect(DOMString arg0);
+    void setEffectsVolume(float arg0);
+    void pauseEffect(unsigned long arg0);
+    void resumeAllEffects();
+    void pauseMusic();
+    void resumeEffect(unsigned long arg0);
+     static void end();
+    [CallWith=ScriptState]  static any getInstance();
+};

@@ -1,0 +1,32 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface CCMotionStreak : CCNodeRGBA {
+    void reset();
+    void draw();
+    void setTexture(CCTexture2D arg0);
+    boolean isOpacityModifyRGB();
+    [CallWith=ScriptState] any getTexture();
+    void tintWithColor(ccColor3B arg0);
+    void update(float arg0);
+    void setOpacity(unsigned short arg0);
+    boolean initWithFade(float arg0, float arg1, float arg2, ccColor3B arg3, CCTexture2D arg4);
+    boolean initWithFade(float arg0, float arg1, float arg2, ccColor3B arg3, DOMString arg4);
+    void setPositionInternal(CCPoint arg0);
+    void setOpacityModifyRGB(boolean arg0);
+    unsigned short getOpacity();
+    void setStartingPositionInitialized(boolean arg0);
+    void setFastMode(boolean arg0);
+    boolean isStartingPositionInitialized();
+    boolean isFastMode();
+    [CallWith=ScriptState]  static any createInternal(float arg0, float arg1, float arg2, ccColor3B arg3, CCTexture2D arg4);
+    [CallWith=ScriptState]  static any createInternal(float arg0, float arg1, float arg2, ccColor3B arg3, DOMString arg4);
+    [Custom] void ctor();
+};

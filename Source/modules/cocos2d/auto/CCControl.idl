@@ -1,0 +1,28 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface CCControl : CCLayerRGBA {
+    void setEnabled(boolean arg0);
+    unsigned long getState();
+    boolean isOpacityModifyRGB();
+    void sendActionsForControlEvents(unsigned long arg0);
+    void setSelected(boolean arg0);
+    CCPoint getTouchLocation(CCTouch arg0);
+    boolean isEnabled();
+    boolean isTouchInside(CCTouch arg0);
+    void setOpacityModifyRGB(boolean arg0);
+    void needsLayout();
+    boolean hasVisibleParents();
+    boolean isSelected();
+    boolean init();
+    void setHighlighted(boolean arg0);
+    void registerWithTouchDispatcher();
+    boolean isHighlighted();
+};

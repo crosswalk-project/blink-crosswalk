@@ -1,0 +1,20 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface CCLens3D : CCGrid3DAction {
+    void setConcave(boolean arg0);
+    boolean initWithDuration(float arg0, CCSize arg1, CCPoint arg2, float arg3);
+    void setLensEffect(float arg0);
+    void update(float arg0);
+    void setPositionInternal(CCPoint arg0);
+    float getLensEffect();
+    CCPoint getPosition();
+    [CallWith=ScriptState]  static any createInternal(float arg0, CCSize arg1, CCPoint arg2, float arg3);
+};

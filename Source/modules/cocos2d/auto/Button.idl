@@ -1,0 +1,40 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface Button : Widget {
+    [CallWith=ScriptState] any getVirtualRenderer();
+    DOMString getTitleText();
+    void setTitleFontSize(float arg0);
+    DOMString getDescription();
+    void setScale9Enabled(boolean arg0);
+    void setTitleColor(ccColor3B arg0);
+    void ignoreContentAdaptWithSize(boolean arg0);
+    void setCapInsetsDisabledRenderer(CCRect arg0);
+    boolean isFlipX();
+    boolean isFlipY();
+    void loadTextureDisabled(DOMString arg0, short arg1);
+    CCSize getContentSize();
+    void setTitleText(DOMString arg0);
+    void setCapInsetsNormalRenderer(CCRect arg0);
+    void loadTexturePressed(DOMString arg0, short arg1);
+    void setFlipY(boolean arg0);
+    void setFlipX(boolean arg0);
+    void setTitleFontName(DOMString arg0);
+    void loadTextures(DOMString arg0, DOMString arg1, DOMString arg2, short arg3);
+    ccColor3B getTitleColor();
+    void loadTextureNormal(DOMString arg0, short arg1);
+    void setColor(ccColor3B arg0);
+    void setCapInsetsPressedRenderer(CCRect arg0);
+    float getTitleFontSize();
+    DOMString getTitleFontName();
+    void setCapInsets(CCRect arg0);
+    void setPressedActionEnabled(boolean arg0);
+    [CallWith=ScriptState]  static any createInternal();
+};

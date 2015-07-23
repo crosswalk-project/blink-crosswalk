@@ -1,0 +1,38 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface CCTMXLayer : CCSpriteBatchNode {
+    void addChild(any arg0, long arg1, long arg2);
+    unsigned long getTileGIDAt(CCPoint arg0, Uint8Array arg1);
+    unsigned long getTileGIDAt(CCPoint arg0);
+    CCPoint getPositionAt(CCPoint arg0);
+    void setLayerOrientation(unsigned long arg0);
+    void releaseMap();
+    void setTiles(Uint8Array arg0);
+    CCSize getLayerSize();
+    void setMapTileSize(CCSize arg0);
+    unsigned long getLayerOrientation();
+    void setProperties(CCDictionary arg0);
+    void setLayerName(DOMString arg0);
+    void removeTileAt(CCPoint arg0);
+    boolean initWithTilesetInfo(CCTMXTilesetInfo arg0, CCTMXLayerInfo arg1, any arg2);
+    void setupTiles();
+    CCSize getMapTileSize();
+    [CallWith=ScriptState] any getProperty(DOMString arg0);
+    void setLayerSize(CCSize arg0);
+    DOMString getLayerName();
+    void setTileSet(CCTMXTilesetInfo arg0);
+    void removeChild(any arg0, boolean arg1);
+    [CallWith=ScriptState] any getTileSet();
+    [CallWith=ScriptState] any getProperties();
+    [CallWith=ScriptState] any getTileAt(CCPoint arg0);
+    [CallWith=ScriptState]  static any createInternal(CCTMXTilesetInfo arg0, CCTMXLayerInfo arg1, any arg2);
+    [Custom] void ctor();
+};

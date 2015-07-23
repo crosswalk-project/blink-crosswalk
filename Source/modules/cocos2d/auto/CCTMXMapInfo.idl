@@ -1,0 +1,45 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface CCTMXMapInfo : CCObject  {
+    [CallWith=ScriptState] any getTileProperties();
+    void setObjectGroups(CCArray arg0);
+    void setTileSize(CCSize arg0);
+    boolean initWithTMXFile(DOMString arg0);
+    void setTMXFileName(DOMString arg0);
+    void setLayers(CCArray arg0);
+    void setStoringCharacters(boolean arg0);
+    boolean getStoringCharacters();
+    long getParentElement();
+    long getLayerAttribs();
+    [CallWith=ScriptState] any getLayers();
+    [CallWith=ScriptState] any getTilesets();
+    unsigned long getParentGID();
+    void setParentElement(long arg0);
+    void setProperties(CCDictionary arg0);
+    void setParentGID(unsigned long arg0);
+    boolean parseXMLString(DOMString arg0);
+    CCSize getTileSize();
+    [CallWith=ScriptState] any getObjectGroups();
+    void setLayerAttribs(long arg0);
+    DOMString getTMXFileName();
+    void setCurrentString(DOMString arg0);
+    boolean initWithXML(DOMString arg0, DOMString arg1);
+    void setTileProperties(CCDictionary arg0);
+    void setMapSize(CCSize arg0);
+    boolean parseXMLFile(DOMString arg0);
+    CCSize getMapSize();
+    void setTilesets(CCArray arg0);
+    [CallWith=ScriptState] any getProperties();
+    DOMString getCurrentString();
+    [CallWith=ScriptState]  static any formatWithTMXFile(DOMString arg0);
+    [CallWith=ScriptState]  static any formatWithXML(DOMString arg0, DOMString arg1);
+    [Custom] void ctor();
+};

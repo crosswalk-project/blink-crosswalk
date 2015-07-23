@@ -1,0 +1,22 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface CCTMXObjectGroup : CCObject  {
+    void setPositionOffset(CCPoint arg0);
+    [CallWith=ScriptState] any objectNamed(DOMString arg0);
+    CCPoint getPositionOffset();
+    [CallWith=ScriptState] any getObjects();
+    void setGroupName(DOMString arg0);
+    [CallWith=ScriptState] any getProperties();
+    DOMString getGroupName();
+    void setProperties(CCDictionary arg0);
+    [CallWith=ScriptState] any propertyNamed(DOMString arg0);
+    void setObjects(CCArray arg0);
+};

@@ -1,0 +1,25 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface CCComAttribute : CCComponent {
+    float getFloat(DOMString arg0, float arg1);
+    boolean getBool(DOMString arg0, boolean arg1);
+    void setFloat(DOMString arg0, float arg1);
+    void setCString(DOMString arg0, DOMString arg1);
+    DOMString getCString(DOMString arg0, DOMString arg1);
+    boolean serialize(Uint8Array arg0);
+    void setInt(DOMString arg0, long arg1);
+    boolean parse(DOMString arg0);
+    long getInt(DOMString arg0, long arg1);
+    boolean init();
+    void setBool(DOMString arg0, boolean arg1);
+    [CallWith=ScriptState]  static any createInternal();
+    [CallWith=ScriptState]  static any createInstance();
+};

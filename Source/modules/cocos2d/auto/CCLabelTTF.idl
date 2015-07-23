@@ -1,0 +1,42 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface CCLabelTTF : CCSprite {
+    void enableShadow(CCSize arg0, float arg1, float arg2, boolean arg3);
+    void setDimensions(CCSize arg0);
+    float getFontSize();
+    DOMString getString();
+    void setTextDefinition(ccFontDefinition arg0);
+    void setFontName(DOMString arg0);
+    short getHorizontalAlignment();
+    boolean initWithStringAndTextDefinition(DOMString arg0, ccFontDefinition arg1);
+    void setString(DOMString arg0);
+    boolean initWithString(DOMString arg0, DOMString arg1, float arg2, CCSize arg3, short arg4);
+    boolean initWithString(DOMString arg0, DOMString arg1, float arg2);
+    boolean initWithString(DOMString arg0, DOMString arg1, float arg2, CCSize arg3, short arg4, short arg5);
+    boolean init();
+    void setFontFillColor(ccColor3B arg0, boolean arg1);
+    void enableStroke(ccColor3B arg0, float arg1, boolean arg2);
+    CCSize getDimensions();
+    void setVerticalAlignment(short arg0);
+    void setFontSize(float arg0);
+    short getVerticalAlignment();
+    ccFontDefinition getTextDefinition();
+    DOMString getFontName();
+    void setHorizontalAlignment(short arg0);
+    void disableShadow(boolean arg0);
+    void disableStroke(boolean arg0);
+    [CallWith=ScriptState]  static any createInternal(DOMString arg0, DOMString arg1, float arg2, CCSize arg3, short arg4);
+    [CallWith=ScriptState]  static any createInternal(DOMString arg0, DOMString arg1, float arg2);
+    [CallWith=ScriptState]  static any createInternal(DOMString arg0, DOMString arg1, float arg2, CCSize arg3, short arg4, short arg5);
+    [CallWith=ScriptState]  static any createInternal();
+    [CallWith=ScriptState]  static any createWithFontDefinition(DOMString arg0, ccFontDefinition arg1);
+    [Custom] void ctor();
+};

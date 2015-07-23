@@ -1,0 +1,18 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface CCTileMapAtlas : CCAtlasNode {
+    boolean initWithTileFile(DOMString arg0, DOMString arg1, long arg2, long arg3);
+    void releaseMap();
+    ccColor3B getTileAt(CCPoint arg0);
+    void setTile(ccColor3B arg0, CCPoint arg1);
+    [CallWith=ScriptState]  static any createInternal(DOMString arg0, DOMString arg1, long arg2, long arg3);
+    [Custom] void ctor();
+};

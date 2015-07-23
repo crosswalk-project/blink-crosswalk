@@ -1,0 +1,29 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface CCLayerRGBA : CCLayer {
+    void updateDisplayedColor(ccColor3B arg0);
+    void setColor(ccColor3B arg0);
+    boolean isCascadeOpacityEnabled();
+    ccColor3B getColor();
+    unsigned short getDisplayedOpacity();
+    void setCascadeColorEnabled(boolean arg0);
+    void setOpacity(unsigned short arg0);
+    void setOpacityModifyRGB(boolean arg0);
+    void setCascadeOpacityEnabled(boolean arg0);
+    void updateDisplayedOpacity(unsigned short arg0);
+    boolean init();
+    unsigned short getOpacity();
+    boolean isOpacityModifyRGB();
+    boolean isCascadeColorEnabled();
+    ccColor3B getDisplayedColor();
+    [CallWith=ScriptState]  static any createInternal();
+    [Custom] void ctor();
+};

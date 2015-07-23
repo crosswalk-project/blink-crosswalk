@@ -1,0 +1,33 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface CCProgressTimer : CCNodeRGBA {
+    void setReverseProgress(boolean arg0);
+    void draw();
+    boolean isReverseDirection();
+    void setBarChangeRate(CCPoint arg0);
+    void setColor(ccColor3B arg0);
+    CCPoint getBarChangeRate();
+    float getPercentage();
+    void setSprite(any arg0);
+    short getType();
+    void setOpacity(unsigned short arg0);
+    [CallWith=ScriptState] any getSprite();
+    void setMidpoint(CCPoint arg0);
+    CCPoint getMidpoint();
+    ccColor3B getColor();
+    unsigned short getOpacity();
+    void setReverseDirection(boolean arg0);
+    boolean initWithSprite(any arg0);
+    void setPercentage(float arg0);
+    void setType(short arg0);
+    [CallWith=ScriptState]  static any createInternal(any arg0);
+    [Custom] void ctor();
+};

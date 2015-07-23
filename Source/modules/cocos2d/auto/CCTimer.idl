@@ -1,0 +1,18 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface CCTimer : CCObject  {
+    float getInterval();
+    void setInterval(float arg0);
+    boolean initWithScriptHandler(long arg0, float arg1);
+    void update(float arg0);
+    long getScriptHandler();
+    [CallWith=ScriptState]  static any timerWithScriptHandler(long arg0, float arg1);
+};

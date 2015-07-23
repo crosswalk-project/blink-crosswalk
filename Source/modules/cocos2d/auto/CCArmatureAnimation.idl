@@ -1,0 +1,28 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface CCArmatureAnimation : CCObject  {
+    float getSpeedScale();
+    void pause();
+    void setSpeedScale(float arg0);
+    boolean init(CCArmature arg0);
+    void play(DOMString arg0, long arg1, long arg2, long arg3, long arg4);
+    void gotoAndPause(long arg0);
+    void resume();
+    void stop();
+    void update(float arg0);
+    void playWithArray(CCArray arg0, long arg1, boolean arg2);
+    void playWithIndexArray(CCArray arg0, long arg1, boolean arg2);
+    void playWithIndex(long arg0, long arg1, long arg2, long arg3, long arg4);
+    DOMString getCurrentMovementID();
+    void gotoAndPlay(long arg0);
+    long getMovementCount();
+    [CallWith=ScriptState]  static any createInternal(CCArmature arg0);
+};
