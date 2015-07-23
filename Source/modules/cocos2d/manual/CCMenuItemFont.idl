@@ -1,0 +1,24 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface CCMenuItemFont : CCMenuItemLabel {
+    unsigned long fontSizeObj();
+    DOMString fontNameObj();
+    void setFontNameObj(DOMString arg0);
+    void setFontSizeObj(unsigned long arg0);
+    static void setFontName(DOMString arg0);
+    static DOMString fontName();
+    static unsigned long fontSize();
+    static void setFontSize(unsigned long arg0);
+    void initWithString(DOMString str,
+                              MenuItemCallback callback,
+                              any target);
+    [Custom] void ctor();
+};

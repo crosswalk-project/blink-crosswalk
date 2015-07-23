@@ -1,0 +1,23 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor(optional float a = 0,
+                optional float b = 0,
+                optional float c = 0,
+                optional float d = 0,
+                optional float tx = 0,
+                optional float ty = 0),
+    NoInterfaceObject
+] interface CCAffineTransform : CCObject {
+    attribute float a;
+    attribute float b;
+    attribute float c;
+    attribute float d;
+    attribute float tx;
+    attribute float ty;
+};

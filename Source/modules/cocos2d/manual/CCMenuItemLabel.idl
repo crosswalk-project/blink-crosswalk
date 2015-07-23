@@ -1,0 +1,23 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface CCMenuItemLabel : CCMenuItem {
+    void setEnabled(boolean arg0);
+    void setLabel(any arg0);
+    void activate();
+    ccColor3B getDisabledColor();
+    void setString(DOMString arg0);
+    void selected();
+    void setDisabledColor(ccColor3B arg0);
+    [CallWith=ScriptState] any getLabel();
+    void unselected();
+    void initWithLabel(any label, MenuItemCallback callback, any target);
+    [Custom] void ctor();
+};

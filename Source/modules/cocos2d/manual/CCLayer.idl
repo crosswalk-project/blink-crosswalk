@@ -1,0 +1,45 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface CCLayer : CCNode {
+    void unregisterScriptTouchHandler();
+    void keyBackClicked();
+    boolean ccTouchBegan(CCTouch arg0, CCEvent arg1);
+    void setAccelerometerInterval(double arg0);
+    void ccTouchesCancelled(CCSet arg0, CCEvent arg1);
+    void unregisterScriptAccelerateHandler();
+    void ccTouchesMoved(CCSet arg0, CCEvent arg1);
+    void registerScriptAccelerateHandler(long arg0);
+    long getTouchMode();
+    void setAccelerometerEnabled(boolean arg0);
+    boolean init();
+    boolean isTouchEnabled();
+    void ccTouchMoved(CCTouch arg0, CCEvent arg1);
+    void setTouchEnabled(boolean arg0);
+    void unregisterScriptKeypadHandler();
+    boolean isKeypadEnabled();
+    void ccTouchesEnded(CCSet arg0, CCEvent arg1);
+    boolean isAccelerometerEnabled();
+    void ccTouchEnded(CCTouch arg0, CCEvent arg1);
+    void registerScriptTouchHandler(long arg0, boolean arg1, long arg2, boolean arg3);
+    void ccTouchCancelled(CCTouch arg0, CCEvent arg1);
+    void ccTouchesBegan(CCSet arg0, CCEvent arg1);
+    void setTouchPriority(long arg0);
+    long getTouchPriority();
+    void setKeypadEnabled(boolean arg0);
+    void registerWithTouchDispatcher();
+     void registerTargetedWithTouchDispatcher(long priority, boolean swallowsTouches);
+    void keyMenuClicked();
+    void registerScriptKeypadHandler(long arg0);
+    [CallWith=ScriptState]  static any createInternal();
+    [Custom] void ctor();
+
+    void setTouchMode(long mode);
+};

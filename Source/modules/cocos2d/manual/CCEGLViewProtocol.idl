@@ -1,0 +1,19 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface CCEGLViewProtocol : CCObject  {
+     CCPoint getVisibleOrigin();
+     CCSize getVisibleSize();
+    void setDesignResolutionSize(float arg0, float arg1, long arg2);
+    void handleTouchesBegin(long num, sequence<long> ids, sequence<float> xs, sequence<float> ys);
+    void handleTouchesMove(long num, sequence<long> ids, sequence<float> xs, sequence<float> ys);
+    void handleTouchesEnd(long num, sequence<long> ids, sequence<float> xs, sequence<float> ys);
+    void handleTouchesCancel(long num, sequence<long> ids, sequence<float> xs, sequence<float> ys);
+};

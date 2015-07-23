@@ -1,0 +1,47 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface CCTexture2D : CCObject  {
+    [CallWith=ScriptState] any getShaderProgram();
+    boolean initWithETCFile(DOMString arg0);
+    DOMString stringForFormat();
+    void setShaderProgram(CCGLProgram arg0);
+    float getMaxS();
+    boolean hasPremultipliedAlpha();
+    unsigned long getPixelsHigh();
+     unsigned long bitsPerPixelForFormat(long arg0);
+    unsigned long bitsPerPixelForFormat();
+     WebGLTexture getName();
+    boolean initWithString(DOMString arg0, DOMString arg1, float arg2);
+     boolean initWithString(DOMString arg0, DOMString arg1, float arg2, CCSize arg3, long arg4, long arg5);
+    boolean initWithString(DOMString arg0, ccFontDefinition arg1);
+    void setMaxT(float arg0);
+    void drawInRect(CCRect arg0);
+    CCSize getContentSize();
+    float getMaxT();
+    void setAliasTexParameters();
+    void setAntiAliasTexParameters();
+    void generateMipmap();
+     long getPixelFormat();
+    CCSize getContentSizeInPixels();
+    unsigned long getPixelsWide();
+    void drawAtPoint(CCPoint arg0);
+    boolean hasMipmaps();
+    boolean initWithPVRFile(DOMString arg0);
+    void setMaxS(float arg0);
+    static void setDefaultAlphaPixelFormat(long arg0);
+    static long getDefaultAlphaPixelFormat();
+     static void PVRImagesHavePremultipliedAlpha(boolean arg0);
+    void handleLoadedTexture();
+    void initWithElement(HTMLImageElement image);
+    void initWithElement(HTMLCanvasElement image);
+    void initWithElement(HTMLVideoElement image);
+    boolean isLoaded();
+};

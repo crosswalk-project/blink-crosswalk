@@ -1,0 +1,49 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface CCScrollView : CCLayer {
+    boolean isClippingToBounds();
+    void setContainer(CCNode arg0);
+    void setContentOffsetInDuration(CCPoint arg0, float arg1);
+    void setZoomScaleInDuration(float arg0, float arg1);
+    void addChild(CCNode arg0, long arg1);
+    void addChild(CCNode arg0, long arg1, long arg2);
+    void addChild(CCNode arg0);
+    CCNode getContainer();
+    short getDirection();
+    float getZoomScale();
+    void updateInset();
+    boolean initWithViewSize(CCSize arg0, CCNode arg1);
+    void pause(CCObject arg0);
+    void setDirection(short arg0);
+    void setBounceable(boolean arg0);
+    void setContentOffset(CCPoint arg0, boolean arg1);
+    boolean isDragging();
+    boolean init();
+    boolean isBounceable();
+    CCSize getContentSize();
+    void setTouchEnabled(boolean arg0);
+    CCPoint getContentOffset();
+    void resume(CCObject arg0);
+    void setClippingToBounds(boolean arg0);
+    void setViewSize(CCSize arg0);
+    CCSize getViewSize();
+    CCPoint maxContainerOffset();
+    boolean isTouchMoved();
+    boolean isNodeVisible(CCNode arg0);
+    CCPoint minContainerOffset();
+    void registerWithTouchDispatcher();
+    void setZoomScale(float arg0, boolean arg1);
+    void setZoomScale(float arg0);
+    static CCScrollView createInternal();
+    static CCScrollView createInternal(CCSize arg0, CCNode arg1);
+
+    void setDelegateInternal(ScrollViewCallback didScrollCallback, ScrollViewCallback didZoomCallback);
+};

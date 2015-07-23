@@ -242,9 +242,18 @@ public:
     void texImage2D(GLenum target, GLint level, GLenum internalformat,
         GLenum format, GLenum type, HTMLImageElement*, ExceptionState&);
     void texImage2D(GLenum target, GLint level, GLenum internalformat,
+        GLenum format, GLenum type, HTMLImageElement*);
+    void texImage2D(GLenum target, GLint level, GLenum internalformat,
+    GLenum format, GLenum type, const String& url, GLint* width, GLint* height);
+
+    void texImage2D(GLenum target, GLint level, GLenum internalformat,
         GLenum format, GLenum type, HTMLCanvasElement*, ExceptionState&);
     void texImage2D(GLenum target, GLint level, GLenum internalformat,
         GLenum format, GLenum type, HTMLVideoElement*, ExceptionState&);
+
+
+    unsigned char* getDataFromURL(const String& fileURL, unsigned long * pSize);
+    void texImage2DCocos2d(GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, const void* pixels);
 
     void texParameterf(GLenum target, GLenum pname, GLfloat param);
     void texParameteri(GLenum target, GLenum pname, GLint param);
@@ -720,7 +729,9 @@ protected:
     GLenum convertTexInternalFormat(GLenum internalformat, GLenum type);
 
     void texImage2DBase(GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, const void* pixels, ExceptionState&);
+    void texImage2DBase(GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, const void* pixels);
     void texImage2DImpl(GLenum target, GLint level, GLenum internalformat, GLenum format, GLenum type, Image*, WebGLImageConversion::ImageHtmlDomSource, bool flipY, bool premultiplyAlpha, ExceptionState&);
+    void texImage2DImpl(GLenum target, GLint level, GLenum internalformat, GLenum format, GLenum type, Image*, WebGLImageConversion::ImageHtmlDomSource, bool flipY, bool premultiplyAlpha);
     void texSubImage2DBase(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLenum type, const void* pixels, ExceptionState&);
     void texSubImage2DImpl(GLenum target, GLint level, GLint xoffset, GLint yoffset, GLenum format, GLenum type, Image*, WebGLImageConversion::ImageHtmlDomSource, bool flipY, bool premultiplyAlpha, ExceptionState&);
 
@@ -865,6 +876,7 @@ protected:
 
     // Helper function for tex{Sub}Image2D to make sure image is ready and wouldn't taint Origin.
     bool validateHTMLImageElement(const char* functionName, HTMLImageElement*, ExceptionState&);
+    bool validateHTMLImageElement(const char* functionName, HTMLImageElement*);
 
     // Helper function for tex{Sub}Image2D to make sure canvas is ready and wouldn't taint Origin.
     bool validateHTMLCanvasElement(const char* functionName, HTMLCanvasElement*, ExceptionState&);

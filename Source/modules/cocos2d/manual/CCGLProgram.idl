@@ -1,0 +1,43 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface CCGLProgram : CCObject  {
+    DOMString getFragmentShaderLog();
+    void addAttribute(DOMString arg0, unsigned long arg1);
+    //void setUniformLocationWithMatrix4fv(long arg0, Uint8Array arg1, unsigned long arg2);
+    void use();
+    DOMString getVertexShaderLog();
+    boolean initWithString(DOMString arg0, DOMString arg1);
+    boolean init(DOMString arg0, DOMString arg1);
+    void setUniformsForBuiltins();
+    void setUniformLocationWith3i(WebGLUniformLocation arg0, long arg1, long arg2, long arg3);
+    void setUniformLocationWith3iv(WebGLUniformLocation arg0, Uint8Array arg1, unsigned long arg2);
+    void updateUniforms();
+    void setUniformLocationWith4iv(WebGLUniformLocation arg0, Uint8Array arg1, unsigned long arg2);
+    boolean link();
+    WebGLProgram getProgram();
+    void setUniformLocationWith2iv(WebGLUniformLocation arg0, Uint8Array arg1, unsigned long arg2);
+    void reset();
+    DOMString getProgramLog();
+    void setUniformLocationWith4i(WebGLUniformLocation arg0, long arg1, long arg2, long arg3, long arg4);
+    void setUniformLocationI32(WebGLUniformLocation arg0, long arg1);
+    void setUniformLocationWith2i(WebGLUniformLocation arg0, long arg1, long arg2);
+
+    void setUniformLocationWith1f(WebGLUniformLocation location, double f1);
+    void setUniformLocationWith2f(WebGLUniformLocation location, double f1, double f2);
+    void setUniformLocationWith3f(WebGLUniformLocation location, double f1, double f2, double f3);
+    void setUniformLocationWith4f(WebGLUniformLocation location, double f1, double f2, double f3, double f4);
+
+    //
+    void setUniformLocationWith2fv(WebGLUniformLocation location, Float32Array floats, unsigned long numberOfArrays);
+    void setUniformLocationWith3fv(WebGLUniformLocation location, Float32Array floats, unsigned long numberOfArrays);
+    void setUniformLocationWith4fv(WebGLUniformLocation location, Float32Array floats, unsigned long numberOfArrays);
+    void setUniformLocationWithMatrix4fv(WebGLUniformLocation location, Float32Array matrixArray, unsigned long numberOfMatrices);
+};

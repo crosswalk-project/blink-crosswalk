@@ -1,0 +1,36 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface CCMenu : CCLayerRGBA {
+    boolean initWithArray(CCArray arg0);
+    boolean initWithItems(any[] arg0);
+    void addChild(any arg0, long arg1);
+    void addChild(any arg0);
+    void addChild(any arg0, long arg1, long arg2);
+    void alignItemsVertically();
+    boolean ccTouchBegan(CCTouch arg0, CCEvent arg1);
+    void ccTouchEnded(CCTouch arg0, CCEvent arg1);
+    boolean isOpacityModifyRGB();
+    boolean isEnabled();
+    void setOpacityModifyRGB(boolean arg0);
+    void setHandlerPriority(long arg0);
+    boolean init();
+    void alignItemsHorizontallyWithPadding(float arg0);
+    void alignItemsHorizontally();
+    void setEnabled(boolean arg0);
+    void ccTouchMoved(CCTouch arg0, CCEvent arg1);
+    void ccTouchCancelled(CCTouch arg0, CCEvent arg1);
+    void removeChild(any arg0, boolean arg1);
+    void alignItemsVerticallyWithPadding(float arg0);
+    void registerWithTouchDispatcher();
+    void alignItemsInColumnsWithArray(CCArray arg0);
+    void alignItemsInRowsWithArray(CCArray arg0);
+    [Custom] void ctor();
+};
