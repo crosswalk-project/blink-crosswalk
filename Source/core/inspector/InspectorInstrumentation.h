@@ -164,16 +164,25 @@ inline InstrumentingAgents* instrumentingAgentsFor(CSSStyleDeclaration* declarat
     return declaration ? instrumentingAgentsFor(declaration->parentStyleSheet()) : 0;
 }
 
+#ifdef DISABLE_INSPECTOR
+inline void addMessageToConsoleImpl(InstrumentingAgents*, ConsoleMessage*){}
+inline void consoleProfileImpl(InstrumentingAgents*, ExecutionContext*, const String&){}
+inline void consoleProfileEndImpl(InstrumentingAgents*, const String&){}
+inline void consoleMessagesClearedImpl(InstrumentingAgents*){}
+#endif
+
 } // namespace InspectorInstrumentation
 
 InstrumentingAgents* instrumentationForWorkerGlobalScope(WorkerGlobalScope*);
 
 } // namespace blink
 
+#ifndef DISABLE_INSPECTOR
 #include "core/InspectorInstrumentationInl.h"
 
 #include "core/inspector/InspectorInstrumentationCustomInl.h"
 
 #include "core/InspectorOverridesInl.h"
+#endif
 
 #endif // !defined(InspectorInstrumentation_h)

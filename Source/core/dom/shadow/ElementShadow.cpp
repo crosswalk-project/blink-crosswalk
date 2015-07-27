@@ -33,7 +33,9 @@
 #include "core/dom/shadow/DistributedNodes.h"
 #include "core/html/HTMLContentElement.h"
 #include "core/html/HTMLShadowElement.h"
+#ifndef DISABLE_INSPECTOR
 #include "core/inspector/InspectorInstrumentation.h"
+#endif
 #include "platform/EventDispatchForbiddenScope.h"
 #include "platform/ScriptForbiddenScope.h"
 
@@ -160,7 +162,9 @@ ShadowRoot& ElementShadow::addShadowRoot(Element& shadowHost, ShadowRoot::Shadow
     setNeedsDistributionRecalc();
 
     shadowRoot->insertedInto(&shadowHost);
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::didPushShadowRoot(&shadowHost, shadowRoot.get());
+#endif
 
     return *shadowRoot;
 }
@@ -173,7 +177,9 @@ void ElementShadow::removeDetachedShadowRoots()
     ASSERT(shadowHost);
 
     while (RefPtrWillBeRawPtr<ShadowRoot> oldRoot = m_shadowRoots.head()) {
+#ifndef DISABLE_INSPECTOR
         InspectorInstrumentation::willPopShadowRoot(shadowHost, oldRoot.get());
+#endif
         shadowHost->document().removeFocusedElementOfSubtree(oldRoot.get());
         m_shadowRoots.removeHead();
         oldRoot->setParentOrShadowHostNode(0);
@@ -301,7 +307,9 @@ void ElementShadow::distribute()
         if (ElementShadow* shadow = shadowWhereNodeCanBeDistributed(*shadowInsertionPoint))
             shadow->setNeedsDistributionRecalc();
     }
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::didPerformElementShadowDistribution(host());
+#endif
 }
 
 void ElementShadow::didDistributeNode(const Node* node, InsertionPoint* insertionPoint)

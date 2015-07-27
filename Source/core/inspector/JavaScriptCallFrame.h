@@ -42,7 +42,11 @@
 namespace blink {
 
 class JavaScriptCallFrame : public RefCountedWillBeGarbageCollectedFinalized<JavaScriptCallFrame>, public ScriptWrappable {
+#ifndef DISABLE_INSPECTOR
     DEFINE_WRAPPERTYPEINFO();
+#else
+    DEFINE_WRAPPERTYPEINFO_DISABLE_INSPECTOR();
+#endif
 public:
     static PassRefPtrWillBeRawPtr<JavaScriptCallFrame> create(v8::Local<v8::Context> debuggerContext, v8::Local<v8::Object> callFrame)
     {

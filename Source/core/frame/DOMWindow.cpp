@@ -15,7 +15,9 @@
 #include "core/frame/LocalDOMWindow.h"
 #include "core/frame/Location.h"
 #include "core/frame/UseCounter.h"
+#ifndef DISABLE_INSPECTOR
 #include "core/inspector/InspectorInstrumentation.h"
+#endif
 #include "core/inspector/ScriptCallStack.h"
 #include "core/loader/MixedContentChecker.h"
 #include "platform/weborigin/KURL.h"
@@ -193,9 +195,10 @@ void DOMWindow::postMessage(PassRefPtr<SerializedScriptValue> message, const Mes
     if (!didHandleMessageEvent) {
         // Capture stack trace only when inspector front-end is loaded as it may be time consuming.
         RefPtrWillBeRawPtr<ScriptCallStack> stackTrace = nullptr;
+#ifndef DISABLE_INSPECTOR
         if (InspectorInstrumentation::consoleAgentEnabled(sourceDocument))
             stackTrace = createScriptCallStack(ScriptCallStack::maxCallStackSizeToCapture, true);
-
+#endif
         toLocalDOMWindow(this)->schedulePostMessage(event, source, target.get(), stackTrace.release());
     }
 }

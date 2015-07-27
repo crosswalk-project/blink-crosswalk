@@ -35,7 +35,9 @@
 #include "core/frame/FrameView.h"
 #include "core/frame/LocalFrame.h"
 #include "core/frame/Settings.h"
+#ifndef DISABLE_INSPECTOR
 #include "core/inspector/InspectorInstrumentation.h"
+#endif
 #include "core/layout/LayoutView.h"
 #include "core/layout/TextAutosizer.h"
 #include "core/layout/compositing/DeprecatedPaintLayerCompositor.h"
@@ -263,7 +265,9 @@ void PinchViewport::setScaleAndLocation(float scale, const FloatPoint& location)
         document->enqueueScrollEventForNode(document);
 
         mainFrame()->loader().client()->didChangeScrollOffset();
+#ifndef DISABLE_INSPECTOR
         InspectorInstrumentation::didScroll(mainFrame());
+#endif
         valuesChanged = true;
     }
 

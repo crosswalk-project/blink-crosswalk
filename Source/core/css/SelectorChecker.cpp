@@ -49,7 +49,9 @@
 #include "core/html/HTMLSelectElement.h"
 #include "core/html/parser/HTMLParserIdioms.h"
 #include "core/html/track/vtt/VTTElement.h"
+#ifndef DISABLE_INSPECTOR
 #include "core/inspector/InspectorInstrumentation.h"
+#endif
 #include "core/layout/LayoutObject.h"
 #include "core/layout/LayoutScrollbar.h"
 #include "core/style/ComputedStyle.h"
@@ -1172,8 +1174,10 @@ bool SelectorChecker::isFrameFocused(const Element& element)
 
 bool SelectorChecker::matchesFocusPseudoClass(const Element& element)
 {
+#ifndef DISABLE_INSPECTOR
     if (InspectorInstrumentation::forcePseudoState(const_cast<Element*>(&element), CSSSelector::PseudoFocus))
         return true;
+#endif
     if (element.focused() && isFrameFocused(element))
         return true;
     // TODO(kochi): adjustedFocusedElement is slow.  Before tabStop gets out of experimental state,

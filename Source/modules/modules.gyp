@@ -35,6 +35,15 @@
     '../bindings/modules/modules.gypi',  # modules can depend on bindings/modules, but not on bindings
     'modules.gypi',
   ],
+  'target_defaults': {
+    'conditions': [
+      ['disable_devtools==1', {
+        'defines': [
+          'DISABLE_INSPECTOR',
+        ],
+      }],
+    ],
+  },
   'targets': [{
     # GN version: //third_party/WebKit/Source/modules:modules
     'target_name': 'modules',
@@ -57,6 +66,9 @@
       '<(bindings_modules_v8_output_dir)/initPartialInterfacesInModules.cpp',
     ],
     'conditions': [
+      ['disable_devtools==1', {
+        'sources!': ['<@(modules_files_inspector)',],
+      }],
       ['component=="shared_library" and link_core_modules_separately==1', {
         'type': 'shared_library',
         'defines': [

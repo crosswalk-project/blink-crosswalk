@@ -61,7 +61,9 @@
 #include "core/html/HTMLFrameOwnerElement.h"
 #include "core/html/parser/HTMLParserIdioms.h"
 #include "core/inspector/ConsoleMessage.h"
+#ifndef DISABLE_INSPECTOR
 #include "core/inspector/InspectorInstrumentation.h"
+#endif
 #include "core/loader/DocumentLoadTiming.h"
 #include "core/loader/DocumentLoader.h"
 #include "core/loader/FormState.h"
@@ -345,7 +347,9 @@ void FrameLoader::receivedFirstData()
     client()->dispatchDidCommitLoad(m_currentItem.get(), historyCommitType);
 
     TRACE_EVENT1(TRACE_DISABLED_BY_DEFAULT("devtools.timeline"), "CommitLoad", "data", InspectorCommitLoadEvent::data(m_frame));
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::didCommitLoad(m_frame, m_documentLoader.get());
+#endif
     m_frame->page()->didCommitLoad(m_frame);
     dispatchDidClearDocumentOfWindowObject();
 }
@@ -1045,7 +1049,9 @@ void FrameLoader::restoreScrollPositionAndViewState()
 String FrameLoader::userAgent(const KURL& url) const
 {
     String userAgent = client()->userAgent(url);
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::applyUserAgentOverride(m_frame, &userAgent);
+#endif
     return userAgent;
 }
 
@@ -1245,9 +1251,9 @@ void FrameLoader::startLoad(FrameLoadRequest& frameLoadRequest, FrameLoadType ty
     // might detach the current FrameLoader, in which case we should bail on this newly defunct load.
     if (!m_frame->page() || !m_policyDocumentLoader)
         return;
-
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::didStartProvisionalLoad(m_frame);
-
+#endif
     m_frame->navigationScheduler().cancel();
 
     m_provisionalDocumentLoader = m_policyDocumentLoader.release();
@@ -1362,8 +1368,9 @@ void FrameLoader::dispatchDidClearDocumentOfWindowObject()
 {
     if (!m_frame->script().canExecuteScripts(NotAboutToExecuteScript))
         return;
-
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::didClearDocumentOfWindowObject(m_frame);
+#endif
 
     // We just cleared the document, not the entire window object, but for the
     // embedder that's close enough.

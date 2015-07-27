@@ -30,7 +30,9 @@
 #include "core/events/Event.h"
 #include "core/frame/LocalDOMWindow.h"
 #include "core/frame/SuspendableTimer.h"
+#ifndef DISABLE_INSPECTOR
 #include "core/inspector/InspectorInstrumentation.h"
+#endif
 
 namespace blink {
 
@@ -84,8 +86,9 @@ bool DOMWindowEventQueue::enqueueEvent(PassRefPtrWillBeRawPtr<Event> event)
         return false;
 
     ASSERT(event->target());
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::didEnqueueEvent(event->target(), event.get());
-
+#endif
     bool wasAdded = m_queuedEvents.add(event).isNewEntry;
     ASSERT_UNUSED(wasAdded, wasAdded); // It should not have already been in the list.
 
@@ -100,7 +103,9 @@ bool DOMWindowEventQueue::cancelEvent(Event* event)
     WillBeHeapListHashSet<RefPtrWillBeMember<Event>, 16>::iterator it = m_queuedEvents.find(event);
     bool found = it != m_queuedEvents.end();
     if (found) {
+#ifndef DISABLE_INSPECTOR
         InspectorInstrumentation::didRemoveEvent(event->target(), event);
+#endif
         m_queuedEvents.remove(it);
     }
     if (m_queuedEvents.isEmpty())
@@ -112,6 +117,7 @@ void DOMWindowEventQueue::close()
 {
     m_isClosed = true;
     m_pendingEventTimer->stop();
+#ifndef DISABLE_INSPECTOR
     if (InspectorInstrumentation::hasFrontends()) {
         for (const auto& queuedEvent : m_queuedEvents) {
             RefPtrWillBeRawPtr<Event> event = queuedEvent;
@@ -119,6 +125,7 @@ void DOMWindowEventQueue::close()
                 InspectorInstrumentation::didRemoveEvent(event->target(), event.get());
         }
     }
+#endif
     m_queuedEvents.clear();
 }
 
@@ -141,7 +148,9 @@ void DOMWindowEventQueue::pendingEventTimerFired()
         if (!event)
             break;
         dispatchEvent(event.get());
+#ifndef DISABLE_INSPECTOR
         InspectorInstrumentation::didRemoveEvent(event->target(), event.get());
+#endif
     }
 }
 

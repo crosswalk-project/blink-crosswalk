@@ -32,7 +32,9 @@
 #include "bindings/core/v8/V8GCController.h"
 #include "bindings/core/v8/V8Initializer.h"
 #include "core/dom/Microtask.h"
+#ifndef DISABLE_INSPECTOR
 #include "core/inspector/InspectorInstrumentation.h"
+#endif
 #include "core/inspector/WorkerInspectorController.h"
 #include "core/workers/DedicatedWorkerGlobalScope.h"
 #include "core/workers/WorkerClients.h"
@@ -212,12 +214,18 @@ public:
         if (!workerGlobalScope)
             return;
 
+#ifndef DISABLE_INSPECTOR
         if (m_isInstrumented)
             InspectorInstrumentation::willPerformExecutionContextTask(workerGlobalScope, m_task.get());
+#endif
+
         if ((!workerGlobalScope->isClosing() && !m_workerThread.terminated()) || m_task->isCleanupTask())
             m_task->performTask(workerGlobalScope);
+
+#ifndef DISABLE_INSPECTOR
         if (m_isInstrumented)
             InspectorInstrumentation::didPerformExecutionContextTask(workerGlobalScope);
+#endif
     }
 
 private:
@@ -228,8 +236,10 @@ private:
     {
         if (m_isInstrumented)
             m_isInstrumented = !m_task->taskNameForInstrumentation().isEmpty();
+#ifndef DISABLE_INSPECTOR
         if (m_isInstrumented)
             InspectorInstrumentation::didPostExecutionContextTask(m_workerThread.workerGlobalScope(), m_task.get());
+#endif
     }
 
     WorkerThread& m_workerThread;
@@ -287,8 +297,10 @@ void WorkerThread::start()
 void WorkerThread::interruptAndDispatchInspectorCommands()
 {
     MutexLocker locker(m_workerInspectorControllerMutex);
+#ifndef DISABLE_INSPECTOR
     if (m_workerInspectorController)
         m_workerInspectorController->interruptAndDispatchInspectorCommands();
+#endif
 }
 
 PlatformThreadId WorkerThread::platformThreadId() const
@@ -302,7 +314,9 @@ void WorkerThread::initialize()
 {
     KURL scriptURL = m_startupData->m_scriptURL;
     String sourceCode = m_startupData->m_sourceCode;
+#ifndef DISABLE_INSPECTOR
     WorkerThreadStartMode startMode = m_startupData->m_startMode;
+#endif
     OwnPtr<Vector<char>> cachedMetaData = m_startupData->m_cachedMetaData.release();
     V8CacheOptions v8CacheOptions = m_startupData->m_v8CacheOptions;
 
@@ -337,8 +351,10 @@ void WorkerThread::initialize()
     WorkerScriptController* script = m_workerGlobalScope->script();
     if (!script->isExecutionForbidden())
         script->initializeContextIfNeeded();
+#ifndef DISABLE_INSPECTOR
     if (startMode == PauseWorkerGlobalScopeOnStart)
         m_workerGlobalScope->workerInspectorController()->pauseOnStart();
+#endif
 
     OwnPtr<CachedMetadataHandler> handler(workerGlobalScope()->createWorkerScriptCachedMetadataHandler(scriptURL, cachedMetaData.get()));
     bool success = script->evaluate(ScriptSourceCode(sourceCode, scriptURL), nullptr, handler.get(), v8CacheOptions);
@@ -475,7 +491,9 @@ void WorkerThread::stopInternal()
     // Ensure that tasks are being handled by thread event loop. If script execution weren't forbidden, a while(1) loop in JS could keep the thread alive forever.
     terminateV8Execution();
 
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::didKillAllExecutionContextTasks(m_workerGlobalScope.get());
+#endif
     m_debuggerMessageQueue.kill();
     postTask(FROM_HERE, WorkerThreadShutdownStartTask::create());
 }
@@ -592,9 +610,13 @@ MessageQueueWaitResult WorkerThread::runDebuggerTask(WaitMode waitMode)
     }
 
     if (result == MessageQueueMessageReceived) {
+#ifndef DISABLE_INSPECTOR
         InspectorInstrumentation::willProcessTask(workerGlobalScope());
+#endif
         task->run();
+#ifndef DISABLE_INSPECTOR
         InspectorInstrumentation::didProcessTask(workerGlobalScope());
+#endif
     }
 
     return result;
@@ -602,12 +624,16 @@ MessageQueueWaitResult WorkerThread::runDebuggerTask(WaitMode waitMode)
 
 void WorkerThread::willEnterNestedLoop()
 {
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::willEnterNestedRunLoop(m_workerGlobalScope.get());
+#endif
 }
 
 void WorkerThread::didLeaveNestedLoop()
 {
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::didLeaveNestedRunLoop(m_workerGlobalScope.get());
+#endif
 }
 
 void WorkerThread::setWorkerInspectorController(WorkerInspectorController* workerInspectorController)

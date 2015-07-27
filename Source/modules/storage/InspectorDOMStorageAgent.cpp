@@ -95,8 +95,10 @@ void InspectorDOMStorageAgent::enable(ErrorString*)
         return;
     m_isEnabled = true;
     m_state->setBoolean(DOMStorageAgentState::domStorageAgentEnabled, true);
+#ifndef DISABLE_INSPECTOR
     if (StorageNamespaceController* controller = StorageNamespaceController::from(m_page))
         controller->setInspectorAgent(this);
+#endif
 }
 
 void InspectorDOMStorageAgent::disable(ErrorString*)
@@ -105,8 +107,10 @@ void InspectorDOMStorageAgent::disable(ErrorString*)
         return;
     m_isEnabled = false;
     m_state->setBoolean(DOMStorageAgentState::domStorageAgentEnabled, false);
+#ifndef DISABLE_INSPECTOR
     if (StorageNamespaceController* controller = StorageNamespaceController::from(m_page))
         controller->setInspectorAgent(nullptr);
+#endif
 }
 
 void InspectorDOMStorageAgent::getDOMStorageItems(ErrorString* errorString, const RefPtr<JSONObject>& storageId, RefPtr<TypeBuilder::Array<TypeBuilder::Array<String>>>& items)

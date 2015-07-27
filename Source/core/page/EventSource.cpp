@@ -47,7 +47,9 @@
 #include "core/frame/csp/ContentSecurityPolicy.h"
 #include "core/html/parser/TextResourceDecoder.h"
 #include "core/inspector/ConsoleMessage.h"
+#ifndef DISABLE_INSPECTOR
 #include "core/inspector/InspectorInstrumentation.h"
+#endif
 #include "core/loader/ThreadableLoader.h"
 #include "core/page/EventSourceInit.h"
 #include "platform/network/ResourceError.h"
@@ -144,8 +146,10 @@ void EventSource::connect()
     resourceLoaderOptions.dataBufferingPolicy = DoNotBufferData;
     resourceLoaderOptions.securityOrigin = origin;
 
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::willSendEventSourceRequest(&executionContext, this);
     // InspectorInstrumentation::documentThreadableLoaderStartedLoadingForClient will be called synchronously.
+#endif
     m_loader = ThreadableLoader::create(executionContext, this, request, options, resourceLoaderOptions);
 
     if (m_loader)
@@ -157,7 +161,9 @@ void EventSource::networkRequestEnded()
     if (!m_requestInFlight)
         return;
 
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::didFinishEventSourceRequest(executionContext(), this);
+#endif
 
     m_requestInFlight = false;
 
@@ -380,7 +386,9 @@ void EventSource::parseEventStreamLine(unsigned bufPos, int fieldLength, int lin
                 m_lastEventId = m_currentlyParsedEventId;
                 m_currentlyParsedEventId = nullAtom;
             }
+#ifndef DISABLE_INSPECTOR
             InspectorInstrumentation::willDispachEventSourceEvent(executionContext(), this, m_eventName.isEmpty() ? EventTypeNames::message : m_eventName, m_lastEventId, m_data);
+#endif
             dispatchEvent(createMessageEvent());
         }
         if (!m_eventName.isEmpty())
