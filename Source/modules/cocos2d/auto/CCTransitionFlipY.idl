@@ -1,0 +1,14 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface CCTransitionFlipY : CCTransitionSceneOriented {
+    [CallWith=ScriptState]  static any createInternal(float arg0, any arg1);
+    [CallWith=ScriptState]  static any createInternal(float arg0, any arg1, short arg2);
+};

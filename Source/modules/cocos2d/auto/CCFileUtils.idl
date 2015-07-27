@@ -1,0 +1,30 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface CCFileUtils : CCObject  {
+    boolean isFileExist(DOMString arg0);
+    void removeSearchPath(DOMString arg0);
+    void purgeCachedEntries();
+    DOMString fullPathFromRelativeFile(DOMString arg0, DOMString arg1);
+    Uint8Array getFileData(DOMString arg0, DOMString arg1, Uint8Array arg2);
+    boolean isPopupNotify();
+    void setFilenameLookupDictionary(CCDictionary arg0);
+    void addSearchResolutionsOrder(DOMString arg0);
+    Uint8Array getFileDataFromZip(DOMString arg0, DOMString arg1, Uint8Array arg2);
+    void removeAllPaths();
+    DOMString fullPathForFilename(DOMString arg0);
+    boolean isAbsolutePath(DOMString arg0);
+    DOMString getWritablePath();
+    void addSearchPath(DOMString arg0);
+    void setPopupNotify(boolean arg0);
+    void loadFilenameLookup(DOMString arg0);
+     static void purgeFileUtils();
+    [CallWith=ScriptState]  static any getInstance();
+};

@@ -122,6 +122,11 @@
           'LOG_DISABLED=0',
         ],
       }],
+      ['enable_cocos2d==1', {
+        'feature_defines':[
+          'ENABLE_COCOS2D=1'
+        ],
+      }],
     ],
   },
 }

@@ -1,0 +1,20 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface CCDrawNode : CCNode {
+    void draw();
+    void clear();
+    boolean init();
+    void drawDot(CCPoint arg0, float arg1, ccColor4F arg2);
+    void drawSegment(CCPoint arg0, CCPoint arg1, float arg2, ccColor4F arg3);
+    void drawPoly(sequence<CCPoint> arg0, ccColor4F arg1, float arg2, ccColor4F arg3);
+    [CallWith=ScriptState]  static any createInternal();
+    [Custom] void ctor();
+};

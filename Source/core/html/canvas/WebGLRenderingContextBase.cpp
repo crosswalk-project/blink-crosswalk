@@ -29,6 +29,7 @@
 #include "bindings/core/v8/ExceptionMessages.h"
 #include "bindings/core/v8/ExceptionState.h"
 #include "core/dom/ExceptionCode.h"
+#include "core/dom/Document.h"
 #include "core/fetch/ImageResource.h"
 #include "core/frame/LocalFrame.h"
 #include "core/frame/Settings.h"
@@ -83,7 +84,13 @@
 #include "platform/graphics/UnacceleratedImageBufferSurface.h"
 #include "platform/graphics/gpu/AcceleratedImageBufferSurface.h"
 #include "platform/graphics/gpu/DrawingBuffer.h"
+#include "platform/network/ResourceRequest.h"
+#include "platform/SharedBuffer.h"
 #include "public/platform/Platform.h"
+
+#include "core/fetch/FetchRequest.h"
+#include "core/fetch/ResourceFetcher.h"
+
 
 #include "wtf/PassOwnPtr.h"
 #include "wtf/Uint32Array.h"
@@ -1097,7 +1104,6 @@ void WebGLRenderingContextBase::bindBuffer(GLenum target, WebGLBuffer* buffer)
         synthesizeGLError(GL_INVALID_ENUM, "bindBuffer", "invalid target");
         return;
     }
-
     webContext()->bindBuffer(target, objectOrZero(buffer));
     if (buffer)
         buffer->setTarget(target);
@@ -1616,7 +1622,6 @@ PassRefPtrWillBeRawPtr<WebGLShader> WebGLRenderingContextBase::createShader(GLen
         synthesizeGLError(GL_INVALID_ENUM, "createShader", "invalid shader type");
         return nullptr;
     }
-
     RefPtrWillBeRawPtr<WebGLShader> o = WebGLShader::create(this, type);
     addSharedObject(o.get());
     return o.release();
@@ -3340,8 +3345,11 @@ GLenum WebGLRenderingContextBase::convertTexInternalFormat(GLenum internalformat
     return internalformat;
 }
 
-void WebGLRenderingContextBase::texImage2DBase(GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, const void* pixels, ExceptionState& exceptionState)
+void WebGLRenderingContextBase::texImage2DCocos2d(GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, const void* pixels)
 {
+#if JS_GL_DEBUG
+        LOG(ERROR) << "WebGL call:" << __FUNCTION__;
+#endif
     // All calling functions check isContextLost, so a duplicate check is not needed here.
     // FIXME: Handle errors.
     WebGLTexture* tex = validateTextureBinding("texImage2D", target, true);
@@ -3351,6 +3359,71 @@ void WebGLRenderingContextBase::texImage2DBase(GLenum target, GLint level, GLenu
     ASSERT(!pixels || validateSettableTexFormat("texImage2D", internalformat));
     webContext()->texImage2D(target, level, convertTexInternalFormat(internalformat, type), width, height, border, format, type, pixels);
     tex->setLevelInfo(target, level, internalformat, width, height, type);
+}
+
+void WebGLRenderingContextBase::texImage2DBase(GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, const void* pixels, ExceptionState& exceptionState)
+{
+#if JS_GL_DEBUG
+        LOG(ERROR) << "WebGL call:" << __FUNCTION__;
+#endif
+    // All calling functions check isContextLost, so a duplicate check is not needed here.
+    // FIXME: Handle errors.
+    WebGLTexture* tex = validateTextureBinding("texImage2D", target, true);
+    ASSERT(validateTexFuncParameters("texImage2D", NotTexSubImage2D, target, level, internalformat, width, height, border, format, type));
+    ASSERT(tex);
+    ASSERT(!level || !WebGLTexture::isNPOT(width, height));
+    ASSERT(!pixels || validateSettableTexFormat("texImage2D", internalformat));
+    webContext()->texImage2D(target, level, convertTexInternalFormat(internalformat, type), width, height, border, format, type, pixels);
+    tex->setLevelInfo(target, level, internalformat, width, height, type);
+}
+
+void WebGLRenderingContextBase::texImage2DBase(GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, const void* pixels)
+{
+#if JS_GL_DEBUG
+        LOG(ERROR) << "WebGL call:" << __FUNCTION__;
+#endif
+    // All calling functions check isContextLost, so a duplicate check is not needed here.
+    // FIXME: Handle errors.
+    WebGLTexture* tex = validateTextureBinding("texImage2D", target, true);
+    ASSERT(validateTexFuncParameters("texImage2D", NotTexSubImage2D, target, level, internalformat, width, height, border, format, type));
+    ASSERT(tex);
+    ASSERT(!level || !WebGLTexture::isNPOT(width, height));
+    ASSERT(!pixels || validateSettableTexFormat("texImage2D", internalformat));
+    webContext()->texImage2D(target, level, convertTexInternalFormat(internalformat, type), width, height, border, format, type, pixels);
+    tex->setLevelInfo(target, level, internalformat, width, height, type);
+}
+
+void WebGLRenderingContextBase::texImage2DImpl(GLenum target, GLint level, GLenum internalformat, GLenum format, GLenum type, Image* image, WebGLImageConversion::ImageHtmlDomSource domSource, bool flipY, bool premultiplyAlpha)
+{
+#if JS_GL_DEBUG
+        LOG(ERROR) << "WebGL call:" << __FUNCTION__;
+#endif
+    // All calling functions check isContextLost, so a duplicate check is not needed here.
+    Vector<uint8_t> data;
+    WebGLImageConversion::ImageExtractor imageExtractor(image, domSource, premultiplyAlpha, m_unpackColorspaceConversion == GL_NONE);
+    if (!imageExtractor.extractSucceeded()) {
+        synthesizeGLError(GL_INVALID_VALUE, "texImage2D", "bad image data");
+        return;
+    }
+    WebGLImageConversion::DataFormat sourceDataFormat = imageExtractor.imageSourceFormat();
+    WebGLImageConversion::AlphaOp alphaOp = imageExtractor.imageAlphaOp();
+    const void* imagePixelData = imageExtractor.imagePixelData();
+
+    bool needConversion = true;
+    if (type == GL_UNSIGNED_BYTE && sourceDataFormat == WebGLImageConversion::DataFormatRGBA8 && format == GL_RGBA && alphaOp == WebGLImageConversion::AlphaDoNothing && !flipY)
+        needConversion = false;
+    else {
+        if (!WebGLImageConversion::packImageData(image, imagePixelData, format, type, flipY, alphaOp, sourceDataFormat, imageExtractor.imageWidth(), imageExtractor.imageHeight(), imageExtractor.imageSourceUnpackAlignment(), data)) {
+            synthesizeGLError(GL_INVALID_VALUE, "texImage2D", "packImage error");
+            return;
+        }
+    }
+
+    if (m_unpackAlignment != 1)
+        webContext()->pixelStorei(GL_UNPACK_ALIGNMENT, 1);
+    texImage2DBase(target, level, internalformat, imageExtractor.imageWidth(), imageExtractor.imageHeight(), 0, format, type, needConversion ? data.data() : imagePixelData);
+    if (m_unpackAlignment != 1)
+        webContext()->pixelStorei(GL_UNPACK_ALIGNMENT, m_unpackAlignment);
 }
 
 void WebGLRenderingContextBase::texImage2DImpl(GLenum target, GLint level, GLenum internalformat, GLenum format, GLenum type, Image* image, WebGLImageConversion::ImageHtmlDomSource domSource, bool flipY, bool premultiplyAlpha, ExceptionState& exceptionState)
@@ -3517,6 +3590,84 @@ void WebGLRenderingContextBase::texImage2D(GLenum target, GLint level, GLenum in
         return;
 
     texImage2DImpl(target, level, internalformat, format, type, imageForRender.get(), WebGLImageConversion::HtmlDomImage, m_unpackFlipY, m_unpackPremultiplyAlpha, exceptionState);
+}
+
+void WebGLRenderingContextBase::texImage2D(GLenum target, GLint level, GLenum internalformat,
+    GLenum format, GLenum type, HTMLImageElement* image)
+{
+#if JS_GL_DEBUG
+        LOG(ERROR) << "WebGL call:" << __FUNCTION__;
+#endif
+    if (isContextLost() || !validateHTMLImageElement("texImage2D", image))
+        return;
+
+    RefPtr<Image> imageForRender = image->cachedImage()->imageForRenderer(image->renderer());
+    if (imageForRender->isSVGImage())
+        imageForRender = drawImageIntoBuffer(imageForRender.get(), image->width(), image->height(), "texImage2D");
+
+    if (!imageForRender || !validateTexFunc("texImage2D", NotTexSubImage2D, SourceHTMLImageElement, target, level, internalformat, imageForRender->width(), imageForRender->height(), 0, format, type, 0, 0))
+        return;
+
+    texImage2DImpl(target, level, internalformat, format, type, imageForRender.get(), WebGLImageConversion::HtmlDomImage, m_unpackFlipY, m_unpackPremultiplyAlpha);
+
+   //Johnson test pupose code
+   /*
+   texImage2D(target, level, internalformat, format, type, image->currentSrc());
+    //Test pupose
+   unsigned long size;
+   unsigned char* data;
+
+   data=getDataFromURL(String("file:///android_asset/www/Shaders/example_Blur.fsh"), &size);
+   LOG(ERROR) << data;
+   */
+}
+
+//function added for cocos2d to read file data
+unsigned char* WebGLRenderingContextBase::getDataFromURL(const String& fileURL, unsigned long * pSize)
+{
+   ResourceRequest request(fileURL);
+   ResourceFetcher* fetcher = canvas()->document().fetcher();
+   ResourceLoaderOptions resourceLoaderOptions = ResourceFetcher::defaultResourceOptions();
+   FetchRequest fetchRequest(request, canvas()->localName(), resourceLoaderOptions);
+   ResourcePtr<Resource> resource = fetcher->fetchSynchronously(fetchRequest);
+
+   if(!resource)
+    return NULL;
+
+   SharedBuffer *data = resource->resourceBuffer();
+   if(!data)
+    return NULL;
+
+   *pSize = data->size();
+   return (unsigned char*) data->data();
+}
+
+
+// function add here to support Cocos2d to load texture from a filename
+void WebGLRenderingContextBase::texImage2D(GLenum target, GLint level, GLenum internalformat,
+    GLenum format, GLenum type, const String& urlString, GLint* width, GLint* height)
+{
+    //LOG(ERROR) << "WebGL call:" << __FUNCTION__;
+    ResourceRequest request(urlString);
+    ResourceFetcher* fetcher = canvas()->document().fetcher();
+    ResourceLoaderOptions resourceLoaderOptions = ResourceFetcher::defaultResourceOptions();
+    FetchRequest fetchRequest(request, canvas()->localName(), resourceLoaderOptions);
+
+    ResourcePtr<ImageResource> cachedImage = fetcher->fetchImage(fetchRequest);
+
+    if (isContextLost())
+        return;
+
+    RefPtr<Image> imageForRender = cachedImage.get()->image();
+    if (imageForRender->isSVGImage())
+        imageForRender = drawImageIntoBuffer(imageForRender.get(), imageForRender->width(), imageForRender->height(), "texImage2D");
+
+    if (!imageForRender || !validateTexFunc("texImage2D", NotTexSubImage2D, SourceHTMLImageElement, target, level, internalformat, imageForRender->width(), imageForRender->height(), 0, format, type, 0, 0))
+        return;
+
+    *width = imageForRender->width();
+    *height = imageForRender->height();
+    texImage2DImpl(target, level, internalformat, format, type, imageForRender.get(), WebGLImageConversion::HtmlDomImage, m_unpackFlipY, m_unpackPremultiplyAlpha);
 }
 
 void WebGLRenderingContextBase::texImage2D(GLenum target, GLint level, GLenum internalformat,
@@ -5288,6 +5439,25 @@ bool WebGLRenderingContextBase::validateHTMLImageElement(const char* functionNam
 
     if (wouldTaintOrigin(image)) {
         exceptionState.throwSecurityError("The cross-origin image at " + url.elidedString() + " may not be loaded.");
+        return false;
+    }
+    return true;
+}
+
+bool WebGLRenderingContextBase::validateHTMLImageElement(const char* functionName, HTMLImageElement* image)
+{
+    if (!image || !image->cachedImage()) {
+        synthesizeGLError(GL_INVALID_VALUE, functionName, "no image");
+        return false;
+    }
+    const KURL& url = image->cachedImage()->response().url();
+    if (url.isNull() || url.isEmpty() || !url.isValid()) {
+        synthesizeGLError(GL_INVALID_VALUE, functionName, "invalid image");
+        return false;
+    }
+
+    if (wouldTaintOrigin(image)) {
+        //exceptionState.throwSecurityError("The cross-origin image at " + url.elidedString() + " may not be loaded.");
         return false;
     }
     return true;

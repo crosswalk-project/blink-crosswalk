@@ -1,0 +1,47 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface CCBAnimationManager : CCObject  {
+    void moveAnimationsFromNode(CCNode arg0, CCNode arg1);
+    void setAutoPlaySequenceId(long arg0);
+    [CallWith=ScriptState] any getDocumentCallbackNames();
+    [CallWith=ScriptState] any actionForSoundChannel(Uint8Array arg0);
+    void setBaseValue(CCObject arg0, CCNode arg1, DOMString arg2);
+    [CallWith=ScriptState] any getDocumentOutletNodes();
+    void addNode(CCNode arg0, CCDictionary arg1);
+    DOMString getLastCompletedSequenceName();
+    void setRootNode(CCNode arg0);
+    void runAnimationsForSequenceNamedTweenDuration(DOMString arg0, float arg1);
+    void addDocumentOutletName(DOMString arg0);
+    [CallWith=ScriptState] any getSequences();
+    CCSize getRootContainerSize();
+    void setDocumentControllerName(DOMString arg0);
+    CCSize getContainerSize(CCNode arg0);
+    [CallWith=ScriptState] any actionForCallbackChannel(Uint8Array arg0);
+    [CallWith=ScriptState] any getDocumentOutletNames();
+    void addDocumentCallbackControlEvents(unsigned long arg0);
+    boolean init();
+    [CallWith=ScriptState] any getKeyframeCallbacks();
+    [CallWith=ScriptState] any getDocumentCallbackControlEvents();
+    void setRootContainerSize(CCSize arg0);
+    void runAnimationsForSequenceIdTweenDuration(long arg0, float arg1);
+    DOMString getRunningSequenceName();
+    long getAutoPlaySequenceId();
+    void addDocumentCallbackName(DOMString arg0);
+    [CallWith=ScriptState] any getRootNode();
+    void addDocumentOutletNode(CCNode arg0);
+    void addDocumentCallbackNode(CCNode arg0);
+    void runAnimationsForSequenceNamed(DOMString arg0);
+    void setCallFunc(CCCallFunc arg0, DOMString arg1);
+    [CallWith=ScriptState] any getDocumentCallbackNodes();
+    void setSequences(CCArray arg0);
+    void debug();
+    DOMString getDocumentControllerName();
+};

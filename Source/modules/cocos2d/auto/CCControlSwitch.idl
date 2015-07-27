@@ -1,0 +1,22 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface CCControlSwitch : CCControl {
+    void setEnabled(boolean arg0);
+    void setOn(boolean arg0);
+    void setOn(boolean arg0, boolean arg1);
+    boolean isOn();
+    boolean initWithMaskSprite(CCSprite arg0, CCSprite arg1, CCSprite arg2, CCSprite arg3, CCLabelTTF arg4, CCLabelTTF arg5);
+    boolean initWithMaskSprite(CCSprite arg0, CCSprite arg1, CCSprite arg2, CCSprite arg3);
+    boolean hasMoved();
+    CCPoint locationFromTouch(CCTouch arg0);
+    [CallWith=ScriptState]  static any createInternal(CCSprite arg0, CCSprite arg1, CCSprite arg2, CCSprite arg3, CCLabelTTF arg4, CCLabelTTF arg5);
+    [CallWith=ScriptState]  static any createInternal(CCSprite arg0, CCSprite arg1, CCSprite arg2, CCSprite arg3);
+};

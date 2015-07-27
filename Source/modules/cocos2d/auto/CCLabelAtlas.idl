@@ -1,0 +1,21 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface CCLabelAtlas : CCAtlasNode {
+    void setString(DOMString arg0);
+    boolean initWithString(DOMString arg0, DOMString arg1);
+    boolean initWithString(DOMString arg0, DOMString arg1, unsigned long arg2, unsigned long arg3, unsigned long arg4);
+    boolean initWithString(DOMString arg0, CCTexture2D arg1, unsigned long arg2, unsigned long arg3, unsigned long arg4);
+    void updateAtlasValues();
+    DOMString getString();
+    [CallWith=ScriptState]  static any createInternal(DOMString arg0, DOMString arg1);
+    [CallWith=ScriptState]  static any createInternal(DOMString arg0, DOMString arg1, unsigned long arg2, unsigned long arg3, unsigned long arg4);
+    [Custom] void ctor();
+};

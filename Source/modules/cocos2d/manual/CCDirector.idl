@@ -1,0 +1,66 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface CCDirector : CCObject  {
+    void pause();
+    void setDelegate(CCDirectorDelegate arg0);
+    void setContentScaleFactor(float arg0);
+    float getContentScaleFactor();
+    CCSize getWinSizeInPixels();
+    float getDeltaTime();
+    void setGLDefaultValues();
+    void setActionManager(any arg0);
+    void setAlphaBlending(boolean arg0);
+    void popToRootScene();
+    [CallWith=ScriptState] any getNotificationNode();
+    CCSize getWinSize();
+    void end();
+    boolean isSendCleanupToScene();
+    CCPoint getVisibleOrigin();
+    void mainLoop();
+    void setDepthTest(boolean arg0);
+    float getSecondsPerFrame();
+    CCPoint convertToUI(CCPoint arg0);
+    void setDefaultValues();
+    boolean init();
+    void setScheduler(CCScheduler arg0);
+    void reshapeProjection(CCSize arg0);
+    void startAnimation();
+    [CallWith=ScriptState] any getRunningScene();
+    void setViewport();
+    void stopAnimation();
+    void popToSceneStackLevel(long arg0);
+    void resume();
+    boolean isNextDeltaTimeZero();
+    CCDirectorDelegate getDelegate();
+    void setOpenGLView(CCEGLView arg0);
+    CCPoint convertToGL(CCPoint arg0);
+    void purgeCachedData();
+    unsigned long getTotalFrames();
+    void runWithScene(any arg0);
+    void setNotificationNode(any arg0);
+    void drawScene();
+    void popScene();
+    boolean isDisplayStats();
+    void setProjection(short arg0);
+    float getZEye();
+    void setNextDeltaTimeZero(boolean arg0);
+    CCSize getVisibleSize();
+    [CallWith=ScriptState] any getScheduler();
+    void pushScene(any arg0);
+    double getAnimationInterval();
+    boolean isPaused();
+    void setDisplayStats(boolean arg0);
+    void replaceScene(any arg0);
+    void setAnimationInterval(double arg0);
+    [CallWith=ScriptState] any getActionManager();
+    [CallWith=ScriptState]  static any getInstance();
+    static void destroyDirector();
+};

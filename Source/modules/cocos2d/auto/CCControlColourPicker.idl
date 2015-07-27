@@ -1,0 +1,24 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface CCControlColourPicker : CCControl {
+    void setEnabled(boolean arg0);
+    [CallWith=ScriptState] any getHuePicker();
+    void setColor(ccColor3B arg0);
+    void hueSliderValueChanged(CCObject arg0, unsigned long arg1);
+    [CallWith=ScriptState] any getcolourPicker();
+    void setBackground(CCSprite arg0);
+    boolean init();
+    void setcolourPicker(CCControlSaturationBrightnessPicker arg0);
+    void colourSliderValueChanged(CCObject arg0, unsigned long arg1);
+    void setHuePicker(CCControlHuePicker arg0);
+    [CallWith=ScriptState] any getBackground();
+    [CallWith=ScriptState]  static any createInternal();
+};

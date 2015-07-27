@@ -1,0 +1,21 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor(optional float x = 0,
+                optional float y = 0,
+                optional float width = 0,
+                optional float height = 0),
+    NoInterfaceObject
+] interface CCRect : CCObject {
+    attribute CCPoint origin;
+    attribute CCSize  size;
+    attribute float x;
+    attribute float y;
+    attribute float width;
+    attribute float height;
+};

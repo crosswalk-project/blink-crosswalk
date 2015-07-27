@@ -1,0 +1,37 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface CCSpriteFrame : CCObject  {
+    void setRotated(boolean arg0);
+    void setTexture(CCTexture2D arg0);
+    CCPoint getOffset();
+    void setRectInPixels(CCRect arg0);
+    [CallWith=ScriptState] any getTexture();
+    CCRect getRect();
+    void setOffsetInPixels(CCPoint arg0);
+    CCRect getRectInPixels();
+    void setOriginalSize(CCSize arg0);
+    CCSize getOriginalSizeInPixels();
+    void setOriginalSizeInPixels(CCSize arg0);
+    void setOffset(CCPoint arg0);
+    boolean initWithTexture(CCTexture2D arg0, CCRect arg1, boolean arg2, CCPoint arg3, CCSize arg4);
+    boolean initWithTexture(CCTexture2D arg0, CCRect arg1);
+    boolean isRotated();
+    boolean initWithTextureFilename(DOMString arg0, CCRect arg1, boolean arg2, CCPoint arg3, CCSize arg4);
+    boolean initWithTextureFilename(DOMString arg0, CCRect arg1);
+    void setRect(CCRect arg0);
+    CCPoint getOffsetInPixels();
+    CCSize getOriginalSize();
+    [CallWith=ScriptState]  static any createInternal(DOMString arg0, CCRect arg1, boolean arg2, CCPoint arg3, CCSize arg4);
+    [CallWith=ScriptState]  static any createInternal(DOMString arg0, CCRect arg1);
+    [CallWith=ScriptState]  static any createWithTexture(CCTexture2D arg0, CCRect arg1, boolean arg2, CCPoint arg3, CCSize arg4);
+    [CallWith=ScriptState]  static any createWithTexture(CCTexture2D arg0, CCRect arg1);
+    [Custom] void ctor();
+};

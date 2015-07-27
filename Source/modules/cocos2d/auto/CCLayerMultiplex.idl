@@ -1,0 +1,17 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface CCLayerMultiplex : CCLayer {
+    boolean initWithArray(CCArray arg0);
+    void switchTo(unsigned long arg0);
+    void addLayer(any arg0);
+    void switchToAndReleaseMe(unsigned long arg0);
+    [Custom] void ctor();
+};

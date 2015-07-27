@@ -35,6 +35,7 @@
     '../build/scripts/scripts.gypi',
     '../bindings/core/core.gypi',  # core can depend on bindings/core, but not on bindings
     'core.gypi',
+    'cocos2d.gypi',
   ],
 
   'variables': {
@@ -321,6 +322,13 @@
         },
       },
       'conditions': [
+        ['enable_cocos2d==1', {
+          'direct_dependent_settings': {
+            'include_dirs': [
+              '<@(cocos2d_include_dirs)',
+            ],
+          },
+        }],
         ['disable_xslt==1', {
           'depencencies!': [
             '<(DEPTH)/third_party/libxslt/libxslt.gyp:libxslt',
@@ -457,6 +465,14 @@
       'dependencies': [
         'webcore_prerequisites',
       ],
+      'cflags_cc!': [
+        #'-fno-rtti',
+        '-Werror',
+      ],
+      'cflags!': [
+        '-fno-rtti',
+        '-Werror',
+      ],
       'sources': [
         '<@(webcore_dom_files)',
       ],
@@ -469,6 +485,14 @@
       'type': 'static_library',
       'dependencies': [
         'webcore_prerequisites',
+      ],
+      'cflags_cc!': [
+        #'-fno-rtti',
+        '-Werror',
+      ],
+      'cflags!': [
+        #'-fno-rtti',
+        '-Werror',
       ],
       'sources': [
         '<@(webcore_html_files)',
@@ -697,6 +721,16 @@
         ],
       },
       'conditions': [
+        ['enable_cocos2d==1', {
+          'dependencies': [
+            'cocos2d',
+          ],
+          'direct_dependent_settings': {
+            'include_dirs': [
+              '<@(cocos2d_include_dirs)',
+            ]
+          }
+        }],
         ['OS=="linux" and "WTF_USE_WEBAUDIO_IPP=1" in feature_defines', {
           'link_settings': {
             'ldflags': [

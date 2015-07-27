@@ -1,0 +1,29 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface Slider : Widget {
+    void setPercent(long arg0);
+    void loadSlidBallTextureNormal(DOMString arg0, short arg1);
+    void loadBarTexture(DOMString arg0, short arg1);
+    void loadProgressBarTexture(DOMString arg0, short arg1);
+    void loadSlidBallTextures(DOMString arg0, DOMString arg1, DOMString arg2, short arg3);
+    void setCapInsetProgressBarRebderer(CCRect arg0);
+    void setCapInsetsBarRenderer(CCRect arg0);
+    DOMString getDescription();
+    void setScale9Enabled(boolean arg0);
+    [CallWith=ScriptState] any getVirtualRenderer();
+    void setCapInsets(CCRect arg0);
+    void ignoreContentAdaptWithSize(boolean arg0);
+    void loadSlidBallTexturePressed(DOMString arg0, short arg1);
+    void loadSlidBallTextureDisabled(DOMString arg0, short arg1);
+    CCSize getContentSize();
+    long getPercent();
+    [CallWith=ScriptState]  static any createInternal();
+};

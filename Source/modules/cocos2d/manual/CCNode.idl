@@ -1,0 +1,137 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface CCNode : CCObject  {
+    void addChild(any arg0, long arg1);
+    void addChild(any arg0);
+    void addChild(any arg0, long arg1, long arg2);
+    boolean removeComponent(DOMString arg0);
+    void removeAllComponents();
+    [CallWith=ScriptState] any getShaderProgram();
+    [CallWith=ScriptState] any getChildren();
+    long getScriptHandler();
+    CCPoint convertToWorldSpaceAR(CCPoint arg0);
+    boolean isIgnoreAnchorPointForPosition();
+    boolean init();
+    void setRotation(float arg0);
+    void setZOrder(long arg0);
+    void setScaleY(float arg0);
+    void setScaleX(float arg0);
+    void unregisterScriptHandler();
+    long getTag();
+    CCAffineTransform getNodeToWorldTransform();
+    void removeChild(any arg0, boolean arg1);
+    void removeChild(any arg0);
+    CCPoint convertToWorldSpace(CCPoint arg0);
+    void setSkewX(float arg0);
+    void setSkewY(float arg0);
+    CCPoint convertTouchToNodeSpace(CCTouch arg0);
+    void removeAllChildren(boolean arg0);
+    void removeAllChildren();
+    float getRotationX();
+    float getRotationY();
+    void setParent(any arg0);
+    CCAffineTransform getNodeToParentTransform();
+    CCPoint convertToNodeSpace(CCPoint arg0);
+    [CallWith=ScriptState] any getGrid();
+    void setPosition(float arg0, float arg1);
+    void setPosition(any arg0);
+    void stopActionByTag(long arg0);
+    void reorderChild(any arg0, long arg1);
+    void setPositionY(float arg0);
+    void setPositionX(float arg0);
+    CCPoint getAnchorPoint();
+    unsigned long getNumberOfRunningActions();
+    void updateTransform();
+    boolean isVisible();
+    unsigned long getChildrenCount();
+    CCPoint convertToNodeSpaceAR(CCPoint arg0);
+    boolean addComponent(any arg0);
+    void visit();
+    void setShaderProgram(CCGLProgram arg0);
+    float getRotation();
+    void resumeSchedulerAndActions();
+    long getZOrder();
+    CCPoint getAnchorPointInPoints();
+    [CallWith=ScriptState] any runAction(any arg0);
+    void transform();
+    void setVertexZ(float arg0);
+    void setScheduler(CCScheduler arg0);
+    void stopAllActions();
+    float getSkewX();
+    float getSkewY();
+    void ignoreAnchorPointForPosition(boolean arg0);
+    [CallWith=ScriptState] any getActionByTag(long arg0);
+    void setRotationX(float arg0);
+    void setRotationY(float arg0);
+    void setAdditionalTransform(CCAffineTransform arg0);
+    [CallWith=ScriptState] any getScheduler();
+    unsigned long getOrderOfArrival();
+    void setActionManager(any arg0);
+    void getPosition(Uint8Array arg0, Uint8Array arg1);
+    CCPoint getPosition();
+    boolean isRunning();
+    [CallWith=ScriptState] any getParent();
+    float getPositionY();
+    float getPositionX();
+    void removeChildByTag(long arg0, boolean arg1);
+    void removeChildByTag(long arg0);
+    void setVisible(boolean arg0);
+    CCAffineTransform getParentToNodeTransform();
+    void pauseSchedulerAndActions();
+    float getVertexZ();
+    void setScale(float arg0, float arg1);
+    void setScale(float arg0);
+    [CallWith=ScriptState] any getChildByTag(long arg0);
+    void setOrderOfArrival(unsigned long arg0);
+    float getScaleY();
+    float getScaleX();
+    void cleanup();
+    [CallWith=ScriptState] any getComponent(DOMString arg0);
+    CCSize getContentSize();
+    CCRect getBoundingBox();
+    void draw();
+    void transformAncestors();
+    void setUserObject(CCObject arg0);
+    void registerScriptHandler(long arg0);
+    void removeFromParent(boolean arg0);
+    void removeFromParent();
+    CCPoint convertTouchToNodeSpaceAR(CCTouch arg0);
+    void update(float arg0);
+    void sortAllChildren();
+    CCAffineTransform getWorldToNodeTransform();
+    float getScale();
+    [CallWith=ScriptState] any getCamera();
+    void setTag(long arg0);
+    void stopAction(any arg0);
+    [CallWith=ScriptState] any getActionManager();
+    [CallWith=ScriptState]  static any createInternal();
+    void onEnter();
+    void onEnterTransitionDidFinish();
+    void onExit();
+    void onExitTransitionDidStart();
+
+    void setOnExitEventCallback(OnExitEventCallback callback);
+    void setOnEnterEventCallback(OnEnterEventCallback callback);
+    void setOnEnterTransitionDidFinishEventCallback(OnEnterTransitionDidFinishEventCallback callback);
+    void setOnExitTransitionDidStartEventCallback(OnExitTransitionDidStartEventCallback callback);
+    void setAnchorPointInternal(CCPoint p);
+    void setContentSizeInternal(CCSize size);
+    
+    void setTouchBeganCallback(OnTouchCallback callback);
+    void setTouchMovedCallback(OnTouchCallback callback);
+    void setTouchEndedCallback(OnTouchCallback callback);
+    void setTouchCancelledCallback(OnTouchCallback callback);
+    void setTouchesBeganCallback(OnTouchesCallback callback);
+    void setTouchesMovedCallback(OnTouchesCallback callback);
+    void setTouchesEndedCallback(OnTouchesCallback callback);
+    void setTouchesCancelledCallback(OnTouchesCallback callback);
+    [Custom] void ctor();
+};

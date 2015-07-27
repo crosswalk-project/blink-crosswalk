@@ -1,0 +1,35 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface CCControlSlider : CCControl {
+    CCPoint locationFromTouch(CCTouch arg0);
+    void setProgressSprite(CCSprite arg0);
+    float getMaximumAllowedValue();
+    float getMinimumAllowedValue();
+    float getMinimumValue();
+    void setThumbSprite(CCSprite arg0);
+    void setMinimumValue(float arg0);
+    void setMinimumAllowedValue(float arg0);
+    void setEnabled(boolean arg0);
+    void setValue(float arg0);
+    void setMaximumValue(float arg0);
+    void needsLayout();
+    [CallWith=ScriptState] any getBackgroundSprite();
+    boolean initWithSprites(CCSprite arg0, CCSprite arg1, CCSprite arg2);
+    float getMaximumValue();
+    boolean isTouchInside(CCTouch arg0);
+    float getValue();
+    [CallWith=ScriptState] any getThumbSprite();
+    [CallWith=ScriptState] any getProgressSprite();
+    void setBackgroundSprite(CCSprite arg0);
+    void setMaximumAllowedValue(float arg0);
+    [CallWith=ScriptState]  static any createInternal(CCSprite arg0, CCSprite arg1, CCSprite arg2);
+    [CallWith=ScriptState]  static any createInternal(DOMString arg0, DOMString arg1, DOMString arg2);
+};

@@ -1,0 +1,56 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface CCScale9Sprite : CCNodeRGBA {
+    CCRect getCapInsets();
+    void setOpacityModifyRGB(boolean arg0);
+    boolean updateWithBatchNode(CCSpriteBatchNode arg0, CCRect arg1, boolean arg2, CCRect arg3);
+    void setInsetBottom(float arg0);
+    boolean isOpacityModifyRGB();
+    boolean initWithSpriteFrameName(DOMString arg0);
+    boolean initWithSpriteFrameName(DOMString arg0, CCRect arg1);
+    void setInsetTop(float arg0);
+    void updateDisplayedOpacity(unsigned short arg0);
+    boolean init();
+    void setPreferredSize(CCSize arg0);
+    unsigned short getOpacity();
+    void setSpriteFrame(CCSpriteFrame arg0);
+    ccColor3B getColor();
+    boolean initWithBatchNode(CCSpriteBatchNode arg0, CCRect arg1, CCRect arg2);
+    boolean initWithBatchNode(CCSpriteBatchNode arg0, CCRect arg1, boolean arg2, CCRect arg3);
+    float getInsetBottom();
+    [CallWith=ScriptState] any resizableSpriteWithCapInsets(CCRect arg0);
+    void setOpacity(unsigned short arg0);
+    float getInsetRight();
+    CCSize getOriginalSize();
+    boolean initWithFile(DOMString arg0, CCRect arg1);
+    boolean initWithFile(DOMString arg0, CCRect arg1, CCRect arg2);
+    boolean initWithFile(CCRect arg0, DOMString arg1);
+    boolean initWithFile(DOMString arg0);
+    void setColor(ccColor3B arg0);
+    float getInsetTop();
+    void setInsetLeft(float arg0);
+    boolean initWithSpriteFrame(CCSpriteFrame arg0);
+    boolean initWithSpriteFrame(CCSpriteFrame arg0, CCRect arg1);
+    CCSize getPreferredSize();
+    void setCapInsets(CCRect arg0);
+    float getInsetLeft();
+    void updateDisplayedColor(ccColor3B arg0);
+    void setInsetRight(float arg0);
+    [CallWith=ScriptState]  static any createInternal(DOMString arg0, CCRect arg1);
+    [CallWith=ScriptState]  static any createInternal(DOMString arg0, CCRect arg1, CCRect arg2);
+    [CallWith=ScriptState]  static any createInternal(CCRect arg0, DOMString arg1);
+    [CallWith=ScriptState]  static any createInternal(DOMString arg0);
+    [CallWith=ScriptState]  static any createInternal();
+    [CallWith=ScriptState]  static any createWithSpriteFrameName(DOMString arg0);
+    [CallWith=ScriptState]  static any createWithSpriteFrameName(DOMString arg0, CCRect arg1);
+    [CallWith=ScriptState]  static any createWithSpriteFrame(CCSpriteFrame arg0);
+    [CallWith=ScriptState]  static any createWithSpriteFrame(CCSpriteFrame arg0, CCRect arg1);
+};

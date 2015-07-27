@@ -1,0 +1,24 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface CCSkin : CCSprite {
+    [CallWith=ScriptState] any getBone();
+    CCAffineTransform nodeToWorldTransform();
+    boolean initWithFile(DOMString arg0);
+    CCAffineTransform nodeToWorldTransformAR();
+    void updateTransform();
+    DOMString getDisplayName();
+    void updateArmatureTransform();
+    boolean initWithSpriteFrameName(DOMString arg0);
+    void setBone(CCBone arg0);
+    [CallWith=ScriptState]  static any createInternal(DOMString arg0);
+    [CallWith=ScriptState]  static any createInternal();
+    [CallWith=ScriptState]  static any createWithSpriteFrameName(DOMString arg0);
+};

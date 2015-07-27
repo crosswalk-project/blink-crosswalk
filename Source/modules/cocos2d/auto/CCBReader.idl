@@ -1,0 +1,31 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface CCBReader : CCObject  {
+    [CallWith=ScriptState] any getAnimationManager();
+    void setAnimationManager(CCBAnimationManager arg0);
+    void addOwnerOutletName(DOMString arg0);
+    [CallWith=ScriptState] any getOwnerCallbackNames();
+    void addDocumentCallbackControlEvents(unsigned long arg0);
+    void setCCBRootPath(DOMString arg0);
+    void addOwnerOutletNode(CCNode arg0);
+    [CallWith=ScriptState] any getOwnerCallbackNodes();
+    boolean readSoundKeyframesForSeq(Uint8Array arg0);
+    DOMString getCCBRootPath();
+    [CallWith=ScriptState] any getOwnerCallbackControlEvents();
+    [CallWith=ScriptState] any getOwnerOutletNodes();
+    DOMString readUTF8();
+    void addOwnerCallbackControlEvents(unsigned long arg0);
+    [CallWith=ScriptState] any getOwnerOutletNames();
+    boolean readCallbackKeyframesForSeq(Uint8Array arg0);
+    [CallWith=ScriptState] any getAnimationManagersForNodes();
+    [CallWith=ScriptState] any getNodesWithAnimationManagers();
+     static void setResolutionScale(float arg0);
+};

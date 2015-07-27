@@ -1,0 +1,16 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface CCTintTo : CCActionInterval {
+    void startWithTarget(any arg0);
+    boolean initWithDuration(float arg0, unsigned short arg1, unsigned short arg2, unsigned short arg3);
+    void update(float arg0);
+    [CallWith=ScriptState]  static any createInternal(float arg0, unsigned short arg1, unsigned short arg2, unsigned short arg3);
+};

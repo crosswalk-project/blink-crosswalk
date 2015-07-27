@@ -1,0 +1,28 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface CheckBox : Widget {
+    boolean getSelectedState();
+    void loadTextureBackGroundSelected(DOMString arg0, short arg1);
+    void loadTextureBackGroundDisabled(DOMString arg0, short arg1);
+    DOMString getDescription();
+    void setFlipY(boolean arg0);
+    void setFlipX(boolean arg0);
+    boolean isFlipX();
+    boolean isFlipY();
+    void loadTextureFrontCross(DOMString arg0, short arg1);
+    [CallWith=ScriptState] any getVirtualRenderer();
+    CCSize getContentSize();
+    void loadTextures(DOMString arg0, DOMString arg1, DOMString arg2, DOMString arg3, DOMString arg4, short arg5);
+    void loadTextureBackGround(DOMString arg0, short arg1);
+    void setSelectedState(boolean arg0);
+    void loadTextureFrontCrossDisabled(DOMString arg0, short arg1);
+    [CallWith=ScriptState]  static any createInternal();
+};

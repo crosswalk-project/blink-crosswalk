@@ -1,0 +1,15 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface CCEaseIn : CCEaseRateAction {
+    void update(float arg0);
+    [CallWith=ScriptState] any reverse();
+    [CallWith=ScriptState]  static any createInternal(any arg0, float arg1);
+};

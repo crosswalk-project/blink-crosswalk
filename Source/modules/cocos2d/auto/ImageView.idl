@@ -1,0 +1,25 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface ImageView : Widget {
+    [CallWith=ScriptState] any getVirtualRenderer();
+    void ignoreContentAdaptWithSize(boolean arg0);
+    void loadTexture(DOMString arg0, short arg1);
+    DOMString getDescription();
+    void setFlipY(boolean arg0);
+    void setFlipX(boolean arg0);
+    boolean isFlipX();
+    boolean isFlipY();
+    void setScale9Enabled(boolean arg0);
+    void setTextureRect(CCRect arg0);
+    void setCapInsets(CCRect arg0);
+    CCSize getContentSize();
+    [CallWith=ScriptState]  static any createInternal();
+};

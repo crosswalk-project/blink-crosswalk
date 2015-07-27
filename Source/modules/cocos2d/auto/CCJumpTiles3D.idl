@@ -1,0 +1,19 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface CCJumpTiles3D : CCTiledGrid3DAction {
+    boolean initWithDuration(float arg0, CCSize arg1, unsigned long arg2, float arg3);
+    void update(float arg0);
+    float getAmplitudeRate();
+    void setAmplitude(float arg0);
+    float getAmplitude();
+    void setAmplitudeRate(float arg0);
+    [CallWith=ScriptState]  static any createInternal(float arg0, CCSize arg1, unsigned long arg2, float arg3);
+};

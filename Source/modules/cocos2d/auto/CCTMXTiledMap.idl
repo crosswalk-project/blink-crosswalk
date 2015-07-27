@@ -1,0 +1,31 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface CCTMXTiledMap : CCNode {
+    void setObjectGroups(CCArray arg0);
+    void setTileSize(CCSize arg0);
+    void setMapSize(CCSize arg0);
+    CCSize getTileSize();
+    [CallWith=ScriptState] any getPropertiesForGID(long arg0);
+    [CallWith=ScriptState] any getObjectGroups();
+    boolean initWithXML(DOMString arg0, DOMString arg1);
+    boolean initWithTMXFile(DOMString arg0);
+    [CallWith=ScriptState] any getObjectGroup(DOMString arg0);
+    CCSize getMapSize();
+    [CallWith=ScriptState] any getProperties();
+    void setMapOrientation(long arg0);
+    void setProperties(CCDictionary arg0);
+    [CallWith=ScriptState] any getLayer(DOMString arg0);
+    long getMapOrientation();
+    [CallWith=ScriptState] any getProperty(DOMString arg0);
+    [CallWith=ScriptState]  static any createInternal(DOMString arg0);
+    [CallWith=ScriptState]  static any createWithXML(DOMString arg0, DOMString arg1);
+    [Custom] void ctor();
+};

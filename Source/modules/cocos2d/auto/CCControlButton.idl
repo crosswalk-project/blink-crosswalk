@@ -1,0 +1,69 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface CCControlButton : CCControl {
+    void setTitleColorDispatchTable(CCDictionary arg0);
+    void setZoomOnTouchDown(boolean arg0);
+    void setSelected(boolean arg0);
+    void setTitleLabel(CCNode arg0);
+    void setTitleTTFSizeForState(float arg0, unsigned long arg1);
+    void setAdjustBackgroundImage(boolean arg0);
+    void setHighlighted(boolean arg0);
+    void setBackgroundSpriteDispatchTable(CCDictionary arg0);
+    void setTitleLabelForState(CCNode arg0, unsigned long arg1);
+    void setTitleForState(CCString arg0, unsigned long arg1);
+    [CallWith=ScriptState] any getTitleDispatchTable();
+    void setLabelAnchorPoint(CCPoint arg0);
+    CCPoint getLabelAnchorPoint();
+    boolean initWithBackgroundSprite(CCScale9Sprite arg0);
+    float getTitleTTFSizeForState(unsigned long arg0);
+    void setTitleDispatchTable(CCDictionary arg0);
+    boolean isPushed();
+    void setOpacity(unsigned short arg0);
+    boolean init();
+    void setTitleTTFForState(DOMString arg0, unsigned long arg1);
+    void setPreferredSize(CCSize arg0);
+    long getHorizontalOrigin();
+    unsigned short getOpacity();
+    ccColor3B getCurrentTitleColor();
+    [CallWith=ScriptState] any getTitleColorDispatchTable();
+    void setEnabled(boolean arg0);
+    [CallWith=ScriptState] any getBackgroundSpriteForState(unsigned long arg0);
+    ccColor3B getColor();
+    void setMargins(long arg0, long arg1);
+    void needsLayout();
+    boolean initWithTitleAndFontNameAndFontSize(DOMString arg0, DOMString arg1, float arg2);
+    void setTitleBMFontForState(DOMString arg0, unsigned long arg1);
+    DOMString getTitleTTFForState(unsigned long arg0);
+    [CallWith=ScriptState] any getBackgroundSprite();
+    ccColor3B getTitleColorForState(unsigned long arg0);
+    void setTitleColorForState(ccColor3B arg0, unsigned long arg1);
+    boolean doesAdjustBackgroundImage();
+    void setBackgroundSpriteFrameForState(CCSpriteFrame arg0, unsigned long arg1);
+    void setBackgroundSpriteForState(CCScale9Sprite arg0, unsigned long arg1);
+    void setColor(ccColor3B arg0);
+    [CallWith=ScriptState] any getTitleLabelDispatchTable();
+    boolean initWithLabelAndBackgroundSprite(CCNode arg0, CCScale9Sprite arg1);
+    void setTitleLabelDispatchTable(CCDictionary arg0);
+    [CallWith=ScriptState] any getTitleLabel();
+    CCSize getPreferredSize();
+    long getVerticalMargin();
+    [CallWith=ScriptState] any getBackgroundSpriteDispatchTable();
+    [CallWith=ScriptState] any getTitleLabelForState(unsigned long arg0);
+    [CallWith=ScriptState] any getCurrentTitle();
+    DOMString getTitleBMFontForState(unsigned long arg0);
+    void setBackgroundSprite(CCScale9Sprite arg0);
+    boolean getZoomOnTouchDown();
+    [CallWith=ScriptState] any getTitleForState(unsigned long arg0);
+    [CallWith=ScriptState]  static any createInternal(DOMString arg0, DOMString arg1, float arg2);
+    [CallWith=ScriptState]  static any createInternal(CCNode arg0, CCScale9Sprite arg1);
+    [CallWith=ScriptState]  static any createInternal(CCScale9Sprite arg0);
+    [CallWith=ScriptState]  static any createInternal();
+};

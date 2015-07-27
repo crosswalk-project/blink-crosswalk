@@ -1,0 +1,49 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface CCComAudio : CCComponent {
+    void stopAllEffects();
+    boolean serialize(Uint8Array arg0);
+    float getEffectsVolume();
+    void stopEffect(unsigned long arg0);
+    float getBackgroundMusicVolume();
+    boolean willPlayBackgroundMusic();
+    void setBackgroundMusicVolume(float arg0);
+    void end();
+    boolean isEnabled();
+    void stopBackgroundMusic();
+    void stopBackgroundMusic(boolean arg0);
+    void pauseBackgroundMusic();
+    boolean isBackgroundMusicPlaying();
+    boolean init();
+    boolean isLoop();
+    void pauseAllEffects();
+    void setEnabled(boolean arg0);
+    void preloadBackgroundMusic(DOMString arg0);
+    void playBackgroundMusic(DOMString arg0);
+    void playBackgroundMusic(DOMString arg0, boolean arg1);
+    void playBackgroundMusic();
+    unsigned long playEffect(DOMString arg0);
+    unsigned long playEffect(DOMString arg0, boolean arg1);
+    unsigned long playEffect();
+    void resumeAllEffects();
+    void setLoop(boolean arg0);
+    void unloadEffect(DOMString arg0);
+    void rewindBackgroundMusic();
+    void preloadEffect(DOMString arg0);
+    void pauseEffect(unsigned long arg0);
+    void resumeBackgroundMusic();
+    void setFile(DOMString arg0);
+    void setEffectsVolume(float arg0);
+    DOMString getFile();
+    void resumeEffect(unsigned long arg0);
+    [CallWith=ScriptState]  static any createInternal();
+    [CallWith=ScriptState]  static any createInstance();
+};

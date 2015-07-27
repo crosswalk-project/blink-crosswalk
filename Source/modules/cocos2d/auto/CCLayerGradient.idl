@@ -1,0 +1,31 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface CCLayerGradient : CCLayerColor {
+    ccColor3B getStartColor();
+    boolean isCompressedInterpolation();
+    unsigned short getStartOpacity();
+    void setVector(CCPoint arg0);
+    void setStartOpacity(unsigned short arg0);
+    void setCompressedInterpolation(boolean arg0);
+    void setEndOpacity(unsigned short arg0);
+    CCPoint getVector();
+    boolean init();
+    void setEndColor(ccColor3B arg0);
+    boolean initWithColor(ccColor4B arg0, ccColor4B arg1, CCPoint arg2);
+    boolean initWithColor(ccColor4B arg0, ccColor4B arg1);
+    ccColor3B getEndColor();
+    unsigned short getEndOpacity();
+    void setStartColor(ccColor3B arg0);
+    [CallWith=ScriptState]  static any createInternal(ccColor4B arg0, ccColor4B arg1, CCPoint arg2);
+    [CallWith=ScriptState]  static any createInternal(ccColor4B arg0, ccColor4B arg1);
+    [CallWith=ScriptState]  static any createInternal();
+    [Custom] void ctor();
+};

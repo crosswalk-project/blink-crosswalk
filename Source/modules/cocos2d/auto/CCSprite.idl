@@ -1,0 +1,75 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface CCSprite : CCNodeRGBA {
+    void draw();
+    void addChild(any arg0, long arg1);
+    void addChild(any arg0);
+    void addChild(any arg0, long arg1, long arg2);
+    void setTexture(CCTexture2D arg0);
+    boolean isFlippedX();
+    [CallWith=ScriptState] any getTexture();
+    void setFlippedY(boolean arg0);
+    void setFlippedX(boolean arg0);
+    void setScaleY(float arg0);
+    void setScale(float arg0);
+    void setOpacity(unsigned short arg0);
+    void setDisplayFrameWithAnimationName(DOMString arg0, long arg1);
+    void setRotationY(float arg0);
+    void setOpacityModifyRGB(boolean arg0);
+    [CallWith=ScriptState] any getBatchNode();
+    boolean isTextureRectRotated();
+    boolean isOpacityModifyRGB();
+    void setTextureRect(CCRect arg0, boolean arg1, CCSize arg2);
+    void setTextureRect(CCRect arg0);
+    boolean init();
+    void setVertexZ(float arg0);
+    CCRect getTextureRect();
+    void updateDisplayedOpacity(unsigned short arg0);
+    boolean initWithSpriteFrameName(DOMString arg0);
+    boolean isFrameDisplayed(any arg0);
+    unsigned long getAtlasIndex();
+    void setRotation(float arg0);
+    void setDisplayFrame(any arg0);
+    CCPoint getOffsetPosition();
+    void setBatchNode(any arg0);
+    void setRotationX(float arg0);
+    void setScaleX(float arg0);
+    boolean initWithTexture(CCTexture2D arg0, CCRect arg1);
+    boolean initWithTexture(CCTexture2D arg0);
+    boolean initWithTexture(CCTexture2D arg0, CCRect arg1, boolean arg2);
+    void removeAllChildrenWithCleanup(boolean arg0);
+    void sortAllChildren();
+    void setAtlasIndex(unsigned long arg0);
+    void setVertexRect(CCRect arg0);
+    void setDirty(boolean arg0);
+    boolean isDirty();
+    void reorderChild(any arg0, long arg1);
+    void ignoreAnchorPointForPosition(boolean arg0);
+    boolean initWithFile(DOMString arg0, CCRect arg1);
+    boolean initWithFile(DOMString arg0);
+    void setColor(ccColor3B arg0);
+    boolean initWithSpriteFrame(any arg0);
+    void removeChild(any arg0, boolean arg1);
+    void updateTransform();
+    boolean isFlippedY();
+    void updateDisplayedColor(ccColor3B arg0);
+    void setSkewX(float arg0);
+    void setSkewY(float arg0);
+    void setVisible(boolean arg0);
+    [CallWith=ScriptState]  static any createInternal(DOMString arg0);
+    [CallWith=ScriptState]  static any createInternal();
+    [CallWith=ScriptState]  static any createInternal(DOMString arg0, CCRect arg1);
+    [CallWith=ScriptState]  static any createWithTexture(CCTexture2D arg0, CCRect arg1);
+    [CallWith=ScriptState]  static any createWithTexture(CCTexture2D arg0);
+    [CallWith=ScriptState]  static any createWithSpriteFrameName(DOMString arg0);
+    [CallWith=ScriptState]  static any createWithSpriteFrame(any arg0);
+    [Custom] void ctor();
+};

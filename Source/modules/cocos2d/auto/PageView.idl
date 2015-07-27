@@ -1,0 +1,27 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface PageView : Layout {
+    short getLayoutType();
+    long getCurPageIndex();
+    void addWidgetToPage(Widget arg0, long arg1, boolean arg2);
+    [CallWith=ScriptState] any getPage(long arg0);
+    void removePage(Layout arg0);
+    DOMString getDescription();
+    void insertPage(Layout arg0, long arg1);
+    void setLayoutType(short arg0);
+    void scrollToPage(long arg0);
+    void update(float arg0);
+    void removePageAtIndex(long arg0);
+    [CallWith=ScriptState] any getPages();
+    void removeAllPages();
+    void addPage(Layout arg0);
+    [CallWith=ScriptState]  static any createInternal();
+};

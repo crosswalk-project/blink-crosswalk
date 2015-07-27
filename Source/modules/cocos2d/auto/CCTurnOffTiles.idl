@@ -1,0 +1,20 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface CCTurnOffTiles : CCTiledGrid3DAction {
+    void turnOnTile(CCPoint arg0);
+    void startWithTarget(any arg0);
+    void turnOffTile(CCPoint arg0);
+    void shuffle(Uint8Array arg0, unsigned long arg1);
+    boolean initWithDuration(float arg0, CCSize arg1, unsigned long arg2);
+    void update(float arg0);
+    [CallWith=ScriptState]  static any createInternal(float arg0, CCSize arg1, unsigned long arg2);
+    [CallWith=ScriptState]  static any createInternal(float arg0, CCSize arg1);
+};

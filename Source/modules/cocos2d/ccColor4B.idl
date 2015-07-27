@@ -1,0 +1,16 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor(optional float r = 0, optional float g = 0, optional float b = 0, optional float a = 0),
+    NoInterfaceObject
+] interface ccColor4B : CCObject {
+    attribute float r;
+    attribute float g;
+    attribute float b;
+    attribute float a;
+};

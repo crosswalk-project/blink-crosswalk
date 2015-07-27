@@ -1,0 +1,32 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface CCAnimation : CCObject  {
+    unsigned long getLoops();
+    void setFrames(CCArray arg0);
+    [CallWith=ScriptState] any getFrames();
+    void addSpriteFrame(any arg0);
+    void setRestoreOriginalFrame(boolean arg0);
+    void setDelayPerUnit(float arg0);
+    boolean initWithAnimationFrames(CCArray arg0, float arg1, unsigned long arg2);
+    boolean initWithAnimationFrames(any[] frames, float arg1, unsigned long arg2);
+    
+    boolean init();
+    boolean initWithSpriteFrames(CCArray arg0, float arg1);
+    boolean initWithSpriteFrames(any[] frames, float arg1);
+    
+    void setLoops(unsigned long arg0);
+    void addSpriteFrameWithFile(DOMString arg0);
+    float getTotalDelayUnits();
+    float getDelayPerUnit();
+    boolean getRestoreOriginalFrame();
+    float getDuration();
+    void addSpriteFrameWithTexture(CCTexture2D arg0, CCRect arg1);
+};

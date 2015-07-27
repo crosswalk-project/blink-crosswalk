@@ -1,0 +1,24 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface CCMenuItem : CCNodeRGBA {
+     void setEnabled(boolean arg0);
+     void activate();
+     void unregisterScriptTapHandler();
+     boolean isEnabled();
+     void selected();
+     short getScriptTapHandler();
+     boolean isSelected();
+     void registerScriptTapHandler(short arg0);
+     void unselected();
+     CCRect rect();
+     void setMenuItemCallback(MenuItemCallback callback);
+    [Custom] void ctor();
+};

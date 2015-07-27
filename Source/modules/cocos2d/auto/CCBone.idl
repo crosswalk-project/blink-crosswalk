@@ -1,0 +1,55 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface CCBone : CCNodeRGBA {
+    CCAffineTransform nodeToWorldTransform();
+    boolean isTransformDirty();
+    void updateZOrder();
+    void setTransformDirty(boolean arg0);
+    [CallWith=ScriptState] any getDisplayRenderNode();
+    boolean isBlendDirty();
+    void addChildBone(CCBone arg0);
+    [CallWith=ScriptState] any getWorldInfo();
+    [CallWith=ScriptState] any getTween();
+    [CallWith=ScriptState] any getParentBone();
+    void updateColor();
+    void setChildArmature(CCArmature arg0);
+    DOMString getName();
+    void setOpacity(unsigned short arg0);
+    short getDisplayRenderNodeType();
+    void removeDisplay(long arg0);
+    void updateDisplayedOpacity(unsigned short arg0);
+    boolean init(DOMString arg0);
+    boolean init();
+    void setParentBone(CCBone arg0);
+    void setZOrder(long arg0);
+    boolean getIgnoreMovementBoneData();
+    void setIgnoreMovementBoneData(boolean arg0);
+    void setName(DOMString arg0);
+    void removeFromParent(boolean arg0);
+    [CallWith=ScriptState] any getChildArmature();
+    void update(float arg0);
+    void setDisplayManager(CCDisplayManager arg0);
+    void changeDisplayWithIndex(long arg0, boolean arg1);
+    void changeDisplayWithName(DOMString arg0, boolean arg1);
+    [CallWith=ScriptState] any getColliderBodyList();
+    void setArmature(CCArmature arg0);
+    void setBlendDirty(boolean arg0);
+    void addDisplay(CCNode arg0, long arg1);
+    void addDisplay(Uint8Array arg0, long arg1);
+    void setColor(ccColor3B arg0);
+    void removeChildBone(CCBone arg0, boolean arg1);
+    [CallWith=ScriptState] any getDisplayManager();
+    [CallWith=ScriptState] any getArmature();
+    CCAffineTransform nodeToArmatureTransform();
+    void updateDisplayedColor(ccColor3B arg0);
+    [CallWith=ScriptState]  static any createInternal(DOMString arg0);
+    [CallWith=ScriptState]  static any createInternal();
+};

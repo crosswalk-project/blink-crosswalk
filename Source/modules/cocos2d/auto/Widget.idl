@@ -1,0 +1,84 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface Widget : CCNodeRGBA {
+    void addChild(CCNode arg0, long arg1);
+    void addChild(CCNode arg0);
+    void addChild(CCNode arg0, long arg1, long arg2);
+    [CallWith=ScriptState] any getVirtualRenderer();
+    void setSizePercent(CCPoint arg0);
+    boolean isFlipX();
+    void setActionTag(long arg0);
+    DOMString getDescription();
+    float getLeftInParent();
+    void setUpdateEnabled(boolean arg0);
+    boolean isFlipY();
+    CCPoint getTouchEndPos();
+    [CallWith=ScriptState] any getChildren();
+    [CallWith=ScriptState] any getNodes();
+    [CallWith=ScriptState] any getChildByTag(long arg0);
+    DOMString getName();
+    boolean isIgnoreContentAdaptWithSize();
+    void updateSizeAndPosition();
+    float getBottomInParent();
+    long getActionTag();
+    [CallWith=ScriptState] any getLayoutParameter(short arg0);
+    short getPositionType();
+    void setName(DOMString arg0);
+    [CallWith=ScriptState] any getChildByName(DOMString arg0);
+    boolean isEnabled();
+    void removeNodeByTag(long arg0);
+    void removeAllChildren();
+    boolean isTouchEnabled();
+    CCSize getContentSize();
+    CCPoint getTouchStartPos();
+    void didNotSelectSelf();
+    void setFocused(boolean arg0);
+    void setTouchEnabled(boolean arg0);
+    [CallWith=ScriptState] any clone();
+    CCPoint getTouchMovePos();
+    void setEnabled(boolean arg0);
+    void setBrightStyle(short arg0);
+    void addNode(CCNode arg0, long arg1);
+    void addNode(CCNode arg0);
+    void addNode(CCNode arg0, long arg1, long arg2);
+    void removeFromParent();
+    void setLayoutParameter(LayoutParameter arg0);
+    void setFlipY(boolean arg0);
+    void setFlipX(boolean arg0);
+    void removeAllChildrenWithCleanup(boolean arg0);
+    void sortAllChildren();
+    void ignoreContentAdaptWithSize(boolean arg0);
+    boolean isBright();
+    boolean clippingParentAreaContainPoint(CCPoint arg0);
+    CCPoint getSizePercent();
+    void removeFromParentAndCleanup(boolean arg0);
+    float getTopInParent();
+    boolean isUpdateEnabled();
+    short getWidgetType();
+    [CallWith=ScriptState] any getNodeByTag(long arg0);
+    CCSize getSize();
+    float getRightInParent();
+    short getSizeType();
+    void removeNode(CCNode arg0);
+    void removeAllNodes();
+    CCPoint getWorldPosition();
+    CCPoint getPositionPercent();
+    void removeChildByTag(long arg0, boolean arg1);
+    boolean hitTest(CCPoint arg0);
+    void removeChild(CCNode arg0, boolean arg1);
+    boolean isFocused();
+    void setSizeType(short arg0);
+    void checkChildInfo(long arg0, Widget arg1, CCPoint arg2);
+    void setSize(CCSize arg0);
+    void setBright(boolean arg0);
+    unsigned long getChildrenCount();
+    [CallWith=ScriptState]  static any createInternal();
+};

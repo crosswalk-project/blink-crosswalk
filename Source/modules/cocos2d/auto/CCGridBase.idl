@@ -1,0 +1,33 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface CCGridBase : CCObject  {
+    void setGridSize(CCSize arg0);
+    void calculateVertexPoints();
+    void afterDraw(any arg0);
+    void beforeDraw();
+    boolean isTextureFlipped();
+    CCSize getGridSize();
+    CCPoint getStep();
+    void set2DProjection();
+    void setStep(CCPoint arg0);
+    void setTextureFlipped(boolean arg0);
+    void blit();
+    void setActive(boolean arg0);
+    long getReuseGrid();
+    boolean initWithSize(CCSize arg0);
+    boolean initWithSize(CCSize arg0, CCTexture2D arg1, boolean arg2);
+    void setReuseGrid(long arg0);
+    boolean isActive();
+    void reuse();
+    [CallWith=ScriptState]  static any createInternal(CCSize arg0);
+    [CallWith=ScriptState]  static any createInternal(CCSize arg0, CCTexture2D arg1, boolean arg2);
+    [Custom] void ctor();
+};

@@ -1,0 +1,31 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface ListView : ScrollView {
+    unsigned long getIndex(Widget arg0);
+    void removeAllItems();
+    void setGravity(short arg0);
+    void pushBackCustomItem(Widget arg0);
+    void setDirection(short arg0);
+    [CallWith=ScriptState] any getItems();
+    DOMString getDescription();
+    void removeItem(long arg0);
+    long getCurSelectedIndex();
+    void insertDefaultItem(long arg0);
+    void sortAllChildren();
+    void setItemsMargin(float arg0);
+    void removeLastItem();
+    [CallWith=ScriptState] any getItem(unsigned long arg0);
+    void setItemModel(Widget arg0);
+    void requestRefreshView();
+    void pushBackDefaultItem();
+    void insertCustomItem(Widget arg0, long arg1);
+    [CallWith=ScriptState]  static any createInternal();
+};

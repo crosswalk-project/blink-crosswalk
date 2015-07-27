@@ -1,0 +1,18 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface ActionManager : CCObject  {
+    [CallWith=ScriptState] any playActionByName(DOMString arg0, DOMString arg1, CCCallFunc arg2);
+    [CallWith=ScriptState] any playActionByName(DOMString arg0, DOMString arg1);
+    [CallWith=ScriptState] any getActionByName(DOMString arg0, DOMString arg1);
+    void releaseActions();
+     static void purge();
+    [CallWith=ScriptState]  static any getInstance();
+};

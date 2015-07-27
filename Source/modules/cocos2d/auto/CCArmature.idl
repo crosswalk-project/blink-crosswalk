@@ -1,0 +1,41 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface CCArmature : CCNodeRGBA {
+    [CallWith=ScriptState] any getBone(DOMString arg0);
+    void changeBoneParent(CCBone arg0, DOMString arg1);
+    void setAnimation(CCArmatureAnimation arg0);
+    [CallWith=ScriptState] any getBoneAtPoint(float arg0, float arg1);
+    [CallWith=ScriptState] any getBatchNode();
+    void setVersion(float arg0);
+    void updateOffsetPoint();
+    [CallWith=ScriptState] any getParentBone();
+    void setName(DOMString arg0);
+    void removeBone(CCBone arg0, boolean arg1);
+    boolean getArmatureTransformDirty();
+    DOMString getName();
+    boolean init(DOMString arg0);
+    boolean init();
+    boolean init(DOMString arg0, CCBone arg1);
+    void setParentBone(CCBone arg0);
+    void drawContour();
+    void setBatchNode(CCBatchNode arg0);
+    void draw();
+    CCAffineTransform nodeToParentTransform();
+    void addBone(CCBone arg0, DOMString arg1);
+    void update(float arg0);
+    CCRect boundingBox();
+    float getVersion();
+    [CallWith=ScriptState] any getAnimation();
+    [CallWith=ScriptState] any getBoneDic();
+    [CallWith=ScriptState]  static any createInternal(DOMString arg0);
+    [CallWith=ScriptState]  static any createInternal();
+    [CallWith=ScriptState]  static any createInternal(DOMString arg0, CCBone arg1);
+};

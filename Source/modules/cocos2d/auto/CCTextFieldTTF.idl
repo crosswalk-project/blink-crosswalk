@@ -1,0 +1,28 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface CCTextFieldTTF : CCLabelTTF {
+    long getCharCount();
+    void setSecureTextEntry(boolean arg0);
+    DOMString getString();
+    ccColor3B getColorSpaceHolder();
+    boolean initWithPlaceHolder(DOMString arg0, DOMString arg1, float arg2);
+    boolean initWithPlaceHolder(DOMString arg0, CCSize arg1, short arg2, DOMString arg3, float arg4);
+    DOMString getPlaceHolder();
+    void setColorSpaceHolder(ccColor3B arg0);
+    boolean detachWithIME();
+    void setPlaceHolder(DOMString arg0);
+    boolean isSecureTextEntry();
+    void setString(DOMString arg0);
+    boolean attachWithIME();
+    [CallWith=ScriptState]  static any textFieldWithPlaceHolder(DOMString arg0, DOMString arg1, float arg2);
+    [CallWith=ScriptState]  static any textFieldWithPlaceHolder(DOMString arg0, CCSize arg1, short arg2, DOMString arg3, float arg4);
+    [Custom] void ctor();
+};

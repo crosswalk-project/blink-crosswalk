@@ -1,0 +1,33 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface CCEditBox : CCControlButton {
+    void setAnchorPoint(CCPoint arg0);
+    DOMString getText();
+    void setPlaceholderFontName(DOMString arg0);
+    DOMString getPlaceHolder();
+    void setFontName(DOMString arg0);
+    void setPlaceholderFontSize(long arg0);
+    void setInputMode(short arg0);
+    void setPlaceholderFontColor(ccColor3B arg0);
+    void setFontColor(ccColor3B arg0);
+    void setPlaceholderFont(DOMString arg0, long arg1);
+    void setFontSize(long arg0);
+    boolean initWithSizeAndBackgroundSprite(CCSize arg0, CCScale9Sprite arg1);
+    void setPlaceHolder(DOMString arg0);
+    void setReturnType(short arg0);
+    void setInputFlag(short arg0);
+    long getMaxLength();
+    void setText(DOMString arg0);
+    void setMaxLength(long arg0);
+    void setFont(DOMString arg0, long arg1);
+    void setVisible(boolean arg0);
+    [CallWith=ScriptState]  static any createInternal(CCSize arg0, CCScale9Sprite arg1, CCScale9Sprite arg2, CCScale9Sprite arg3);
+};

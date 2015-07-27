@@ -1,0 +1,33 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface CCControlPotentiometer : CCControl {
+    void setPreviousLocation(CCPoint arg0);
+    void setProgressTimer(CCProgressTimer arg0);
+    void potentiometerMoved(CCPoint arg0);
+    float getMinimumValue();
+    void setThumbSprite(CCSprite arg0);
+    CCPoint getPreviousLocation();
+    void setEnabled(boolean arg0);
+    void setValue(float arg0);
+    void setMaximumValue(float arg0);
+    void setMinimumValue(float arg0);
+    void potentiometerEnded(CCPoint arg0);
+    float distanceBetweenPointAndPoint(CCPoint arg0, CCPoint arg1);
+    [CallWith=ScriptState] any getProgressTimer();
+    float getMaximumValue();
+    float angleInDegreesBetweenLineFromPoint_toPoint_toLineFromPoint_toPoint(CCPoint arg0, CCPoint arg1, CCPoint arg2, CCPoint arg3);
+    boolean isTouchInside(CCTouch arg0);
+    float getValue();
+    void potentiometerBegan(CCPoint arg0);
+    [CallWith=ScriptState] any getThumbSprite();
+    boolean initWithTrackSprite_ProgressTimer_ThumbSprite(CCSprite arg0, CCProgressTimer arg1, CCSprite arg2);
+    [CallWith=ScriptState]  static any createInternal(DOMString arg0, DOMString arg1, DOMString arg2);
+};

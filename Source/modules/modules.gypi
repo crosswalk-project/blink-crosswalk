@@ -1,6 +1,7 @@
 {
   'includes': [
     '../core/core_generated.gypi',
+    'cocos2d.gypi',
     'modules_generated.gypi',
   ],
   'variables': {
@@ -175,6 +176,9 @@
       'webmidi/MIDISuccessCallback.idl',
       'websockets/CloseEvent.idl',
       'websockets/WebSocket.idl',
+      '<@(cocos2d_modules_idl_files)',
+      '<@(cocos2d_extensions_modules_idl_files)',
+      '<@(cocos2d_studio_modules_idl_files)',
     ],
     # 'partial interface' or target (right side of) 'implements'
     'modules_dependency_idl_files': [
@@ -252,7 +256,7 @@
       'serviceworkers/ServiceWorkerClientQueryParams.idl',
       'webmidi/MIDIOptions.idl',
     ],
-    'generated_modules_files': [
+    'generated_modules_files': [          
       # .cpp files from make_modules_generated actions.
       '<(blink_modules_output_dir)/EventModules.cpp',
       '<(blink_modules_output_dir)/EventModulesHeaders.h',
@@ -1059,6 +1063,18 @@
           'webdatabase/InspectorDatabaseResource.cpp',
           'webdatabase/InspectorDatabaseResource.h',
         ],
+      }],
+      ['enable_cocos2d==1',{
+        'modules_dependency_idl_files': [
+          'cocos2d/WindowCocos2d.idl',
+        ],
+        'modules_files': [
+          'cocos2d/DOMWindowCocos2d.cpp',
+          'cocos2d/DOMWindowCocos2d.h',
+          '<@(cocos2d_modules_files)',
+          '<@(cocos2d_extensions_modules_files)',
+          '<@(cocos2d_studio_modules_files)',
+        ]
       }],
     ],
   },

@@ -1,0 +1,33 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface CCDisplayManager : CCObject  {
+    [CallWith=ScriptState] any getDisplayRenderNode();
+    CCPoint getAnchorPointInPoints();
+    short getDisplayRenderNodeType();
+    void removeDisplay(long arg0);
+    void setForceChangeDisplay(boolean arg0);
+    boolean init(CCBone arg0);
+    CCSize getContentSize();
+    CCRect getBoundingBox();
+    void addDisplay(CCNode arg0, long arg1);
+    void addDisplay(Uint8Array arg0, long arg1);
+    boolean containPoint(float arg0, float arg1);
+    boolean containPoint(CCPoint arg0);
+    void changeDisplayWithIndex(long arg0, boolean arg1);
+    void changeDisplayWithName(DOMString arg0, boolean arg1);
+    long getCurrentDisplayIndex();
+    void setVisible(boolean arg0);
+    CCPoint getAnchorPoint();
+    [CallWith=ScriptState] any getDecorativeDisplayList();
+    boolean isVisible();
+    boolean getForceChangeDisplay();
+    [CallWith=ScriptState]  static any createInternal(CCBone arg0);
+};

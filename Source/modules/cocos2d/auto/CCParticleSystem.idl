@@ -1,0 +1,119 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface CCParticleSystem : CCNode {
+    float getStartSizeVar();
+    [CallWith=ScriptState] any getTexture();
+    boolean isFull();
+    [CallWith=ScriptState] any getBatchNode();
+    ccColor4F getStartColor();
+    short getPositionType();
+    void setPosVar(CCPoint arg0);
+    float getEndSpin();
+    void setRotatePerSecondVar(float arg0);
+    float getStartSpinVar();
+    float getEndSpinVar();
+    void stopSystem();
+    boolean init();
+    float getEndSizeVar();
+    void setRotation(float arg0);
+    void setTangentialAccel(float arg0);
+    void setScaleY(float arg0);
+    void setScaleX(float arg0);
+    float getRadialAccel();
+    void setStartRadius(float arg0);
+    void setRotatePerSecond(float arg0);
+    void setEndSize(float arg0);
+    CCPoint getGravity();
+    float getTangentialAccel();
+    void setEndRadius(float arg0);
+    float getAngle();
+    float getSpeed();
+    void setEndColor(ccColor4F arg0);
+    void setStartSpin(float arg0);
+    void setDuration(float arg0);
+    boolean initWithTotalParticles(unsigned long arg0);
+    void setTexture(CCTexture2D arg0);
+    CCPoint getPosVar();
+    void updateWithNoTime();
+    boolean isBlendAdditive();
+    float getAngleVar();
+    void setPositionType(short arg0);
+    float getEndRadius();
+    CCPoint getSourcePosition();
+    void setLifeVar(float arg0);
+    void setTotalParticles(unsigned long arg0);
+    void setEndColorVar(ccColor4F arg0);
+    unsigned long getAtlasIndex();
+    float getStartSize();
+    void setStartSpinVar(float arg0);
+    void resetSystem();
+    void setAtlasIndex(unsigned long arg0);
+    void setTangentialAccelVar(float arg0);
+    void setEndRadiusVar(float arg0);
+    boolean isActive();
+    void setRadialAccelVar(float arg0);
+    void setStartSize(float arg0);
+    void setSpeed(float arg0);
+    float getStartSpin();
+    float getRotatePerSecond();
+    void setEmitterMode(long arg0);
+    float getDuration();
+    void setSourcePosition(CCPoint arg0);
+    float getRadialAccelVar();
+    void setBlendAdditive(boolean arg0);
+    void setLife(float arg0);
+    void setAngleVar(float arg0);
+    void setRotationIsDir(boolean arg0);
+    void setEndSizeVar(float arg0);
+    void setAngle(float arg0);
+    void setBatchNode(any arg0);
+    float getTangentialAccelVar();
+    long getEmitterMode();
+    void setEndSpinVar(float arg0);
+    boolean initWithFile(DOMString arg0);
+    float getSpeedVar();
+    void setStartColor(ccColor4F arg0);
+    float getRotatePerSecondVar();
+    float getEndSize();
+    float getLife();
+    void setSpeedVar(float arg0);
+    void setAutoRemoveOnFinish(boolean arg0);
+    void setGravity(CCPoint arg0);
+    void postStep();
+    void setEmissionRate(float arg0);
+    ccColor4F getEndColorVar();
+    boolean getRotationIsDir();
+    void setScale(float arg0);
+    float getEmissionRate();
+    ccColor4F getEndColor();
+    float getLifeVar();
+    void setStartSizeVar(float arg0);
+    void setOpacityModifyRGB(boolean arg0);
+    boolean addParticle();
+    boolean getOpacityModifyRGB();
+    float getStartRadius();
+    unsigned long getParticleCount();
+    float getStartRadiusVar();
+    void setStartColorVar(ccColor4F arg0);
+    void setEndSpin(float arg0);
+    void update(float arg0);
+    void setRadialAccel(float arg0);
+    boolean initWithDictionary(CCDictionary arg0, DOMString arg1);
+    boolean initWithDictionary(CCDictionary arg0);
+    boolean isAutoRemoveOnFinish();
+    unsigned long getTotalParticles();
+    void setStartRadiusVar(float arg0);
+    float getEndRadiusVar();
+    ccColor4F getStartColorVar();
+    [CallWith=ScriptState]  static any createInternal(DOMString arg0);
+    [CallWith=ScriptState]  static any createWithTotalParticles(unsigned long arg0);
+    [Custom] void ctor();
+};

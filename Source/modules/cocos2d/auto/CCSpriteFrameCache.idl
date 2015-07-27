@@ -1,0 +1,25 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface CCSpriteFrameCache : CCObject  {
+    void addSpriteFrames(DOMString arg0, DOMString arg1);
+    void addSpriteFrames(DOMString arg0);
+    void addSpriteFrames(DOMString arg0, CCTexture2D arg1);
+    void addSpriteFrame(any arg0, DOMString arg1);
+    void removeUnusedSpriteFrames();
+    [CallWith=ScriptState] any getSpriteFrame(DOMString arg0);
+    void removeSpriteFramesFromFile(DOMString arg0);
+    boolean init();
+    void removeSpriteFrames();
+    void removeSpriteFramesFromTexture(CCTexture2D arg0);
+    void removeSpriteFrameByName(DOMString arg0);
+     static void purgeSharedSpriteFrameCache();
+    [CallWith=ScriptState]  static any getInstance();
+};

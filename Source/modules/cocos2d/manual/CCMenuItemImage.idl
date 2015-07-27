@@ -1,0 +1,22 @@
+// Copyright (c) 2014 The Chromium Authors. All rights reserved.
+// Copyright (c) 2015 Intel Corporation. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+[
+    Conditional=COCOS2D,
+    WillBeGarbageCollected,
+    Constructor,
+    NoInterfaceObject
+] interface CCMenuItemImage : CCMenuItemSprite {
+    void setDisabledSpriteFrame(any arg0);
+    void setSelectedSpriteFrame(any arg0);
+    boolean init();
+    void setNormalSpriteFrame(any arg0);
+    void initWithNormalImage(DOMString normalImage,
+                              DOMString selectedImage,
+                              DOMString disabledImage,
+                              any target,
+                              MenuItemCallback callback);
+    [Custom] void ctor();
+};
