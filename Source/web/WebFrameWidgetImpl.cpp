@@ -47,7 +47,9 @@
 #include "platform/NotImplemented.h"
 #include "public/web/WebBeginFrameArgs.h"
 #include "public/web/WebWidgetClient.h"
+#ifndef DISABLE_INSPECTOR
 #include "web/WebDevToolsAgentImpl.h"
+#endif
 #include "web/WebInputEventConversion.h"
 #include "web/WebLocalFrameImpl.h"
 #include "web/WebPluginContainerImpl.h"
@@ -104,7 +106,9 @@ WebFrameWidgetImpl::~WebFrameWidgetImpl()
 
 void WebFrameWidgetImpl::close()
 {
+#ifndef DISABLE_INSPECTOR
     WebDevToolsAgentImpl::webFrameWidgetImplClosed(this);
+#endif
     ASSERT(allInstances().contains(this));
     allInstances().remove(this);
 
@@ -371,10 +375,11 @@ bool WebFrameWidgetImpl::handleInputEvent(const WebInputEvent& inputEvent)
 {
 
     TRACE_EVENT1("input", "WebFrameWidgetImpl::handleInputEvent", "type", inputTypeToName(inputEvent.type).ascii());
-
+#ifndef DISABLE_INSPECTOR
     WebDevToolsAgentImpl* devTools = m_localRoot ? m_localRoot->devToolsAgentImpl() : nullptr;
     if (devTools && devTools->handleInputEvent(inputEvent))
         return true;
+#endif
 
     // Report the event to be NOT processed by WebKit, so that the browser can handle it appropriately.
     if (m_ignoreInputEvents)

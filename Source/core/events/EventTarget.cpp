@@ -37,7 +37,9 @@
 #include "core/dom/ExceptionCode.h"
 #include "core/editing/Editor.h"
 #include "core/events/Event.h"
+#ifndef DISABLE_INSPECTOR
 #include "core/inspector/InspectorInstrumentation.h"
+#endif
 #include "core/frame/LocalDOMWindow.h"
 #include "core/frame/UseCounter.h"
 #include "platform/EventDispatchForbiddenScope.h"
@@ -349,12 +351,15 @@ void EventTarget::fireEventListeners(Event* event, EventTargetData* d, EventList
         ExecutionContext* context = executionContext();
         if (!context)
             break;
-
+#ifndef DISABLE_INSPECTOR
         InspectorInstrumentationCookie cookie = InspectorInstrumentation::willHandleEvent(this, event, registeredListener.listener.get(), registeredListener.useCapture);
+#endif
         // To match Mozilla, the AT_TARGET phase fires both capturing and bubbling
         // event listeners, even though that violates some versions of the DOM spec.
         registeredListener.listener->handleEvent(context, event);
+#ifndef DISABLE_INSPECTOR
         InspectorInstrumentation::didHandleEvent(cookie);
+#endif
     }
     d->firingEventIterators->removeLast();
 }

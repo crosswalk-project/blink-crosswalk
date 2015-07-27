@@ -1,5 +1,11 @@
 {
   'variables': {
+    'web_files_inspector': [
+      'WebDevToolsAgentImpl.cpp',
+      'WebDevToolsAgentImpl.h',
+      'WebDevToolsFrontendImpl.cpp',
+      'WebDevToolsFrontendImpl.h',
+    ],
     'web_files': [
       'AssertMatchingEnums.cpp',
       'AssociatedURLLoader.cpp',

@@ -49,7 +49,9 @@
 #include "core/html/DocumentNameCollection.h"
 #include "core/html/HTMLCollection.h"
 #include "core/html/HTMLIFrameElement.h"
+#ifndef DISABLE_INSPECTOR
 #include "core/inspector/InspectorInstrumentation.h"
+#endif
 #include "core/loader/DocumentLoader.h"
 #include "core/loader/FrameLoader.h"
 #include "core/loader/FrameLoaderClient.h"
@@ -110,7 +112,9 @@ void WindowProxy::disposeContext(GlobalDetachmentBehavior behavior)
         LocalFrame* frame = toLocalFrame(m_frame);
         // The embedder could run arbitrary code in response to the willReleaseScriptContext callback, so all disposing should happen after it returns.
         frame->loader().client()->willReleaseScriptContext(context, m_world->worldId());
+#ifndef DISABLE_INSPECTOR
         InspectorInstrumentation::willReleaseScriptContext(frame, m_scriptState.get());
+#endif
     }
 
     m_document.clear();
@@ -254,7 +258,9 @@ bool WindowProxy::initialize()
     }
     if (m_frame->isLocalFrame()) {
         LocalFrame* frame = toLocalFrame(m_frame);
+#ifndef DISABLE_INSPECTOR
         InspectorInstrumentation::didCreateScriptContext(frame, m_scriptState.get(), origin, m_world->worldId());
+#endif
         frame->loader().client()->didCreateScriptContext(context, m_world->extensionGroup(), m_world->worldId());
     }
     return true;

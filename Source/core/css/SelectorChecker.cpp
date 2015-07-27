@@ -50,7 +50,9 @@
 #include "core/html/HTMLSelectElement.h"
 #include "core/html/parser/HTMLParserIdioms.h"
 #include "core/html/track/vtt/VTTElement.h"
+#ifndef DISABLE_INSPECTOR
 #include "core/inspector/InspectorInstrumentation.h"
+#endif
 #include "core/layout/LayoutObject.h"
 #include "core/layout/LayoutScrollbar.h"
 #include "core/page/FocusController.h"
@@ -1201,8 +1203,10 @@ bool SelectorChecker::checkScrollbarPseudoClass(const SelectorCheckingContext& c
 
 bool SelectorChecker::matchesFocusPseudoClass(const Element& element)
 {
+#ifndef DISABLE_INSPECTOR
     if (InspectorInstrumentation::forcePseudoState(const_cast<Element*>(&element), CSSSelector::PseudoFocus))
         return true;
+#endif
     return element.focused() && isFrameFocused(element);
 }
 

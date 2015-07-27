@@ -45,7 +45,9 @@
 #include "core/html/HTMLFrameOwnerElement.h"
 #include "core/html/HTMLTagCollection.h"
 #include "core/html/RadioNodeList.h"
+#ifndef DISABLE_INSPECTOR
 #include "core/inspector/InspectorInstrumentation.h"
+#endif
 #include "core/layout/LayoutInline.h"
 #include "core/layout/LayoutText.h"
 #include "core/layout/LayoutTheme.h"
@@ -217,7 +219,9 @@ PassRefPtrWillBeRawPtr<Node> ContainerNode::insertBefore(PassRefPtrWillBeRawPtr<
         return newChild;
     }
 
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::willInsertDOMNode(this);
+#endif
 
     ChildListMutationScope mutation(*this);
     for (const auto& targetNode : targets) {
@@ -387,7 +391,9 @@ PassRefPtrWillBeRawPtr<Node> ContainerNode::replaceChild(PassRefPtrWillBeRawPtr<
         return child;
     }
 
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::willInsertDOMNode(this);
+#endif
 
     // Add the new child(ren).
     for (const auto& targetNode : targets) {
@@ -726,7 +732,9 @@ PassRefPtrWillBeRawPtr<Node> ContainerNode::appendChild(PassRefPtrWillBeRawPtr<N
         return newChild;
     }
 
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::willInsertDOMNode(this);
+#endif
 
     // Now actually add the child(ren).
     ChildListMutationScope mutation(*this);
@@ -790,7 +798,9 @@ void ContainerNode::notifyNodeInserted(Node& root, ChildrenChangeSource source)
     ASSERT(!EventDispatchForbiddenScope::isEventDispatchForbidden());
     ASSERT(!root.isShadowRoot());
 
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::didInsertDOMNode(&root);
+#endif
 
     RefPtrWillBeRawPtr<Node> protect(this);
     RefPtrWillBeRawPtr<Node> protectNode(root);
@@ -1222,13 +1232,17 @@ static void dispatchChildInsertionEvents(Node& child)
 static void dispatchChildRemovalEvents(Node& child)
 {
     if (child.isInShadowTree()) {
+#ifndef DISABLE_INSPECTOR
         InspectorInstrumentation::willRemoveDOMNode(&child);
+#endif
         return;
     }
 
     ASSERT(!EventDispatchForbiddenScope::isEventDispatchForbidden());
 
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::willRemoveDOMNode(&child);
+#endif
 
     RefPtrWillBeRawPtr<Node> c(child);
     RefPtrWillBeRawPtr<Document> document(child.document());

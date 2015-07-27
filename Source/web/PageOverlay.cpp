@@ -38,7 +38,9 @@
 #include "public/platform/WebLayer.h"
 #include "public/web/WebPageOverlay.h"
 #include "public/web/WebViewClient.h"
+#ifndef DISABLE_INSPECTOR
 #include "web/WebDevToolsAgentImpl.h"
+#endif
 #include "web/WebGraphicsContextImpl.h"
 #include "web/WebViewImpl.h"
 
@@ -62,8 +64,10 @@ void PageOverlay::clear()
 
     if (m_layer) {
         m_layer->removeFromParent();
+#ifndef DISABLE_INSPECTOR
         if (WebDevToolsAgentImpl* devTools = m_viewImpl->mainFrameDevToolsAgentImpl())
             devTools->didRemovePageOverlay(m_layer.get());
+#endif
         m_layer = nullptr;
     }
 }
@@ -76,8 +80,10 @@ void PageOverlay::update()
         m_layer = GraphicsLayer::create(m_viewImpl->graphicsLayerFactory(), this);
         m_layer->setDrawsContent(true);
 
+#ifndef DISABLE_INSPECTOR
         if (WebDevToolsAgentImpl* devTools = m_viewImpl->mainFrameDevToolsAgentImpl())
             devTools->willAddPageOverlay(m_layer.get());
+#endif
 
         // This is required for contents of overlay to stay in sync with the page while scrolling.
         WebLayer* platformLayer = m_layer->platformLayer();

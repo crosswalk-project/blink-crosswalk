@@ -130,12 +130,16 @@ void ConsoleBase::markTimeline(const String& title)
 
 void ConsoleBase::profile(const String& title)
 {
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::consoleProfile(context(), title);
+#endif
 }
 
 void ConsoleBase::profileEnd(const String& title)
 {
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::consoleProfileEnd(context(), title);
+#endif
 }
 
 void ConsoleBase::time(const String& title)

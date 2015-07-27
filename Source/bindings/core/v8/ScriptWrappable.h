@@ -203,6 +203,18 @@ public: \
 private: \
     static const WrapperTypeInfo& s_wrapperTypeInfo
 
+#ifdef DISABLE_INSPECTOR
+#define DEFINE_WRAPPERTYPEINFO_DISABLE_INSPECTOR()                \
+public: \
+    virtual const WrapperTypeInfo* wrapperTypeInfo() const override \
+    { \
+        return nullptr; \
+    } \
+private: \
+    static const WrapperTypeInfo& s_wrapperTypeInfo
+#endif
+
+
 // Defines 'wrapperTypeInfo' virtual method, which should never be called.
 //
 // This macro is used when there exists a class hierarchy with a root class

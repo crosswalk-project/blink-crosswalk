@@ -39,7 +39,9 @@
 #include "core/fetch/UniqueIdentifier.h"
 #include "core/frame/FrameConsole.h"
 #include "core/frame/LocalFrame.h"
+#ifndef DISABLE_INSPECTOR
 #include "core/inspector/InspectorInstrumentation.h"
+#endif
 #include "core/inspector/InspectorTraceEvents.h"
 #include "core/loader/FrameLoader.h"
 #include "core/loader/FrameLoaderClient.h"
@@ -141,7 +143,10 @@ PingLoader::PingLoader(LocalFrame* frame, ResourceRequest& request, const FetchI
     frame->loader().client()->didDispatchPingLoader(request.url());
 
     TRACE_EVENT_INSTANT1(TRACE_DISABLED_BY_DEFAULT("devtools.timeline"), "ResourceSendRequest", TRACE_EVENT_SCOPE_THREAD, "data", InspectorSendRequestEvent::data(m_identifier, frame, request));
+
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::willSendRequest(frame, m_identifier, frame->loader().documentLoader(), request, ResourceResponse(), initiatorInfo);
+#endif
 
     m_loader = adoptPtr(Platform::current()->createURLLoader());
     ASSERT(m_loader);
@@ -173,8 +178,11 @@ void PingLoader::didReceiveResponse(WebURLLoader*, const WebURLResponse& respons
 {
     if (Page* page = this->page()) {
         TRACE_EVENT_INSTANT1(TRACE_DISABLED_BY_DEFAULT("devtools.timeline"), "ResourceFinish", TRACE_EVENT_SCOPE_THREAD, "data", InspectorResourceFinishEvent::data(m_identifier, 0, true));
+
+#ifndef DISABLE_INSPECTOR
         const ResourceResponse& resourceResponse = response.toResourceResponse();
         InspectorInstrumentation::didReceiveResourceResponse(page->deprecatedLocalMainFrame(), m_identifier, 0, resourceResponse, 0);
+#endif
         didFailLoading(page);
     }
     dispose();
@@ -219,7 +227,9 @@ void PingLoader::timeout(Timer<PingLoader>*)
 void PingLoader::didFailLoading(Page* page)
 {
     LocalFrame* frame = page->deprecatedLocalMainFrame();
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::didFailLoading(frame, m_identifier, ResourceError::cancelledError(m_url));
+#endif
     frame->console().didFailLoading(m_identifier, ResourceError::cancelledError(m_url));
 }
 

@@ -28,7 +28,9 @@
 #include "core/dom/PseudoElement.h"
 
 #include "core/dom/FirstLetterPseudoElement.h"
+#ifndef DISABLE_INSPECTOR
 #include "core/inspector/InspectorInstrumentation.h"
+#endif
 #include "core/layout/LayoutObject.h"
 #include "core/layout/LayoutQuote.h"
 #include "core/style/ContentData.h"
@@ -100,7 +102,9 @@ void PseudoElement::dispose()
 {
     ASSERT(parentOrShadowHostElement());
 
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::pseudoElementDestroyed(this);
+#endif
 
     ASSERT(!nextSibling());
     ASSERT(!previousSibling());

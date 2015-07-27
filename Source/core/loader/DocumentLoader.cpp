@@ -45,7 +45,9 @@
 #include "core/html/HTMLFrameOwnerElement.h"
 #include "core/html/parser/HTMLDocumentParser.h"
 #include "core/html/parser/TextResourceDecoder.h"
+#ifndef DISABLE_INSPECTOR
 #include "core/inspector/InspectorInstrumentation.h"
+#endif
 #include "core/loader/FrameFetchContext.h"
 #include "core/loader/FrameLoader.h"
 #include "core/loader/FrameLoaderClient.h"
@@ -162,7 +164,9 @@ const KURL& DocumentLoader::urlForHistory() const
 void DocumentLoader::mainReceivedError(const ResourceError& error)
 {
     ASSERT(!error.isNull());
+#ifndef DISABLE_INSPECTOR
     ASSERT(!mainResourceLoader() || !mainResourceLoader()->defersLoading() || InspectorInstrumentation::isDebuggerPaused(m_frame));
+#endif
     m_applicationCacheHost->failedLoadingMainResource();
     if (!frameLoader())
         return;
@@ -219,8 +223,9 @@ void DocumentLoader::notifyFinished(Resource* resource)
 
 void DocumentLoader::finishedLoading(double finishTime)
 {
+#ifndef DISABLE_INSPECTOR
     ASSERT(!mainResourceLoader() || !mainResourceLoader()->defersLoading() || InspectorInstrumentation::isDebuggerPaused(m_frame));
-
+#endif
     RefPtr<DocumentLoader> protect(this);
 
     double responseEndTime = finishTime;
@@ -393,8 +398,9 @@ bool DocumentLoader::shouldContinueForResponse() const
 
 void DocumentLoader::cancelLoadAfterXFrameOptionsOrCSPDenied(const ResourceResponse& response)
 {
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::continueAfterXFrameOptionsDenied(m_frame, this, mainResourceIdentifier(), response);
-
+#endif
     frame()->document()->enforceSandboxFlags(SandboxOrigin);
     if (FrameOwner* owner = frame()->owner())
         owner->dispatchLoad();
@@ -451,7 +457,9 @@ void DocumentLoader::responseReceived(Resource* resource, const ResourceResponse
         m_mainResource->setDataBufferingPolicy(BufferData);
 
     if (!shouldContinueForResponse()) {
+#ifndef DISABLE_INSPECTOR
         InspectorInstrumentation::continueWithPolicyIgnore(m_frame, this, m_mainResource->identifier(), m_response);
+#endif
         cancelMainResourceLoad(ResourceError::cancelledError(m_request.url()));
         return;
     }

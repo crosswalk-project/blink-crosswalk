@@ -37,7 +37,9 @@
 #include "core/frame/LocalFrame.h"
 #include "core/frame/Settings.h"
 #include "core/html/HTMLIFrameElement.h"
+#ifndef DISABLE_INSPECTOR
 #include "core/inspector/InspectorInstrumentation.h"
+#endif
 #include "core/layout/LayoutPart.h"
 #include "core/layout/LayoutVideo.h"
 #include "core/layout/LayoutView.h"
@@ -406,9 +408,11 @@ void DeprecatedPaintLayerCompositor::updateIfNeeded()
     for (unsigned i = 0; i < layersNeedingPaintInvalidation.size(); i++)
         forceRecomputePaintInvalidationRectsIncludingNonCompositingDescendants(layersNeedingPaintInvalidation[i]->layoutObject());
 
+#ifndef DISABLE_INSPECTOR
     // Inform the inspector that the layer tree has changed.
     if (m_layoutView.frame()->isMainFrame())
         InspectorInstrumentation::layerTreeDidChange(m_layoutView.frame());
+#endif
 }
 
 bool DeprecatedPaintLayerCompositor::allocateOrClearCompositedDeprecatedPaintLayerMapping(DeprecatedPaintLayer* layer, const CompositingStateTransitionType compositedLayerUpdate)

@@ -37,7 +37,9 @@
 #include "public/platform/WebString.h"
 #include "public/platform/WebURL.h"
 #include "web/DevToolsEmulator.h"
+#ifndef DISABLE_INSPECTOR
 #include "web/WebDevToolsAgentImpl.h"
+#endif
 
 namespace blink {
 

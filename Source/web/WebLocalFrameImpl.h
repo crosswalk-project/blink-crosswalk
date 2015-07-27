@@ -54,7 +54,9 @@ class SharedWorkerRepositoryClientImpl;
 class TextFinder;
 class WebAutofillClient;
 class WebDataSourceImpl;
+#ifndef DISABLE_INSPECTOR
 class WebDevToolsAgentImpl;
+#endif
 class WebDevToolsFrontendImpl;
 class WebFrameClient;
 class WebFrameWidgetImpl;
@@ -277,8 +279,9 @@ public:
     FrameView* frameView() const { return frame() ? frame()->view() : 0; }
 
     InspectorOverlay* inspectorOverlay();
+#ifndef DISABLE_INSPECTOR
     WebDevToolsAgentImpl* devToolsAgentImpl() const { return m_devToolsAgent.get(); }
-
+#endif
     // Getters for the impls corresponding to Get(Provisional)DataSource. They
     // may return 0 if there is no corresponding data source.
     WebDataSourceImpl* dataSourceImpl() const;
@@ -357,7 +360,9 @@ private:
     RefPtrWillBeMember<LocalFrame> m_frame;
 
     OwnPtrWillBeMember<InspectorOverlay> m_inspectorOverlay;
+#ifndef DISABLE_INSPECTOR
     OwnPtrWillBeMember<WebDevToolsAgentImpl> m_devToolsAgent;
+#endif
 
     // This is set if the frame is the root of a local frame tree, and requires a widget for layout.
     WebFrameWidgetImpl* m_frameWidget;

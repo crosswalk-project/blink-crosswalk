@@ -28,7 +28,9 @@
 #include "core/frame/DOMTimer.h"
 
 #include "core/dom/ExecutionContext.h"
+#ifndef DISABLE_INSPECTOR
 #include "core/inspector/InspectorInstrumentation.h"
+#endif
 #include "core/inspector/InspectorTraceEvents.h"
 #include "platform/TraceEvent.h"
 #include "wtf/CurrentTime.h"
@@ -69,7 +71,10 @@ int DOMTimer::install(ExecutionContext* context, PassOwnPtrWillBeRawPtr<Schedule
 {
     int timeoutID = context->timers()->installNewTimeout(context, action, timeout, singleShot);
     TRACE_EVENT_INSTANT1(TRACE_DISABLED_BY_DEFAULT("devtools.timeline"), "TimerInstall", TRACE_EVENT_SCOPE_THREAD, "data", InspectorTimerInstallEvent::data(context, timeoutID, timeout, singleShot));
+
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::didInstallTimer(context, timeoutID, timeout, singleShot);
+#endif
     return timeoutID;
 }
 
@@ -77,7 +82,9 @@ void DOMTimer::removeByID(ExecutionContext* context, int timeoutID)
 {
     context->timers()->removeTimeoutByID(timeoutID);
     TRACE_EVENT_INSTANT1(TRACE_DISABLED_BY_DEFAULT("devtools.timeline"), "TimerRemove", TRACE_EVENT_SCOPE_THREAD, "data", InspectorTimerRemoveEvent::data(context, timeoutID));
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::didRemoveTimer(context, timeoutID);
+#endif
 }
 
 DOMTimer::DOMTimer(ExecutionContext* context, PassOwnPtrWillBeRawPtr<ScheduledAction> action, int interval, bool singleShot, int timeoutID)
@@ -120,8 +127,9 @@ void DOMTimer::fired()
     UserGestureIndicator gestureIndicator(m_userGestureToken.release());
 
     TRACE_EVENT1(TRACE_DISABLED_BY_DEFAULT("devtools.timeline"), "TimerFire", "data", InspectorTimerFireEvent::data(context, m_timeoutID));
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentationCookie cookie = InspectorInstrumentation::willFireTimer(context, m_timeoutID);
-
+#endif
     // Simple case for non-one-shot timers.
     if (isActive()) {
         if (repeatInterval() && repeatInterval() < minimumInterval) {
@@ -132,8 +140,9 @@ void DOMTimer::fired()
 
         // No access to member variables after this point, it can delete the timer.
         m_action->execute(context);
-
+#ifndef DISABLE_INSPECTOR
         InspectorInstrumentation::didFireTimer(cookie);
+#endif
 
         return;
     }
@@ -147,7 +156,9 @@ void DOMTimer::fired()
 
     action->execute(context);
 
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::didFireTimer(cookie);
+#endif
     TRACE_EVENT_INSTANT1(TRACE_DISABLED_BY_DEFAULT("devtools.timeline"), "UpdateCounters", TRACE_EVENT_SCOPE_THREAD, "data", InspectorUpdateCountersEvent::data());
 
     // ExecutionContext might be already gone when we executed action->execute().

@@ -38,7 +38,9 @@
 #include "core/frame/LocalFrame.h"
 #include "core/frame/csp/ContentSecurityPolicy.h"
 #include "core/html/HTMLFormElement.h"
+#ifndef DISABLE_INSPECTOR
 #include "core/inspector/InspectorInstrumentation.h"
+#endif
 #include "core/loader/DocumentLoader.h"
 #include "core/loader/FormSubmission.h"
 #include "core/loader/FrameLoadRequest.h"
@@ -362,7 +364,9 @@ void NavigationScheduler::timerFired(Timer<NavigationScheduler>*)
     if (!m_frame->page())
         return;
     if (m_frame->page()->defersLoading()) {
+#ifndef DISABLE_INSPECTOR
         InspectorInstrumentation::frameClearedScheduledNavigation(m_frame);
+#endif
         return;
     }
 
@@ -370,7 +374,9 @@ void NavigationScheduler::timerFired(Timer<NavigationScheduler>*)
 
     OwnPtrWillBeRawPtr<ScheduledNavigation> redirect(m_redirect.release());
     redirect->fire(m_frame);
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::frameClearedScheduledNavigation(m_frame);
+#endif
 }
 
 void NavigationScheduler::schedule(PassOwnPtrWillBeRawPtr<ScheduledNavigation> redirect)
@@ -405,13 +411,17 @@ void NavigationScheduler::startTimer()
         return;
 
     m_timer.startOneShot(m_redirect->delay(), FROM_HERE);
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::frameScheduledNavigation(m_frame, m_redirect->delay());
+#endif
 }
 
 void NavigationScheduler::cancel()
 {
+#ifndef DISABLE_INSPECTOR
     if (m_timer.isActive())
         InspectorInstrumentation::frameClearedScheduledNavigation(m_frame);
+#endif
     m_timer.stop();
     m_redirect.clear();
 }

@@ -28,7 +28,9 @@
 #include "core/html/HTMLInputElement.h"
 #include "core/html/forms/ColorChooser.h"
 #include "core/html/forms/DateTimeChooser.h"
+#ifndef DISABLE_INSPECTOR
 #include "core/inspector/InspectorInstrumentation.h"
+#endif
 #include "core/layout/HitTestResult.h"
 #include "core/page/ChromeClient.h"
 #include "core/page/FrameTree.h"
@@ -190,9 +192,13 @@ bool Chrome::runBeforeUnloadConfirmPanel(const String& message, LocalFrame* fram
     // otherwise cause the load to continue while we're in the middle of executing JavaScript.
     ScopedPageLoadDeferrer deferrer;
 
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentationCookie cookie = InspectorInstrumentation::willRunJavaScriptDialog(frame, message);
+#endif
     bool ok = m_client->runBeforeUnloadConfirmPanel(message, frame);
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::didRunJavaScriptDialog(cookie);
+#endif
     return ok;
 }
 
@@ -213,9 +219,13 @@ void Chrome::runJavaScriptAlert(LocalFrame* frame, const String& message)
     ASSERT(frame);
     notifyPopupOpeningObservers();
 
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentationCookie cookie = InspectorInstrumentation::willRunJavaScriptDialog(frame, message);
+#endif
     m_client->runJavaScriptAlert(frame, message);
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::didRunJavaScriptDialog(cookie);
+#endif
 }
 
 bool Chrome::runJavaScriptConfirm(LocalFrame* frame, const String& message)
@@ -229,10 +239,13 @@ bool Chrome::runJavaScriptConfirm(LocalFrame* frame, const String& message)
 
     ASSERT(frame);
     notifyPopupOpeningObservers();
-
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentationCookie cookie = InspectorInstrumentation::willRunJavaScriptDialog(frame, message);
+#endif
     bool ok = m_client->runJavaScriptConfirm(frame, message);
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::didRunJavaScriptDialog(cookie);
+#endif
     return ok;
 }
 
@@ -248,9 +261,13 @@ bool Chrome::runJavaScriptPrompt(LocalFrame* frame, const String& prompt, const 
     ASSERT(frame);
     notifyPopupOpeningObservers();
 
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentationCookie cookie = InspectorInstrumentation::willRunJavaScriptDialog(frame, prompt);
+#endif
     bool ok = m_client->runJavaScriptPrompt(frame, prompt, defaultValue, result);
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::didRunJavaScriptDialog(cookie);
+#endif
 
     return ok;
 }

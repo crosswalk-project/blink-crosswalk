@@ -40,7 +40,9 @@
 #include "core/dom/ExecutionContext.h"
 #include "core/events/ProgressEvent.h"
 #include "core/fileapi/File.h"
+#ifndef DISABLE_INSPECTOR
 #include "core/inspector/InspectorInstrumentation.h"
+#endif
 #include "platform/Logging.h"
 #include "platform/Supplementable.h"
 #include "wtf/CurrentTime.h"
@@ -97,8 +99,11 @@ public:
         ThrottlingController* controller = from(context);
         if (!controller)
             return;
-
+#ifndef DISABLE_INSPECTOR
         reader->m_asyncOperationId = InspectorInstrumentation::traceAsyncOperationStarting(context, "FileReader");
+#else
+        reader->m_asyncOperationId = 0;
+#endif
         controller->pushReader(reader);
     }
 
@@ -113,7 +118,9 @@ public:
 
     static void finishReader(ExecutionContext* context, FileReader* reader, FinishReaderType nextStep)
     {
+#ifndef DISABLE_INSPECTOR
         InspectorInstrumentation::traceAsyncOperationCompleted(context, reader->m_asyncOperationId);
+#endif
 
         ThrottlingController* controller = from(context);
         if (!controller)
@@ -453,6 +460,7 @@ void FileReader::didFail(FileError::ErrorCode errorCode)
 
 void FileReader::fireEvent(const AtomicString& type)
 {
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentationCookie cookie = InspectorInstrumentation::traceAsyncCallbackStarting(executionContext(), m_asyncOperationId);
     if (!m_loader) {
         dispatchEvent(ProgressEvent::create(type, false, 0, 0));
@@ -466,6 +474,7 @@ void FileReader::fireEvent(const AtomicString& type)
         dispatchEvent(ProgressEvent::create(type, false, m_loader->bytesLoaded(), 0));
 
     InspectorInstrumentation::traceAsyncCallbackCompleted(cookie);
+#endif
 }
 
 DEFINE_TRACE(FileReader)

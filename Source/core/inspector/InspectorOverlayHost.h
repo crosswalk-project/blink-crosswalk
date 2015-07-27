@@ -36,7 +36,11 @@
 namespace blink {
 
 class InspectorOverlayHost final : public RefCountedWillBeGarbageCollectedFinalized<InspectorOverlayHost>, public ScriptWrappable {
+#ifndef DISABLE_INSPECTOR
     DEFINE_WRAPPERTYPEINFO();
+#else
+    DEFINE_WRAPPERTYPEINFO_DISABLE_INSPECTOR();
+#endif
 public:
     static PassRefPtrWillBeRawPtr<InspectorOverlayHost> create()
     {

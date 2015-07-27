@@ -112,7 +112,13 @@ public:
         return nullptr;
     }
 
-    bool needsMainthreadDataCopy() override { return InspectorInstrumentation::hasFrontends(); }
+    bool needsMainthreadDataCopy() override {
+#ifndef DISABLE_INSPECTOR
+        return InspectorInstrumentation::hasFrontends();
+#else
+        return false;
+#endif
+    }
     void acceptMainthreadDataNotification(const char* data, int dataLength, int encodedDataLength) override
     {
         ASSERT(!data || needsMainthreadDataCopy());

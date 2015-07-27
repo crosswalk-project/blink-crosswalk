@@ -32,7 +32,9 @@
 #include "core/events/Event.h"
 #include "core/frame/LocalDOMWindow.h"
 #include "core/frame/FrameView.h"
+#ifndef DISABLE_INSPECTOR
 #include "core/inspector/InspectorInstrumentation.h"
+#endif
 #include "core/inspector/InspectorTraceEvents.h"
 #include "core/loader/DocumentLoader.h"
 #include "platform/Logging.h"
@@ -126,7 +128,9 @@ void ScriptedAnimationController::dispatchEvents(const AtomicString& eventInterf
         else
             eventTarget->dispatchEvent(events[i]);
 
+#ifndef DISABLE_INSPECTOR
         InspectorInstrumentation::didRemoveEvent(eventTarget, events[i].get());
+#endif
     }
 }
 
@@ -175,7 +179,9 @@ void ScriptedAnimationController::serviceScriptedAnimations(double monotonicTime
 
 void ScriptedAnimationController::enqueueEvent(PassRefPtrWillBeRawPtr<Event> event)
 {
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::didEnqueueEvent(event->target(), event.get());
+#endif
     m_eventQueue.append(event);
     scheduleAnimationIfNeeded();
 }

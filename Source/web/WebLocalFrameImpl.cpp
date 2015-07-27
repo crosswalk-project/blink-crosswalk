@@ -220,7 +220,9 @@
 #include "web/SuspendableScriptExecutor.h"
 #include "web/TextFinder.h"
 #include "web/WebDataSourceImpl.h"
+#ifndef DISABLE_INSPECTOR
 #include "web/WebDevToolsAgentImpl.h"
+#endif
 #include "web/WebFrameWidgetImpl.h"
 #include "web/WebPluginContainerImpl.h"
 #include "web/WebRemoteFrameImpl.h"
@@ -588,11 +590,12 @@ WebRemoteFrame* WebLocalFrameImpl::toWebRemoteFrame()
 void WebLocalFrameImpl::close()
 {
     m_client = nullptr;
-
+#ifndef DISABLE_INSPECTOR
     if (m_devToolsAgent) {
         m_devToolsAgent->dispose();
         m_devToolsAgent.clear();
     }
+#endif
 
 #if ENABLE(OILPAN)
     m_selfKeepAlive.clear();
@@ -1632,7 +1635,9 @@ WebLocalFrameImpl::~WebLocalFrameImpl()
 DEFINE_TRACE(WebLocalFrameImpl)
 {
     visitor->trace(m_frame);
+#ifndef DISABLE_INSPECTOR
     visitor->trace(m_devToolsAgent);
+#endif
     visitor->trace(m_inspectorOverlay);
     visitor->trace(m_textFinder);
     visitor->trace(m_printContext);
@@ -1958,6 +1963,7 @@ WebAutofillClient* WebLocalFrameImpl::autofillClient()
 
 void WebLocalFrameImpl::setDevToolsAgentClient(WebDevToolsAgentClient* devToolsClient)
 {
+#ifndef DISABLE_INSPECTOR
     if (devToolsClient) {
         m_devToolsAgent = WebDevToolsAgentImpl::create(this, devToolsClient);
     } else {
@@ -1965,6 +1971,7 @@ void WebLocalFrameImpl::setDevToolsAgentClient(WebDevToolsAgentClient* devToolsC
         m_devToolsAgent->dispose();
         m_devToolsAgent.clear();
     }
+#endif
 }
 
 InspectorOverlay* WebLocalFrameImpl::inspectorOverlay()
@@ -1976,7 +1983,11 @@ InspectorOverlay* WebLocalFrameImpl::inspectorOverlay()
 
 WebDevToolsAgent* WebLocalFrameImpl::devToolsAgent()
 {
+#ifndef DISABLE_INSPECTOR
     return m_devToolsAgent.get();
+#else
+    return nullptr;
+#endif
 }
 
 void WebLocalFrameImpl::sendPings(const WebNode& linkNode, const WebURL& destinationURL)
@@ -2061,8 +2072,10 @@ void WebLocalFrameImpl::requestRunTask(WebSuspendableTask* task) const
 
 void WebLocalFrameImpl::willBeDetached()
 {
+#ifndef DISABLE_INSPECTOR
     if (m_devToolsAgent)
         m_devToolsAgent->willBeDestroyed();
+#endif
 }
 
 void WebLocalFrameImpl::willDetachParent()

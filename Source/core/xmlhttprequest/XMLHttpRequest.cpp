@@ -54,7 +54,9 @@
 #include "core/html/HTMLDocument.h"
 #include "core/html/parser/TextResourceDecoder.h"
 #include "core/inspector/ConsoleMessage.h"
+#ifndef DISABLE_INSPECTOR
 #include "core/inspector/InspectorInstrumentation.h"
+#endif
 #include "core/inspector/InspectorTraceEvents.h"
 #include "core/loader/ThreadableLoader.h"
 #include "core/page/Chrome.h"
@@ -825,8 +827,9 @@ void XMLHttpRequest::send(const ArrayBufferOrArrayBufferViewOrBlobOrDocumentOrSt
         send(exceptionState);
         return;
     }
-
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::willSendXMLHttpRequest(executionContext(), url());
+#endif
     if (data.isArrayBuffer()) {
         send(data.getAsArrayBuffer().get(), exceptionState);
         return;
@@ -858,7 +861,9 @@ void XMLHttpRequest::send(const ArrayBufferOrArrayBufferViewOrBlobOrDocumentOrSt
 
 void XMLHttpRequest::send(ExceptionState& exceptionState)
 {
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::willSendXMLHttpRequest(executionContext(), url());
+#endif
     send(String(), exceptionState);
 }
 
@@ -1041,7 +1046,9 @@ void XMLHttpRequest::createRequest(PassRefPtr<FormData> httpBody, ExceptionState
     request.setRequestContext(WebURLRequest::RequestContextXMLHttpRequest);
     request.setFetchCredentialsMode(m_includeCredentials ? WebURLRequest::FetchCredentialsModeInclude : WebURLRequest::FetchCredentialsModeSameOrigin);
 
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::willLoadXHR(&executionContext, this, this, m_method, m_url, m_async, httpBody ? httpBody->deepCopy() : nullptr, m_requestHeaders, m_includeCredentials);
+#endif
 
     if (httpBody) {
         ASSERT(m_method != "GET");
@@ -1170,7 +1177,9 @@ bool XMLHttpRequest::internalAbort()
 
     clearVariablesForLoading();
 
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::didFailXHRLoading(executionContext(), this, this);
+#endif
 
     if (m_responseLegacyStream && m_state != DONE)
         m_responseLegacyStream->abort();
@@ -1249,8 +1258,10 @@ void XMLHttpRequest::dispatchProgressEvent(const AtomicString& type, long long r
 
     m_progressEventThrottle.dispatchProgressEvent(type, lengthComputable, loaded, total);
 
+#ifndef DISABLE_INSPECTOR
     if (type == EventTypeNames::loadend)
         InspectorInstrumentation::didDispatchXHRLoadendEvent(executionContext(), this);
+#endif
 }
 
 void XMLHttpRequest::dispatchProgressEventFromSnapshot(const AtomicString& type)
@@ -1630,7 +1641,9 @@ void XMLHttpRequest::notifyParserStopped()
 
 void XMLHttpRequest::endLoading()
 {
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::didFinishXHRLoading(executionContext(), this, this, m_loaderIdentifier, m_responseText, m_method, m_url);
+#endif
 
     if (m_loader)
         m_loader = nullptr;

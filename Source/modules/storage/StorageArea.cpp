@@ -34,7 +34,9 @@
 #include "core/frame/LocalFrame.h"
 #include "core/page/Page.h"
 #include "modules/storage/DOMWindowStorage.h"
+#ifndef DISABLE_INSPECTOR
 #include "modules/storage/InspectorDOMStorageAgent.h"
+#endif
 #include "modules/storage/Storage.h"
 #include "modules/storage/StorageClient.h"
 #include "modules/storage/StorageEvent.h"
@@ -175,8 +177,10 @@ void StorageArea::dispatchLocalStorageEvent(const String& key, const String& old
             if (storage && localFrame->document()->securityOrigin()->canAccess(securityOrigin) && !isEventSource(storage, sourceAreaInstance))
                 localFrame->localDOMWindow()->enqueueWindowEvent(StorageEvent::create(EventTypeNames::storage, key, oldValue, newValue, pageURL, storage));
         }
+#ifndef DISABLE_INSPECTOR
         if (InspectorDOMStorageAgent* agent = StorageNamespaceController::from(page)->inspectorAgent())
             agent->didDispatchDOMStorageEvent(key, oldValue, newValue, LocalStorage, securityOrigin);
+#endif
     }
 }
 
@@ -209,8 +213,10 @@ void StorageArea::dispatchSessionStorageEvent(const String& key, const String& o
         if (storage && localFrame->document()->securityOrigin()->canAccess(securityOrigin) && !isEventSource(storage, sourceAreaInstance))
             localFrame->localDOMWindow()->enqueueWindowEvent(StorageEvent::create(EventTypeNames::storage, key, oldValue, newValue, pageURL, storage));
     }
+#ifndef DISABLE_INSPECTOR
     if (InspectorDOMStorageAgent* agent = StorageNamespaceController::from(page)->inspectorAgent())
         agent->didDispatchDOMStorageEvent(key, oldValue, newValue, SessionStorage, securityOrigin);
+#endif
 }
 
 bool StorageArea::isEventSource(Storage* storage, WebStorageArea* sourceAreaInstance)

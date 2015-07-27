@@ -31,7 +31,9 @@
 #include "core/dom/Element.h"
 #include "core/dom/MutationObserverInterestGroup.h"
 #include "core/dom/MutationRecord.h"
+#ifndef DISABLE_INSPECTOR
 #include "core/inspector/InspectorInstrumentation.h"
+#endif
 #include "platform/RuntimeEnabledFeatures.h"
 
 namespace blink {
@@ -44,7 +46,9 @@ class StyleAttributeMutationScope {
 public:
     StyleAttributeMutationScope(AbstractPropertySetCSSStyleDeclaration* decl)
     {
+#ifndef DISABLE_INSPECTOR
         InspectorInstrumentation::willMutateStyle(decl);
+#endif
         ++s_scopeCount;
 
         if (s_scopeCount != 1) {
@@ -86,16 +90,20 @@ public:
         s_shouldDeliver = false;
 
         // We have to clear internal state before calling Inspector's code.
+#ifndef DISABLE_INSPECTOR
         AbstractPropertySetCSSStyleDeclaration* localCopyStyleDecl = s_currentDecl;
         s_currentDecl = 0;
         InspectorInstrumentation::didMutateStyle(localCopyStyleDecl, localCopyStyleDecl->parentElement());
+#endif
 
         if (!s_shouldNotifyInspector)
             return;
 
         s_shouldNotifyInspector = false;
+#ifndef DISABLE_INSPECTOR
         if (localCopyStyleDecl->parentElement())
             InspectorInstrumentation::didInvalidateStyleAttr(localCopyStyleDecl->parentElement());
+#endif
     }
 
     void enqueueMutationRecord()

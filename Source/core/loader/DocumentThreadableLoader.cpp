@@ -41,7 +41,9 @@
 #include "core/frame/FrameConsole.h"
 #include "core/frame/LocalFrame.h"
 #include "core/frame/csp/ContentSecurityPolicy.h"
+#ifndef DISABLE_INSPECTOR
 #include "core/inspector/InspectorInstrumentation.h"
+#endif
 #include "core/inspector/InspectorTraceEvents.h"
 #include "core/loader/CrossOriginPreflightResultCache.h"
 #include "core/loader/DocumentThreadableLoaderClient.h"
@@ -186,7 +188,11 @@ void DocumentThreadableLoader::makeCrossOriginAccessRequest(const ResourceReques
         m_actualRequest = crossOriginRequest.release();
         m_actualOptions = crossOriginOptions.release();
 
+#ifndef DISABLE_INSPECTOR
         bool shouldForcePreflight = InspectorInstrumentation::shouldForceCORSPreflight(&m_document);
+#else
+        bool shouldForcePreflight = false;
+#endif
         bool canSkipPreflight = CrossOriginPreflightResultCache::shared().canSkipPreflight(securityOrigin()->toString(), m_actualRequest->url(), effectiveAllowCredentials(), m_actualRequest->httpMethod(), m_actualRequest->httpHeaderFields());
         if (canSkipPreflight && !shouldForcePreflight) {
             loadActualRequest();
@@ -289,9 +295,9 @@ void DocumentThreadableLoader::redirectReceived(Resource* resource, ResourceRequ
         m_client->didFailRedirectCheck();
     } else if (m_options.crossOriginRequestPolicy == UseAccessControl) {
         --m_corsRedirectLimit;
-
+#ifndef DISABLE_INSPECTOR
         InspectorInstrumentation::didReceiveCORSRedirectResponse(m_document.frame(), resource->identifier(), m_document.frame()->loader().documentLoader(), redirectResponse, 0);
-
+#endif
         bool allowRedirect = false;
         String accessControlErrorDescription;
 
@@ -406,7 +412,9 @@ void DocumentThreadableLoader::reportResponseReceived(unsigned long identifier, 
     DocumentLoader* loader = m_document.frame()->loader().documentLoader();
     TRACE_EVENT_INSTANT1(TRACE_DISABLED_BY_DEFAULT("devtools.timeline"), "ResourceReceiveResponse", TRACE_EVENT_SCOPE_THREAD, "data", InspectorReceiveResponseEvent::data(identifier, m_document.frame(), response));
     LocalFrame* frame = m_document.frame();
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::didReceiveResourceResponse(frame, identifier, loader, response, resource() ? resource()->loader() : 0);
+#endif
     frame->console().reportResourceResponseReceived(loader, identifier, response);
 }
 
@@ -581,10 +589,12 @@ void DocumentThreadableLoader::loadRequest(const ResourceRequest& request, Resou
             setResource(m_document.fetcher()->fetchMedia(newRequest));
         else
             setResource(m_document.fetcher()->fetchRawResource(newRequest));
+#ifndef DISABLE_INSPECTOR
         if (resource() && resource()->loader()) {
             unsigned long identifier = resource()->identifier();
             InspectorInstrumentation::documentThreadableLoaderStartedLoadingForClient(&m_document, identifier, m_client);
         }
+#endif
         return;
     }
 
@@ -595,9 +605,9 @@ void DocumentThreadableLoader::loadRequest(const ResourceRequest& request, Resou
     ResourceResponse response = resource ? resource->response() : ResourceResponse();
     unsigned long identifier = resource ? resource->identifier() : std::numeric_limits<unsigned long>::max();
     ResourceError error = resource ? resource->resourceError() : ResourceError();
-
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::documentThreadableLoaderStartedLoadingForClient(&m_document, identifier, m_client);
-
+#endif
     if (!resource) {
         m_client->didFail(error);
         return;

@@ -63,7 +63,9 @@ void InspectorDatabaseResource::bind(InspectorFrontend::Database* frontend)
         .setDomain(m_domain)
         .setName(m_name)
         .setVersion(m_version);
+#ifndef DISABLE_INSPECTOR
     frontend->addDatabase(jsonObject);
+#endif
 }
 
 } // namespace blink

@@ -15,7 +15,9 @@
 #include "core/events/Event.h"
 #include "core/events/EventListener.h"
 #include "core/frame/UseCounter.h"
+#ifndef DISABLE_INSPECTOR
 #include "core/inspector/InspectorInstrumentation.h"
+#endif
 #if !defined(DISABLE_XSLT)
 #include "core/xml/XSLStyleSheet.h"
 #include "core/xml/XSLTProcessor.h"
@@ -118,7 +120,9 @@ void DocumentXSLT::applyXSLTransform(Document& document, ProcessingInstruction* 
     // FIXME: If the transform failed we should probably report an error (like Mozilla does).
     LocalFrame* ownerFrame = document.frame();
     processor->createDocumentFromSource(newSource, resultEncoding, resultMIMEType, &document, ownerFrame);
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::frameDocumentUpdated(ownerFrame);
+#endif
     document.setParsingState(Document::FinishedParsing);
 #endif
 }

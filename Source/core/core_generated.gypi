@@ -109,18 +109,6 @@
       '<(blink_core_output_dir)/CSSGrammar.cpp',
       '<(blink_core_output_dir)/XPathGrammar.cpp',
 
-      # Additional .cpp files from the inspector_protocol_sources list.
-      '<(blink_core_output_dir)/InspectorFrontend.cpp',
-      '<(blink_core_output_dir)/InspectorBackendDispatcher.cpp',
-      '<(blink_core_output_dir)/InspectorTypeBuilder.cpp',
-
-      # Additional .cpp files from the inspector_instrumentation_sources list.
-      '<(blink_core_output_dir)/InspectorConsoleInstrumentationInl.h',
-      '<(blink_core_output_dir)/InspectorInstrumentationInl.h',
-      '<(blink_core_output_dir)/InspectorOverridesInl.h',
-      '<(blink_core_output_dir)/InstrumentingAgentsInl.h',
-      '<(blink_core_output_dir)/InspectorInstrumentationImpl.cpp',
-
       # Additional .cpp files for SVG.
       '<(blink_core_output_dir)/SVGElementFactory.cpp',
 
@@ -133,6 +121,19 @@
 
       # Generated from make_css_property_metadata.py
       '<(blink_core_output_dir)/CSSPropertyMetadata.cpp',
+    ],
+    'generated_core_additional_files_inspector': [
+      # Additional .cpp files from the inspector_protocol_sources list.
+      '<(blink_core_output_dir)/InspectorFrontend.cpp',
+      '<(blink_core_output_dir)/InspectorBackendDispatcher.cpp',
+      '<(blink_core_output_dir)/InspectorTypeBuilder.cpp',
+
+      # Additional .cpp files from the inspector_instrumentation_sources list.
+      '<(blink_core_output_dir)/InspectorConsoleInstrumentationInl.h',
+      '<(blink_core_output_dir)/InspectorInstrumentationInl.h',
+      '<(blink_core_output_dir)/InspectorOverridesInl.h',
+      '<(blink_core_output_dir)/InstrumentingAgentsInl.h',
+      '<(blink_core_output_dir)/InspectorInstrumentationImpl.cpp',
     ],
   },
 }
