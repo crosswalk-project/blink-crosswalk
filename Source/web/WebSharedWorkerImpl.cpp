@@ -36,7 +36,9 @@
 #include "core/events/MessageEvent.h"
 #include "core/html/HTMLFormElement.h"
 #include "core/inspector/ConsoleMessage.h"
+#ifndef DISABLE_INSPECTOR
 #include "core/inspector/InspectorInstrumentation.h"
+#endif
 #include "core/inspector/WorkerDebuggerAgent.h"
 #include "core/inspector/WorkerInspectorController.h"
 #include "core/loader/FrameLoadRequest.h"
@@ -381,7 +383,9 @@ void WebSharedWorkerImpl::startWorkerContext(const WebURL& url, const WebString&
 
 void WebSharedWorkerImpl::didReceiveScriptLoaderResponse()
 {
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::didReceiveScriptResponse(m_loadingDocument.get(), m_mainScriptLoader->identifier());
+#endif
     if (client())
         client()->selectAppCacheID(m_mainScriptLoader->appCacheID());
 }
@@ -405,8 +409,10 @@ void WebSharedWorkerImpl::onScriptLoaderFinished()
 
     Document* document = toWebLocalFrameImpl(m_mainFrame)->frame()->document();
     WorkerThreadStartMode startMode = DontPauseWorkerGlobalScopeOnStart;
+#ifndef DISABLE_INSPECTOR
     if (InspectorInstrumentation::shouldPauseDedicatedWorkerOnStart(document))
         startMode = PauseWorkerGlobalScopeOnStart;
+#endif
 
     // FIXME: this document's origin is pristine and without any extra privileges. (crbug.com/254993)
     SecurityOrigin* starterOrigin = document->securityOrigin();
@@ -418,7 +424,9 @@ void WebSharedWorkerImpl::onScriptLoaderFinished()
     OwnPtr<WorkerThreadStartupData> startupData = WorkerThreadStartupData::create(m_url, m_loadingDocument->userAgent(m_url), m_mainScriptLoader->script(), nullptr, startMode, m_contentSecurityPolicy, static_cast<ContentSecurityPolicyHeaderType>(m_policyType), starterOrigin, workerClients.release());
     m_loaderProxy = WorkerLoaderProxy::create(this);
     setWorkerThread(SharedWorkerThread::create(m_name, m_loaderProxy, *this, startupData.release()));
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::scriptImported(m_loadingDocument.get(), m_mainScriptLoader->identifier(), m_mainScriptLoader->script());
+#endif
     m_mainScriptLoader.clear();
 
     workerThread()->start();

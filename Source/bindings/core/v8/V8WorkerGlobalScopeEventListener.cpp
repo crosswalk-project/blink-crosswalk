@@ -39,7 +39,9 @@
 #include "bindings/core/v8/V8GCController.h"
 #include "bindings/core/v8/V8ScriptRunner.h"
 #include "bindings/core/v8/WorkerScriptController.h"
+#ifndef DISABLE_INSPECTOR
 #include "core/inspector/InspectorInstrumentation.h"
+#endif
 #include "core/inspector/InspectorTraceEvents.h"
 #include "core/workers/WorkerGlobalScope.h"
 
@@ -76,12 +78,15 @@ v8::Local<v8::Value> V8WorkerGlobalScopeEventListener::callListenerFunction(Scri
         return v8::Local<v8::Value>();
 
     TRACE_EVENT1(TRACE_DISABLED_BY_DEFAULT("devtools.timeline"), "FunctionCall", "data", devToolsTraceEventData(isolate(), scriptState->executionContext(), handlerFunction));
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentationCookie cookie = InspectorInstrumentation::willCallFunction(scriptState->executionContext(), DevToolsFunctionInfo(handlerFunction));
-
+#endif
     v8::Local<v8::Value> parameters[1] = { jsEvent };
     v8::Local<v8::Value> result = V8ScriptRunner::callFunction(handlerFunction, scriptState->executionContext(), receiver, WTF_ARRAY_LENGTH(parameters), parameters, isolate());
 
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::didCallFunction(cookie);
+#endif
     TRACE_EVENT_INSTANT1(TRACE_DISABLED_BY_DEFAULT("devtools.timeline"), "UpdateCounters", "data", InspectorUpdateCountersEvent::data());
 
     return result;

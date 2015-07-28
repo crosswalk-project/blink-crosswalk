@@ -37,7 +37,9 @@
 #include "core/frame/LocalFrame.h"
 #include "core/frame/Settings.h"
 #include "core/inspector/InspectorApplicationCacheAgent.h"
+#ifndef DISABLE_INSPECTOR
 #include "core/inspector/InspectorInstrumentation.h"
+#endif
 #include "core/loader/DocumentLoader.h"
 #include "core/loader/FrameLoader.h"
 #include "core/loader/FrameLoaderClient.h"
@@ -179,8 +181,10 @@ void ApplicationCacheHost::dispose()
 
 void ApplicationCacheHost::notifyApplicationCache(EventID id, int progressTotal, int progressDone, WebApplicationCacheHost::ErrorReason errorReason, const String& errorURL, int errorStatus, const String& errorMessage)
 {
+#ifndef DISABLE_INSPECTOR
     if (id != PROGRESS_EVENT)
         InspectorInstrumentation::updateApplicationCacheStatus(m_documentLoader->frame());
+#endif
 
     if (m_defersEvents) {
         // Event dispatching is deferred until document.onload has fired.
@@ -253,8 +257,10 @@ bool ApplicationCacheHost::update()
 bool ApplicationCacheHost::swapCache()
 {
     bool success = m_host ? m_host->swapCache() : false;
+#ifndef DISABLE_INSPECTOR
     if (success)
         InspectorInstrumentation::updateApplicationCacheStatus(m_documentLoader->frame());
+#endif
     return success;
 }
 

@@ -27,8 +27,9 @@ void ConsoleMessageStorage::reportMessage(ExecutionContext* context, PassRefPtrW
     if (message->type() == ClearMessageType)
         clear(context);
 
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::addMessageToConsole(context, message.get());
-
+#endif
     ASSERT(m_messages.size() <= maxConsoleMessageCount);
     if (m_messages.size() == maxConsoleMessageCount) {
         ++m_expiredCount;
@@ -39,7 +40,9 @@ void ConsoleMessageStorage::reportMessage(ExecutionContext* context, PassRefPtrW
 
 void ConsoleMessageStorage::clear(ExecutionContext* context)
 {
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::consoleMessagesCleared(context);
+#endif
     m_messages.clear();
     m_expiredCount = 0;
 }

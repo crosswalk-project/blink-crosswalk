@@ -45,7 +45,9 @@
 #include "core/html/HTMLFrameElement.h"
 #include "core/html/HTMLPlugInElement.h"
 #include "core/html/parser/TextResourceDecoder.h"
+#ifndef DISABLE_INSPECTOR
 #include "core/inspector/InspectorInstrumentation.h"
+#endif
 #include "core/inspector/InspectorTraceEvents.h"
 #include "core/layout/LayoutAnalyzer.h"
 #include "core/layout/LayoutCounter.h"
@@ -1100,7 +1102,9 @@ void FrameView::layout()
 
     // FIXME: The notion of a single root for layout is no longer applicable. Remove or update this code. crbug.com/460596
     TRACE_EVENT_END1(TRACE_DISABLED_BY_DEFAULT("devtools.timeline"), "Layout", "endData", InspectorLayoutEvent::endData(rootForThisLayout));
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::didLayout(m_frame.get());
+#endif
 
     m_nestedLayoutCount--;
     if (m_nestedLayoutCount)
@@ -1403,16 +1407,17 @@ bool FrameView::scrollContentsFastPath(const IntSize& scrollDelta)
 {
     if (!contentsInCompositedLayer() || hasSlowRepaintObjects())
         return false;
-
+#ifndef DISABLE_INSPECTOR
     if (!m_viewportConstrainedObjects || m_viewportConstrainedObjects->isEmpty()) {
         InspectorInstrumentation::didScroll(m_frame.get());
         return true;
     }
-
+#endif
     if (!invalidateViewportConstrainedObjects())
         return false;
-
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::didScroll(m_frame.get());
+#endif
     return true;
 }
 
@@ -2121,8 +2126,10 @@ void FrameView::sendResizeEventIfNeeded()
 
     m_frame->document()->enqueueResizeEvent();
 
+#ifndef DISABLE_INSPECTOR
     if (m_frame->isMainFrame())
         InspectorInstrumentation::didResizeMainFrame(m_frame.get());
+#endif
 }
 
 void FrameView::postLayoutTimerFired(Timer<FrameView>*)

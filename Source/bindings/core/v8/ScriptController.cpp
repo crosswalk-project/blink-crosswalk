@@ -60,7 +60,9 @@
 #include "core/frame/csp/ContentSecurityPolicy.h"
 #include "core/html/HTMLPlugInElement.h"
 #include "core/inspector/ConsoleMessage.h"
+#ifndef DISABLE_INSEPCTOR
 #include "core/inspector/InspectorInstrumentation.h"
+#endif
 #include "core/inspector/InspectorTraceEvents.h"
 #include "core/inspector/ScriptCallStack.h"
 #include "core/loader/DocumentLoader.h"
@@ -151,17 +153,22 @@ v8::Local<v8::Value> ScriptController::callFunction(v8::Local<v8::Function> func
 v8::Local<v8::Value> ScriptController::callFunction(ExecutionContext* context, v8::Local<v8::Function> function, v8::Local<v8::Value> receiver, int argc, v8::Local<v8::Value> info[], v8::Isolate* isolate)
 {
     TRACE_EVENT1(TRACE_DISABLED_BY_DEFAULT("devtools.timeline"), "FunctionCall", "data", devToolsTraceEventData(isolate, context, function));
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentationCookie cookie = InspectorInstrumentation::willCallFunction(context, DevToolsFunctionInfo(function));
+#endif
     v8::Local<v8::Value> result = V8ScriptRunner::callFunction(function, context, receiver, argc, info, isolate);
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::didCallFunction(cookie);
+#endif
     return result;
 }
 
 v8::Local<v8::Value> ScriptController::executeScriptAndReturnValue(v8::Local<v8::Context> context, const ScriptSourceCode& source, AccessControlStatus corsStatus, double* compilationFinishTime)
 {
     TRACE_EVENT1(TRACE_DISABLED_BY_DEFAULT("devtools.timeline"), "EvaluateScript", "data", InspectorEvaluateScriptEvent::data(frame(), source.url().string(), source.startLine()));
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentationCookie cookie = InspectorInstrumentation::willEvaluateScript(frame(), source.url().string(), source.startLine());
-
+#endif
     v8::Local<v8::Value> result;
     {
         V8CacheOptions v8CacheOptions(V8CacheOptionsDefault);
@@ -188,7 +195,9 @@ v8::Local<v8::Value> ScriptController::executeScriptAndReturnValue(v8::Local<v8:
             return result;
     }
 
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::didEvaluateScript(cookie);
+#endif
     TRACE_EVENT_INSTANT1(TRACE_DISABLED_BY_DEFAULT("devtools.timeline"), "UpdateCounters", "data", InspectorUpdateCountersEvent::data());
 
     return result;

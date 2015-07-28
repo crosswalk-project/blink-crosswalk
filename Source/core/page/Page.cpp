@@ -34,7 +34,9 @@
 #include "core/frame/RemoteFrame.h"
 #include "core/frame/RemoteFrameView.h"
 #include "core/frame/Settings.h"
+#ifndef DISABLE_INSPECTOR
 #include "core/inspector/InspectorInstrumentation.h"
+#endif
 #include "core/layout/LayoutView.h"
 #include "core/layout/TextAutosizer.h"
 #include "core/page/AutoscrollController.h"
@@ -86,7 +88,9 @@ void Page::networkStateChanged(bool online)
     AtomicString eventName = online ? EventTypeNames::online : EventTypeNames::offline;
     for (unsigned i = 0; i < frames.size(); i++) {
         frames[i]->domWindow()->dispatchEvent(Event::create(eventName));
+#ifndef DISABLE_INSPECTOR
         InspectorInstrumentation::networkStateChanged(frames[i].get(), online);
+#endif
     }
 }
 

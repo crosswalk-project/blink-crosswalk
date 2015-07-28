@@ -79,8 +79,10 @@ MutationObserver::~MutationObserver()
 
 void MutationObserver::dispose()
 {
+#ifndef DISABLE_INSPECTOR
     if (!m_records.isEmpty())
         InspectorInstrumentation::didClearAllMutationRecords(m_callback->executionContext(), this);
+#endif
 }
 
 void MutationObserver::observe(Node* node, const MutationObserverInit& observerInit, ExceptionState& exceptionState)
@@ -147,14 +149,18 @@ MutationRecordVector MutationObserver::takeRecords()
 {
     MutationRecordVector records;
     records.swap(m_records);
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::didClearAllMutationRecords(m_callback->executionContext(), this);
+#endif
     return records;
 }
 
 void MutationObserver::disconnect()
 {
     m_records.clear();
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::didClearAllMutationRecords(m_callback->executionContext(), this);
+#endif
     MutationObserverRegistrationSet registrations(m_registrations);
     for (auto& registration : registrations) {
         // The registration may be already unregistered while iteration.
@@ -202,7 +208,9 @@ void MutationObserver::enqueueMutationRecord(PassRefPtrWillBeRawPtr<MutationReco
     ASSERT(isMainThread());
     m_records.append(mutation);
     activateObserver(this);
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::didEnqueueMutationRecord(m_callback->executionContext(), this);
+#endif
 }
 
 void MutationObserver::setHasTransientRegistration()
@@ -243,10 +251,13 @@ void MutationObserver::deliver()
 
     MutationRecordVector records;
     records.swap(m_records);
-
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::willDeliverMutationRecords(m_callback->executionContext(), this);
+#endif
     m_callback->call(records, this);
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::didDeliverMutationRecords(m_callback->executionContext());
+#endif
 }
 
 void MutationObserver::resumeSuspendedObservers()

@@ -160,7 +160,9 @@
 #include "core/html/parser/TextResourceDecoder.h"
 #include "core/inspector/ConsoleMessage.h"
 #include "core/inspector/InspectorCounters.h"
+#ifndef DISABLE_INSPECTOR
 #include "core/inspector/InspectorInstrumentation.h"
+#endif
 #include "core/inspector/InspectorTraceEvents.h"
 #include "core/inspector/ScriptCallStack.h"
 #include "core/layout/HitTestResult.h"
@@ -668,7 +670,9 @@ void Document::mediaQueryAffectingValueChanged()
 {
     m_evaluateMediaQueriesOnStyleRecalc = true;
     styleEngine().clearMediaQueryRuleSetStyleSheets();
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::mediaQueryResultChanged(this);
+#endif
 }
 
 void Document::setCompatibilityMode(CompatibilityMode mode)
@@ -1569,7 +1573,9 @@ void Document::scheduleRenderTreeUpdate()
     m_lifecycle.ensureStateAtMost(DocumentLifecycle::VisualUpdatePending);
 
     TRACE_EVENT_INSTANT1(TRACE_DISABLED_BY_DEFAULT("devtools.timeline"), "ScheduleStyleRecalculation", "data", InspectorRecalculateStylesEvent::data(frame()));
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::didScheduleStyleRecalculation(this);
+#endif
 }
 
 bool Document::hasPendingForcedStyleRecalc() const
@@ -1731,7 +1737,9 @@ void Document::updateRenderTree(StyleRecalcChange change)
     // FIXME: Remove m_styleRecalcElementCounter, we should just use the accessCount() on the resolver.
     m_styleRecalcElementCounter = 0;
     TRACE_EVENT_BEGIN1(TRACE_DISABLED_BY_DEFAULT("devtools.timeline"), "RecalculateStyles", "beginData", InspectorRecalculateStylesEvent::data(frame()));
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentationCookie cookie = InspectorInstrumentation::willRecalculateStyle(this);
+#endif
 
     DocumentAnimations::updateAnimationTimingIfNeeded(*this);
     evaluateMediaQueryListIfNeeded();
@@ -1764,7 +1772,9 @@ void Document::updateRenderTree(StyleRecalcChange change)
 
     TRACE_EVENT_END1(TRACE_DISABLED_BY_DEFAULT("devtools.timeline"), "RecalculateStyles", "elementCount", m_styleRecalcElementCounter);
     TRACE_EVENT_END1("blink", "Document::updateRenderTree", "elementCount", m_styleRecalcElementCounter);
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::didRecalculateStyle(cookie, m_styleRecalcElementCounter);
+#endif
 }
 
 void Document::updateStyle(StyleRecalcChange change)
@@ -2088,7 +2098,9 @@ void Document::detach(const AttachContext& context)
 
     if (page())
         page()->documentDetached(this);
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::documentDetached(this);
+#endif
 
     if (m_frame->loader().client()->sharedWorkerRepositoryClient())
         m_frame->loader().client()->sharedWorkerRepositoryClient()->documentDetached(this);
@@ -2239,7 +2251,11 @@ AXObjectCache* Document::axObjectCache() const
 PassRefPtrWillBeRawPtr<DocumentParser> Document::createParser()
 {
     if (isHTMLDocument()) {
+#ifndef DISABLE_INSPECTOR
         bool reportErrors = InspectorInstrumentation::collectingHTMLParseErrors(this);
+#else
+        bool reportErrors = false;
+#endif
         return HTMLDocumentParser::create(toHTMLDocument(*this), reportErrors, m_parserSyncPolicy);
     }
     // FIXME: this should probably pass the frame instead
@@ -4517,7 +4533,9 @@ void Document::finishedParsing()
         frame->loader().finishedParsing();
 
         TRACE_EVENT_INSTANT1(TRACE_DISABLED_BY_DEFAULT("devtools.timeline"), "MarkDOMContent", "data", InspectorMarkLoadEvent::data(frame.get()));
+#ifndef DISABLE_INSPECTOR
         InspectorInstrumentation::domContentLoadedEventFired(frame.get());
+#endif
     }
 
     // Schedule dropping of the ElementDataCache. We keep it alive for a while after parsing finishes
@@ -4885,7 +4903,9 @@ void Document::parseDNSPrefetchControlHeader(const String& dnsPrefetchControl)
 
 void Document::reportBlockedScriptExecutionToInspector(const String& directiveText)
 {
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::scriptExecutionBlockedByCSP(this, directiveText);
+#endif
 }
 
 void Document::addConsoleMessage(PassRefPtrWillBeRawPtr<ConsoleMessage> consoleMessage)

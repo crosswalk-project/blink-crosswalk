@@ -39,7 +39,9 @@ namespace blink {
 
 class Database;
 class ExecutionContext;
+#ifndef DISABLE_INSPECTOR
 class InspectorDatabaseAgent;
+#endif
 class Page;
 
 class DatabaseClient : public WillBeHeapSupplement<Page> {
@@ -55,11 +57,12 @@ public:
     static DatabaseClient* fromPage(Page*);
     static DatabaseClient* from(ExecutionContext*);
     static const char* supplementName();
-
+#ifndef DISABLE_INSPECTOR
     void setInspectorAgent(InspectorDatabaseAgent*);
 
 private:
     InspectorDatabaseAgent* m_inspectorAgent;
+#endif
 };
 
 void provideDatabaseClientTo(Page&, PassOwnPtrWillBeRawPtr<DatabaseClient>);

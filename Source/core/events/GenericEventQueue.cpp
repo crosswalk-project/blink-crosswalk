@@ -28,7 +28,9 @@
 #include "core/events/GenericEventQueue.h"
 
 #include "core/events/Event.h"
+#ifndef DISABLE_INSPECTOR
 #include "core/inspector/InspectorInstrumentation.h"
+#endif
 #include "platform/TraceEvent.h"
 
 namespace blink {
@@ -65,7 +67,9 @@ bool GenericEventQueue::enqueueEvent(PassRefPtrWillBeRawPtr<Event> event)
         event->setTarget(nullptr);
 
     TRACE_EVENT_ASYNC_BEGIN1("event", "GenericEventQueue:enqueueEvent", event.get(), "type", event->type().ascii());
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::didEnqueueEvent(event->target() ? event->target() : m_owner.get(), event.get());
+#endif
     m_pendingEvents.append(event);
 
     if (!m_timer.isActive())
@@ -79,7 +83,9 @@ bool GenericEventQueue::cancelEvent(Event* event)
     bool found = m_pendingEvents.contains(event);
 
     if (found) {
+#ifndef DISABLE_INSPECTOR
         InspectorInstrumentation::didRemoveEvent(event->target() ? event->target() : m_owner.get(), event);
+#endif
         m_pendingEvents.remove(m_pendingEvents.find(event));
         TRACE_EVENT_ASYNC_END2("event", "GenericEventQueue:enqueueEvent", event, "type", event->type().ascii(), "status", "cancelled");
     }
@@ -106,7 +112,9 @@ void GenericEventQueue::timerFired(Timer<GenericEventQueue>*)
         TRACE_EVENT_ASYNC_STEP_INTO1("event", "GenericEventQueue:enqueueEvent", event, "dispatch", "type", type);
         target->dispatchEvent(pendingEvent);
         TRACE_EVENT_ASYNC_END1("event", "GenericEventQueue:enqueueEvent", event, "type", type);
+#ifndef DISABLE_INSPECTOR
         InspectorInstrumentation::didRemoveEvent(target, event);
+#endif
     }
 }
 
@@ -123,7 +131,9 @@ void GenericEventQueue::cancelAllEvents()
     for (const auto& pendingEvent : m_pendingEvents) {
         Event* event = pendingEvent.get();
         TRACE_EVENT_ASYNC_END2("event", "GenericEventQueue:enqueueEvent", event, "type", event->type().ascii(), "status", "cancelled");
+#ifndef DISABLE_INSPECTOR
         InspectorInstrumentation::didRemoveEvent(event->target() ? event->target() : m_owner.get(), event);
+#endif
     }
     m_pendingEvents.clear();
 }

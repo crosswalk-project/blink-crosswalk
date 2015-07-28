@@ -8,7 +8,9 @@
 #include "core/dom/DocumentMarkerController.h"
 #include "core/fetch/MemoryCache.h"
 #include "core/frame/FrameView.h"
+#ifndef DISABLE_INSPECTOR
 #include "core/inspector/InspectorInstrumentation.h"
+#endif
 #include "core/inspector/InspectorTraceEvents.h"
 #include "core/layout/LayoutView.h"
 #include "core/page/Chrome.h"
@@ -162,7 +164,9 @@ void FramePainter::paintContents(GraphicsContext* context, const IntRect& rect)
         s_inPaintContents = false;
     }
 
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::didPaint(layoutView, 0, context, LayoutRect(rect));
+#endif
 }
 
 void FramePainter::paintScrollbars(GraphicsContext* context, const IntRect& rect)

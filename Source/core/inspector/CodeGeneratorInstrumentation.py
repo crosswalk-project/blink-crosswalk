@@ -125,7 +125,11 @@ class InstrumentingAgents : public RefCountedWillBeGarbageCollectedFinalized<Ins
 public:
     static PassRefPtrWillBeRawPtr<InstrumentingAgents> create()
     {
+#ifndef DISABLE_INSPECTOR
         return adoptRefWillBeNoop(new InstrumentingAgents());
+#else
+        return adoptRefWillBeNoop((InstrumentingAgents*)nullptr);
+#endif
     }
     ~InstrumentingAgents() { }
     DECLARE_TRACE();

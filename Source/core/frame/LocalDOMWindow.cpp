@@ -56,7 +56,9 @@
 #include "core/frame/SuspendableTimer.h"
 #include "core/html/HTMLFrameOwnerElement.h"
 #include "core/inspector/ConsoleMessageStorage.h"
+#ifndef DISABLE_INSPECTOR
 #include "core/inspector/InspectorInstrumentation.h"
+#endif
 #include "core/loader/DocumentLoader.h"
 #include "core/loader/FrameLoaderClient.h"
 #include "core/loader/SinkDocument.h"
@@ -123,7 +125,9 @@ public:
         , m_stackTrace(stackTrace)
         , m_userGestureToken(userGestureToken)
     {
+#ifndef DISABLE_INSPECTOR
         m_asyncOperationId = InspectorInstrumentation::traceAsyncOperationStarting(executionContext(), "postMessage");
+#endif
     }
 
     PassRefPtrWillBeRawPtr<MessageEvent> event() const { return m_event.get(); }
@@ -142,10 +146,16 @@ public:
 private:
     virtual void fired() override
     {
+#ifndef DISABLE_INSPECTOR
         InspectorInstrumentationCookie cookie = InspectorInstrumentation::traceAsyncOperationCompletedCallbackStarting(executionContext(), m_asyncOperationId);
+#else
+        (void) m_asyncOperationId;
+#endif
         m_window->postMessageTimerFired(this);
+#ifndef DISABLE_INSPECTOR
         // This object is deleted now.
         InspectorInstrumentation::traceAsyncCallbackCompleted(cookie);
+#endif
     }
 
     RefPtrWillBeMember<MessageEvent> m_event;
@@ -809,7 +819,9 @@ void LocalDOMWindow::close(ExecutionContext* context)
     if (!frame()->loader().shouldClose())
         return;
 
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::willCloseWindow(context);
+#endif
 
     page->chrome().closeWindowSoon();
 }
@@ -1439,7 +1451,9 @@ void LocalDOMWindow::dispatchLoadEvent()
         owner->dispatchLoad();
 
     TRACE_EVENT_INSTANT1(TRACE_DISABLED_BY_DEFAULT("devtools.timeline"), "MarkLoad", "data", InspectorMarkLoadEvent::data(frame()));
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::loadEventFired(frame());
+#endif
 }
 
 bool LocalDOMWindow::dispatchEvent(PassRefPtrWillBeRawPtr<Event> prpEvent, PassRefPtrWillBeRawPtr<EventTarget> prpTarget)

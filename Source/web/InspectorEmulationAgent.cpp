@@ -95,6 +95,7 @@ void InspectorEmulationAgent::setEmulatedMedia(ErrorString*, const String& media
 
 void InspectorEmulationAgent::viewportChanged()
 {
+#ifndef DISABLE_INSPECTOR
     if (!m_webViewImpl->devToolsEmulator()->deviceEmulationEnabled() || !frontend())
         return;
 
@@ -113,6 +114,7 @@ void InspectorEmulationAgent::viewportChanged()
         .setMinimumPageScaleFactor(m_webViewImpl->minimumPageScaleFactor())
         .setMaximumPageScaleFactor(m_webViewImpl->maximumPageScaleFactor());
     frontend()->viewportChanged(viewport);
+#endif
 }
 
 DEFINE_TRACE(InspectorEmulationAgent)

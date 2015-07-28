@@ -47,6 +47,13 @@
         'variables': {
             'clang_warning_flags': ['-Wglobal-constructors'],
         },
+        'conditions': [
+          ['disable_devtools==1', {
+            'defines': [
+              'DISABLE_INSPECTOR',
+            ],
+          }],
+        ],
     },
     'targets': [
         {
@@ -81,6 +88,11 @@
                 '<@(web_files)',
             ],
             'conditions': [
+                ['disable_devtools==1', {
+                  'sources!': [
+                    '<@(web_files_inspector)',
+                  ],
+                }],
                 ['component=="shared_library"', {
                     'dependencies': [
                         '../wtf/wtf_tests.gyp:wtf_unittest_helpers',

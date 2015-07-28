@@ -30,7 +30,9 @@
 #include "web/InspectorOverlayImpl.h"
 
 #include "bindings/core/v8/ScriptController.h"
+#ifndef DISABLE_INSPECTOR
 #include "bindings/core/v8/V8InspectorOverlayHost.h"
+#endif
 #include "core/dom/Node.h"
 #include "core/frame/FrameHost.h"
 #include "core/frame/FrameView.h"

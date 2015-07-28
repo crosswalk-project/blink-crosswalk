@@ -86,14 +86,18 @@ namespace InspectorInstrumentation {
 
 bool isDebuggerPausedImpl(InstrumentingAgents* instrumentingAgents)
 {
+#ifndef DISABLE_INSPECTOR
     if (InspectorDebuggerAgent* debuggerAgent = instrumentingAgents->inspectorDebuggerAgent())
         return debuggerAgent->isPaused();
+#endif
     return false;
 }
 
 void didReceiveResourceResponseButCanceledImpl(LocalFrame* frame, DocumentLoader* loader, unsigned long identifier, const ResourceResponse& r)
 {
+#ifndef DISABLE_INSPECTOR
     didReceiveResourceResponse(frame, identifier, loader, r, 0);
+#endif
 }
 
 void continueAfterXFrameOptionsDeniedImpl(LocalFrame* frame, DocumentLoader* loader, unsigned long identifier, const ResourceResponse& r)
@@ -111,10 +115,12 @@ void willDestroyResourceImpl(Resource* cachedResource)
     ASSERT(isMainThread());
     if (!instrumentingAgentsSet)
         return;
+#ifndef DISABLE_INSPECTOR
     for (InstrumentingAgents* instrumentingAgents: *instrumentingAgentsSet) {
         if (InspectorResourceAgent* inspectorResourceAgent = instrumentingAgents->inspectorResourceAgent())
             inspectorResourceAgent->willDestroyResource(cachedResource);
     }
+#endif
 }
 
 bool collectingHTMLParseErrorsImpl(InstrumentingAgents* instrumentingAgents)
@@ -127,11 +133,13 @@ bool collectingHTMLParseErrorsImpl(InstrumentingAgents* instrumentingAgents)
 
 void appendAsyncCallStack(ExecutionContext* executionContext, ScriptCallStack* callStack)
 {
+#ifndef DISABLE_INSPECTOR
     InstrumentingAgents* instrumentingAgents = instrumentingAgentsFor(executionContext);
     if (!instrumentingAgents)
         return;
     if (InspectorDebuggerAgent* debuggerAgent = instrumentingAgents->inspectorDebuggerAgent())
         callStack->setAsyncCallStack(debuggerAgent->currentAsyncStackTraceForConsole());
+#endif
 }
 
 bool canvasAgentEnabled(ExecutionContext* executionContext)
@@ -221,8 +229,10 @@ const char CallbackName[] = "callbackName";
 
 InstrumentingAgents* instrumentationForWorkerGlobalScope(WorkerGlobalScope* workerGlobalScope)
 {
+#ifndef DISABLE_INSPECTOR
     if (WorkerInspectorController* controller = workerGlobalScope->workerInspectorController())
         return controller->m_instrumentingAgents.get();
+#endif
     return 0;
 }
 

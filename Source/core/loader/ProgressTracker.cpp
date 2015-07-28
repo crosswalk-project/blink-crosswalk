@@ -29,7 +29,9 @@
 #include "core/fetch/ResourceFetcher.h"
 #include "core/frame/FrameView.h"
 #include "core/frame/LocalFrame.h"
+#ifndef DISABLE_INSPECTOR
 #include "core/inspector/InspectorInstrumentation.h"
+#endif
 #include "core/loader/FrameLoader.h"
 #include "core/loader/FrameLoaderClient.h"
 #include "platform/Logging.h"
@@ -121,7 +123,9 @@ void ProgressTracker::progressStarted()
         m_frame->loader().client()->didStartLoading(NavigationToDifferentDocument);
     }
     m_frame->setIsLoading(true);
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::frameStartedLoading(m_frame);
+#endif
 }
 
 void ProgressTracker::progressCompleted()
@@ -134,7 +138,9 @@ void ProgressTracker::progressCompleted()
     }
     reset();
     m_frame->loader().client()->didStopLoading();
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::frameStoppedLoading(m_frame);
+#endif
 }
 
 void ProgressTracker::incrementProgress(unsigned long identifier, const ResourceResponse& response)

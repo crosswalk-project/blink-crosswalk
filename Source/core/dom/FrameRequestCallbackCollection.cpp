@@ -6,7 +6,9 @@
 #include "core/dom/FrameRequestCallbackCollection.h"
 
 #include "core/dom/FrameRequestCallback.h"
+#ifndef DISABLE_INSPETOR
 #include "core/inspector/InspectorInstrumentation.h"
+#endif
 #include "core/inspector/InspectorTraceEvents.h"
 
 namespace blink {
@@ -24,8 +26,10 @@ FrameRequestCallbackCollection::CallbackId FrameRequestCallbackCollection::regis
     m_callbacks.append(callback);
 
     TRACE_EVENT_INSTANT1(TRACE_DISABLED_BY_DEFAULT("devtools.timeline"), "RequestAnimationFrame", "data", InspectorAnimationFrameEvent::data(m_context, id));
-    InspectorInstrumentation::didRequestAnimationFrame(m_context, id);
 
+#ifndef DISABLE_INSPETOR
+    InspectorInstrumentation::didRequestAnimationFrame(m_context, id);
+#endif
     return id;
 }
 
@@ -35,14 +39,20 @@ void FrameRequestCallbackCollection::cancelCallback(CallbackId id)
         if (m_callbacks[i]->m_id == id) {
             m_callbacks.remove(i);
             TRACE_EVENT_INSTANT1(TRACE_DISABLED_BY_DEFAULT("devtools.timeline"), "CancelAnimationFrame", "data", InspectorAnimationFrameEvent::data(m_context, id));
+
+#ifndef DISABLE_INSPETOR
             InspectorInstrumentation::didCancelAnimationFrame(m_context, id);
+#endif
             return;
         }
     }
     for (size_t i = 0; i < m_callbacksToInvoke.size(); ++i) {
         if (m_callbacksToInvoke[i]->m_id == id) {
             TRACE_EVENT_INSTANT1(TRACE_DISABLED_BY_DEFAULT("devtools.timeline"), "CancelAnimationFrame", "data", InspectorAnimationFrameEvent::data(m_context, id));
+
+#ifndef DISABLE_INSPETOR
             InspectorInstrumentation::didCancelAnimationFrame(m_context, id);
+#endif
             m_callbacksToInvoke[i]->m_cancelled = true;
             // will be removed at the end of executeCallbacks()
             return;
@@ -61,12 +71,14 @@ void FrameRequestCallbackCollection::executeCallbacks(double highResNowMs, doubl
         FrameRequestCallback* callback = m_callbacksToInvoke[i].get();
         if (!callback->m_cancelled) {
             TRACE_EVENT1(TRACE_DISABLED_BY_DEFAULT("devtools.timeline"), "FireAnimationFrame", "data", InspectorAnimationFrameEvent::data(m_context, callback->m_id));
+#ifndef DISABLE_INSPETOR
             InspectorInstrumentationCookie cookie = InspectorInstrumentation::willFireAnimationFrame(m_context, callback->m_id);
             if (callback->m_useLegacyTimeBase)
                 callback->handleEvent(highResNowMsLegacy);
             else
                 callback->handleEvent(highResNowMs);
             InspectorInstrumentation::didFireAnimationFrame(cookie);
+#endif
             TRACE_EVENT_INSTANT1(TRACE_DISABLED_BY_DEFAULT("devtools.timeline"), "UpdateCounters", "data", InspectorUpdateCountersEvent::data());
         }
     }

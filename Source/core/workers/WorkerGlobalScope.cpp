@@ -91,7 +91,9 @@ WorkerGlobalScope::WorkerGlobalScope(const KURL& url, const String& userAgent, W
     , m_v8CacheOptions(V8CacheOptionsDefault)
     , m_script(adoptPtr(new WorkerScriptController(*this, thread->isolate())))
     , m_thread(thread)
+#ifndef DISABLE_INSPECTOR
     , m_workerInspectorController(adoptRefWillBeNoop(new WorkerInspectorController(this)))
+#endif
     , m_closing(false)
     , m_eventQueue(WorkerEventQueue::create(this))
     , m_workerClients(workerClients)
@@ -104,7 +106,9 @@ WorkerGlobalScope::WorkerGlobalScope(const KURL& url, const String& userAgent, W
         securityOrigin()->transferPrivilegesFrom(*starterOrigin);
 
     m_workerClients->reattachThread();
+#ifndef DISABLE_INSPECTOR
     m_thread->setWorkerInspectorController(m_workerInspectorController.get());
+#endif
 }
 
 WorkerGlobalScope::~WorkerGlobalScope()
@@ -209,9 +213,12 @@ void WorkerGlobalScope::clearInspector()
 {
     if (!m_workerInspectorController)
         return;
+
+#ifndef DISABLE_INSPECTOR
     thread()->setWorkerInspectorController(nullptr);
     m_workerInspectorController->dispose();
     m_workerInspectorController.clear();
+#endif
 }
 
 void WorkerGlobalScope::dispose()
@@ -267,7 +274,9 @@ void WorkerGlobalScope::importScripts(const Vector<String>& urls, ExceptionState
             return;
         }
 
+#ifndef DISABLE_INSPECTOR
         InspectorInstrumentation::scriptImported(&executionContext, scriptLoader->identifier(), scriptLoader->script());
+#endif
         scriptLoaded(scriptLoader->script().length(), scriptLoader->cachedMetadata() ? scriptLoader->cachedMetadata()->size() : 0);
 
         RefPtrWillBeRawPtr<ErrorEvent> errorEvent = nullptr;
@@ -298,7 +307,9 @@ void WorkerGlobalScope::logExceptionToConsole(const String& errorMessage, int, c
 
 void WorkerGlobalScope::reportBlockedScriptExecutionToInspector(const String& directiveText)
 {
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::scriptExecutionBlockedByCSP(this, directiveText);
+#endif
 }
 
 void WorkerGlobalScope::addConsoleMessage(PassRefPtrWillBeRawPtr<ConsoleMessage> prpConsoleMessage)
@@ -380,7 +391,9 @@ DEFINE_TRACE(WorkerGlobalScope)
     visitor->trace(m_console);
     visitor->trace(m_location);
     visitor->trace(m_navigator);
+#ifndef DISABLE_INSPECTOR
     visitor->trace(m_workerInspectorController);
+#endif
     visitor->trace(m_eventQueue);
     visitor->trace(m_workerClients);
     visitor->trace(m_timers);

@@ -7,7 +7,9 @@
 #include "core/workers/WorkerInspectorProxy.h"
 
 #include "core/dom/CrossThreadTask.h"
+#ifndef DISABLE_INSPECTOR
 #include "core/inspector/InspectorInstrumentation.h"
+#endif
 #include "core/inspector/InspectorTraceEvents.h"
 #include "core/inspector/WorkerInspectorController.h"
 #include "core/workers/WorkerThread.h"
@@ -37,20 +39,26 @@ void WorkerInspectorProxy::workerThreadCreated(ExecutionContext* context, Worker
 {
     m_workerThread = workerThread;
     m_executionContext = context;
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::didStartWorker(context, this, url);
+#endif
 }
 
 void WorkerInspectorProxy::workerThreadTerminated()
 {
+#ifndef DISABLE_INSPECTOR
     if (m_workerThread)
         InspectorInstrumentation::workerTerminated(m_executionContext, this);
+#endif
     m_workerThread = nullptr;
     m_pageInspector = nullptr;
 }
 
 static void connectToWorkerGlobalScopeInspectorTask(ExecutionContext* context, bool)
 {
+#ifndef DISABLE_INSPECTOR
     toWorkerGlobalScope(context)->workerInspectorController()->connectFrontend();
+#endif
 }
 
 void WorkerInspectorProxy::connectToInspector(WorkerInspectorProxy::PageInspector* pageInspector)
@@ -64,7 +72,9 @@ void WorkerInspectorProxy::connectToInspector(WorkerInspectorProxy::PageInspecto
 
 static void disconnectFromWorkerGlobalScopeInspectorTask(ExecutionContext* context, bool)
 {
+#ifndef DISABLE_INSPECTOR
     toWorkerGlobalScope(context)->workerInspectorController()->disconnectFrontend();
+#endif
 }
 
 void WorkerInspectorProxy::disconnectFromInspector()
@@ -77,7 +87,9 @@ void WorkerInspectorProxy::disconnectFromInspector()
 
 static void dispatchOnInspectorBackendTask(ExecutionContext* context, const String& message)
 {
+#ifndef DISABLE_INSPECTOR
     toWorkerGlobalScope(context)->workerInspectorController()->dispatchMessageFromFrontend(message);
+#endif
 }
 
 void WorkerInspectorProxy::sendMessageToInspector(const String& message)

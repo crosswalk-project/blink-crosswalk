@@ -11,7 +11,9 @@
 
 namespace blink {
 
+#ifndef DISABLE_INSPECTOR
 class InspectorDOMStorageAgent;
+#endif
 class StorageClient;
 class StorageNamespace;
 
@@ -26,15 +28,18 @@ public:
     static StorageNamespaceController* from(Page* page) { return static_cast<StorageNamespaceController*>(WillBeHeapSupplement<Page>::from(page, supplementName())); }
 
     DECLARE_TRACE();
-
+#ifndef DISABLE_INSPECTOR
     InspectorDOMStorageAgent* inspectorAgent() { return m_inspectorAgent; }
     void setInspectorAgent(InspectorDOMStorageAgent* agent) { m_inspectorAgent = agent; }
+#endif
 private:
     explicit StorageNamespaceController(StorageClient*);
     static const char* supplementName();
     OwnPtr<StorageNamespace> m_sessionStorage;
     StorageClient* m_client;
+#ifndef DISABLE_INSPECTOR
     RawPtrWillBeMember<InspectorDOMStorageAgent> m_inspectorAgent;
+#endif
 };
 
 } // namespace blink

@@ -37,7 +37,9 @@
 #include "core/dom/Node.h"
 #include "core/frame/UseCounter.h"
 #include "core/html/HTMLStyleElement.h"
+#ifndef DISABLE_INSPECTOR
 #include "core/inspector/InspectorInstrumentation.h"
+#endif
 #include "core/svg/SVGStyleElement.h"
 #include "platform/weborigin/SecurityOrigin.h"
 #include "wtf/text/StringBuilder.h"
@@ -162,7 +164,9 @@ CSSStyleSheet::~CSSStyleSheet()
 
 void CSSStyleSheet::willMutateRules()
 {
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::willMutateRules(this);
+#endif
 
     // If we are the only client it is safe to mutate.
     if (m_contents->clientSize() <= 1 && !m_contents->isInMemoryCache()) {
@@ -190,8 +194,9 @@ void CSSStyleSheet::didMutateRules()
 {
     ASSERT(m_contents->isMutable());
     ASSERT(m_contents->clientSize() <= 1);
-
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::didMutateRules(this);
+#endif
     didMutate(PartialRuleUpdate);
 }
 

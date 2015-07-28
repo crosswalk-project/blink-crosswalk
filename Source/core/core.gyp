@@ -58,6 +58,13 @@
     'variables': {
       'optimize': 'max',
     },
+    'conditions': [
+      ['disable_devtools==1', {
+        'defines': [
+          'DISABLE_INSPECTOR',
+        ],
+      }],
+    ],
   },
 
   'targets': [
@@ -209,6 +216,11 @@
         '<@(generated_core_dictionary_files)',
       ],
       'conditions': [
+        ['disable_devtools!=1', {
+          'sources': [
+            '<@(generated_core_additional_files_inspector)',
+          ],
+        }],
         ['OS=="win" and component=="shared_library"', {
           'defines': [
             'USING_V8_SHARED',
@@ -566,6 +578,12 @@
         '<@(webcore_non_rendering_files)',
       ],
       'conditions': [
+        ['disable_devtools==1', {
+          'sources!': [
+            '<@(webcore_non_rendering_files_inspector)',
+          ],
+        }],
+
         # Shard this target into parts to work around linker limitations.
         # on link time code generation builds.
         ['OS=="win" and (buildtype=="Official" or (fastbuild==0 and win_z7==1))', {
@@ -721,9 +739,9 @@
 
         '../platform/blink_platform.gyp:blink_common',
         '../platform/blink_platform.gyp:blink_platform',
-
         # webcore_generated dependency
         'core_generated.gyp:make_core_generated',
+
         'inspector_protocol_sources',
         'inspector_instrumentation_sources',
         '../bindings/core/v8/generated.gyp:bindings_core_v8_generated',
@@ -731,7 +749,6 @@
         '../bindings/modules/generated.gyp:modules_event_generated',
         '../bindings/modules/v8/generated.gyp:bindings_modules_v8_generated',
         '../platform/platform_generated.gyp:make_platform_generated',
-
         '../wtf/wtf.gyp:wtf',
         '<(DEPTH)/gin/gin.gyp:gin',
         '<(DEPTH)/skia/skia.gyp:skia',
@@ -792,6 +809,11 @@
             'testing/v8',
           ],
           'conditions': [
+            ['disable_devtools!=1', {
+              'sources': [
+                '<@(generated_core_additional_files_inspector)',
+              ],
+            }],
             ['use_default_render_theme==0 and OS != "android"', {
               'sources!': [
                 'layout/LayoutThemeDefault.cpp',
