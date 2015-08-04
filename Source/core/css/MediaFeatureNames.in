@@ -16,6 +16,7 @@ device-aspect-ratio
 -webkit-device-pixel-ratio
 device-height
 device-width
+device-radius
 display-mode
 max-color
 max-color-index
@@ -27,6 +28,7 @@ max-device-width
 max-height
 max-monochrome
 max-width
+max-device-radius
 max-resolution
 min-color
 min-color-index
@@ -38,6 +40,7 @@ min-device-width
 min-height
 min-monochrome
 min-width
+min-device-radius
 min-resolution
 pointer
 resolution

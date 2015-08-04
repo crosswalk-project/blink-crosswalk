@@ -77,13 +77,15 @@ struct WebScreenInfo {
     // It is the opposite of the physical rotation.
     uint16_t orientationAngle;
 
+    int deviceRadius; //[device-radius]
+
     WebScreenInfo()
         : deviceScaleFactor(1)
         , depth(0)
         , depthPerComponent(0)
         , isMonochrome(false)
         , orientationType(WebScreenOrientationUndefined)
-        , orientationAngle(0) { }
+        , orientationAngle(0) {}
 
     bool operator==(const WebScreenInfo& other) const
     {
@@ -94,7 +96,8 @@ struct WebScreenInfo {
             && this->rect == other.rect
             && this->availableRect == other.availableRect
             && this->orientationType == other.orientationType
-            && this->orientationAngle == other.orientationAngle;
+            && this->orientationAngle == other.orientationAngle
+            && this->deviceRadius == other.deviceRadius; //[device-radius]
     }
 
     bool operator!=(const WebScreenInfo& other) const

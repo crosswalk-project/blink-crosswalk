@@ -37,6 +37,7 @@ public:
     virtual WebDisplayMode displayMode() const override;
     virtual Document* document() const override;
     virtual bool hasValues() const override;
+    virtual int deviceRadius() const override; //[device-radius]
 
 protected:
     MediaValuesDynamic(LocalFrame*);
