@@ -22,9 +22,6 @@
 #include "core/page/Page.h"
 #include "core/style/ComputedStyle.h"
 #include "public/platform/WebScreenInfo.h"
-//[device-radius]
-#include "core/page/Chrome.h"
-#include "public/platform/WebScreenInfo.h"
 
 namespace blink {
 
@@ -156,7 +153,6 @@ int MediaValues::calculateAvailableHoverTypes(LocalFrame* frame) const
     return frame->settings()->availableHoverTypes();
 }
 
-//[device-radius]
 int MediaValues::calculateDeviceRadius(LocalFrame* frame) const
 {
     ASSERT(frame && frame->host());

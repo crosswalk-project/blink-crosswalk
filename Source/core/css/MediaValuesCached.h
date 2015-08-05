@@ -30,7 +30,7 @@ public:
         bool strictMode;
         String mediaType;
         WebDisplayMode displayMode;
-        int deviceRadius; //[device-radius]
+        int deviceRadius;
 
         MediaValuesCachedData()
             : viewportWidth(0)
@@ -48,7 +48,7 @@ public:
             , threeDEnabled(false)
             , strictMode(true)
             , displayMode(WebDisplayModeBrowser)
-            , deviceRadius(-1) //[device-radius]
+            , deviceRadius(-1)
         {
         }
     };
@@ -79,7 +79,7 @@ public:
     virtual bool hasValues() const override;
     virtual const String mediaType() const override;
     virtual WebDisplayMode displayMode() const override;
-    virtual int deviceRadius() const override; //[device-radius]
+    virtual int deviceRadius() const override;
 
     void setViewportWidth(int);
     void setViewportHeight(int);

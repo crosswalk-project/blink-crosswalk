@@ -355,7 +355,6 @@ static bool computeLength(const MediaQueryExpValue& value, const MediaValues& me
         return !mediaValues.strictMode() || !result;
     }
 
-    //[device-radius]
     if (value.unit == CSSPrimitiveValue::CSS_PERCENTAGE) {
         result = clampTo<int>(mediaValues.deviceWidth() * (std::min<double>(50,value.value) / 100));
         return true;
@@ -392,10 +391,9 @@ static bool deviceWidthMediaFeatureEval(const MediaQueryExpValue& value, MediaFe
     return true;
 }
 
-//[device-radius]
 static bool deviceRadiusMediaFeatureEval(const MediaQueryExpValue& value, MediaFeaturePrefix op, const MediaValues& mediaValues)
 {
-    //Check if the shape of device is round
+    // Check if the shape of device is round
     if (mediaValues.deviceRadius() < 0)
         return false;
 
@@ -511,8 +509,6 @@ static bool maxWidthMediaFeatureEval(const MediaQueryExpValue& value, MediaFeatu
     return widthMediaFeatureEval(value, MaxPrefix, mediaValues);
 }
 
-
-//[device-radius]
 static bool minDeviceRadiusMediaFeatureEval(const MediaQueryExpValue& value, MediaFeaturePrefix, const MediaValues& mediaValues)
 {
     return deviceRadiusMediaFeatureEval(value, MinPrefix, mediaValues);
