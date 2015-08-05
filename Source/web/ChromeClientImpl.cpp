@@ -56,6 +56,7 @@
 #include "modules/accessibility/AXObject.h"
 #include "platform/Cursor.h"
 #include "platform/FileChooser.h"
+#include "platform/KeyboardCodes.h"
 #include "platform/RuntimeEnabledFeatures.h"
 #include "platform/exported/WrappedResourceRequest.h"
 #include "platform/geometry/IntRect.h"
@@ -249,7 +250,7 @@ static inline void updatePolicyForEvent(const WebInputEvent* inputEvent, Navigat
         default:
             return;
         }
-    } else if (WebInputEvent::isKeyboardEventType(inputEvent->type) || WebInputEvent::isGestureEventType(inputEvent->type)) {
+    } else if ((WebInputEvent::isKeyboardEventType(inputEvent->type) && static_cast<const WebKeyboardEvent*>(inputEvent)->windowsKeyCode == VKEY_RETURN) || WebInputEvent::isGestureEventType(inputEvent->type)) {
         // Keyboard and gesture events can simulate mouse events.
         buttonNumber = 0;
     } else {
