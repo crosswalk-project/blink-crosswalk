@@ -153,6 +153,12 @@ int MediaValues::calculateAvailableHoverTypes(LocalFrame* frame) const
     return frame->settings()->availableHoverTypes();
 }
 
+int MediaValues::calculateDeviceRadius(LocalFrame* frame) const
+{
+    ASSERT(frame && frame->host());
+    return frame->host()->chrome().screenInfo().deviceRadius;
+}
+
 bool MediaValues::computeLengthImpl(double value, CSSPrimitiveValue::UnitType type, unsigned defaultFontSize, unsigned viewportWidth, unsigned viewportHeight, double& result)
 {
     // The logic in this function is duplicated from CSSPrimitiveValue::computeLengthDouble
