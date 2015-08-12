@@ -77,6 +77,17 @@ static inline bool featureWithValidIdent(const String& mediaFeature, CSSValueID 
     return false;
 }
 
+static inline bool featureWithValidDeviceRadius(const String& mediaFeature, const CSSParserValue* value)
+{
+    if (!(CSSPrimitiveValue::isLength((CSSPrimitiveValue::UnitType)value->unit) || (value->unit == CSSPrimitiveValue::CSS_NUMBER && value->fValue == 0) || value->unit == CSSPrimitiveValue::CSS_PERCENTAGE) 
+        || value->fValue < 0)
+        return false;
+
+    return mediaFeature == deviceRadiusMediaFeature
+        || mediaFeature == minDeviceRadiusMediaFeature
+        || mediaFeature == maxDeviceRadiusMediaFeature;
+}
+
 static inline bool featureWithValidPositiveLength(const String& mediaFeature, const CSSParserValue* value)
 {
     if (!(CSSPrimitiveValue::isLength((CSSPrimitiveValue::UnitType)value->unit) || (value->unit == CSSPrimitiveValue::CSS_NUMBER && value->fValue == 0)) || value->fValue < 0)
@@ -173,7 +184,8 @@ static inline bool featureWithoutValue(const String& mediaFeature)
         || mediaFeature == anyPointerMediaFeature
         || mediaFeature == devicePixelRatioMediaFeature
         || mediaFeature == resolutionMediaFeature
-        || mediaFeature == scanMediaFeature;
+        || mediaFeature == scanMediaFeature
+        || mediaFeature == deviceRadiusMediaFeature;
 }
 
 bool MediaQueryExp::isViewportDependent() const
@@ -224,6 +236,7 @@ PassOwnPtrWillBeRawPtr<MediaQueryExp> MediaQueryExp::createIfValid(const String&
                 expValue.unit = CSSPrimitiveValue::CSS_VALUE_ID;
                 expValue.isID = true;
             } else if (featureWithValidDensity(lowerMediaFeature, value)
+                || featureWithValidDeviceRadius(lowerMediaFeature, value)
                 || featureWithValidPositiveLength(lowerMediaFeature, value)) {
                 // Media features that must have non-negative <density>, ie. dppx, dpi or dpcm,
                 // or Media features that must have non-negative <length> or number value.
