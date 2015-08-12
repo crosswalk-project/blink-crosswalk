@@ -659,8 +659,10 @@ void TableLayoutAlgorithmAuto::distributeWidthToColumns(int& available, Total to
         m_layoutStruct[i].computedLogicalWidth = (distributionMode == InitialWidth) ? cellLogicalWidth : m_layoutStruct[i].computedLogicalWidth + cellLogicalWidth;
 
         // If we have run out of width to allocate we're done.
-        // Also, any overallocation will be unwound later so no point in building up cells to unwind, just bail now.
-        if (available <= 0 || total <= 0)
+        // TODO(rhogan): Extend this to Fixed as well.
+        if (lengthType == Percent && (!available || !total))
+            return;
+        if (lengthType == Auto && !total)
             return;
     }
 }
