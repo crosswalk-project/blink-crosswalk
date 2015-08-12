@@ -77,13 +77,21 @@ struct WebScreenInfo {
     // It is the opposite of the physical rotation.
     uint16_t orientationAngle;
 
+    // Display shape factor. Specifies the radii of a circle
+    // that defines the curve of the four corners of the display.
+    // Similar to the border-radius' principle.
+    // Can describe a round or ellipse shaped display.
+    // W3C CSS Spec: https://drafts.csswg.org/css-round-display/
+    int deviceRadius;
+
     WebScreenInfo()
         : deviceScaleFactor(1)
         , depth(0)
         , depthPerComponent(0)
         , isMonochrome(false)
         , orientationType(WebScreenOrientationUndefined)
-        , orientationAngle(0) { }
+        , orientationAngle(0)
+        , deviceRadius(0) { }
 
     bool operator==(const WebScreenInfo& other) const
     {
@@ -94,7 +102,8 @@ struct WebScreenInfo {
             && this->rect == other.rect
             && this->availableRect == other.availableRect
             && this->orientationType == other.orientationType
-            && this->orientationAngle == other.orientationAngle;
+            && this->orientationAngle == other.orientationAngle
+            && this->deviceRadius == other.deviceRadius;
     }
 
     bool operator!=(const WebScreenInfo& other) const

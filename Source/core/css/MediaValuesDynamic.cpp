@@ -147,4 +147,9 @@ bool MediaValuesDynamic::hasValues() const
     return m_frame;
 }
 
+int MediaValuesDynamic::deviceRadius() const
+{
+    return calculateDeviceRadius(m_frame);
+}
+
 } // namespace
