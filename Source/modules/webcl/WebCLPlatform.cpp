@@ -7,8 +7,8 @@
 
 #if ENABLE(WEBCL)
 #include "bindings/core/v8/V8Binding.h"
+#include "core/webcl/WebCLException.h"
 #include "modules/webcl/WebCL.h"
-#include "modules/webcl/WebCLException.h"
 #include "modules/webcl/WebCLOpenCL.h"
 #include "modules/webcl/WebCLPlatform.h"
 

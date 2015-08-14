@@ -7,8 +7,8 @@
 
 #if ENABLE(WEBCL)
 
-#include "modules/webcl/WebCL.h"
-#include "modules/webcl/WebCLException.h"
+#include "core/webcl/WebCLException.h"
+#include <CL/cl.h>
 
 namespace blink {
 

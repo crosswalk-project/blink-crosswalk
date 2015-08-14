@@ -7,11 +7,8 @@
 #define WebCLException_h
 
 #include "bindings/core/v8/ExceptionState.h"
+#include "bindings/core/v8/ScriptWrappable.h"
 #include <wtf/ThreadSafeRefCounted.h>
-
-#if ENABLE(WEBCL)
-#include "modules/webcl/WebCLConfig.h"
-#endif
 
 #define WEBCLEXCEPTIONOFFSET 0
 

@@ -11,10 +11,10 @@
 #include "core/html/HTMLImageElement.h"
 #include "core/html/HTMLVideoElement.h"
 #include "core/html/ImageData.h"
+#include "core/webcl/WebCLException.h"
 #include "platform/graphics/gpu/WebGLImageConversion.h"
 #include "platform/graphics/ImageBuffer.h"
 #include "modules/webcl/WebCL.h"
-#include "modules/webcl/WebCLException.h"
 #include "modules/webcl/WebCLHTMLUtil.h"
 
 namespace blink {
