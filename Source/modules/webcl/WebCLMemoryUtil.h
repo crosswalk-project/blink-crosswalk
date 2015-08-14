@@ -8,7 +8,7 @@
 
 #if ENABLE(WEBCL)
 
-#include "modules/webcl/WebCLException.h"
+#include "core/webcl/WebCLException.h"
 #include <wtf/RefCounted.h>
 #include <wtf/Vector.h>
 #include <wtf/WeakPtr.h>
