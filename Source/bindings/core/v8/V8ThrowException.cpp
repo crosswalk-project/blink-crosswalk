@@ -28,10 +28,10 @@
 #include "bindings/core/v8/BindingSecurity.h"
 #include "bindings/core/v8/V8Binding.h"
 #include "bindings/core/v8/V8DOMException.h"
-#include "bindings/modules/v8/V8WebCLException.h"
+#include "bindings/core/v8/V8WebCLException.h"
 #include "core/dom/DOMException.h"
 #include "core/dom/ExceptionCode.h"
-#include "modules/webcl/WebCLException.h"
+#include "core/webcl/WebCLException.h"
 #include "wtf/RefPtr.h"
 
 namespace blink {
