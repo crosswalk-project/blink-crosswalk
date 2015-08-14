@@ -8,8 +8,8 @@
 #if ENABLE(WEBCL)
 #include "bindings/modules/v8/V8WebCLContext.h"
 #include "bindings/modules/v8/V8WebCLMemoryObject.h"
+#include "core/webcl/WebCLException.h"
 #include "modules/webcl/WebCL.h"
-#include "modules/webcl/WebCLException.h"
 #include "modules/webcl/WebCLMemoryObject.h"
 #include "modules/webcl/WebCLOpenCL.h"
 
