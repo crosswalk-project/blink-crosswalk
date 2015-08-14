@@ -7,10 +7,10 @@
 
 #if ENABLE(WEBCL)
 
+#include "core/webcl/WebCLException.h"
 #include "modules/webcl/WebCL.h"
 #include "modules/webcl/WebCLBuffer.h"
 #include "modules/webcl/WebCLContext.h"
-#include "modules/webcl/WebCLException.h"
 #include "modules/webcl/WebCLMemoryObject.h"
 #include "modules/webcl/WebCLOpenCL.h"
 

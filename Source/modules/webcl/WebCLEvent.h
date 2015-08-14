@@ -8,6 +8,7 @@
 
 #if ENABLE(WEBCL)
 #include "modules/webcl/WebCLCallback.h"
+#include "modules/webcl/WebCLConfig.h"
 #include "modules/webcl/WebCLObject.h"
 
 #include <wtf/PassRefPtr.h>

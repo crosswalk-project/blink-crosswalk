@@ -6,7 +6,7 @@
 #include "config.h"
 
 #if ENABLE(WEBCL)
-#include "modules/webcl/WebCLException.h"
+#include "core/webcl/WebCLException.h"
 #include "modules/webcl/WebCLKernel.h"
 #include "modules/webcl/WebCLKernelArgInfoProvider.h"
 #include "modules/webcl/WebCLProgram.h"

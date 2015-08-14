@@ -6,6 +6,7 @@
 #include "config.h"
 
 #if ENABLE(WEBCL)
+#include "core/webcl/WebCLException.h"
 #include "modules/webcl/WebCL.h"
 #include "modules/webcl/WebCLOpenCL.h"
 #include "modules/webcl/WebCLCallback.h"
@@ -13,7 +14,6 @@
 #include "modules/webcl/WebCLConfig.h"
 #include "modules/webcl/WebCLContext.h"
 #include "modules/webcl/WebCLDevice.h"
-#include "modules/webcl/WebCLException.h"
 #include "modules/webcl/WebCLExtension.h"
 #include "modules/webcl/WebCLEvent.h"
 #include "modules/webcl/WebCLImage.h"
