@@ -4321,8 +4321,10 @@ void WebViewImpl::initializeLayerTreeView()
         m_layerTreeView = m_client->layerTreeView();
     }
 
+#ifndef DISABLE_INSPECTOR
     if (WebDevToolsAgentImpl* devTools = mainFrameDevToolsAgentImpl())
         devTools->layerTreeViewChanged(m_layerTreeView);
+#endif
 
     m_page->settings().setAcceleratedCompositingEnabled(m_layerTreeView != 0);
 

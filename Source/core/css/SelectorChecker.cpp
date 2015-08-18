@@ -892,8 +892,10 @@ bool SelectorChecker::checkPseudoClass(const SelectorCheckingContext& context, u
         }
         if (!shouldMatchHoverOrActive(context))
             return false;
+#ifndef DISABLE_INSPECTOR
         if (InspectorInstrumentation::forcePseudoState(&element, CSSSelector::PseudoHover))
             return true;
+#endif
         return element.hovered();
     case CSSSelector::PseudoActive:
         if (m_mode == ResolvingStyle) {
@@ -904,8 +906,10 @@ bool SelectorChecker::checkPseudoClass(const SelectorCheckingContext& context, u
         }
         if (!shouldMatchHoverOrActive(context))
             return false;
+#ifndef DISABLE_INSPECTOR
         if (InspectorInstrumentation::forcePseudoState(&element, CSSSelector::PseudoActive))
             return true;
+#endif
         return element.active();
     case CSSSelector::PseudoEnabled:
         if (element.isFormControlElement() || isHTMLOptionElement(element) || isHTMLOptGroupElement(element))

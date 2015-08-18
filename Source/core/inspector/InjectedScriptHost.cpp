@@ -87,7 +87,12 @@ void InjectedScriptHost::inspectImpl(PassRefPtr<JSONValue> object, PassRefPtr<JS
 
 void InjectedScriptHost::getEventListenersImpl(EventTarget* target, Vector<EventListenerInfo>& listenersArray)
 {
+#ifndef DISABLE_INSPECTOR
     EventListenerInfo::getEventListeners(target, listenersArray, false);
+#else
+    (void) target;
+    (void) listenersArray;
+#endif
 }
 
 void InjectedScriptHost::clearConsoleMessages()
@@ -124,14 +129,26 @@ InjectedScriptHost::InspectableObject* InjectedScriptHost::inspectedObject(unsig
 
 void InjectedScriptHost::debugFunction(const String& scriptId, int lineNumber, int columnNumber)
 {
+#ifndef DISABLE_INSPECTOR
     if (m_debuggerAgent)
         m_debuggerAgent->setBreakpoint(scriptId, lineNumber, columnNumber, InspectorDebuggerAgent::DebugCommandBreakpointSource);
+#else
+    (void) scriptId;
+    (void) lineNumber;
+    (void) columnNumber;
+#endif
 }
 
 void InjectedScriptHost::undebugFunction(const String& scriptId, int lineNumber, int columnNumber)
 {
+#ifndef DISABLE_INSPECTOR
     if (m_debuggerAgent)
         m_debuggerAgent->removeBreakpoint(scriptId, lineNumber, columnNumber, InspectorDebuggerAgent::DebugCommandBreakpointSource);
+#else
+    (void) scriptId;
+    (void) lineNumber;
+    (void) columnNumber;
+#endif
 }
 
 void InjectedScriptHost::monitorFunction(const String& scriptId, int lineNumber, int columnNumber, const String& functionName)
@@ -143,14 +160,26 @@ void InjectedScriptHost::monitorFunction(const String& scriptId, int lineNumber,
     else
         builder.append(functionName);
     builder.appendLiteral(" called\" + (arguments.length > 0 ? \" with arguments: \" + Array.prototype.join.call(arguments, \", \") : \"\")) && false");
+#ifndef DISABLE_INSPECTOR
     if (m_debuggerAgent)
         m_debuggerAgent->setBreakpoint(scriptId, lineNumber, columnNumber, InspectorDebuggerAgent::MonitorCommandBreakpointSource, builder.toString());
+#else
+      (void) scriptId;
+      (void) lineNumber;
+      (void) columnNumber;
+#endif
 }
 
 void InjectedScriptHost::unmonitorFunction(const String& scriptId, int lineNumber, int columnNumber)
 {
+#ifndef DISABLE_INSPECTOR
     if (m_debuggerAgent)
         m_debuggerAgent->removeBreakpoint(scriptId, lineNumber, columnNumber, InspectorDebuggerAgent::MonitorCommandBreakpointSource);
+#else
+    (void) scriptId;
+    (void) lineNumber;
+    (void) columnNumber;
+#endif
 }
 
 } // namespace blink

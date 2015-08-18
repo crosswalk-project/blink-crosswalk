@@ -836,7 +836,9 @@ void Animation::cancel()
     m_startTime = nullValue();
     m_currentTimePending = false;
 
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::didCancelAnimation(timeline()->document(), this);
+#endif
 }
 
 void Animation::beginUpdatingState()
@@ -997,8 +999,10 @@ Animation::PlayStateUpdateScope::~PlayStateUpdateScope()
     }
     m_animation->endUpdatingState();
 
+#ifndef DISABLE_INSPECTOR
     if (oldPlayState != newPlayState && newPlayState == Running)
         InspectorInstrumentation::didCreateAnimation(m_animation->timeline()->document(), m_animation);
+#endif
 }
 
 bool Animation::addEventListener(const AtomicString& eventType, PassRefPtr<EventListener> listener, bool useCapture)

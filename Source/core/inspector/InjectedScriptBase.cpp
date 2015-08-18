@@ -146,8 +146,9 @@ ScriptValue InjectedScriptBase::callFunctionWithEvalEnabled(ScriptFunctionCall& 
     v8::Local<v8::Function> functionObj = function.function();
     DevToolsFunctionInfo info(functionObj);
     TRACE_EVENT1(TRACE_DISABLED_BY_DEFAULT("devtools.timeline"), "FunctionCall", "data", InspectorFunctionCallEvent::data(executionContext, info.scriptId(), "InjectedScriptSource.js", info.lineNumber()));
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentationCookie cookie = InspectorInstrumentation::willCallFunction(executionContext, info);
-
+#endif
     ScriptState* scriptState = m_injectedScriptObject.scriptState();
     bool evalIsDisabled = false;
     if (scriptState) {
@@ -161,8 +162,9 @@ ScriptValue InjectedScriptBase::callFunctionWithEvalEnabled(ScriptFunctionCall& 
 
     if (evalIsDisabled)
         scriptState->setEvalEnabled(false);
-
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::didCallFunction(cookie);
+#endif
     TRACE_EVENT_INSTANT1(TRACE_DISABLED_BY_DEFAULT("devtools.timeline"), "UpdateCounters", TRACE_EVENT_SCOPE_THREAD, "data", InspectorUpdateCountersEvent::data());
     return resultValue;
 }

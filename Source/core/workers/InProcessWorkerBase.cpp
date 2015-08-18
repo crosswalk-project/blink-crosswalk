@@ -88,7 +88,9 @@ void InProcessWorkerBase::didReceiveResponse(unsigned long identifier, const Res
         m_contentSecurityPolicy->setOverrideURLForSelf(response.url());
         m_contentSecurityPolicy->didReceiveHeaders(ContentSecurityPolicyResponseHeaders(response));
     }
+#ifndef DISABLE_INSPECTOR
     InspectorInstrumentation::didReceiveScriptResponse(executionContext(), identifier);
+#endif
 }
 
 void InProcessWorkerBase::notifyFinished()
@@ -98,10 +100,14 @@ void InProcessWorkerBase::notifyFinished()
     } else {
         ASSERT(m_contextProxy);
         WorkerThreadStartMode startMode = DontPauseWorkerGlobalScopeOnStart;
+#ifndef DISABLE_INSPECTOR
         if (InspectorInstrumentation::shouldPauseDedicatedWorkerOnStart(executionContext()))
             startMode = PauseWorkerGlobalScopeOnStart;
+#endif
         m_contextProxy->startWorkerGlobalScope(m_scriptLoader->url(), executionContext()->userAgent(m_scriptLoader->url()), m_scriptLoader->script(), startMode);
+#ifndef DISABLE_INSPECTOR
         InspectorInstrumentation::scriptImported(executionContext(), m_scriptLoader->identifier(), m_scriptLoader->script());
+#endif
     }
     m_scriptLoader = nullptr;
 }

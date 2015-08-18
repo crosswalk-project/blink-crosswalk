@@ -28,9 +28,7 @@
 #include "core/frame/DOMTimer.h"
 
 #include "core/dom/ExecutionContext.h"
-#ifndef DISABLE_INSPECTOR
 #include "core/inspector/InspectorInstrumentation.h"
-#endif
 #include "core/inspector/InspectorTraceEvents.h"
 #include "platform/TraceEvent.h"
 #include "wtf/CurrentTime.h"
