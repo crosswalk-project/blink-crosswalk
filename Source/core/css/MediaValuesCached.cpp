@@ -65,6 +65,7 @@ MediaValuesCached::MediaValuesCached(LocalFrame* frame)
     const String mediaType = calculateMediaType(frame);
     if (!mediaType.isEmpty())
         m_data.mediaType = mediaType.isolatedCopy();
+    m_data.deviceRadius = calculateDeviceRadius(frame);
 }
 
 MediaValuesCached::MediaValuesCached(const MediaValuesCachedData& data)
@@ -185,6 +186,11 @@ void MediaValuesCached::setViewportWidth(int width)
 void MediaValuesCached::setViewportHeight(int height)
 {
     m_data.viewportHeight = height;
+}
+
+int MediaValuesCached::deviceRadius() const
+{
+    return m_data.deviceRadius;
 }
 
 } // namespace

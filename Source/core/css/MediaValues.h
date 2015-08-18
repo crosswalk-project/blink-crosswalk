@@ -59,6 +59,7 @@ public:
     virtual bool hasValues() const = 0;
 
     virtual bool isCached() const { return false; }
+    virtual int deviceRadius() const = 0;
 
 protected:
     int calculateViewportWidth(LocalFrame*) const;
@@ -78,6 +79,7 @@ protected:
     HoverType calculatePrimaryHoverType(LocalFrame*) const;
     int calculateAvailableHoverTypes(LocalFrame*) const;
     static LocalFrame* frameFrom(Document&);
+    int calculateDeviceRadius(LocalFrame*) const;
 
 };
 
