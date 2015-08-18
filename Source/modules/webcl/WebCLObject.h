@@ -8,7 +8,7 @@
 
 #if ENABLE(WEBCL)
 
-#include "modules/webcl/WebCLException.h"
+#include "core/webcl/WebCLException.h"
 
 #include <wtf/PassRefPtr.h>
 #include <wtf/RefCounted.h>
