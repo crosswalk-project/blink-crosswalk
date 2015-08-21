@@ -3437,7 +3437,9 @@ void HTMLMediaElement::createMediaPlayer()
 
     closeMediaSource();
 
+#ifndef DISABLE_WEB_VIDEO
     m_player = MediaPlayer::create(this);
+#endif
 
     // We haven't yet found out if any remote routes are available.
     m_remoteRoutesAvailable = false;
