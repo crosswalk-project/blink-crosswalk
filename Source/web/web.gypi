@@ -286,6 +286,10 @@
       'painting/PaintAggregator.h',
       'win/WebFontRendering.cpp',
     ],
+    'web_files_web_video': [
+      'WebMediaPlayerClientImpl.cpp',
+      'WebMediaPlayerClientImpl.h',
+    ],
     'web_unittest_files': [
       'ExternalPopupMenuTest.cpp',
       'PageOverlayTest.cpp',

@@ -100,6 +100,12 @@
                     ],
                 }],
 
+                ['disable_web_video==1', {
+                  'sources!': [
+                    '<@(web_files_web_video)',
+                  ],
+                }],
+
                 ['component=="shared_library"', {
                     'dependencies': [
                         '../wtf/wtf_tests.gyp:wtf_unittest_helpers',

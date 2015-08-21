@@ -192,7 +192,9 @@ void initializeWithoutV8(Platform* platform)
 
     setIndexedDBClientCreateFunction(IndexedDBClientImpl::create);
 
+#ifndef DISABLE_WEB_VIDEO
     MediaPlayer::setMediaEngineCreateFunction(WebMediaPlayerClientImpl::create);
+#endif
 }
 
 void shutdown()
