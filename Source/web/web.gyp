@@ -81,6 +81,14 @@
                 '<@(web_files)',
             ],
             'conditions': [
+                ['disable_web_video==1', {
+                  'sources!': [
+                    '<@(web_files_web_video)',
+                  ],
+                  'defines': [
+                    'DISABLE_WEB_VIDEO',
+                  ],
+                }],
                 ['component=="shared_library"', {
                     'dependencies': [
                         '../wtf/wtf_tests.gyp:wtf_unittest_helpers',

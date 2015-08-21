@@ -82,7 +82,13 @@ public:
     // dispose() is called just before the destructor. This must be called in
     // the main thread, and while the graph lock is held.
     virtual void dispose();
-    static unsigned instanceCount() { return s_instanceCount; }
+    static unsigned instanceCount() {
+#if ENABLE(WEB_AUDIO)
+        return s_instanceCount;
+#else
+        return 0;
+#endif
+    }
 
     // node() always returns a valid pointer for now.
     AudioNode* node() const { return m_node; }
