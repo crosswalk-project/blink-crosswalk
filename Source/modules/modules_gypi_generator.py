@@ -1,3 +1,10 @@
+#!/usr/bin/python
+import os
+import sys
+
+###########################################
+def file_header():
+    str = """
 {
   'includes': [
     '../core/core_generated.gypi',
@@ -11,6 +18,13 @@
     # ways.
     'extra_blink_module_idl_files': [],
     'extra_blink_module_files': [],
+    """
+    return str
+
+###########################################end file_header
+
+def modules_idl_files():
+    str = """
     # Files for which bindings (.cpp and .h files) will be generated
     'modules_idl_files': [
       '<@(extra_blink_module_idl_files)',
@@ -172,6 +186,9 @@
       'serviceworkers/ServiceWorkerGlobalScope.idl',
       'serviceworkers/ServiceWorkerRegistration.idl',
       'serviceworkers/WindowClient.idl',
+    """
+
+    str_speech = """
       'speech/SpeechGrammar.idl',
       'speech/SpeechGrammarList.idl',
       'speech/SpeechRecognition.idl',
@@ -184,6 +201,9 @@
       'speech/SpeechSynthesisEvent.idl',
       'speech/SpeechSynthesisUtterance.idl',
       'speech/SpeechSynthesisVoice.idl',
+    """
+
+    str_tail = """
       'storage/Storage.idl',
       'storage/StorageEvent.idl',
       'vr/HMDVRDevice.idl',
@@ -258,6 +278,17 @@
       'websockets/CloseEvent.idl',
       'websockets/WebSocket.idl',
     ],
+    """
+
+    if not disable_speech:
+        str = str + str_speech
+
+    return str + str_tail
+####################################end modules_idl_files
+
+
+def modules_dependency_idl_files():
+    str = """
     # 'partial interface' or target (right side of) 'implements'
     'modules_dependency_idl_files': [
       'background_sync/ServiceWorkerGlobalScopeSync.idl',
@@ -315,8 +346,14 @@
       'quota/WorkerNavigatorStorageQuota.idl',
       'screen_orientation/ScreenScreenOrientation.idl',
       'serviceworkers/NavigatorServiceWorker.idl',
+    """
+
+    str_speech = """
       'speech/WindowSpeech.idl',
       'speech/WindowSpeechSynthesis.idl',
+    """
+
+    str_tail = """
       'storage/WindowStorage.idl',
       'vibration/NavigatorVibration.idl',
       'vr/NavigatorVRDevice.idl',
@@ -325,6 +362,16 @@
       'webdatabase/WindowWebDatabase.idl',
       'webmidi/NavigatorWebMIDI.idl',
     ],
+    """
+
+    if not disable_speech:
+        str = str + str_speech
+
+    return str + str_tail
+####################################end modules_dependency_idl_files
+
+def modules_event_idl_files():
+    str = """
     # interfaces that inherit from Event
     'modules_event_idl_files': [
       'app_banner/BeforeInstallPromptEvent.idl',
@@ -350,9 +397,15 @@
       'push_messaging/PushEvent.idl',
       'serviceworkers/ExtendableEvent.idl',
       'serviceworkers/FetchEvent.idl',
+    """
+
+    str_speech = """
       'speech/SpeechRecognitionError.idl',
       'speech/SpeechRecognitionEvent.idl',
       'speech/SpeechSynthesisEvent.idl',
+    """
+
+    str_tail = """
       'storage/StorageEvent.idl',
       'webaudio/AudioProcessingEvent.idl',
       'webaudio/OfflineAudioCompletionEvent.idl',
@@ -360,6 +413,17 @@
       'webmidi/MIDIMessageEvent.idl',
       'websockets/CloseEvent.idl',
     ],
+    """
+
+    if not disable_speech:
+        str = str + str_speech
+
+    return str + str_tail
+####################################end modules_event_idl_files
+
+
+def modules_dictionary_idl_files():
+    str = """
     'modules_dictionary_idl_files': [
       'app_banner/BeforeInstallPromptEventInit.idl',
       'background_sync/PeriodicSyncEventInit.idl',
@@ -399,8 +463,14 @@
       'serviceworkers/ExtendableEventInit.idl',
       'serviceworkers/FetchEventInit.idl',
       'serviceworkers/RegistrationOptions.idl',
+    """
+
+    str_speech = """
       'speech/SpeechRecognitionErrorInit.idl',
       'speech/SpeechRecognitionEventInit.idl',
+    """
+
+    str_tail = """
       'storage/StorageEventInit.idl',
       'vr/VRFieldOfViewInit.idl',
       'webcl/WebCLImageDescriptor.idl',
@@ -409,6 +479,16 @@
       'webmidi/MIDIOptions.idl',
       'websockets/CloseEventInit.idl',
     ],
+    """
+
+    if not disable_speech:
+        str = str + str_speech
+
+    return str + str_tail
+####################################end modules_dictionary_idl_files
+
+def generated_modules_files():
+    str = """
     'generated_modules_files': [
       # .cpp files from make_modules_generated actions.
       '<(blink_modules_output_dir)/EventModules.cpp',
@@ -420,6 +500,13 @@
       '<(blink_modules_output_dir)/IndexedDBNames.cpp',
       '<(blink_modules_output_dir)/IndexedDBNames.h',
     ],
+    """
+
+    return str
+####################################end generated_modules_files
+
+def generated_modules_dictionary_files():
+    str = """
     'generated_modules_dictionary_files': [
       '<(blink_modules_output_dir)/app_banner/BeforeInstallPromptEventInit.cpp',
       '<(blink_modules_output_dir)/app_banner/BeforeInstallPromptEventInit.h',
@@ -497,10 +584,16 @@
       '<(blink_modules_output_dir)/serviceworkers/FetchEventInit.h',
       '<(blink_modules_output_dir)/serviceworkers/RegistrationOptions.cpp',
       '<(blink_modules_output_dir)/serviceworkers/RegistrationOptions.h',
+    """
+
+    str_speech = """
       '<(blink_modules_output_dir)/speech/SpeechRecognitionErrorInit.cpp',
       '<(blink_modules_output_dir)/speech/SpeechRecognitionErrorInit.h',
       '<(blink_modules_output_dir)/speech/SpeechRecognitionEventInit.cpp',
       '<(blink_modules_output_dir)/speech/SpeechRecognitionEventInit.h',
+    """
+
+    str_tail = """
       '<(blink_modules_output_dir)/storage/StorageEventInit.cpp',
       '<(blink_modules_output_dir)/storage/StorageEventInit.h',
       '<(blink_modules_output_dir)/vr/VRFieldOfViewInit.cpp',
@@ -516,6 +609,16 @@
       '<(blink_modules_output_dir)/websockets/CloseEventInit.cpp',
       '<(blink_modules_output_dir)/websockets/CloseEventInit.h',
     ],
+    """
+
+    if not disable_speech:
+        str = str + str_speech
+
+    return str + str_tail
+####################################end generated_modules_dictionary_files
+
+def modules_files():
+    str = """
     'modules_files': [
       '<@(extra_blink_module_files)',
       '<@(generated_modules_dictionary_files)',
@@ -1153,6 +1256,9 @@
       'serviceworkers/ServiceWorkerThread.cpp',
       'serviceworkers/ServiceWorkerThread.h',
       'serviceworkers/WaitUntilObserver.cpp',
+    """
+
+    str_speech = """
       'speech/DOMWindowSpeechSynthesis.cpp',
       'speech/DOMWindowSpeechSynthesis.h',
       'speech/SpeechGrammar.cpp',
@@ -1182,6 +1288,9 @@
       'speech/SpeechSynthesisUtterance.h',
       'speech/SpeechSynthesisVoice.cpp',
       'speech/SpeechSynthesisVoice.h',
+    """
+
+    str_tail = """
       'storage/DOMWindowStorage.cpp',
       'storage/DOMWindowStorage.h',
       'storage/DOMWindowStorageController.cpp',
@@ -1462,15 +1571,41 @@
       'websockets/WorkerWebSocketChannel.cpp',
       'websockets/WorkerWebSocketChannel.h',
     ],
+    """
+
+    if not disable_speech:
+        str = str + str_speech
+
+    return str + str_tail
+####################################end modules_files
+
+def modules_testing_dependency_idl_files():
+    str = """
     # 'partial interface' or target (right side of) 'implements'
     'modules_testing_dependency_idl_files' : [
       'geolocation/testing/InternalsGeolocation.idl',
       'navigatorcontentutils/testing/InternalsNavigatorContentUtils.idl',
       'serviceworkers/testing/InternalsServiceWorker.idl',
+    """
+
+    str_speech = """
       'speech/testing/InternalsSpeechSynthesis.idl',
+    """
+
+    str_tail = """
       'vibration/testing/InternalsVibration.idl',
       'webaudio/testing/InternalsWebAudio.idl',
     ],
+    """
+
+    if not disable_speech:
+        str = str + str_speech
+
+    return str + str_tail
+####################################end modules_testing_dependency_idl_files
+
+def modules_testing_files():
+    str = """
     'modules_testing_files': [
       'geolocation/testing/GeolocationClientMock.cpp',
       'geolocation/testing/GeolocationClientMock.h',
@@ -1482,15 +1617,31 @@
       'navigatorcontentutils/testing/NavigatorContentUtilsClientMock.h',
       'serviceworkers/testing/InternalsServiceWorker.cpp',
       'serviceworkers/testing/InternalsServiceWorker.h',
+    """
+
+    str_speech = """
       'speech/testing/InternalsSpeechSynthesis.cpp',
       'speech/testing/InternalsSpeechSynthesis.h',
       'speech/testing/PlatformSpeechSynthesizerMock.cpp',
       'speech/testing/PlatformSpeechSynthesizerMock.h',
+    """
+
+    str_tail = """
       'vibration/testing/InternalsVibration.cpp',
       'vibration/testing/InternalsVibration.h',
       'webaudio/testing/InternalsWebAudio.h',
       'webaudio/testing/InternalsWebAudio.cpp',
     ],
+    """
+
+    if not disable_speech:
+        str = str + str_speech
+
+    return str + str_tail
+####################################end modules_testing_files
+
+def modules_unittest_files():
+    str = """
     'modules_unittest_files': [
       'accessibility/AXObjectTest.cpp',
       'cachestorage/CacheTest.cpp',
@@ -1511,6 +1662,13 @@
       'websockets/DOMWebSocketTest.cpp',
       'websockets/DocumentWebSocketChannelTest.cpp',
     ],
+    """
+
+    return str
+###################################end modules_unittest_files
+
+def modules_files_inspector():
+    str = """
     'modules_files_inspector': [
       'accessibility/InspectorAccessibilityAgent.cpp',
       'accessibility/InspectorAccessibilityAgent.h',
@@ -1531,5 +1689,41 @@
       'webdatabase/InspectorDatabaseResource.cpp',
       'webdatabase/InspectorDatabaseResource.h',
     ],
+    """
+
+    return str
+###################################end modules_files_inspector
+
+def file_tail():
+    str = """
   },
 }
+    """
+    return str
+####################################
+
+def generate_modules_gypi(speech):
+    global disable_speech
+
+    disable_speech = speech
+
+    if os.path.exists('third_party/WebKit/Source/modules/modules.gypi'):
+        os.remove('third_party/WebKit/Source/modules/modules.gypi')
+
+    with open('third_party/WebKit/Source/modules/modules.gypi', 'a') as f:
+        f.write(file_header())
+        f.write(modules_idl_files())
+        f.write(modules_dependency_idl_files())
+        f.write(modules_event_idl_files())
+        f.write(modules_dictionary_idl_files())
+        f.write(generated_modules_files())
+        f.write(generated_modules_dictionary_files())
+        f.write(modules_files())
+        f.write(modules_testing_dependency_idl_files())
+        f.write(modules_testing_files())
+        f.write(modules_unittest_files())
+        f.write(modules_files_inspector())
+        f.write(file_tail())
+        print "Generate file ./third_party/WebKit/Source/modules/modules.gypi"
+
+

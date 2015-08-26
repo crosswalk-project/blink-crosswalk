@@ -63,7 +63,9 @@
 #include "modules/indexeddb/IndexedDB.h"
 #include "modules/navigatorcontentutils/NavigatorContentUtilsClient.h"
 #include "modules/quota/DeprecatedStorageQuota.h"
+#ifndef DISABLE_SPEECH
 #include "modules/speech/SpeechRecognitionError.h"
+#endif
 #include "platform/Cursor.h"
 #include "platform/FileMetadata.h"
 #include "platform/FileSystemType.h"
@@ -130,7 +132,9 @@
 #include "public/web/WebSelection.h"
 #include "public/web/WebSerializedScriptValueVersion.h"
 #include "public/web/WebSettings.h"
+#ifndef DISABLE_SPEECH
 #include "public/web/WebSpeechRecognizerClient.h"
+#endif
 #include "public/web/WebTextAffinity.h"
 #include "public/web/WebTextCheckingResult.h"
 #include "public/web/WebTextCheckingType.h"
@@ -591,6 +595,7 @@ STATIC_ASSERT_MATCHING_ENUM(WebMediaStreamSource::ReadyStateLive, MediaStreamSou
 STATIC_ASSERT_MATCHING_ENUM(WebMediaStreamSource::ReadyStateMuted, MediaStreamSource::ReadyStateMuted);
 STATIC_ASSERT_MATCHING_ENUM(WebMediaStreamSource::ReadyStateEnded, MediaStreamSource::ReadyStateEnded);
 
+#ifndef DISABLE_SPEECH
 STATIC_ASSERT_MATCHING_ENUM(WebSpeechRecognizerClient::OtherError, SpeechRecognitionError::ErrorCodeOther);
 STATIC_ASSERT_MATCHING_ENUM(WebSpeechRecognizerClient::NoSpeechError, SpeechRecognitionError::ErrorCodeNoSpeech);
 STATIC_ASSERT_MATCHING_ENUM(WebSpeechRecognizerClient::AbortedError, SpeechRecognitionError::ErrorCodeAborted);
@@ -600,6 +605,7 @@ STATIC_ASSERT_MATCHING_ENUM(WebSpeechRecognizerClient::NotAllowedError, SpeechRe
 STATIC_ASSERT_MATCHING_ENUM(WebSpeechRecognizerClient::ServiceNotAllowedError, SpeechRecognitionError::ErrorCodeServiceNotAllowed);
 STATIC_ASSERT_MATCHING_ENUM(WebSpeechRecognizerClient::BadGrammarError, SpeechRecognitionError::ErrorCodeBadGrammar);
 STATIC_ASSERT_MATCHING_ENUM(WebSpeechRecognizerClient::LanguageNotSupportedError, SpeechRecognitionError::ErrorCodeLanguageNotSupported);
+#endif
 
 STATIC_ASSERT_MATCHING_ENUM(WebReferrerPolicyAlways, ReferrerPolicyAlways);
 STATIC_ASSERT_MATCHING_ENUM(WebReferrerPolicyDefault, ReferrerPolicyDefault);
