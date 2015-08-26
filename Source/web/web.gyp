@@ -93,6 +93,13 @@
                     '<@(web_files_inspector)',
                   ],
                 }],
+
+                ['disable_speech==1', {
+                    'sources!': [
+                        '<@(web_files_speech)',
+                    ],
+                }],
+
                 ['component=="shared_library"', {
                     'dependencies': [
                         '../wtf/wtf_tests.gyp:wtf_unittest_helpers',
