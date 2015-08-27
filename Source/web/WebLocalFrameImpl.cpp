@@ -1647,7 +1647,9 @@ void WebLocalFrameImpl::setCoreFrame(PassRefPtrWillBeRawPtr<LocalFrame> frame)
         if (m_client)
             providePushControllerTo(*m_frame, m_client->pushClient());
 
+#ifndef DISABLE_NOTIFICATIONS
         provideNotificationPermissionClientTo(*m_frame, NotificationPermissionClientImpl::create());
+#endif
 #if ENABLE(MEDIA_STREAM)
         provideUserMediaTo(*m_frame, &m_userMediaClientImpl);
 #endif
