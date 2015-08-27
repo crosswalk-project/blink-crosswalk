@@ -34,19 +34,25 @@
 #include "bindings/modules/v8/V8MIDIPort.h"
 #include "bindings/modules/v8/V8MediaStream.h"
 #include "bindings/modules/v8/V8PushMessageData.h"
+#ifndef DISABLE_SPEECH
 #include "bindings/modules/v8/V8SpeechRecognitionResult.h"
 #include "bindings/modules/v8/V8SpeechRecognitionResultList.h"
+#endif
 #include "bindings/modules/v8/V8Storage.h"
 #include "modules/gamepad/Gamepad.h"
 #include "modules/mediastream/MediaStream.h"
 #include "modules/push_messaging/PushMessageData.h"
+#ifndef DISABLE_SPEECH
 #include "modules/speech/SpeechRecognitionResult.h"
 #include "modules/speech/SpeechRecognitionResultList.h"
+#endif
 
 namespace blink {
 
 template bool DictionaryHelper::get(const Dictionary&, const String& key, Member<MIDIPort>& value);
+#ifndef DISABLE_SPEECH
 template bool DictionaryHelper::get(const Dictionary&, const String& key, Member<SpeechRecognitionResultList>& value);
+#endif
 template bool DictionaryHelper::get(const Dictionary&, const String& key, Member<Gamepad>& value);
 template bool DictionaryHelper::get(const Dictionary&, const String& key, Member<MediaStream>& value);
 template bool DictionaryHelper::get(const Dictionary&, const String& key, Member<Headers>& value);
@@ -54,7 +60,9 @@ template bool DictionaryHelper::get(const Dictionary&, const String& key, Member
 template bool DictionaryHelper::get(const Dictionary&, const String& key, Member<Storage>& value);
 
 template bool DictionaryHelper::convert(const Dictionary&, Dictionary::ConversionContext&, const String& key, Member<MIDIPort>& value);
+#ifndef DISABLE_SPEECH
 template bool DictionaryHelper::convert(const Dictionary&, Dictionary::ConversionContext&, const String& key, Member<SpeechRecognitionResultList>& value);
+#endif
 template bool DictionaryHelper::convert(const Dictionary&, Dictionary::ConversionContext&, const String& key, Member<Gamepad>& value);
 template bool DictionaryHelper::convert(const Dictionary&, Dictionary::ConversionContext&, const String& key, Member<MediaStream>& value);
 template bool DictionaryHelper::convert(const Dictionary&, Dictionary::ConversionContext&, const String& key, Member<Headers>& value);
