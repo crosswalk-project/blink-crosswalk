@@ -1707,10 +1707,12 @@ def generate_modules_gypi(speech):
 
     disable_speech = speech
 
-    if os.path.exists('third_party/WebKit/Source/modules/modules.gypi'):
-        os.remove('third_party/WebKit/Source/modules/modules.gypi')
+    name = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'modules.gypi')
 
-    with open('third_party/WebKit/Source/modules/modules.gypi', 'a') as f:
+    if os.path.exists(name):
+        os.remove(name)
+
+    with open(name, 'a') as f:
         f.write(file_header())
         f.write(modules_idl_files())
         f.write(modules_dependency_idl_files())
