@@ -45,8 +45,10 @@
 #include "modules/navigatorconnect/AcceptConnectionObserver.h"
 #include "modules/navigatorconnect/CrossOriginConnectEvent.h"
 #include "modules/navigatorconnect/CrossOriginServiceWorkerClient.h"
+#ifndef DISABLE_NOTIFICATIONS
 #include "modules/notifications/Notification.h"
 #include "modules/notifications/NotificationEvent.h"
+#endif
 #include "modules/push_messaging/PushEvent.h"
 #include "modules/push_messaging/PushMessageData.h"
 #include "modules/serviceworkers/ExtendableEvent.h"
@@ -135,12 +137,18 @@ void ServiceWorkerGlobalScopeProxy::dispatchMessageEvent(const WebString& messag
 
 void ServiceWorkerGlobalScopeProxy::dispatchNotificationClickEvent(int eventID, int64_t notificationID, const WebNotificationData& data)
 {
+#ifndef DISABLE_NOTIFICATIONS
     ASSERT(m_workerGlobalScope);
     WaitUntilObserver* observer = WaitUntilObserver::create(m_workerGlobalScope, WaitUntilObserver::NotificationClick, eventID);
     NotificationEventInit eventInit;
     eventInit.setNotification(Notification::create(m_workerGlobalScope, notificationID, data));
     RefPtrWillBeRawPtr<Event> event(NotificationEvent::create(EventTypeNames::notificationclick, eventInit, observer));
     m_workerGlobalScope->dispatchExtendableEvent(event.release(), observer);
+#else
+    (void) eventID;
+    (void) notificationID;
+    (void) data;
+#endif
 }
 
 void ServiceWorkerGlobalScopeProxy::dispatchPushEvent(int eventID, const WebString& data)

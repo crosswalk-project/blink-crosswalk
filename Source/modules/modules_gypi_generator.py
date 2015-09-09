@@ -151,9 +151,15 @@ def modules_idl_files():
       'navigatorconnect/CrossOriginConnectEvent.idl',
       'navigatorconnect/CrossOriginServiceWorkerClient.idl',
       'netinfo/NetworkInformation.idl',
+    """
+
+    str_notifications = """
       'notifications/Notification.idl',
       'notifications/NotificationEvent.idl',
       'notifications/NotificationPermissionCallback.idl',
+    """
+
+    str_1 = """
       'performance/WorkerPerformance.idl',
       'permissions/Permissions.idl',
       'permissions/PermissionStatus.idl',
@@ -280,6 +286,11 @@ def modules_idl_files():
     ],
     """
 
+    if not disable_notifications:
+       str = str + str_notifications
+
+    str = str + str_1;
+
     if not disable_speech:
         str = str + str_speech
 
@@ -331,8 +342,14 @@ def modules_dependency_idl_files():
       'navigatorcontentutils/NavigatorContentUtils.idl',
       'netinfo/NavigatorNetworkInformation.idl',
       'netinfo/WorkerNavigatorNetworkInformation.idl',
+    """
+
+    str_notifications = """
       'notifications/ServiceWorkerGlobalScopeNotifications.idl',
       'notifications/ServiceWorkerRegistrationNotifications.idl',
+    """
+
+    str_1 = """
       'permissions/NavigatorPermissions.idl',
       'permissions/WorkerNavigatorPermissions.idl',
       'performance/SharedWorkerPerformance.idl',
@@ -364,6 +381,11 @@ def modules_dependency_idl_files():
     ],
     """
 
+    if not disable_notifications:
+        str = str + str_notifications
+
+    str = str + str_1
+
     if not disable_speech:
         str = str + str_speech
 
@@ -391,7 +413,13 @@ def modules_event_idl_files():
       'mediastream/RTCDataChannelEvent.idl',
       'mediastream/RTCIceCandidateEvent.idl',
       'navigatorconnect/CrossOriginConnectEvent.idl',
+    """
+
+    str_notifications = """
       'notifications/NotificationEvent.idl',
+    """
+
+    str_1 = """
       'presentation/AvailableChangeEvent.idl',
       'presentation/DefaultSessionStartEvent.idl',
       'push_messaging/PushEvent.idl',
@@ -414,6 +442,11 @@ def modules_event_idl_files():
       'websockets/CloseEvent.idl',
     ],
     """
+
+    if not disable_notifications:
+        str = str + str_notifications
+
+    str = str + str_1
 
     if not disable_speech:
         str = str + str_speech
@@ -449,9 +482,15 @@ def modules_dictionary_idl_files():
       'mediastream/RTCDTMFToneChangeEventInit.idl',
       'mediastream/RTCIceCandidateInit.idl',
       'mediastream/RTCSessionDescriptionInit.idl',
+    """
+
+    str_notifications = """
       'notifications/GetNotificationOptions.idl',
       'notifications/NotificationEventInit.idl',
       'notifications/NotificationOptions.idl',
+    """
+
+    str_1 = """
       'permissions/MidiPermissionDescriptor.idl',
       'permissions/PermissionDescriptor.idl',
       'permissions/PushPermissionDescriptor.idl',
@@ -480,6 +519,11 @@ def modules_dictionary_idl_files():
       'websockets/CloseEventInit.idl',
     ],
     """
+
+    if not disable_notifications:
+        str = str + str_notifications
+
+    str = str + str_1
 
     if not disable_speech:
         str = str + str_speech
@@ -556,12 +600,18 @@ def generated_modules_dictionary_files():
       '<(blink_modules_output_dir)/mediastream/RTCIceCandidateInit.h',
       '<(blink_modules_output_dir)/mediastream/RTCSessionDescriptionInit.cpp',
       '<(blink_modules_output_dir)/mediastream/RTCSessionDescriptionInit.h',
+    """
+
+    str_notifications = """
       '<(blink_modules_output_dir)/notifications/GetNotificationOptions.cpp',
       '<(blink_modules_output_dir)/notifications/GetNotificationOptions.h',
       '<(blink_modules_output_dir)/notifications/NotificationEventInit.cpp',
       '<(blink_modules_output_dir)/notifications/NotificationEventInit.h',
       '<(blink_modules_output_dir)/notifications/NotificationOptions.cpp',
       '<(blink_modules_output_dir)/notifications/NotificationOptions.h',
+    """
+
+    str_1 = """
       '<(blink_modules_output_dir)/permissions/MidiPermissionDescriptor.cpp',
       '<(blink_modules_output_dir)/permissions/MidiPermissionDescriptor.h',
       '<(blink_modules_output_dir)/permissions/PermissionDescriptor.cpp',
@@ -610,6 +660,11 @@ def generated_modules_dictionary_files():
       '<(blink_modules_output_dir)/websockets/CloseEventInit.h',
     ],
     """
+
+    if not disable_notifications:
+        str = str + str_notifications
+
+    str = str + str_1
 
     if not disable_speech:
         str = str + str_speech
@@ -1115,6 +1170,9 @@ def modules_files():
       'netinfo/NetworkInformation.h',
       'netinfo/WorkerNavigatorNetworkInformation.cpp',
       'netinfo/WorkerNavigatorNetworkInformation.h',
+    """
+
+    str_notifications = """
       'notifications/Notification.cpp',
       'notifications/Notification.h',
       'notifications/NotificationEvent.cpp',
@@ -1125,6 +1183,9 @@ def modules_files():
       'notifications/ServiceWorkerGlobalScopeNotifications.h',
       'notifications/ServiceWorkerRegistrationNotifications.cpp',
       'notifications/ServiceWorkerRegistrationNotifications.h',
+    """
+
+    str_1 = """
       'performance/SharedWorkerPerformance.cpp',
       'performance/WorkerGlobalScopePerformance.cpp',
       'performance/WorkerGlobalScopePerformance.h',
@@ -1573,6 +1634,11 @@ def modules_files():
     ],
     """
 
+    if not disable_notifications:
+        str = str + str_notifications
+
+    str = str + str_1
+
     if not disable_speech:
         str = str + str_speech
 
@@ -1702,10 +1768,12 @@ def file_tail():
     return str
 ####################################
 
-def generate_modules_gypi(speech):
+def generate_modules_gypi(speech, notifications):
     global disable_speech
+    global disable_notifications
 
     disable_speech = speech
+    disable_notifications = notifications
 
     name = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'modules.gypi')
 
