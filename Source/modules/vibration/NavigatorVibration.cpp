@@ -62,10 +62,12 @@ NavigatorVibration::VibrationPattern NavigatorVibration::sanitizeVibrationPatter
 {
     VibrationPattern sanitized;
 
+#ifndef DISABLE_NOTIFICATIONS
     if (pattern.isUnsignedLong())
         sanitized.append(pattern.getAsUnsignedLong());
     else if (pattern.isUnsignedLongSequence())
         sanitized = pattern.getAsUnsignedLongSequence();
+#endif
 
     return sanitizeVibrationPatternInternal(sanitized);
 }

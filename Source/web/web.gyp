@@ -106,6 +106,12 @@
                   ],
                 }],
 
+                ['disable_notifications==1', {
+                  'sources!': [
+                    '<@(web_files_notifications)',
+                  ],
+                }],
+
                 ['component=="shared_library"', {
                     'dependencies': [
                         '../wtf/wtf_tests.gyp:wtf_unittest_helpers',
