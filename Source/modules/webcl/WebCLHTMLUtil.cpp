@@ -135,7 +135,7 @@ PassRefPtr<Image> WebCLHTMLUtil::videoFrameToImage(HTMLVideoElement* video)
 
     IntRect destRect(0, 0, size.width(), size.height());
     video->paintCurrentFrame(imageBufferObject->canvas(), destRect, nullptr);
-    return imageBufferObject->copyImage();
+    return imageBufferObject->newImageSnapshot();
 }
 
 WebCLHTMLUtil::WebCLHTMLUtil(unsigned capacity)
