@@ -35,12 +35,14 @@ InspectorRenderingAgent::InspectorRenderingAgent(WebViewImpl* webViewImpl)
 
 void InspectorRenderingAgent::restore()
 {
+#ifndef DISABLE_INSPECTOR
     ErrorString error;
     setContinuousPaintingEnabled(&error, m_state->getBoolean(RenderingAgentState::continuousPaintingEnabled));
     setShowDebugBorders(&error, m_state->getBoolean(RenderingAgentState::showDebugBorders));
     setShowFPSCounter(&error, m_state->getBoolean(RenderingAgentState::showFPSCounter));
     setShowPaintRects(&error, m_state->getBoolean(RenderingAgentState::showPaintRects));
     setShowScrollBottleneckRects(&error, m_state->getBoolean(RenderingAgentState::showScrollBottleneckRects));
+#endif
 }
 
 void InspectorRenderingAgent::disable(ErrorString*)
@@ -104,9 +106,11 @@ bool InspectorRenderingAgent::compositingEnabled(ErrorString* errorString)
     return true;
 }
 
+#ifndef DISABLE_INSPECTOR
 DEFINE_TRACE(InspectorRenderingAgent)
 {
     InspectorBaseAgent::trace(visitor);
 }
+#endif
 
 } // namespace blink

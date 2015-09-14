@@ -41,10 +41,12 @@ InspectorEmulationAgent::~InspectorEmulationAgent()
 
 void InspectorEmulationAgent::restore()
 {
+#ifndef DISABLE_INSPECTOR
     ErrorString error;
     setScriptExecutionDisabled(&error, m_state->getBoolean(EmulationAgentState::scriptExecutionDisabled));
     setTouchEmulationEnabled(&error, m_state->getBoolean(EmulationAgentState::touchEventEmulationEnabled), nullptr);
     setEmulatedMedia(&error, m_state->getString(EmulationAgentState::emulatedMedia));
+#endif
 }
 
 void InspectorEmulationAgent::disable(ErrorString*)
@@ -117,9 +119,11 @@ void InspectorEmulationAgent::viewportChanged()
 #endif
 }
 
+#ifndef DISABLE_INSPECTOR
 DEFINE_TRACE(InspectorEmulationAgent)
 {
     InspectorBaseAgent::trace(visitor);
 }
+#endif
 
 } // namespace blink

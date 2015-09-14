@@ -49,17 +49,26 @@ namespace blink {
 
 InjectedScriptManager::CallbackData* InjectedScriptManager::createCallbackData(InjectedScriptManager* injectedScriptManager)
 {
+#ifndef DISABLE_INSPECTOR
     OwnPtrWillBeRawPtr<InjectedScriptManager::CallbackData> callbackData = InjectedScriptManager::CallbackData::create(injectedScriptManager);
     InjectedScriptManager::CallbackData* callbackDataPtr = callbackData.get();
     m_callbackDataSet.add(callbackData.release());
     return callbackDataPtr;
+#else
+    (void) injectedScriptManager;
+    return nullptr;
+#endif
 }
 
 void InjectedScriptManager::removeCallbackData(InjectedScriptManager::CallbackData* callbackData)
 {
+#ifndef DISABLE_INSPECTOR
     ASSERT(m_callbackDataSet.contains(callbackData));
     callbackData->dispose();
     m_callbackDataSet.remove(callbackData);
+#else
+    (void) callbackData;
+#endif
 }
 
 static v8::Local<v8::Object> createInjectedScriptHostV8Wrapper(v8::Isolate* isolate, PassRefPtrWillBeRawPtr<InjectedScriptHost> host, InjectedScriptManager* injectedScriptManager, v8::Local<v8::Object> creationContext)

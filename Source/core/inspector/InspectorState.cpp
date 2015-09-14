@@ -121,10 +121,12 @@ PassRefPtr<JSONObject> InspectorState::getObject(const String& propertyName)
     return it->value->asObject();
 }
 
+#ifndef DISABLE_INSPECTOR
 DEFINE_TRACE(InspectorState)
 {
     visitor->trace(m_listener);
 }
+#endif
 
 InspectorState* InspectorCompositeState::createAgentState(const String& agentName)
 {
@@ -140,6 +142,7 @@ InspectorState* InspectorCompositeState::createAgentState(const String& agentNam
 
 void InspectorCompositeState::loadFromCookie(const String& inspectorCompositeStateCookie)
 {
+#ifndef DISABLE_INSPECTOR
     RefPtr<JSONValue> cookie = parseJSON(inspectorCompositeStateCookie);
     if (cookie)
         m_stateObject = cookie->asObject();
@@ -154,6 +157,9 @@ void InspectorCompositeState::loadFromCookie(const String& inspectorCompositeSta
         }
         state.value->setFromCookie(agentStateObject);
     }
+#else
+    (void) inspectorCompositeStateCookie;
+#endif
 }
 
 void InspectorCompositeState::mute()

@@ -48,9 +48,14 @@ class LocalFrame;
 
 class InspectorAgent : public NoBaseWillBeGarbageCollectedFinalized<InspectorAgent> {
 public:
+#ifndef DISABLE_INSPECTOR
     explicit InspectorAgent(const String&);
     virtual ~InspectorAgent();
     DECLARE_VIRTUAL_TRACE();
+#else
+    explicit InspectorAgent(const String&) {}
+    virtual ~InspectorAgent() {}
+#endif
 
     virtual void init() { }
     virtual void setFrontend(InspectorFrontend*) = 0;
@@ -87,7 +92,9 @@ public:
     void flushPendingProtocolNotifications();
     void didCommitLoadForLocalFrame(LocalFrame*);
 
+#ifndef DISABLE_INSPECTOR
     DECLARE_TRACE();
+#endif
 
 private:
     RawPtrWillBeMember<InstrumentingAgents> m_instrumentingAgents;
