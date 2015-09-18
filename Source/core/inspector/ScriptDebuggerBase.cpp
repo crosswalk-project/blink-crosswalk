@@ -22,11 +22,13 @@ ScriptDebuggerBase::~ScriptDebuggerBase()
 {
 }
 
+#ifndef DISABLE_INSPECTOR
 DEFINE_TRACE(ScriptDebuggerBase)
 {
     visitor->trace(m_scriptDebugServer);
     ScriptDebugServer::Client::trace(visitor);
 }
+#endif
 
 v8::Local<v8::Object> ScriptDebuggerBase::compileDebuggerScript()
 {

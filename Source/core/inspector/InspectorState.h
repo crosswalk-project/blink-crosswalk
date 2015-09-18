@@ -73,7 +73,9 @@ public:
 
     void remove(const String&);
 
+#ifndef DISABLE_INSPECTOR
     DECLARE_TRACE();
+#endif
 
 private:
     void updateCookie();

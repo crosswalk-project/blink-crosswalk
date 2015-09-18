@@ -54,11 +54,13 @@ WorkerThreadDebugger::~WorkerThreadDebugger()
 {
 }
 
+#ifndef DISABLE_INSPECTOR
 DEFINE_TRACE(WorkerThreadDebugger)
 {
     visitor->trace(m_workerGlobalScope);
     ScriptDebuggerBase::trace(visitor);
 }
+#endif
 
 void WorkerThreadDebugger::setContextDebugData(v8::Local<v8::Context> context)
 {

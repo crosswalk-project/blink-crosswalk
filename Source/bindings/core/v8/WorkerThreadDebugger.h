@@ -56,7 +56,9 @@ public:
     void addListener(ScriptDebugListener*);
     void removeListener(ScriptDebugListener*);
 
+#ifndef DISABLE_INSPECTOR
     DECLARE_VIRTUAL_TRACE();
+#endif
 
 private:
     explicit WorkerThreadDebugger(WorkerGlobalScope*);

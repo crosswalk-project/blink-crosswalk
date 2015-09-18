@@ -30,7 +30,9 @@ public:
     void disable(ErrorString*) override;
     void restore() override;
 
+#ifndef DISABLE_INSPECTOR
     DECLARE_VIRTUAL_TRACE();
+#endif
 
 private:
     explicit InspectorRenderingAgent(WebViewImpl*);

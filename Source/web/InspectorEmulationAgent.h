@@ -35,7 +35,9 @@ public:
     void discardAgent() override;
     void didCommitLoadForLocalFrame(LocalFrame*) override;
 
+#ifndef DISABLE_INSPECTOR
     DECLARE_VIRTUAL_TRACE();
+#endif
 
 private:
     explicit InspectorEmulationAgent(WebViewImpl*);

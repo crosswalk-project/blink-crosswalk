@@ -97,7 +97,9 @@ WorkerGlobalScope::WorkerGlobalScope(const KURL& url, const String& userAgent, W
 WorkerGlobalScope::~WorkerGlobalScope()
 {
     ASSERT(!m_script);
+#ifndef DISABLE_INSPECTOR
     ASSERT(!m_workerInspectorController);
+#endif
 }
 
 void WorkerGlobalScope::applyContentSecurityPolicyFromString(const String& policy, ContentSecurityPolicyHeaderType contentSecurityPolicyType)
@@ -188,9 +190,9 @@ void WorkerGlobalScope::postTask(const WebTraceLocation& location, PassOwnPtr<Ex
 
 void WorkerGlobalScope::clearInspector()
 {
+#ifndef DISABLE_INSPECTOR
     ASSERT(m_workerInspectorController);
 
-#ifndef DISABLE_INSPECTOR
     thread()->setWorkerInspectorController(nullptr);
     m_workerInspectorController->dispose();
     m_workerInspectorController.clear();

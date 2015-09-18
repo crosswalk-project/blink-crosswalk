@@ -18,7 +18,9 @@ public:
     v8::Local<v8::Object> compileDebuggerScript() override;
     ScriptDebugServer* scriptDebugServer() const { return m_scriptDebugServer.get(); }
 
+#ifndef DISABLE_INSPECTOR
     DECLARE_VIRTUAL_TRACE();
+#endif
 
 private:
     v8::Isolate* m_isolate;

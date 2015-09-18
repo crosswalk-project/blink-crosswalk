@@ -660,6 +660,7 @@ void ScriptDebugServer::handleV8PromiseEvent(ScriptDebugListener* listener, Scri
 
 void ScriptDebugServer::dispatchDidParseSource(ScriptDebugListener* listener, v8::Local<v8::Object> object, CompileResult compileResult)
 {
+#ifndef DISABLE_INSPECTOR
     v8::Local<v8::Value> id = object->Get(v8InternalizedString("id"));
     ASSERT(!id.IsEmpty() && id->IsInt32());
     String sourceID = String::number(id->Int32Value());
@@ -677,6 +678,11 @@ void ScriptDebugServer::dispatchDidParseSource(ScriptDebugListener* listener, v8
         .setIsInternalScript(object->Get(v8InternalizedString("isInternalScript"))->ToBoolean(m_isolate)->Value());
 
     listener->didParseSource(sourceID, script, compileResult);
+#else
+    (void) listener;
+    (void) object;
+    (void) compileResult;
+#endif
 }
 
 void ScriptDebugServer::compileDebuggerScript()
