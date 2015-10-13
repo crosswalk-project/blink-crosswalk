@@ -1794,6 +1794,5 @@ def generate_modules_gypi(speech, notifications):
         f.write(modules_unittest_files())
         f.write(modules_files_inspector())
         f.write(file_tail())
-        print "Generate file ./third_party/WebKit/Source/modules/modules.gypi"
 
 
