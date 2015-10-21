@@ -107,6 +107,9 @@ def modules_idl_files():
       'geolocation/PositionCallback.idl',
       'geolocation/PositionError.idl',
       'geolocation/PositionErrorCallback.idl',
+    """
+
+    str_indexeddb = """
       'indexeddb/IDBCursor.idl',
       'indexeddb/IDBCursorWithValue.idl',
       'indexeddb/IDBDatabase.idl',
@@ -118,6 +121,9 @@ def modules_idl_files():
       'indexeddb/IDBRequest.idl',
       'indexeddb/IDBTransaction.idl',
       'indexeddb/IDBVersionChangeEvent.idl',
+    """
+
+    str_0 = """
       'mediasource/MediaSource.idl',
       'mediasource/SourceBuffer.idl',
       'mediasource/SourceBufferList.idl',
@@ -292,6 +298,11 @@ def modules_idl_files():
     ],
     """
 
+    if not disable_indexeddb:
+        str = str + str_indexeddb;
+
+    str = str + str_0;
+
     if not disable_notifications:
         str = str + str_notifications
 
@@ -341,8 +352,14 @@ def modules_dependency_idl_files():
       'geofencing/ServiceWorkerRegistrationGeofencing.idl',
       'geofencing/WorkerNavigatorGeofencing.idl',
       'geolocation/NavigatorGeolocation.idl',
+    """
+
+    str_indexeddb = """
       'indexeddb/WindowIndexedDatabase.idl',
       'indexeddb/WorkerGlobalScopeIndexedDatabase.idl',
+    """
+
+    str_0 = """
       'mediasource/HTMLVideoElementMediaSource.idl',
       'mediasource/URLMediaSource.idl',
       'mediastream/NavigatorMediaStream.idl',
@@ -398,6 +415,11 @@ def modules_dependency_idl_files():
     ],
     """
 
+    if not disable_indexeddb:
+        str = str + str_indexeddb;
+
+    str = str + str_0;
+
     if not disable_notifications:
         str = str + str_notifications
 
@@ -428,7 +450,13 @@ def modules_event_idl_files():
       'encryptedmedia/MediaKeyMessageEvent.idl',
       'gamepad/GamepadEvent.idl',
       'geofencing/GeofencingEvent.idl',
+    """
+
+    str_indexeddb = """
       'indexeddb/IDBVersionChangeEvent.idl',
+    """
+
+    str_0 = """
       'mediastream/MediaStreamEvent.idl',
       'mediastream/MediaStreamTrackEvent.idl',
       'mediastream/RTCDTMFToneChangeEvent.idl',
@@ -465,6 +493,11 @@ def modules_event_idl_files():
     ],
     """
 
+    if not disable_indexeddb:
+        str = str + str_indexeddb;
+
+    str = str + str_0;
+
     if not disable_notifications:
         str = str + str_notifications
 
@@ -497,9 +530,15 @@ def modules_dictionary_idl_files():
       'gamepad/GamepadEventInit.idl',
       'geofencing/CircularGeofencingRegionInit.idl',
       'geolocation/PositionOptions.idl',
+    """
+
+    str_indexeddb = """
       'indexeddb/IDBIndexParameters.idl',
       'indexeddb/IDBObjectStoreParameters.idl',
       'indexeddb/IDBVersionChangeEventInit.idl',
+    """
+
+    str_0 = """
       'mediastream/MediaStreamEventInit.idl',
       'mediastream/RTCDTMFToneChangeEventInit.idl',
       'mediastream/RTCIceCandidateInit.idl',
@@ -547,6 +586,11 @@ def modules_dictionary_idl_files():
       'websockets/CloseEventInit.idl',
     ],
     """
+
+    if not disable_indexeddb:
+        str = str + str_indexeddb;
+
+    str = str + str_0;
 
     if not disable_notifications:
         str = str + str_notifications
@@ -619,12 +663,18 @@ def generated_modules_dictionary_files():
       '<(blink_modules_output_dir)/geofencing/CircularGeofencingRegionInit.h',
       '<(blink_modules_output_dir)/geolocation/PositionOptions.cpp',
       '<(blink_modules_output_dir)/geolocation/PositionOptions.h',
+    """
+
+    str_0 = """
       '<(blink_modules_output_dir)/indexeddb/IDBIndexParameters.cpp',
       '<(blink_modules_output_dir)/indexeddb/IDBIndexParameters.h',
       '<(blink_modules_output_dir)/indexeddb/IDBObjectStoreParameters.cpp',
       '<(blink_modules_output_dir)/indexeddb/IDBObjectStoreParameters.h',
       '<(blink_modules_output_dir)/indexeddb/IDBVersionChangeEventInit.cpp',
       '<(blink_modules_output_dir)/indexeddb/IDBVersionChangeEventInit.h',
+    """
+
+    str_0 = """
       '<(blink_modules_output_dir)/mediastream/MediaStreamEventInit.cpp',
       '<(blink_modules_output_dir)/mediastream/MediaStreamEventInit.h',
       '<(blink_modules_output_dir)/mediastream/RTCDTMFToneChangeEventInit.cpp',
@@ -699,6 +749,11 @@ def generated_modules_dictionary_files():
       '<(blink_modules_output_dir)/websockets/CloseEventInit.h',
     ],
     """
+
+    if not disable_indexeddb:
+        str = str + str_indexeddb;
+
+    str = str + str_0;
 
     if not disable_notifications:
         str = str + str_notifications
@@ -1063,6 +1118,9 @@ def modules_files():
       'geolocation/GeolocationWatchers.h',
       'geolocation/NavigatorGeolocation.cpp',
       'geolocation/NavigatorGeolocation.h',
+    """
+
+    str_indexeddb = """
       'indexeddb/DOMWindowIndexedDatabase.cpp',
       'indexeddb/DOMWindowIndexedDatabase.h',
       'indexeddb/IDBAny.cpp',
@@ -1114,6 +1172,9 @@ def modules_files():
       'indexeddb/WebIDBDatabaseCallbacksImpl.h',
       'indexeddb/WorkerGlobalScopeIndexedDatabase.cpp',
       'indexeddb/WorkerGlobalScopeIndexedDatabase.h',
+    """
+
+    str_0 = """
       'mediasource/HTMLVideoElementMediaSource.cpp',
       'mediasource/HTMLVideoElementMediaSource.h',
       'mediasource/MediaSource.cpp',
@@ -1684,6 +1745,11 @@ def modules_files():
     ],
     """
 
+    if not disable_indexeddb:
+        str = str + str_indexeddb;
+
+    str = str + str_0;
+
     if not disable_notifications:
         str = str + str_notifications
 
@@ -1771,9 +1837,15 @@ def modules_unittest_files():
       'fetch/RequestTest.cpp',
       'fetch/ResponseTest.cpp',
       'filesystem/DOMFileSystemBaseTest.cpp',
+    """
+
+    str_indexeddb = """
       'indexeddb/IDBKeyPathTest.cpp',
       'indexeddb/IDBRequestTest.cpp',
       'indexeddb/IDBTransactionTest.cpp',
+    """
+
+    str_0 = """
       'serviceworkers/ServiceWorkerContainerTest.cpp',
       'webaudio/AudioBasicProcessorHandlerTest.cpp',
       'webaudio/ConvolverNodeTest.cpp',
@@ -1784,6 +1856,11 @@ def modules_unittest_files():
       'websockets/DocumentWebSocketChannelTest.cpp',
     ],
     """
+
+    if not disable_indexeddb:
+        str = str + str_indexeddb;
+
+    str = str + str_0;
 
     return str
 ###################################end modules_unittest_files
@@ -1801,8 +1878,14 @@ def modules_files_inspector():
       'device_orientation/DeviceOrientationInspectorAgent.h',
       'filesystem/InspectorFileSystemAgent.cpp',
       'filesystem/InspectorFileSystemAgent.h',
+    """
+
+    str_indexeddb = """
       'indexeddb/InspectorIndexedDBAgent.cpp',
       'indexeddb/InspectorIndexedDBAgent.h',
+    """
+
+    str_0 = """
       'storage/InspectorDOMStorageAgent.cpp',
       'storage/InspectorDOMStorageAgent.h',
       'webdatabase/InspectorDatabaseAgent.cpp',
@@ -1811,6 +1894,11 @@ def modules_files_inspector():
       'webdatabase/InspectorDatabaseResource.h',
     ],
     """
+
+    if not disable_indexeddb:
+        str = str + str_indexeddb;
+
+    str = str + str_0;
 
     return str
 ###################################end modules_files_inspector
@@ -1822,15 +1910,17 @@ def file_tail():
     """
     return str
 ####################################
-
-def generate_modules_gypi(speech=0, notifications=0, webcl=0):
-    global disable_speech
+# args : (indexeddb, notifications, speech, webcl)
+def generate_modules_gypi(args):
+    global disable_indexeddb
     global disable_notifications
+    global disable_speech
     global disable_webcl
 
-    disable_speech = speech
-    disable_notifications = notifications
-    disable_webcl = webcl
+    disable_indexeddb = args[0]
+    disable_notifications = args[1]
+    disable_speech = args[2]
+    disable_webcl = args[3]
 
     name = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'modules.gypi')
 
