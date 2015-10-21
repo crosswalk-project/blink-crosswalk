@@ -209,7 +209,7 @@ def modules_idl_files():
       'speech/SpeechSynthesisVoice.idl',
     """
 
-    str_tail = """
+    str_2 = """
       'storage/Storage.idl',
       'storage/StorageEvent.idl',
       'vr/HMDVRDevice.idl',
@@ -247,6 +247,9 @@ def modules_idl_files():
       'webaudio/ScriptProcessorNode.idl',
       'webaudio/StereoPannerNode.idl',
       'webaudio/WaveShaperNode.idl',
+    """
+
+    str_webcl = """
       'webcl/WebCL.idl',
       'webcl/WebCLBuffer.idl',
       'webcl/WebCLCallback.idl',
@@ -263,6 +266,9 @@ def modules_idl_files():
       'webcl/WebCLProgram.idl',
       'webcl/WebCLSampler.idl',
       'webcl/WebCLUserEvent.idl',
+    """
+
+    str_tail = """
       'webdatabase/Database.idl',
       'webdatabase/DatabaseCallback.idl',
       'webdatabase/SQLError.idl',
@@ -287,12 +293,17 @@ def modules_idl_files():
     """
 
     if not disable_notifications:
-       str = str + str_notifications
+        str = str + str_notifications
 
     str = str + str_1;
 
     if not disable_speech:
         str = str + str_speech
+
+    str = str + str_2;
+
+    if not disable_webcl:
+        str = str + str_webcl
 
     return str + str_tail
 ####################################end modules_idl_files
@@ -370,12 +381,18 @@ def modules_dependency_idl_files():
       'speech/WindowSpeechSynthesis.idl',
     """
 
-    str_tail = """
+    str_2 = """
       'storage/WindowStorage.idl',
       'vibration/NavigatorVibration.idl',
       'vr/NavigatorVRDevice.idl',
       'webaudio/WindowWebAudio.idl',
+    """
+
+    str_webcl = """
       'webcl/WindowWebCL.idl',
+    """
+
+    str_tail = """
       'webdatabase/WindowWebDatabase.idl',
       'webmidi/NavigatorWebMIDI.idl',
     ],
@@ -388,6 +405,11 @@ def modules_dependency_idl_files():
 
     if not disable_speech:
         str = str + str_speech
+
+    str = str + str_2
+
+    if not disable_webcl:
+        str = str + str_webcl
 
     return str + str_tail
 ####################################end modules_dependency_idl_files
@@ -509,10 +531,16 @@ def modules_dictionary_idl_files():
       'speech/SpeechRecognitionEventInit.idl',
     """
 
-    str_tail = """
+    str_2 = """
       'storage/StorageEventInit.idl',
       'vr/VRFieldOfViewInit.idl',
+    """
+
+    str_webcl = """
       'webcl/WebCLImageDescriptor.idl',
+    """
+
+    str_tail = """
       'webmidi/MIDIConnectionEventInit.idl',
       'webmidi/MIDIMessageEventInit.idl',
       'webmidi/MIDIOptions.idl',
@@ -527,6 +555,11 @@ def modules_dictionary_idl_files():
 
     if not disable_speech:
         str = str + str_speech
+
+    str = str + str_2
+
+    if not disable_webcl:
+        str = str + str_webcl
 
     return str + str_tail
 ####################################end modules_dictionary_idl_files
@@ -643,13 +676,19 @@ def generated_modules_dictionary_files():
       '<(blink_modules_output_dir)/speech/SpeechRecognitionEventInit.h',
     """
 
-    str_tail = """
+    str_2 = """
       '<(blink_modules_output_dir)/storage/StorageEventInit.cpp',
       '<(blink_modules_output_dir)/storage/StorageEventInit.h',
       '<(blink_modules_output_dir)/vr/VRFieldOfViewInit.cpp',
       '<(blink_modules_output_dir)/vr/VRFieldOfViewInit.h',
+    """
+
+    str_webcl = """
       '<(blink_modules_output_dir)/webcl/WebCLImageDescriptor.cpp',
       '<(blink_modules_output_dir)/webcl/WebCLImageDescriptor.h',
+    """
+
+    str_tail = """
       '<(blink_modules_output_dir)/webmidi/MIDIConnectionEventInit.cpp',
       '<(blink_modules_output_dir)/webmidi/MIDIConnectionEventInit.h',
       '<(blink_modules_output_dir)/webmidi/MIDIMessageEventInit.h',
@@ -668,6 +707,11 @@ def generated_modules_dictionary_files():
 
     if not disable_speech:
         str = str + str_speech
+
+    str = str + str_2
+
+    if not disable_webcl:
+        str = str + str_webcl
 
     return str + str_tail
 ####################################end generated_modules_dictionary_files
@@ -1351,7 +1395,7 @@ def modules_files():
       'speech/SpeechSynthesisVoice.h',
     """
 
-    str_tail = """
+    str_2 = """
       'storage/DOMWindowStorage.cpp',
       'storage/DOMWindowStorage.h',
       'storage/DOMWindowStorageController.cpp',
@@ -1483,6 +1527,9 @@ def modules_files():
       'webaudio/WaveShaperNode.h',
       'webaudio/WaveShaperProcessor.cpp',
       'webaudio/WaveShaperProcessor.h',
+    """
+
+    str_webcl = """
       'webcl/DOMWindowWebCL.cpp',
       'webcl/DOMWindowWebCL.h',
       'webcl/WebCL.cpp',
@@ -1530,6 +1577,9 @@ def modules_files():
       'webcl/WebCLSampler.h',
       'webcl/WebCLUserEvent.cpp',
       'webcl/WebCLUserEvent.h',
+    """
+
+    str_tail = """
       'webdatabase/ChangeVersionData.h',
       'webdatabase/ChangeVersionWrapper.cpp',
       'webdatabase/ChangeVersionWrapper.h',
@@ -1641,6 +1691,11 @@ def modules_files():
 
     if not disable_speech:
         str = str + str_speech
+
+    str = str + str_2
+
+    if not disable_webcl:
+        str = str + str_webcl;
 
     return str + str_tail
 ####################################end modules_files
@@ -1768,12 +1823,14 @@ def file_tail():
     return str
 ####################################
 
-def generate_modules_gypi(speech, notifications):
+def generate_modules_gypi(speech=0, notifications=0, webcl=0):
     global disable_speech
     global disable_notifications
+    global disable_webcl
 
     disable_speech = speech
     disable_notifications = notifications
+    disable_webcl = webcl
 
     name = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'modules.gypi')
 
