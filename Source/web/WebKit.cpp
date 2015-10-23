@@ -190,7 +190,9 @@ void initializeWithoutV8(Platform* platform)
     DEFINE_STATIC_LOCAL(ModulesInitializer, initializer, ());
     initializer.init();
 
+#ifndef DISABLE_INDEXEDDB
     setIndexedDBClientCreateFunction(IndexedDBClientImpl::create);
+#endif
 
 #ifndef DISABLE_WEB_VIDEO
     MediaPlayer::setMediaEngineCreateFunction(WebMediaPlayerClientImpl::create);
