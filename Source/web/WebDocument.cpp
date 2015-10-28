@@ -53,11 +53,15 @@
 #include "core/layout/LayoutObject.h"
 #include "core/layout/LayoutView.h"
 #include "core/loader/DocumentLoader.h"
+#ifndef DISABLE_ACCESSIBILITY
 #include "modules/accessibility/AXObject.h"
 #include "modules/accessibility/AXObjectCacheImpl.h"
+#endif
 #include "platform/weborigin/SecurityOrigin.h"
 #include "public/platform/WebURL.h"
+#ifndef DISABLE_ACCESSIBILITY
 #include "public/web/WebAXObject.h"
+#endif
 #include "public/web/WebDOMEvent.h"
 #include "public/web/WebDocumentType.h"
 #include "public/web/WebElement.h"
@@ -337,6 +341,7 @@ void WebDocument::showTransitionElements(const WebString& cssSelector)
     document->showTransitionElements(cssSelector);
 }
 
+#ifndef DISABLE_ACCESSIBILITY
 WebAXObject WebDocument::accessibilityObject() const
 {
     const Document* document = constUnwrap<Document>();
@@ -350,6 +355,7 @@ WebAXObject WebDocument::accessibilityObjectFromID(int axID) const
     AXObjectCacheImpl* cache = toAXObjectCacheImpl(document->axObjectCache());
     return cache ? WebAXObject(cache->objectFromAXID(axID)) : WebAXObject();
 }
+#endif
 
 WebVector<WebDraggableRegion> WebDocument::draggableRegions() const
 {

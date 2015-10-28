@@ -39,7 +39,9 @@
 namespace blink {
 
 class Node;
+#ifndef DISABLE_ACCESSIBILITY
 class WebAXObject;
+#endif
 class WebDOMEvent;
 class WebDocument;
 class WebElement;
@@ -127,7 +129,9 @@ public:
     BLINK_EXPORT WebElement shadowHost() const;
 
     BLINK_EXPORT bool isInsideFocusableElementOrARIAWidget() const;
+#ifndef DISABLE_ACCESSIBILITY
     BLINK_EXPORT WebAXObject accessibilityObject();
+#endif
 
     template<typename T> T to()
     {

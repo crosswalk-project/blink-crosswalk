@@ -88,6 +88,12 @@
                 '<@(web_files)',
             ],
             'conditions': [
+                ['disable_accessibility==1', {
+                    'sources!': [
+                        '<@(web_files_accessibility)',
+                    ],
+                }],
+
                 ['disable_devtools==1', {
                   'sources!': [
                     '<@(web_files_inspector)',
