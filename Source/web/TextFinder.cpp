@@ -42,11 +42,15 @@
 #include "core/frame/FrameView.h"
 #include "core/layout/LayoutObject.h"
 #include "core/page/Page.h"
+#ifndef DISABLE_ACCESSIBILITY
 #include "modules/accessibility/AXObject.h"
 #include "modules/accessibility/AXObjectCacheImpl.h"
+#endif
 #include "platform/Timer.h"
 #include "public/platform/WebVector.h"
+#ifndef DISABLE_ACCESSIBILITY
 #include "public/web/WebAXObject.h"
+#endif
 #include "public/web/WebFindOptions.h"
 #include "public/web/WebFrameClient.h"
 #include "public/web/WebViewClient.h"
@@ -212,6 +216,7 @@ void TextFinder::stopFindingAndClearSelection()
 
 void TextFinder::reportFindInPageResultToAccessibility(int identifier)
 {
+#ifndef DISABLE_ACCESSIBILITY
     AXObjectCacheImpl* axObjectCache = toAXObjectCacheImpl(ownerFrame().frame()->document()->existingAXObjectCache());
     if (!axObjectCache)
         return;
@@ -228,6 +233,9 @@ void TextFinder::reportFindInPageResultToAccessibility(int identifier)
             WebAXObject(startObject), m_activeMatch->startOffset(),
             WebAXObject(endObject), m_activeMatch->endOffset());
     }
+#else
+    (void) identifier;
+#endif
 }
 
 void TextFinder::scopeStringMatches(int identifier, const WebString& searchText, const WebFindOptions& options, bool reset)

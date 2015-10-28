@@ -255,7 +255,9 @@ public:
     virtual unsigned long createUniqueIdentifierForRequest() override;
     void enableDeviceEmulation(const WebDeviceEmulationParams&) override;
     void disableDeviceEmulation() override;
+#ifndef DISABLE_ACCESSIBILITY
     virtual WebAXObject accessibilityObject() override;
+#endif
     virtual void setSelectionColors(unsigned activeBackgroundColor,
                                     unsigned activeForegroundColor,
                                     unsigned inactiveBackgroundColor,

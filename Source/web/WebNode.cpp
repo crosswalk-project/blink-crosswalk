@@ -43,13 +43,17 @@
 #include "core/html/HTMLElement.h"
 #include "core/layout/LayoutObject.h"
 #include "core/layout/LayoutPart.h"
+#ifndef DISABLE_ACCESSIBILITY
 #include "modules/accessibility/AXObject.h"
 #include "modules/accessibility/AXObjectCacheImpl.h"
+#endif
 #include "platform/Task.h"
 #include "platform/Widget.h"
 #include "public/platform/WebString.h"
 #include "public/platform/WebSuspendableTask.h"
+#ifndef DISABLE_ACCESSIBILITY
 #include "public/web/WebAXObject.h"
+#endif
 #include "public/web/WebDOMEvent.h"
 #include "public/web/WebDocument.h"
 #include "public/web/WebElement.h"
@@ -215,7 +219,11 @@ bool WebNode::isContentEditable() const
 
 bool WebNode::isInsideFocusableElementOrARIAWidget() const
 {
+#ifndef DISABLE_ACCESSIBILITY
     return AXObject::isInsideFocusableElementOrARIAWidget(*this->constUnwrap<Node>());
+#else
+    return false;
+#endif
 }
 
 bool WebNode::isElementNode() const
@@ -303,7 +311,7 @@ WebElement WebNode::shadowHost() const
     return WebElement(coreNode->shadowHost());
 }
 
-
+#ifndef DISABLE_ACCESSIBILITY
 WebAXObject WebNode::accessibilityObject()
 {
     WebDocument webDocument = document();
@@ -312,6 +320,7 @@ WebAXObject WebNode::accessibilityObject()
     Node* node = unwrap<Node>();
     return cache ? WebAXObject(cache->get(node)) : WebAXObject();
 }
+#endif
 
 WebNode::WebNode(const PassRefPtrWillBeRawPtr<Node>& node)
     : m_private(node)

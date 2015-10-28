@@ -3831,6 +3831,7 @@ void WebViewImpl::disableDeviceEmulation()
     m_devToolsEmulator->disableDeviceEmulation();
 }
 
+#ifndef DISABLE_ACCESSIBILITY
 WebAXObject WebViewImpl::accessibilityObject()
 {
     if (!mainFrameImpl())
@@ -3839,6 +3840,7 @@ WebAXObject WebViewImpl::accessibilityObject()
     Document* document = mainFrameImpl()->frame()->document();
     return WebAXObject(toAXObjectCacheImpl(document->axObjectCache())->root());
 }
+#endif
 
 void WebViewImpl::performCustomContextMenuAction(unsigned action)
 {

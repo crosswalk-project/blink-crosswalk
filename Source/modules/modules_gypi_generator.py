@@ -779,6 +779,9 @@ def modules_files():
       '<@(generated_modules_files)',
       'InitModules.cpp',
       'InitModules.h',
+    """
+
+    str_accessibility = """
       'accessibility/AXARIAGrid.cpp',
       'accessibility/AXARIAGrid.h',
       'accessibility/AXARIAGridCell.cpp',
@@ -839,6 +842,9 @@ def modules_files():
       'accessibility/InspectorAccessibilityAgent.h',
       'accessibility/InspectorTypeBuilderHelper.cpp',
       'accessibility/InspectorTypeBuilderHelper.h',
+    """
+
+    str__1 = """
       'app_banner/AppBannerController.cpp',
       'app_banner/AppBannerController.h',
       'app_banner/AppBannerPromptResult.cpp',
@@ -1745,6 +1751,11 @@ def modules_files():
     ],
     """
 
+    if not disable_accessibility:
+        str = str + str_accessibility
+
+    str = str + str__1;
+
     if not disable_indexeddb:
         str = str + str_indexeddb;
 
@@ -1830,7 +1841,13 @@ def modules_testing_files():
 def modules_unittest_files():
     str = """
     'modules_unittest_files': [
+    """
+
+    str_accessibility = """
       'accessibility/AXObjectTest.cpp',
+    """
+
+    str__1 = """
       'cachestorage/CacheTest.cpp',
       'fetch/BodyStreamBufferTest.cpp',
       'fetch/FetchResponseDataTest.cpp',
@@ -1857,6 +1874,11 @@ def modules_unittest_files():
     ],
     """
 
+    if not disable_accessibility:
+        str = str + str_accessibility
+
+    str = str + str__1
+
     if not disable_indexeddb:
         str = str + str_indexeddb;
 
@@ -1868,10 +1890,16 @@ def modules_unittest_files():
 def modules_files_inspector():
     str = """
     'modules_files_inspector': [
+    """
+
+    str_accessibility = """
       'accessibility/InspectorAccessibilityAgent.cpp',
       'accessibility/InspectorAccessibilityAgent.h',
       'accessibility/InspectorTypeBuilderHelper.cpp',
       'accessibility/InspectorTypeBuilderHelper.h',
+    """
+
+    str__1 = """
       'cachestorage/InspectorCacheStorageAgent.cpp',
       'cachestorage/InspectorCacheStorageAgent.h',
       'device_orientation/DeviceOrientationInspectorAgent.cpp',
@@ -1895,6 +1923,11 @@ def modules_files_inspector():
     ],
     """
 
+    if not disable_accessibility:
+        str = str + str_accessibility
+
+    str = str + str__1
+
     if not disable_indexeddb:
         str = str + str_indexeddb;
 
@@ -1910,17 +1943,20 @@ def file_tail():
     """
     return str
 ####################################
-# args : (indexeddb, notifications, speech, webcl)
+# args : (accessibility, indexeddb, notifications, speech, webcl)
+# The arguments are arranged in alphabetical order
 def generate_modules_gypi(args):
+    global disable_accessibility
     global disable_indexeddb
     global disable_notifications
     global disable_speech
     global disable_webcl
 
-    disable_indexeddb = args[0]
-    disable_notifications = args[1]
-    disable_speech = args[2]
-    disable_webcl = args[3]
+    disable_accessibility = args[0]
+    disable_indexeddb = args[1]
+    disable_notifications = args[2]
+    disable_speech = args[3]
+    disable_webcl = args[4]
 
     name = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'modules.gypi')
 

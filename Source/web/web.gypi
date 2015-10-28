@@ -1,5 +1,8 @@
 {
   'variables': {
+    'web_files_accessibility': [
+      'WebAXObject.cpp',
+    ],
     'web_files_inspector': [
       'WebDevToolsAgentImpl.cpp',
       'WebDevToolsAgentImpl.h',

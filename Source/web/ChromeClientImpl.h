@@ -42,7 +42,9 @@
 #include "wtf/PassOwnPtr.h"
 
 namespace blink {
+#ifndef DISABLE_ACCESSIBILITY
 class AXObject;
+#endif
 class ColorChooser;
 class ColorChooserClient;
 class Element;
@@ -143,8 +145,10 @@ public:
     virtual void clearCompositedSelection() override;
     virtual void updateCompositedSelection(const CompositedSelection&) override;
 
+#ifndef DISABLE_ACCESSIBILITY
     // ChromeClient methods:
     virtual void postAccessibilityNotification(AXObject*, AXObjectCache::AXNotification) override;
+#endif
     virtual String acceptLanguages() override;
 
     // ChromeClientImpl:
