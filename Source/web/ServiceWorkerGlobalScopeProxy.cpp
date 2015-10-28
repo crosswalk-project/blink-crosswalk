@@ -111,12 +111,14 @@ void ServiceWorkerGlobalScopeProxy::dispatchFetchEvent(int eventID, const WebSer
     observer->didDispatchEvent(defaultPrevented);
 }
 
+#ifndef DISABLE_GEO_FEATURES
 void ServiceWorkerGlobalScopeProxy::dispatchGeofencingEvent(int eventID, WebGeofencingEventType eventType, const WebString& regionID, const WebCircularGeofencingRegion& region)
 {
     ASSERT(m_workerGlobalScope);
     const AtomicString& type = eventType == WebGeofencingEventTypeEnter ? EventTypeNames::geofenceenter : EventTypeNames::geofenceleave;
     m_workerGlobalScope->dispatchEvent(GeofencingEvent::create(type, regionID, CircularGeofencingRegion::create(regionID, region)));
 }
+#endif
 
 void ServiceWorkerGlobalScopeProxy::dispatchInstallEvent(int eventID)
 {

@@ -23,6 +23,16 @@
       'NotificationPermissionClientImpl.h',
     ],
 
+    'web_files_geo_features': [
+      'GeolocationClientProxy.cpp',
+      'GeolocationClientProxy.h',
+      'WebGeolocationController.cpp',
+      'WebGeolocationError.cpp',
+      'WebGeolocationPermissionRequest.cpp',
+      'WebGeolocationPermissionRequestManager.cpp',
+      'WebGeolocationPosition.cpp',
+    ],
+
     'web_files': [
       'AssertMatchingEnums.cpp',
       'AssociatedURLLoader.cpp',
