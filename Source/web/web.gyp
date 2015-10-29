@@ -118,6 +118,12 @@
                   ],
                 }],
 
+                ['disable_geo_features==1 and OS=="android"', {
+                  'sources!': [
+                    '<@(web_files_geo_features)',
+                  ],
+                }],
+
                 ['component=="shared_library"', {
                     'dependencies': [
                         '../wtf/wtf_tests.gyp:wtf_unittest_helpers',

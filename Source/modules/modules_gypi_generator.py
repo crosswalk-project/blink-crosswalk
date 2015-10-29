@@ -97,6 +97,9 @@ def modules_idl_files():
       'gamepad/GamepadButton.idl',
       'gamepad/GamepadEvent.idl',
       'gamepad/GamepadList.idl',
+    """
+
+    str_geo_features = """
       'geofencing/CircularGeofencingRegion.idl',
       'geofencing/Geofencing.idl',
       'geofencing/GeofencingEvent.idl',
@@ -299,19 +302,22 @@ def modules_idl_files():
     """
 
     if not disable_indexeddb:
-        str = str + str_indexeddb;
+        str = str + str_indexeddb
 
     str = str + str_0;
+
+    if not disable_geo_features:
+       str = str + str_geo_features
 
     if not disable_notifications:
         str = str + str_notifications
 
-    str = str + str_1;
+    str = str + str_1
 
     if not disable_speech:
         str = str + str_speech
 
-    str = str + str_2;
+    str = str + str_2
 
     if not disable_webcl:
         str = str + str_webcl
@@ -348,6 +354,9 @@ def modules_dependency_idl_files():
       'filesystem/WindowFileSystem.idl',
       'filesystem/WorkerGlobalScopeFileSystem.idl',
       'gamepad/NavigatorGamepad.idl',
+    """
+
+    str_geo_features = """
       'geofencing/ServiceWorkerGlobalScopeGeofencing.idl',
       'geofencing/ServiceWorkerRegistrationGeofencing.idl',
       'geofencing/WorkerNavigatorGeofencing.idl',
@@ -416,9 +425,12 @@ def modules_dependency_idl_files():
     """
 
     if not disable_indexeddb:
-        str = str + str_indexeddb;
+        str = str + str_indexeddb
 
-    str = str + str_0;
+    str = str + str_0
+
+    if not disable_geo_features:
+        str = str + str_geo_features
 
     if not disable_notifications:
         str = str + str_notifications
@@ -449,6 +461,9 @@ def modules_event_idl_files():
       'encryptedmedia/MediaEncryptedEvent.idl',
       'encryptedmedia/MediaKeyMessageEvent.idl',
       'gamepad/GamepadEvent.idl',
+    """
+
+    str_geo_features = """
       'geofencing/GeofencingEvent.idl',
     """
 
@@ -493,10 +508,13 @@ def modules_event_idl_files():
     ],
     """
 
-    if not disable_indexeddb:
-        str = str + str_indexeddb;
+    if not disable_geo_features:
+        str = str + str_geo_features
 
-    str = str + str_0;
+    if not disable_indexeddb:
+        str = str + str_indexeddb
+
+    str = str + str_0
 
     if not disable_notifications:
         str = str + str_notifications
@@ -528,6 +546,9 @@ def modules_dictionary_idl_files():
       'encryptedmedia/MediaKeySystemMediaCapability.idl',
       'filesystem/FileSystemFlags.idl',
       'gamepad/GamepadEventInit.idl',
+    """
+
+    str_geo_features = """
       'geofencing/CircularGeofencingRegionInit.idl',
       'geolocation/PositionOptions.idl',
     """
@@ -588,9 +609,12 @@ def modules_dictionary_idl_files():
     """
 
     if not disable_indexeddb:
-        str = str + str_indexeddb;
+        str = str + str_indexeddb
 
-    str = str + str_0;
+    str = str + str_0
+
+    if not disable_geo_features:
+        str = str + str_geo_features
 
     if not disable_notifications:
         str = str + str_notifications
@@ -659,6 +683,9 @@ def generated_modules_dictionary_files():
       '<(blink_modules_output_dir)/filesystem/FileSystemFlags.h',
       '<(blink_modules_output_dir)/gamepad/GamepadEventInit.cpp',
       '<(blink_modules_output_dir)/gamepad/GamepadEventInit.h',
+    """
+
+    str_geo_features="""
       '<(blink_modules_output_dir)/geofencing/CircularGeofencingRegionInit.cpp',
       '<(blink_modules_output_dir)/geofencing/CircularGeofencingRegionInit.h',
       '<(blink_modules_output_dir)/geolocation/PositionOptions.cpp',
@@ -754,6 +781,9 @@ def generated_modules_dictionary_files():
         str = str + str_indexeddb;
 
     str = str + str_0;
+
+    if not disable_geo_features:
+        str = str + str_geo_features
 
     if not disable_notifications:
         str = str + str_notifications
@@ -1101,6 +1131,9 @@ def modules_files():
       'gamepad/GamepadList.h',
       'gamepad/NavigatorGamepad.cpp',
       'gamepad/NavigatorGamepad.h',
+    """
+
+    str_geo_features="""
       'geofencing/CircularGeofencingRegion.cpp',
       'geofencing/CircularGeofencingRegion.h',
       'geofencing/Geofencing.cpp',
@@ -1754,12 +1787,15 @@ def modules_files():
     if not disable_accessibility:
         str = str + str_accessibility
 
-    str = str + str__1;
+    str = str + str__1
+
+    if not disable_geo_features:
+        str = str + str_geo_features
 
     if not disable_indexeddb:
-        str = str + str_indexeddb;
+        str = str + str_indexeddb
 
-    str = str + str_0;
+    str = str + str_0
 
     if not disable_notifications:
         str = str + str_notifications
@@ -1772,7 +1808,7 @@ def modules_files():
     str = str + str_2
 
     if not disable_webcl:
-        str = str + str_webcl;
+        str = str + str_webcl
 
     return str + str_tail
 ####################################end modules_files
@@ -1781,7 +1817,13 @@ def modules_testing_dependency_idl_files():
     str = """
     # 'partial interface' or target (right side of) 'implements'
     'modules_testing_dependency_idl_files' : [
+    """
+
+    str_geo_features="""
       'geolocation/testing/InternalsGeolocation.idl',
+    """
+
+    str_0="""
       'navigatorcontentutils/testing/InternalsNavigatorContentUtils.idl',
       'serviceworkers/testing/InternalsServiceWorker.idl',
     """
@@ -1796,6 +1838,11 @@ def modules_testing_dependency_idl_files():
     ],
     """
 
+    if not disable_geo_features:
+        str = str + str_geo_features
+
+    str = str + str_0
+
     if not disable_speech:
         str = str + str_speech
 
@@ -1805,10 +1852,16 @@ def modules_testing_dependency_idl_files():
 def modules_testing_files():
     str = """
     'modules_testing_files': [
+    """
+
+    str_geo_features="""
       'geolocation/testing/GeolocationClientMock.cpp',
       'geolocation/testing/GeolocationClientMock.h',
       'geolocation/testing/InternalsGeolocation.cpp',
       'geolocation/testing/InternalsGeolocation.h',
+    """
+
+    str_0="""
       'navigatorcontentutils/testing/InternalsNavigatorContentUtils.cpp',
       'navigatorcontentutils/testing/InternalsNavigatorContentUtils.h',
       'navigatorcontentutils/testing/NavigatorContentUtilsClientMock.cpp',
@@ -1831,6 +1884,11 @@ def modules_testing_files():
       'webaudio/testing/InternalsWebAudio.cpp',
     ],
     """
+
+    if not disable_geo_features:
+        str = str + str_geo_features
+
+    str = str + str_0
 
     if not disable_speech:
         str = str + str_speech
@@ -1880,9 +1938,9 @@ def modules_unittest_files():
     str = str + str__1
 
     if not disable_indexeddb:
-        str = str + str_indexeddb;
+        str = str + str_indexeddb
 
-    str = str + str_0;
+    str = str + str_0
 
     return str
 ###################################end modules_unittest_files
@@ -1929,9 +1987,9 @@ def modules_files_inspector():
     str = str + str__1
 
     if not disable_indexeddb:
-        str = str + str_indexeddb;
+        str = str + str_indexeddb
 
-    str = str + str_0;
+    str = str + str_0
 
     return str
 ###################################end modules_files_inspector
@@ -1943,20 +2001,22 @@ def file_tail():
     """
     return str
 ####################################
-# args : (accessibility, indexeddb, notifications, speech, webcl)
+# args : (accessibility, geo_features, indexeddb, notifications, speech, webcl)
 # The arguments are arranged in alphabetical order
 def generate_modules_gypi(args):
     global disable_accessibility
+    global disable_geo_features
     global disable_indexeddb
     global disable_notifications
     global disable_speech
     global disable_webcl
 
     disable_accessibility = args[0]
-    disable_indexeddb = args[1]
-    disable_notifications = args[2]
-    disable_speech = args[3]
-    disable_webcl = args[4]
+    disable_geo_features = args[1]
+    disable_indexeddb = args[2]
+    disable_notifications = args[3]
+    disable_speech = args[4]
+    disable_webcl = args[5]
 
     name = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'modules.gypi')
 

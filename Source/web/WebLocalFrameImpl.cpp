@@ -153,7 +153,9 @@
 #include "core/timing/DOMWindowPerformance.h"
 #include "core/timing/Performance.h"
 #include "modules/app_banner/AppBannerController.h"
+#ifndef DISABLE_GEO_FEATURES
 #include "modules/geolocation/GeolocationController.h"
+#endif
 #include "modules/notifications/NotificationPermissionClient.h"
 #include "modules/permissions/PermissionController.h"
 #include "modules/presentation/PresentationController.h"
@@ -209,7 +211,9 @@
 #include "web/AssociatedURLLoader.h"
 #include "web/CompositionUnderlineVectorBuilder.h"
 #include "web/FindInPageCoordinates.h"
+#ifndef DISABLE_GEO_FEATURES
 #include "web/GeolocationClientProxy.h"
+#endif
 #include "web/InspectorOverlayImpl.h"
 #include "web/LocalFileSystemClient.h"
 #include "web/MIDIClientProxy.h"
@@ -1611,7 +1615,9 @@ WebLocalFrameImpl::WebLocalFrameImpl(WebFrameClient* client)
     , m_contentSettingsClient(0)
     , m_inputEventsScaleFactorForEmulation(1)
     , m_userMediaClientImpl(this)
+#ifndef DISABLE_GEO_FEATURES
     , m_geolocationClientProxy(GeolocationClientProxy::create(client ? client->geolocationClient() : 0))
+#endif
     , m_webDevToolsFrontend(0)
 #if ENABLE(OILPAN)
     , m_selfKeepAlive(this)
@@ -1641,7 +1647,9 @@ DEFINE_TRACE(WebLocalFrameImpl)
     visitor->trace(m_inspectorOverlay);
     visitor->trace(m_textFinder);
     visitor->trace(m_printContext);
+#ifndef DISABLE_GEO_FEATURES
     visitor->trace(m_geolocationClientProxy);
+#endif
     visitor->template registerWeakMembers<WebFrame, &WebFrame::clearWeakFrames>(this);
     WebFrame::traceFrames(visitor, this);
 }
@@ -1660,8 +1668,10 @@ void WebLocalFrameImpl::setCoreFrame(PassRefPtrWillBeRawPtr<LocalFrame> frame)
         provideNotificationPermissionClientTo(*m_frame, NotificationPermissionClientImpl::create());
 #endif
         provideUserMediaTo(*m_frame, &m_userMediaClientImpl);
+#ifndef DISABLE_GEO_FEATURES
         provideGeolocationTo(*m_frame, m_geolocationClientProxy.get());
         m_geolocationClientProxy->setController(GeolocationController::from(m_frame.get()));
+#endif
         provideMIDITo(*m_frame, MIDIClientProxy::create(m_client ? m_client->webMIDIClient() : nullptr));
         provideLocalFileSystemTo(*m_frame, LocalFileSystemClient::create());
 
