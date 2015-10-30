@@ -28,15 +28,27 @@ def modules_idl_files():
     # Files for which bindings (.cpp and .h files) will be generated
     'modules_idl_files': [
       '<@(extra_blink_module_idl_files)',
+    """
+
+    str_app_banner = """
       'app_banner/AppBannerPromptResult.idl',
       'app_banner/BeforeInstallPromptEvent.idl',
+    """
+
+    str_background_sync = """
       'background_sync/PeriodicSyncEvent.idl',
       'background_sync/PeriodicSyncManager.idl',
       'background_sync/PeriodicSyncRegistration.idl',
       'background_sync/SyncEvent.idl',
       'background_sync/SyncManager.idl',
       'background_sync/SyncRegistration.idl',
+    """
+
+    str_battery = """
       'battery/BatteryManager.idl',
+    """
+
+    str_bluetooth = """
       'bluetooth/Bluetooth.idl',
       'bluetooth/BluetoothDevice.idl',
       'bluetooth/BluetoothDiscovery.idl',
@@ -45,34 +57,64 @@ def modules_idl_files():
       'bluetooth/BluetoothInteraction.idl',
       'bluetooth/BluetoothUUIDs.idl',
       'bluetooth/BluetoothUUIDsService.idl',
+    """
+
+    str_cachestorage = """
       'cachestorage/Cache.idl',
       'cachestorage/CacheStorage.idl',
+    """
+
+    str_compositorworker = """
       'compositorworker/CompositorWorker.idl',
       'compositorworker/CompositorWorkerGlobalScope.idl',
+    """
+
+    str_credentialmanager = """
       'credentialmanager/Credential.idl',
       'credentialmanager/CredentialsContainer.idl',
       'credentialmanager/FederatedCredential.idl',
       'credentialmanager/LocalCredential.idl',
+    """
+
+    str_crypto = """
       'crypto/Crypto.idl',
       'crypto/CryptoKey.idl',
       'crypto/SubtleCrypto.idl',
+    """
+
+    str_device_light = """
       'device_light/DeviceLightEvent.idl',
+    """
+
+    str_device_orientation = """
       'device_orientation/DeviceAcceleration.idl',
       'device_orientation/DeviceMotionEvent.idl',
       'device_orientation/DeviceOrientationEvent.idl',
       'device_orientation/DeviceRotationRate.idl',
+    """
+
+    str_encoding = """
       'encoding/TextDecoder.idl',
       'encoding/TextEncoder.idl',
+    """
+
+    str_encryptedmedia = """
       'encryptedmedia/MediaEncryptedEvent.idl',
       'encryptedmedia/MediaKeyMessageEvent.idl',
       'encryptedmedia/MediaKeySession.idl',
       'encryptedmedia/MediaKeyStatusMap.idl',
       'encryptedmedia/MediaKeySystemAccess.idl',
       'encryptedmedia/MediaKeys.idl',
+    """
+
+    str_fetch = """
       'fetch/Body.idl',
       'fetch/Headers.idl',
       'fetch/Request.idl',
       'fetch/Response.idl',
+    """
+
+    str_filesystem = """
       'filesystem/DOMFileSystem.idl',
       'filesystem/DOMFileSystemSync.idl',
       'filesystem/DirectoryEntry.idl',
@@ -93,6 +135,9 @@ def modules_idl_files():
       'filesystem/FileWriterSync.idl',
       'filesystem/Metadata.idl',
       'filesystem/MetadataCallback.idl',
+    """
+
+    str_gamepad = """
       'gamepad/Gamepad.idl',
       'gamepad/GamepadButton.idl',
       'gamepad/GamepadEvent.idl',
@@ -126,13 +171,16 @@ def modules_idl_files():
       'indexeddb/IDBVersionChangeEvent.idl',
     """
 
-    str_0 = """
+    str_mediasource = """
       'mediasource/MediaSource.idl',
       'mediasource/SourceBuffer.idl',
       'mediasource/SourceBufferList.idl',
       'mediasource/TrackDefault.idl',
       'mediasource/TrackDefaultList.idl',
       'mediasource/VideoPlaybackQuality.idl',
+    """
+
+    str_mediastream = """
       'mediastream/MediaDeviceInfo.idl',
       'mediastream/MediaDeviceInfoCallback.idl',
       'mediastream/MediaStream.idl',
@@ -157,8 +205,14 @@ def modules_idl_files():
       'mediastream/RTCStatsReport.idl',
       'mediastream/RTCStatsResponse.idl',
       'mediastream/SourceInfo.idl',
+    """
+
+    str_navigatorconnect = """
       'navigatorconnect/CrossOriginConnectEvent.idl',
       'navigatorconnect/CrossOriginServiceWorkerClient.idl',
+    """
+
+    str_netinfo = """
       'netinfo/NetworkInformation.idl',
     """
 
@@ -168,22 +222,37 @@ def modules_idl_files():
       'notifications/NotificationPermissionCallback.idl',
     """
 
-    str_1 = """
+    str_performance = """
       'performance/WorkerPerformance.idl',
+    """
+
+    str_permissions = """
       'permissions/Permissions.idl',
       'permissions/PermissionStatus.idl',
+    """
+
+    str_plugins = """
       'plugins/MimeType.idl',
       'plugins/MimeTypeArray.idl',
       'plugins/Plugin.idl',
       'plugins/PluginArray.idl',
+    """
+
+    str_presentation = """
       'presentation/AvailableChangeEvent.idl',
       'presentation/DefaultSessionStartEvent.idl',
       'presentation/Presentation.idl',
       'presentation/PresentationSession.idl',
+    """
+
+    str_push_messaging = """
       'push_messaging/PushEvent.idl',
       'push_messaging/PushManager.idl',
       'push_messaging/PushMessageData.idl',
       'push_messaging/PushSubscription.idl',
+    """
+
+    str_quota = """
       'quota/DeprecatedStorageInfo.idl',
       'quota/DeprecatedStorageQuota.idl',
       'quota/StorageErrorCallback.idl',
@@ -191,7 +260,13 @@ def modules_idl_files():
       'quota/StorageQuota.idl',
       'quota/StorageQuotaCallback.idl',
       'quota/StorageUsageCallback.idl',
+    """
+
+    str_screen_orientation = """
       'screen_orientation/ScreenOrientation.idl',
+    """
+
+    str_serviceworkers = """
       'serviceworkers/Client.idl',
       'serviceworkers/Clients.idl',
       'serviceworkers/ExtendableEvent.idl',
@@ -218,15 +293,21 @@ def modules_idl_files():
       'speech/SpeechSynthesisVoice.idl',
     """
 
-    str_2 = """
+    str_storage = """
       'storage/Storage.idl',
       'storage/StorageEvent.idl',
+    """
+
+    str_vr = """
       'vr/HMDVRDevice.idl',
       'vr/PositionSensorVRDevice.idl',
       'vr/VRDevice.idl',
       'vr/VREyeParameters.idl',
       'vr/VRFieldOfView.idl',
       'vr/VRPositionState.idl',
+    """
+
+    str_webaudio = """
       'webaudio/AnalyserNode.idl',
       'webaudio/AudioBuffer.idl',
       'webaudio/AudioBufferCallback.idl',
@@ -277,7 +358,7 @@ def modules_idl_files():
       'webcl/WebCLUserEvent.idl',
     """
 
-    str_tail = """
+    str_webdatabase = """
       'webdatabase/Database.idl',
       'webdatabase/DatabaseCallback.idl',
       'webdatabase/SQLError.idl',
@@ -288,6 +369,9 @@ def modules_idl_files():
       'webdatabase/SQLTransaction.idl',
       'webdatabase/SQLTransactionCallback.idl',
       'webdatabase/SQLTransactionErrorCallback.idl',
+    """
+
+    str_webmidi = """
       'webmidi/MIDIAccess.idl',
       'webmidi/MIDIConnectionEvent.idl',
       'webmidi/MIDIInput.idl',
@@ -296,31 +380,130 @@ def modules_idl_files():
       'webmidi/MIDIOutput.idl',
       'webmidi/MIDIOutputMap.idl',
       'webmidi/MIDIPort.idl',
+    """
+
+    str_websockets = """
       'websockets/CloseEvent.idl',
       'websockets/WebSocket.idl',
+    """
+
+    str_tail = """
     ],
     """
+
+    if not disable_app_banner:
+        str = str + str_app_banner
+
+    if not disable_background_sync:
+        str = str + str_background_sync
+
+    if not disable_battery:
+        str = str + str_battery
+
+    if not disable_bluetooth:
+        str = str + str_bluetooth
+
+    if not disable_cachestorage:
+        str = str + str_cachestorage
+
+    if not disable_compositorworker:
+        str = str + str_compositorworker
+
+    if not disable_credentialmanager:
+        str = str + str_credentialmanager
+
+    if not disable_crypto:
+        str = str + str_crypto
+
+    if not disable_device_light:
+        str = str + str_device_light
+
+    if not disable_device_orientation:
+        str = str + str_device_orientation
+
+    if not disable_encoding:
+        str = str + str_encoding
+
+    if not disable_encryptedmedia:
+        str = str + str_encryptedmedia
+
+    if not disable_fetch:
+        str = str + str_fetch
+
+    if not disable_filesystem:
+        str = str + str_filesystem
+
+    if not disable_gamepad:
+        str = str + str_gamepad
+
+    if not disable_geo_features:
+        str = str + str_geo_features
 
     if not disable_indexeddb:
         str = str + str_indexeddb
 
-    str = str + str_0;
+    if not disable_mediasource:
+        str = str + str_mediasource
 
-    if not disable_geo_features:
-       str = str + str_geo_features
+    if not disable_mediastream:
+        str = str + str_mediastream
+
+    if not disable_navigatorconnect:
+        str = str + str_navigatorconnect
+
+    if not disable_netinfo:
+        str = str + str_netinfo
 
     if not disable_notifications:
         str = str + str_notifications
 
-    str = str + str_1
+    if not disable_performance:
+        str = str + str_performance
+
+    if not disable_permissions:
+        str = str + str_permissions
+
+    if not disable_plugins:
+        str = str + str_plugins
+
+    if not disable_presentation:
+        str = str + str_presentation
+
+    if not disable_push_messaging:
+        str = str + str_push_messaging
+
+    if not disable_quota:
+        str = str + str_quota
+
+    if not disable_screen_orientation:
+        str = str + str_screen_orientation
+
+    if not disable_serviceworkers:
+        str = str + str_serviceworkers
 
     if not disable_speech:
         str = str + str_speech
 
-    str = str + str_2
+    if not disable_storage:
+        str = str + str_storage
+
+    if not disable_vr:
+        str = str + str_vr
+
+    if not disable_webaudio:
+        str = str + str_webaudio
 
     if not disable_webcl:
         str = str + str_webcl
+
+    if not disable_webdatabase:
+        str = str + str_webdatabase
+
+    if not disable_webmidi:
+        str = str + str_webmidi
+
+    if not disable_websockets:
+        str = str + str_websockets
 
     return str + str_tail
 ####################################end modules_idl_files
@@ -330,29 +513,71 @@ def modules_dependency_idl_files():
     str = """
     # 'partial interface' or target (right side of) 'implements'
     'modules_dependency_idl_files': [
+    """
+
+    str_background_sync = """
       'background_sync/ServiceWorkerGlobalScopeSync.idl',
       'background_sync/ServiceWorkerRegistrationSync.idl',
+    """
+
+    str_battery = """
       'battery/NavigatorBattery.idl',
+    """
+
+    str_beacon = """
       'beacon/NavigatorBeacon.idl',
+    """
+
+    str_bluetooth = """
       'bluetooth/NavigatorBluetooth.idl',
+    """
+
+    str_cachestorage = """
       'cachestorage/WindowCacheStorage.idl',
       'cachestorage/WorkerCacheStorage.idl',
+    """
+
+    str_credentialmanager = """
       'credentialmanager/NavigatorCredentials.idl',
+    """
+
+    str_crypto = """
       'crypto/WindowCrypto.idl',
       'crypto/WorkerGlobalScopeCrypto.idl',
+    """
+
+    str_device_light = """
       'device_light/WindowDeviceLight.idl',
+    """
+
+    str_device_orientation = """
       'device_orientation/WindowDeviceMotion.idl',
       'device_orientation/WindowDeviceOrientation.idl',
+    """
+
+    str_donottrack = """
       'donottrack/NavigatorDoNotTrack.idl',
+    """
+
+    str_encryptedmedia = """
       'encryptedmedia/HTMLMediaElementEncryptedMedia.idl',
       'encryptedmedia/NavigatorRequestMediaKeySystemAccess.idl',
+    """
+
+    str_fetch = """
       'fetch/WindowFetch.idl',
       'fetch/WorkerFetch.idl',
+    """
+
+    str_filesystem = """
       'filesystem/DataTransferItemFileSystem.idl',
       'filesystem/DevToolsHostFileSystem.idl',
       'filesystem/HTMLInputElementFileSystem.idl',
       'filesystem/WindowFileSystem.idl',
       'filesystem/WorkerGlobalScopeFileSystem.idl',
+    """
+
+    str_gamepad = """
       'gamepad/NavigatorGamepad.idl',
     """
 
@@ -368,15 +593,24 @@ def modules_dependency_idl_files():
       'indexeddb/WorkerGlobalScopeIndexedDatabase.idl',
     """
 
-    str_0 = """
+    str_mediasource = """
       'mediasource/HTMLVideoElementMediaSource.idl',
       'mediasource/URLMediaSource.idl',
+    """
+
+    str_mediastream = """
       'mediastream/NavigatorMediaStream.idl',
       'mediastream/URLMediaStream.idl',
       'mediastream/WindowMediaStream.idl',
+    """
+
+    str_navigatorconnect = """
       'navigatorconnect/NavigatorConnect.idl',
       'navigatorconnect/WorkerNavigatorConnect.idl',
       'navigatorcontentutils/NavigatorContentUtils.idl',
+    """
+
+    str_netinfo = """
       'netinfo/NavigatorNetworkInformation.idl',
       'netinfo/WorkerNavigatorNetworkInformation.idl',
     """
@@ -386,19 +620,40 @@ def modules_dependency_idl_files():
       'notifications/ServiceWorkerRegistrationNotifications.idl',
     """
 
-    str_1 = """
-      'permissions/NavigatorPermissions.idl',
-      'permissions/WorkerNavigatorPermissions.idl',
+    str_performance = """
       'performance/SharedWorkerPerformance.idl',
       'performance/WorkerGlobalScopePerformance.idl',
+    """
+
+    str_permissions = """
+      'permissions/NavigatorPermissions.idl',
+      'permissions/WorkerNavigatorPermissions.idl',
+    """
+
+    str_plugins = """
       'plugins/NavigatorPlugins.idl',
+    """
+
+    str_presentation = """
       'presentation/NavigatorPresentation.idl',
+    """
+
+    str_push_messaging = """
       'push_messaging/ServiceWorkerGlobalScopePush.idl',
       'push_messaging/ServiceWorkerRegistrationPush.idl',
+    """
+
+    str_quota = """
       'quota/NavigatorStorageQuota.idl',
       'quota/WindowQuota.idl',
       'quota/WorkerNavigatorStorageQuota.idl',
+    """
+
+    str_screen_orientation = """
       'screen_orientation/ScreenScreenOrientation.idl',
+    """
+
+    str_serviceworkers = """
       'serviceworkers/NavigatorServiceWorker.idl',
     """
 
@@ -407,10 +662,19 @@ def modules_dependency_idl_files():
       'speech/WindowSpeechSynthesis.idl',
     """
 
-    str_2 = """
+    str_storage = """
       'storage/WindowStorage.idl',
+    """
+
+    str_vibration = """
       'vibration/NavigatorVibration.idl',
+    """
+
+    str_vr = """
       'vr/NavigatorVRDevice.idl',
+    """
+
+    str_webaudio = """
       'webaudio/WindowWebAudio.idl',
     """
 
@@ -418,32 +682,128 @@ def modules_dependency_idl_files():
       'webcl/WindowWebCL.idl',
     """
 
-    str_tail = """
+    str_webdatabase = """
       'webdatabase/WindowWebDatabase.idl',
+    """
+
+    str_webmidi = """
       'webmidi/NavigatorWebMIDI.idl',
+    """
+
+    str_tail = """
     ],
     """
 
-    if not disable_indexeddb:
-        str = str + str_indexeddb
+    if not disable_background_sync:
+        str = str + str_background_sync
 
-    str = str + str_0
+    if not disable_battery:
+        str = str + str_battery
+
+    if not disable_beacon:
+        str = str + str_beacon
+
+    if not disable_bluetooth:
+        str = str + str_bluetooth
+
+    if not disable_cachestorage:
+        str = str + str_cachestorage
+
+    if not disable_credentialmanager:
+        str = str + str_credentialmanager
+
+    if not disable_crypto:
+        str = str + str_crypto
+
+    if not disable_device_light:
+        str = str + str_device_light
+
+    if not disable_device_orientation:
+        str = str + str_device_orientation
+
+    if not disable_donottrack:
+        str = str + str_donottrack
+
+    if not disable_encryptedmedia:
+        str = str + str_encryptedmedia
+
+    if not disable_fetch:
+        str = str + str_fetch
+
+    if not disable_filesystem:
+        str = str + str_filesystem
+
+    if not disable_gamepad:
+        str = str + str_gamepad
 
     if not disable_geo_features:
         str = str + str_geo_features
 
+    if not disable_indexeddb:
+        str = str + str_indexeddb
+
+    if not disable_mediasource:
+        str = str + str_mediasource
+
+    if not disable_mediastream:
+        str = str + str_mediastream
+
+    if not disable_navigatorconnect:
+        str = str + str_navigatorconnect
+
+    if not disable_netinfo:
+        str = str + str_netinfo
+
     if not disable_notifications:
         str = str + str_notifications
 
-    str = str + str_1
+    if not disable_performance:
+        str = str + str_performance
+
+    if not disable_permissions:
+        str = str + str_permissions
+
+    if not disable_plugins:
+        str = str + str_plugins
+
+    if not disable_presentation:
+        str = str + str_presentation
+
+    if not disable_push_messaging:
+        str = str + str_push_messaging
+
+    if not disable_quota:
+        str = str + str_quota
+
+    if not disable_screen_orientation:
+        str = str + str_screen_orientation
+
+    if not disable_serviceworkers:
+        str = str + str_serviceworkers
 
     if not disable_speech:
         str = str + str_speech
 
-    str = str + str_2
+    if not disable_storage:
+        str = str + str_storage
+
+    if not disable_vibration:
+        str = str + str_vibration
+
+    if not disable_vr:
+        str = str + str_vr
+
+    if not disable_webaudio:
+        str = str + str_webaudio
 
     if not disable_webcl:
         str = str + str_webcl
+
+    if not disable_webdatabase:
+        str = str + str_webdatabase
+
+    if not disable_webmidi:
+        str = str + str_webmidi
 
     return str + str_tail
 ####################################end modules_dependency_idl_files
@@ -452,14 +812,32 @@ def modules_event_idl_files():
     str = """
     # interfaces that inherit from Event
     'modules_event_idl_files': [
+    """
+
+    str_app_banner = """
       'app_banner/BeforeInstallPromptEvent.idl',
+    """
+
+    str_background_sync = """
       'background_sync/PeriodicSyncEvent.idl',
       'background_sync/SyncEvent.idl',
+    """
+
+    str_device_light = """
       'device_light/DeviceLightEvent.idl',
+    """
+
+    str_device_orientation = """
       'device_orientation/DeviceMotionEvent.idl',
       'device_orientation/DeviceOrientationEvent.idl',
+    """
+
+    str_encryptedmedia = """
       'encryptedmedia/MediaEncryptedEvent.idl',
       'encryptedmedia/MediaKeyMessageEvent.idl',
+    """
+
+    str_gamepad = """
       'gamepad/GamepadEvent.idl',
     """
 
@@ -471,12 +849,15 @@ def modules_event_idl_files():
       'indexeddb/IDBVersionChangeEvent.idl',
     """
 
-    str_0 = """
+    str_mediastream = """
       'mediastream/MediaStreamEvent.idl',
       'mediastream/MediaStreamTrackEvent.idl',
       'mediastream/RTCDTMFToneChangeEvent.idl',
       'mediastream/RTCDataChannelEvent.idl',
       'mediastream/RTCIceCandidateEvent.idl',
+    """
+
+    str_navigatorconnect = """
       'navigatorconnect/CrossOriginConnectEvent.idl',
     """
 
@@ -484,10 +865,16 @@ def modules_event_idl_files():
       'notifications/NotificationEvent.idl',
     """
 
-    str_1 = """
+    str_presentation = """
       'presentation/AvailableChangeEvent.idl',
       'presentation/DefaultSessionStartEvent.idl',
+    """
+
+    str_push_messaging = """
       'push_messaging/PushEvent.idl',
+    """
+
+    str_serviceworkers = """
       'serviceworkers/ExtendableEvent.idl',
       'serviceworkers/FetchEvent.idl',
     """
@@ -498,31 +885,84 @@ def modules_event_idl_files():
       'speech/SpeechSynthesisEvent.idl',
     """
 
-    str_tail = """
+    str_storage = """
       'storage/StorageEvent.idl',
+    """
+
+    str_webaudio = """
       'webaudio/AudioProcessingEvent.idl',
       'webaudio/OfflineAudioCompletionEvent.idl',
+    """
+
+    str_webmidi = """
       'webmidi/MIDIConnectionEvent.idl',
       'webmidi/MIDIMessageEvent.idl',
+    """
+
+    str_websockets = """
       'websockets/CloseEvent.idl',
+    """
+
+    str_tail = """
     ],
     """
+
+    if not disable_app_banner:
+        str = str + str_app_banner
+
+    if not disable_background_sync:
+        str = str + str_background_sync
+
+    if not disable_device_light:
+        str = str + str_device_light
+
+    if not disable_device_orientation:
+        str = str + str_device_orientation
+
+    if not disable_encryptedmedia:
+        str = str + str_encryptedmedia
+
+    if not disable_gamepad:
+        str = str + str_gamepad
 
     if not disable_geo_features:
         str = str + str_geo_features
 
     if not disable_indexeddb:
-        str = str + str_indexeddb
+        str = str + str_indexeddb;
 
-    str = str + str_0
+    if not disable_mediastream:
+        str = str + str_mediastream;
+
+    if not disable_navigatorconnect:
+        str = str + str_navigatorconnect
 
     if not disable_notifications:
         str = str + str_notifications
 
-    str = str + str_1
+    if not disable_presentation:
+        str = str + str_presentation
+
+    if not disable_push_messaging:
+        str = str + str_push_messaging
+
+    if not disable_serviceworkers:
+        str = str + str_serviceworkers
 
     if not disable_speech:
         str = str + str_speech
+
+    if not disable_storage:
+        str = str + str_storage
+
+    if not disable_webaudio:
+        str = str + str_webaudio
+
+    if not disable_webmidi:
+        str = str + str_webmidi
+
+    if not disable_websockets:
+        str = str + str_websockets
 
     return str + str_tail
 ####################################end modules_event_idl_files
@@ -531,20 +971,44 @@ def modules_event_idl_files():
 def modules_dictionary_idl_files():
     str = """
     'modules_dictionary_idl_files': [
+    """
+
+    str_app_banner = """
       'app_banner/BeforeInstallPromptEventInit.idl',
+    """
+
+    str_background_sync = """
       'background_sync/PeriodicSyncEventInit.idl',
       'background_sync/PeriodicSyncRegistrationOptions.idl',
       'background_sync/SyncEventInit.idl',
       'background_sync/SyncRegistrationOptions.idl',
+    """
+
+    str_cachestorage = """
       'cachestorage/CacheQueryOptions.idl',
+    """
+
+    str_device_light = """
       'device_light/DeviceLightEventInit.idl',
+    """
+
+    str_encoding = """
       'encoding/TextDecodeOptions.idl',
       'encoding/TextDecoderOptions.idl',
+    """
+
+    str_encryptedmedia = """
       'encryptedmedia/MediaEncryptedEventInit.idl',
       'encryptedmedia/MediaKeyMessageEventInit.idl',
       'encryptedmedia/MediaKeySystemConfiguration.idl',
       'encryptedmedia/MediaKeySystemMediaCapability.idl',
+    """
+
+    str_filesystem = """
       'filesystem/FileSystemFlags.idl',
+    """
+
+    str_gamepad = """
       'gamepad/GamepadEventInit.idl',
     """
 
@@ -559,7 +1023,7 @@ def modules_dictionary_idl_files():
       'indexeddb/IDBVersionChangeEventInit.idl',
     """
 
-    str_0 = """
+    str_mediastream = """
       'mediastream/MediaStreamEventInit.idl',
       'mediastream/RTCDTMFToneChangeEventInit.idl',
       'mediastream/RTCIceCandidateInit.idl',
@@ -572,14 +1036,23 @@ def modules_dictionary_idl_files():
       'notifications/NotificationOptions.idl',
     """
 
-    str_1 = """
+    str_permissions = """
       'permissions/MidiPermissionDescriptor.idl',
       'permissions/PermissionDescriptor.idl',
       'permissions/PushPermissionDescriptor.idl',
+    """
+
+    str_presentation = """
       'presentation/AvailableChangeEventInit.idl',
       'presentation/DefaultSessionStartEventInit.idl',
+    """
+
+    str_push_messaging = """
       'push_messaging/PushEventInit.idl',
       'push_messaging/PushSubscriptionOptions.idl',
+    """
+
+    str_serviceworkers = """
       'serviceworkers/ClientQueryOptions.idl',
       'serviceworkers/ExtendableEventInit.idl',
       'serviceworkers/FetchEventInit.idl',
@@ -591,8 +1064,11 @@ def modules_dictionary_idl_files():
       'speech/SpeechRecognitionEventInit.idl',
     """
 
-    str_2 = """
+    str_storage = """
       'storage/StorageEventInit.idl',
+    """
+
+    str_vr = """
       'vr/VRFieldOfViewInit.idl',
     """
 
@@ -600,34 +1076,85 @@ def modules_dictionary_idl_files():
       'webcl/WebCLImageDescriptor.idl',
     """
 
-    str_tail = """
+    str_webmidi = """
       'webmidi/MIDIConnectionEventInit.idl',
       'webmidi/MIDIMessageEventInit.idl',
       'webmidi/MIDIOptions.idl',
+    """
+
+    str_websockets = """
       'websockets/CloseEventInit.idl',
+    """
+
+    str_tail = """
     ],
     """
 
-    if not disable_indexeddb:
-        str = str + str_indexeddb
+    if not disable_app_banner:
+        str = str + str_app_banner
 
-    str = str + str_0
+    if not disable_background_sync:
+        str = str + str_background_sync
+
+    if not disable_cachestorage:
+        str = str + str_cachestorage
+
+    if not disable_device_light:
+        str = str + str_device_light
+
+    if not disable_encoding:
+        str = str + str_encoding
+
+    if not disable_encryptedmedia:
+        str = str + str_encryptedmedia
+
+    if not disable_filesystem:
+        str = str + str_filesystem
+
+    if not disable_gamepad:
+        str = str + str_gamepad
 
     if not disable_geo_features:
         str = str + str_geo_features
 
+    if not disable_indexeddb:
+        str = str + str_indexeddb;
+
+    if not disable_mediastream:
+        str = str + str_mediastream;
+
     if not disable_notifications:
         str = str + str_notifications
 
-    str = str + str_1
+    if not disable_permissions:
+        str = str + str_permissions
+
+    if not disable_presentation:
+        str = str + str_presentation
+
+    if not disable_push_messaging:
+        str = str + str_push_messaging
+
+    if not disable_serviceworkers:
+        str = str + str_serviceworkers
 
     if not disable_speech:
         str = str + str_speech
 
-    str = str + str_2
+    if not disable_storage:
+        str = str + str_storage
+
+    if not disable_vr:
+        str = str + str_vr
 
     if not disable_webcl:
         str = str + str_webcl
+
+    if not disable_webmidi:
+        str = str + str_webmidi
+
+    if not disable_websockets:
+        str = str + str_websockets
 
     return str + str_tail
 ####################################end modules_dictionary_idl_files
@@ -653,8 +1180,14 @@ def generated_modules_files():
 def generated_modules_dictionary_files():
     str = """
     'generated_modules_dictionary_files': [
+    """
+
+    str_app_banner = """
       '<(blink_modules_output_dir)/app_banner/BeforeInstallPromptEventInit.cpp',
       '<(blink_modules_output_dir)/app_banner/BeforeInstallPromptEventInit.h',
+    """
+
+    str_background_sync = """
       '<(blink_modules_output_dir)/background_sync/PeriodicSyncEventInit.cpp',
       '<(blink_modules_output_dir)/background_sync/PeriodicSyncEventInit.h',
       '<(blink_modules_output_dir)/background_sync/PeriodicSyncRegistrationOptions.cpp',
@@ -663,14 +1196,26 @@ def generated_modules_dictionary_files():
       '<(blink_modules_output_dir)/background_sync/SyncEventInit.h',
       '<(blink_modules_output_dir)/background_sync/SyncRegistrationOptions.cpp',
       '<(blink_modules_output_dir)/background_sync/SyncRegistrationOptions.h',
+    """
+
+    str_cachestorage = """
       '<(blink_modules_output_dir)/cachestorage/CacheQueryOptions.cpp',
       '<(blink_modules_output_dir)/cachestorage/CacheQueryOptions.h',
+    """
+
+    str_device_light = """
       '<(blink_modules_output_dir)/device_light/DeviceLightEventInit.cpp',
       '<(blink_modules_output_dir)/device_light/DeviceLightEventInit.h',
+    """
+
+    str_encoding = """
       '<(blink_modules_output_dir)/encoding/TextDecodeOptions.cpp',
       '<(blink_modules_output_dir)/encoding/TextDecodeOptions.h',
       '<(blink_modules_output_dir)/encoding/TextDecoderOptions.cpp',
       '<(blink_modules_output_dir)/encoding/TextDecoderOptions.h',
+    """
+
+    str_encryptedmedia = """
       '<(blink_modules_output_dir)/encryptedmedia/MediaEncryptedEventInit.cpp',
       '<(blink_modules_output_dir)/encryptedmedia/MediaEncryptedEventInit.h',
       '<(blink_modules_output_dir)/encryptedmedia/MediaKeyMessageEventInit.cpp',
@@ -679,20 +1224,26 @@ def generated_modules_dictionary_files():
       '<(blink_modules_output_dir)/encryptedmedia/MediaKeySystemConfiguration.h',
       '<(blink_modules_output_dir)/encryptedmedia/MediaKeySystemMediaCapability.cpp',
       '<(blink_modules_output_dir)/encryptedmedia/MediaKeySystemMediaCapability.h',
+    """
+
+    str_filesystem = """
       '<(blink_modules_output_dir)/filesystem/FileSystemFlags.cpp',
       '<(blink_modules_output_dir)/filesystem/FileSystemFlags.h',
+    """
+
+    str_gamepad = """
       '<(blink_modules_output_dir)/gamepad/GamepadEventInit.cpp',
       '<(blink_modules_output_dir)/gamepad/GamepadEventInit.h',
     """
 
-    str_geo_features="""
+    str_geo_features = """
       '<(blink_modules_output_dir)/geofencing/CircularGeofencingRegionInit.cpp',
       '<(blink_modules_output_dir)/geofencing/CircularGeofencingRegionInit.h',
       '<(blink_modules_output_dir)/geolocation/PositionOptions.cpp',
       '<(blink_modules_output_dir)/geolocation/PositionOptions.h',
     """
 
-    str_0 = """
+    str_indexeddb = """
       '<(blink_modules_output_dir)/indexeddb/IDBIndexParameters.cpp',
       '<(blink_modules_output_dir)/indexeddb/IDBIndexParameters.h',
       '<(blink_modules_output_dir)/indexeddb/IDBObjectStoreParameters.cpp',
@@ -701,7 +1252,7 @@ def generated_modules_dictionary_files():
       '<(blink_modules_output_dir)/indexeddb/IDBVersionChangeEventInit.h',
     """
 
-    str_0 = """
+    str_mediastream = """
       '<(blink_modules_output_dir)/mediastream/MediaStreamEventInit.cpp',
       '<(blink_modules_output_dir)/mediastream/MediaStreamEventInit.h',
       '<(blink_modules_output_dir)/mediastream/RTCDTMFToneChangeEventInit.cpp',
@@ -721,21 +1272,30 @@ def generated_modules_dictionary_files():
       '<(blink_modules_output_dir)/notifications/NotificationOptions.h',
     """
 
-    str_1 = """
+    str_permissions = """
       '<(blink_modules_output_dir)/permissions/MidiPermissionDescriptor.cpp',
       '<(blink_modules_output_dir)/permissions/MidiPermissionDescriptor.h',
       '<(blink_modules_output_dir)/permissions/PermissionDescriptor.cpp',
       '<(blink_modules_output_dir)/permissions/PermissionDescriptor.h',
       '<(blink_modules_output_dir)/permissions/PushPermissionDescriptor.cpp',
       '<(blink_modules_output_dir)/permissions/PushPermissionDescriptor.h',
+    """
+
+    str_presentation = """
       '<(blink_modules_output_dir)/presentation/AvailableChangeEventInit.cpp',
       '<(blink_modules_output_dir)/presentation/AvailableChangeEventInit.h',
       '<(blink_modules_output_dir)/presentation/DefaultSessionStartEventInit.cpp',
       '<(blink_modules_output_dir)/presentation/DefaultSessionStartEventInit.h',
+    """
+
+    str_push_messaging = """
       '<(blink_modules_output_dir)/push_messaging/PushEventInit.cpp',
       '<(blink_modules_output_dir)/push_messaging/PushEventInit.h',
       '<(blink_modules_output_dir)/push_messaging/PushSubscriptionOptions.cpp',
       '<(blink_modules_output_dir)/push_messaging/PushSubscriptionOptions.h',
+    """
+
+    str_serviceworkers = """
       '<(blink_modules_output_dir)/serviceworkers/ClientQueryOptions.cpp',
       '<(blink_modules_output_dir)/serviceworkers/ClientQueryOptions.h',
       '<(blink_modules_output_dir)/serviceworkers/ExtendableEventInit.cpp',
@@ -753,9 +1313,12 @@ def generated_modules_dictionary_files():
       '<(blink_modules_output_dir)/speech/SpeechRecognitionEventInit.h',
     """
 
-    str_2 = """
+    str_storage = """
       '<(blink_modules_output_dir)/storage/StorageEventInit.cpp',
       '<(blink_modules_output_dir)/storage/StorageEventInit.h',
+    """
+
+    str_vr = """
       '<(blink_modules_output_dir)/vr/VRFieldOfViewInit.cpp',
       '<(blink_modules_output_dir)/vr/VRFieldOfViewInit.h',
     """
@@ -765,38 +1328,89 @@ def generated_modules_dictionary_files():
       '<(blink_modules_output_dir)/webcl/WebCLImageDescriptor.h',
     """
 
-    str_tail = """
+    str_webmidi = """
       '<(blink_modules_output_dir)/webmidi/MIDIConnectionEventInit.cpp',
       '<(blink_modules_output_dir)/webmidi/MIDIConnectionEventInit.h',
       '<(blink_modules_output_dir)/webmidi/MIDIMessageEventInit.h',
       '<(blink_modules_output_dir)/webmidi/MIDIMessageEventInit.cpp',
       '<(blink_modules_output_dir)/webmidi/MIDIOptions.cpp',
       '<(blink_modules_output_dir)/webmidi/MIDIOptions.h',
+    """
+
+    str_websockets = """
       '<(blink_modules_output_dir)/websockets/CloseEventInit.cpp',
       '<(blink_modules_output_dir)/websockets/CloseEventInit.h',
+    """
+
+    str_tail = """
     ],
     """
 
-    if not disable_indexeddb:
-        str = str + str_indexeddb;
+    if not disable_app_banner:
+        str = str + str_app_banner
 
-    str = str + str_0;
+    if not disable_background_sync:
+        str = str + str_background_sync
+
+    if not disable_cachestorage:
+        str = str + str_cachestorage
+
+    if not disable_device_light:
+        str = str + str_device_light
+
+    if not disable_encoding:
+        str = str + str_encoding
+
+    if not disable_encryptedmedia:
+        str = str + str_encryptedmedia
+
+    if not disable_filesystem:
+        str = str + str_filesystem
+
+    if not disable_gamepad:
+        str = str + str_gamepad
 
     if not disable_geo_features:
         str = str + str_geo_features
 
+    if not disable_indexeddb:
+        str = str + str_indexeddb
+
+    if not disable_mediastream:
+        str = str + str_mediastream
+
     if not disable_notifications:
         str = str + str_notifications
 
-    str = str + str_1
+    if not disable_permissions:
+        str = str + str_permissions
+
+    if not disable_presentation:
+        str = str + str_presentation
+
+    if not disable_push_messaging:
+        str = str + str_push_messaging
+
+    if not disable_serviceworkers:
+        str = str + str_serviceworkers
 
     if not disable_speech:
         str = str + str_speech
 
-    str = str + str_2
+    if not disable_storage:
+        str = str + str_storage
+
+    if not disable_vr:
+        str = str + str_vr
 
     if not disable_webcl:
         str = str + str_webcl
+
+    if not disable_webmidi:
+        str = str + str_webmidi
+
+    if not disable_websockets:
+        str = str + str_websockets
 
     return str + str_tail
 ####################################end generated_modules_dictionary_files
@@ -874,13 +1488,16 @@ def modules_files():
       'accessibility/InspectorTypeBuilderHelper.h',
     """
 
-    str__1 = """
+    str_app_banner = """
       'app_banner/AppBannerController.cpp',
       'app_banner/AppBannerController.h',
       'app_banner/AppBannerPromptResult.cpp',
       'app_banner/AppBannerPromptResult.h',
       'app_banner/BeforeInstallPromptEvent.cpp',
       'app_banner/BeforeInstallPromptEvent.h',
+    """
+
+    str_background_sync = """
       'background_sync/PeriodicSyncEvent.cpp',
       'background_sync/PeriodicSyncEvent.h',
       'background_sync/PeriodicSyncManager.cpp',
@@ -900,6 +1517,9 @@ def modules_files():
       'background_sync/SyncManager.h',
       'background_sync/SyncRegistration.cpp',
       'background_sync/SyncRegistration.h',
+    """
+
+    str_battery = """
       'battery/BatteryDispatcher.cpp',
       'battery/BatteryDispatcher.h',
       'battery/BatteryManager.cpp',
@@ -908,8 +1528,14 @@ def modules_files():
       'battery/BatteryStatus.h',
       'battery/NavigatorBattery.cpp',
       'battery/NavigatorBattery.h',
+    """
+
+    str_beacon = """
       'beacon/NavigatorBeacon.cpp',
       'beacon/NavigatorBeacon.h',
+    """
+
+    str_bluetooth = """
       'bluetooth/Bluetooth.h',
       'bluetooth/Bluetooth.cpp',
       'bluetooth/BluetoothDevice.cpp',
@@ -927,6 +1553,9 @@ def modules_files():
       'bluetooth/BluetoothUUIDsService.h',
       'bluetooth/NavigatorBluetooth.cpp',
       'bluetooth/NavigatorBluetooth.h',
+    """
+
+    str_cachestorage = """
       'cachestorage/Cache.cpp',
       'cachestorage/Cache.h',
       'cachestorage/CacheStorage.cpp',
@@ -937,6 +1566,9 @@ def modules_files():
       'cachestorage/GlobalCacheStorage.h',
       'cachestorage/InspectorCacheStorageAgent.cpp',
       'cachestorage/InspectorCacheStorageAgent.h',
+    """
+
+    str_compositorworker = """
       'compositorworker/CompositorWorker.cpp',
       'compositorworker/CompositorWorker.h',
       'compositorworker/CompositorWorkerGlobalScope.cpp',
@@ -945,6 +1577,9 @@ def modules_files():
       'compositorworker/CompositorWorkerMessagingProxy.h',
       'compositorworker/CompositorWorkerThread.cpp',
       'compositorworker/CompositorWorkerThread.h',
+    """
+
+    str_credentialmanager = """
       'credentialmanager/Credential.cpp',
       'credentialmanager/Credential.h',
       'credentialmanager/CredentialManagerClient.cpp',
@@ -957,6 +1592,9 @@ def modules_files():
       'credentialmanager/LocalCredential.h',
       'credentialmanager/NavigatorCredentials.cpp',
       'credentialmanager/NavigatorCredentials.h',
+    """
+
+    str_crypto = """
       'crypto/Crypto.cpp',
       'crypto/Crypto.h',
       'crypto/CryptoHistograms.cpp',
@@ -973,12 +1611,18 @@ def modules_files():
       'crypto/SubtleCrypto.h',
       'crypto/WorkerGlobalScopeCrypto.cpp',
       'crypto/WorkerGlobalScopeCrypto.h',
+    """
+
+    str_device_light = """
       'device_light/DeviceLightController.cpp',
       'device_light/DeviceLightController.h',
       'device_light/DeviceLightDispatcher.cpp',
       'device_light/DeviceLightDispatcher.h',
       'device_light/DeviceLightEvent.cpp',
       'device_light/DeviceLightEvent.h',
+    """
+
+    str_device_orientation = """
       'device_orientation/DeviceAcceleration.cpp',
       'device_orientation/DeviceAcceleration.h',
       'device_orientation/DeviceMotionController.cpp',
@@ -1001,14 +1645,23 @@ def modules_files():
       'device_orientation/DeviceOrientationInspectorAgent.h',
       'device_orientation/DeviceRotationRate.cpp',
       'device_orientation/DeviceRotationRate.h',
+    """
+
+    str_donottrack = """
       'donottrack/NavigatorDoNotTrack.cpp',
       'donottrack/NavigatorDoNotTrack.h',
+    """
+
+    str_encoding = """
       'encoding/Encoding.cpp',
       'encoding/Encoding.h',
       'encoding/TextDecoder.cpp',
       'encoding/TextDecoder.h',
       'encoding/TextEncoder.cpp',
       'encoding/TextEncoder.h',
+    """
+
+    str_encryptedmedia = """
       'encryptedmedia/ContentDecryptionModuleResultPromise.cpp',
       'encryptedmedia/ContentDecryptionModuleResultPromise.h',
       'encryptedmedia/EncryptedMediaUtils.cpp',
@@ -1034,6 +1687,9 @@ def modules_files():
       'encryptedmedia/NavigatorRequestMediaKeySystemAccess.h',
       'encryptedmedia/SimpleContentDecryptionModuleResultPromise.cpp',
       'encryptedmedia/SimpleContentDecryptionModuleResultPromise.h',
+    """
+
+    str_fetch = """
       'fetch/Body.cpp',
       'fetch/Body.h',
       'fetch/BodyStreamBuffer.cpp',
@@ -1057,6 +1713,9 @@ def modules_files():
       'fetch/Response.cpp',
       'fetch/Response.h',
       'fetch/ResponseInit.h',
+    """
+
+    str_filesystem = """
       'filesystem/DOMFilePath.cpp',
       'filesystem/DOMFilePath.h',
       'filesystem/DOMFileSystem.cpp',
@@ -1119,6 +1778,9 @@ def modules_files():
       'filesystem/SyncCallbackHelper.h',
       'filesystem/WorkerGlobalScopeFileSystem.cpp',
       'filesystem/WorkerGlobalScopeFileSystem.h',
+    """
+
+    str_gamepad = """
       'gamepad/Gamepad.cpp',
       'gamepad/Gamepad.h',
       'gamepad/GamepadButton.cpp',
@@ -1133,7 +1795,7 @@ def modules_files():
       'gamepad/NavigatorGamepad.h',
     """
 
-    str_geo_features="""
+    str_geo_features = """
       'geofencing/CircularGeofencingRegion.cpp',
       'geofencing/CircularGeofencingRegion.h',
       'geofencing/Geofencing.cpp',
@@ -1213,7 +1875,7 @@ def modules_files():
       'indexeddb/WorkerGlobalScopeIndexedDatabase.h',
     """
 
-    str_0 = """
+    str_mediasource = """
       'mediasource/HTMLVideoElementMediaSource.cpp',
       'mediasource/HTMLVideoElementMediaSource.h',
       'mediasource/MediaSource.cpp',
@@ -1232,6 +1894,9 @@ def modules_files():
       'mediasource/URLMediaSource.h',
       'mediasource/VideoPlaybackQuality.cpp',
       'mediasource/VideoPlaybackQuality.h',
+    """
+
+    str_mediastream = """
       'mediastream/MediaConstraintsImpl.cpp',
       'mediastream/MediaConstraintsImpl.h',
       'mediastream/MediaDeviceInfo.cpp',
@@ -1295,6 +1960,9 @@ def modules_files():
       'mediastream/UserMediaController.h',
       'mediastream/UserMediaRequest.cpp',
       'mediastream/UserMediaRequest.h',
+    """
+
+    str_navigatorconnect = """
       'navigatorconnect/AcceptConnectionObserver.cpp',
       'navigatorconnect/AcceptConnectionObserver.h',
       'navigatorconnect/CrossOriginConnectEvent.cpp',
@@ -1308,6 +1976,9 @@ def modules_files():
       'navigatorcontentutils/NavigatorContentUtils.cpp',
       'navigatorcontentutils/NavigatorContentUtils.h',
       'navigatorcontentutils/NavigatorContentUtilsClient.h',
+    """
+
+    str_netinfo = """
       'netinfo/NavigatorNetworkInformation.cpp',
       'netinfo/NavigatorNetworkInformation.h',
       'netinfo/NetworkInformation.cpp',
@@ -1329,12 +2000,15 @@ def modules_files():
       'notifications/ServiceWorkerRegistrationNotifications.h',
     """
 
-    str_1 = """
+    str_performance = """
       'performance/SharedWorkerPerformance.cpp',
       'performance/WorkerGlobalScopePerformance.cpp',
       'performance/WorkerGlobalScopePerformance.h',
       'performance/WorkerPerformance.cpp',
       'performance/WorkerPerformance.h',
+    """
+
+    str_permissions = """
       'permissions/NavigatorPermissions.cpp',
       'permissions/NavigatorPermissions.h',
       'permissions/PermissionController.cpp',
@@ -1347,6 +2021,9 @@ def modules_files():
       'permissions/PermissionStatus.h',
       'permissions/WorkerNavigatorPermissions.cpp',
       'permissions/WorkerNavigatorPermissions.h',
+    """
+
+    str_plugins = """
       'plugins/DOMMimeType.cpp',
       'plugins/DOMMimeType.h',
       'plugins/DOMMimeTypeArray.cpp',
@@ -1359,6 +2036,9 @@ def modules_files():
       'plugins/NavigatorPlugins.h',
       'plugins/PluginOcclusionSupport.cpp',
       'plugins/PluginOcclusionSupport.h',
+    """
+
+    str_presentation = """
       'presentation/AvailableChangeEvent.cpp',
       'presentation/AvailableChangeEvent.h',
       'presentation/DefaultSessionStartEvent.cpp',
@@ -1375,6 +2055,9 @@ def modules_files():
       'presentation/PresentationSession.h',
       'presentation/PresentationSessionClientCallbacks.cpp',
       'presentation/PresentationSessionClientCallbacks.h',
+    """
+
+    str_push_messaging = """
       'push_messaging/PushController.cpp',
       'push_messaging/PushController.h',
       'push_messaging/PushError.cpp',
@@ -1394,6 +2077,9 @@ def modules_files():
       'push_messaging/ServiceWorkerGlobalScopePush.h',
       'push_messaging/ServiceWorkerRegistrationPush.cpp',
       'push_messaging/ServiceWorkerRegistrationPush.h',
+    """
+
+    str_quota = """
       'quota/DOMWindowQuota.cpp',
       'quota/DOMWindowQuota.h',
       'quota/DeprecatedStorageInfo.cpp',
@@ -1418,6 +2104,9 @@ def modules_files():
       'quota/StorageUsageCallback.h',
       'quota/WorkerNavigatorStorageQuota.cpp',
       'quota/WorkerNavigatorStorageQuota.h',
+    """
+
+    str_screen_orientation = """
       'screen_orientation/LockOrientationCallback.cpp',
       'screen_orientation/LockOrientationCallback.h',
       'screen_orientation/ScreenScreenOrientation.cpp',
@@ -1428,6 +2117,9 @@ def modules_files():
       'screen_orientation/ScreenOrientationController.h',
       'screen_orientation/ScreenOrientationDispatcher.cpp',
       'screen_orientation/ScreenOrientationDispatcher.h',
+    """
+
+    str_serviceworkers = """
       'serviceworkers/ExtendableEvent.cpp',
       'serviceworkers/ExtendableEvent.h',
       'serviceworkers/FetchEvent.cpp',
@@ -1495,7 +2187,7 @@ def modules_files():
       'speech/SpeechSynthesisVoice.h',
     """
 
-    str_2 = """
+    str_storage = """
       'storage/DOMWindowStorage.cpp',
       'storage/DOMWindowStorage.h',
       'storage/DOMWindowStorageController.cpp',
@@ -1512,8 +2204,14 @@ def modules_files():
       'storage/StorageNamespace.h',
       'storage/StorageNamespaceController.cpp',
       'storage/StorageNamespaceController.h',
+    """
+
+    str_vibration = """
       'vibration/NavigatorVibration.cpp',
       'vibration/NavigatorVibration.h',
+    """
+
+    str_vr = """
       'vr/HMDVRDevice.cpp',
       'vr/HMDVRDevice.h',
       'vr/NavigatorVRDevice.cpp',
@@ -1535,6 +2233,9 @@ def modules_files():
       'vr/VRHardwareUnitCollection.h',
       'vr/VRPositionState.cpp',
       'vr/VRPositionState.h',
+    """
+
+    str_webaudio = """
       'webaudio/AnalyserNode.cpp',
       'webaudio/AnalyserNode.h',
       'webaudio/AsyncAudioDecoder.cpp',
@@ -1679,7 +2380,7 @@ def modules_files():
       'webcl/WebCLUserEvent.h',
     """
 
-    str_tail = """
+    str_webdatabase = """
       'webdatabase/ChangeVersionData.h',
       'webdatabase/ChangeVersionWrapper.cpp',
       'webdatabase/ChangeVersionWrapper.h',
@@ -1741,6 +2442,9 @@ def modules_files():
       'webdatabase/sqlite/SQLiteStatement.h',
       'webdatabase/sqlite/SQLiteTransaction.cpp',
       'webdatabase/sqlite/SQLiteTransaction.h',
+    """
+
+    str_webmidi = """
       'webmidi/MIDIAccess.cpp',
       'webmidi/MIDIAccess.h',
       'webmidi/MIDIAccessInitializer.cpp',
@@ -1768,6 +2472,9 @@ def modules_files():
       'webmidi/MIDIPort.h',
       'webmidi/NavigatorWebMIDI.cpp',
       'webmidi/NavigatorWebMIDI.h',
+    """
+
+    str_websockets = """
       'websockets/CloseEvent.cpp',
       'websockets/CloseEvent.h',
       'websockets/DOMWebSocket.cpp',
@@ -1781,13 +2488,65 @@ def modules_files():
       'websockets/WebSocketFrame.h',
       'websockets/WorkerWebSocketChannel.cpp',
       'websockets/WorkerWebSocketChannel.h',
+    """
+
+    str_tail = """
     ],
     """
 
     if not disable_accessibility:
         str = str + str_accessibility
+ 
+    if not disable_app_banner:
+        str = str + str_app_banner
 
-    str = str + str__1
+    if not disable_background_sync:
+        str = str + str_background_sync
+
+    if not disable_battery:
+        str = str + str_battery
+
+    if not disable_beacon:
+        str = str + str_beacon
+
+    if not disable_bluetooth:
+        str = str + str_bluetooth
+
+    if not disable_cachestorage:
+        str = str + str_cachestorage
+
+    if not disable_compositorworker:
+        str = str + str_compositorworker
+
+    if not disable_credentialmanager:
+        str = str + str_credentialmanager
+
+    if not disable_crypto:
+        str = str + str_crypto
+
+    if not disable_device_light:
+        str = str + str_device_light
+
+    if not disable_device_orientation:
+        str = str + str_device_orientation
+
+    if not disable_donottrack:
+        str = str + str_donottrack
+
+    if not disable_encoding:
+        str = str + str_encoding
+
+    if not disable_encryptedmedia:
+        str = str + str_encryptedmedia
+
+    if not disable_fetch:
+        str = str + str_fetch
+
+    if not disable_filesystem:
+        str = str + str_filesystem
+
+    if not disable_gamepad:
+        str = str + str_gamepad
 
     if not disable_geo_features:
         str = str + str_geo_features
@@ -1795,20 +2554,71 @@ def modules_files():
     if not disable_indexeddb:
         str = str + str_indexeddb
 
-    str = str + str_0
+    if not disable_mediasource:
+        str = str + str_mediasource
+
+    if not disable_mediastream:
+        str = str + str_mediastream
+
+    if not disable_navigatorconnect:
+        str = str + str_navigatorconnect
+
+    if not disable_netinfo:
+        str = str + str_netinfo
 
     if not disable_notifications:
         str = str + str_notifications
 
-    str = str + str_1
+    if not disable_performance:
+        str = str + str_performance
+
+    if not disable_permissions:
+        str = str + str_permissions
+
+    if not disable_plugins:
+        str = str + str_plugins
+
+    if not disable_presentation:
+        str = str + str_presentation
+
+    if not disable_push_messaging:
+        str = str + str_push_messaging
+
+    if not disable_quota:
+        str = str + str_quota
+
+    if not disable_screen_orientation:
+        str = str + str_screen_orientation
+
+    if not disable_serviceworkers:
+        str = str + str_serviceworkers
 
     if not disable_speech:
         str = str + str_speech
 
-    str = str + str_2
+    if not disable_storage:
+        str = str + str_storage
+
+    if not disable_vibration:
+        str = str + str_vibration
+
+    if not disable_vr:
+        str = str + str_vr
+
+    if not disable_webaudio:
+        str = str + str_webaudio
 
     if not disable_webcl:
         str = str + str_webcl
+
+    if not disable_webdatabase:
+        str = str + str_webdatabase
+
+    if not disable_webmidi:
+        str = str + str_webmidi
+
+    if not disable_websockets:
+        str = str + str_websockets
 
     return str + str_tail
 ####################################end modules_files
@@ -1819,12 +2629,15 @@ def modules_testing_dependency_idl_files():
     'modules_testing_dependency_idl_files' : [
     """
 
-    str_geo_features="""
+    str_geo_features = """
       'geolocation/testing/InternalsGeolocation.idl',
     """
 
-    str_0="""
+    str_navigatorconnect = """
       'navigatorcontentutils/testing/InternalsNavigatorContentUtils.idl',
+    """
+
+    str_serviceworkers = """
       'serviceworkers/testing/InternalsServiceWorker.idl',
     """
 
@@ -1832,19 +2645,35 @@ def modules_testing_dependency_idl_files():
       'speech/testing/InternalsSpeechSynthesis.idl',
     """
 
-    str_tail = """
+    str_vibration = """
       'vibration/testing/InternalsVibration.idl',
+    """
+
+    str_webaudio = """
       'webaudio/testing/InternalsWebAudio.idl',
+    """
+
+    str_tail = """
     ],
     """
 
     if not disable_geo_features:
         str = str + str_geo_features
 
-    str = str + str_0
+    if not disable_navigatorconnect:
+        str = str + str_navigatorconnect
+
+    if not disable_serviceworkers:
+        str = str + str_serviceworkers
 
     if not disable_speech:
         str = str + str_speech
+
+    if not disable_vibration:
+        str = str + str_vibration
+
+    if not disable_webaudio:
+        str = str + str_webaudio
 
     return str + str_tail
 ####################################end modules_testing_dependency_idl_files
@@ -1854,18 +2683,21 @@ def modules_testing_files():
     'modules_testing_files': [
     """
 
-    str_geo_features="""
+    str_geo_features = """
       'geolocation/testing/GeolocationClientMock.cpp',
       'geolocation/testing/GeolocationClientMock.h',
       'geolocation/testing/InternalsGeolocation.cpp',
       'geolocation/testing/InternalsGeolocation.h',
     """
 
-    str_0="""
+    str_navigatorconnect = """
       'navigatorcontentutils/testing/InternalsNavigatorContentUtils.cpp',
       'navigatorcontentutils/testing/InternalsNavigatorContentUtils.h',
       'navigatorcontentutils/testing/NavigatorContentUtilsClientMock.cpp',
       'navigatorcontentutils/testing/NavigatorContentUtilsClientMock.h',
+    """
+
+    str_serviceworkers = """
       'serviceworkers/testing/InternalsServiceWorker.cpp',
       'serviceworkers/testing/InternalsServiceWorker.h',
     """
@@ -1877,21 +2709,36 @@ def modules_testing_files():
       'speech/testing/PlatformSpeechSynthesizerMock.h',
     """
 
-    str_tail = """
+    str_vibration = """
       'vibration/testing/InternalsVibration.cpp',
       'vibration/testing/InternalsVibration.h',
-      'webaudio/testing/InternalsWebAudio.h',
-      'webaudio/testing/InternalsWebAudio.cpp',
-    ],
     """
 
+    str_webaudio = """
+      'webaudio/testing/InternalsWebAudio.h',
+      'webaudio/testing/InternalsWebAudio.cpp',
+    """
+
+    str_tail = """
+    ],
+    """
     if not disable_geo_features:
         str = str + str_geo_features
 
-    str = str + str_0
+    if not disable_navigatorconnect:
+        str = str + str_navigatorconnect
+
+    if not disable_serviceworkers:
+        str = str + str_serviceworkers
 
     if not disable_speech:
         str = str + str_speech
+
+    if not disable_vibration:
+        str = str + str_vibration
+
+    if not disable_webaudio:
+        str = str + str_webaudio
 
     return str + str_tail
 ####################################end modules_testing_files
@@ -1905,12 +2752,18 @@ def modules_unittest_files():
       'accessibility/AXObjectTest.cpp',
     """
 
-    str__1 = """
+    str_cachestorage = """
       'cachestorage/CacheTest.cpp',
+    """
+
+    str_fetch = """
       'fetch/BodyStreamBufferTest.cpp',
       'fetch/FetchResponseDataTest.cpp',
       'fetch/RequestTest.cpp',
       'fetch/ResponseTest.cpp',
+    """
+
+    str_filesystem = """
       'filesystem/DOMFileSystemBaseTest.cpp',
     """
 
@@ -1920,29 +2773,52 @@ def modules_unittest_files():
       'indexeddb/IDBTransactionTest.cpp',
     """
 
-    str_0 = """
+    str_serviceworkers = """
       'serviceworkers/ServiceWorkerContainerTest.cpp',
+    """
+
+    str_webaudio = """
       'webaudio/AudioBasicProcessorHandlerTest.cpp',
       'webaudio/ConvolverNodeTest.cpp',
       'webaudio/DynamicsCompressorNodeTest.cpp',
       'webaudio/ScriptProcessorNodeTest.cpp',
       'webaudio/StereoPannerNodeTest.cpp',
+    """
+
+    str_websockets = """
       'websockets/DOMWebSocketTest.cpp',
       'websockets/DocumentWebSocketChannelTest.cpp',
+    """
+
+    str_tail = """
     ],
     """
 
     if not disable_accessibility:
         str = str + str_accessibility
 
-    str = str + str__1
+    if not disable_cachestorage:
+        str = str + str_cachestorage
+
+    if not disable_fetch:
+        str = str + str_fetch
+
+    if not disable_filesystem:
+        str = str + str_filesystem
 
     if not disable_indexeddb:
         str = str + str_indexeddb
 
-    str = str + str_0
+    if not disable_serviceworkers:
+        str = str + str_serviceworkers
 
-    return str
+    if not disable_webaudio:
+        str = str + str_webaudio
+
+    if not disable_websockets:
+        str = str + str_websockets
+
+    return str + str_tail
 ###################################end modules_unittest_files
 
 def modules_files_inspector():
@@ -1957,11 +2833,17 @@ def modules_files_inspector():
       'accessibility/InspectorTypeBuilderHelper.h',
     """
 
-    str__1 = """
+    str_cachestorage = """
       'cachestorage/InspectorCacheStorageAgent.cpp',
       'cachestorage/InspectorCacheStorageAgent.h',
+    """
+
+    str_device_orientation = """
       'device_orientation/DeviceOrientationInspectorAgent.cpp',
       'device_orientation/DeviceOrientationInspectorAgent.h',
+    """
+
+    str_filesystem = """
       'filesystem/InspectorFileSystemAgent.cpp',
       'filesystem/InspectorFileSystemAgent.h',
     """
@@ -1971,27 +2853,44 @@ def modules_files_inspector():
       'indexeddb/InspectorIndexedDBAgent.h',
     """
 
-    str_0 = """
+    str_storage = """
       'storage/InspectorDOMStorageAgent.cpp',
       'storage/InspectorDOMStorageAgent.h',
+    """
+
+    str_webdatabase = """
       'webdatabase/InspectorDatabaseAgent.cpp',
       'webdatabase/InspectorDatabaseAgent.h',
       'webdatabase/InspectorDatabaseResource.cpp',
       'webdatabase/InspectorDatabaseResource.h',
+    """
+
+    str_tail = """
     ],
     """
 
     if not disable_accessibility:
         str = str + str_accessibility
 
-    str = str + str__1
+    if not disable_cachestorage:
+        str = str + str_cachestorage
+
+    if not disable_device_orientation:
+        str = str + str_device_orientation;
+
+    if not disable_filesystem:
+        str = str + str_filesystem
 
     if not disable_indexeddb:
-        str = str + str_indexeddb
+        str = str + str_indexeddb;
 
-    str = str + str_0
+    if not disable_storage:
+        str = str + str_storage
 
-    return str
+    if not disable_webdatabase:
+        str = str + str_webdatabase
+
+    return str + str_tail
 ###################################end modules_files_inspector
 
 def file_tail():
@@ -2001,15 +2900,94 @@ def file_tail():
     """
     return str
 ####################################
-# args : (accessibility, geo_features, indexeddb, notifications, speech, webcl)
+# args : (accessibility, indexeddb, notifications, speech, webcl)
 # The arguments are arranged in alphabetical order
 def generate_modules_gypi(args):
     global disable_accessibility
+    global disable_app_banner
+    global disable_background_sync
+    global disable_battery
+    global disable_beacon
+    global disable_bluetooth
+    global disable_cachestorage
+    global disable_compositorworker
+    global disable_credentialmanager
+    global disable_crypto
+    global disable_donottrack
+    global disable_device_light
+    global disable_device_orientation
+    global disable_encoding
+    global disable_encryptedmedia
+    global disable_fetch
+    global disable_filesystem
+    global disable_gamepad
     global disable_geo_features
     global disable_indexeddb
+    global disable_mediasource
+    global disable_mediastream
+    global disable_navigatorconnect
+    global disable_netinfo
     global disable_notifications
+    global disable_performance
+    global disable_permissions
+    global disable_plugins
+    global disable_presentation
+    global disable_push_messaging
+    global disable_quota
+    global disable_screen_orientation
+    global disable_serviceworkers
     global disable_speech
+    global disable_storage
+    global disable_vibration
+    global disable_vr
+    global disable_webaudio
     global disable_webcl
+    global disable_webdatabase
+    global disable_webmidi
+    global disable_websockets
+
+    disable_accessibility = 0
+    disable_app_banner = 0
+    disable_background_sync = 0
+    disable_battery = 0
+    disable_beacon = 0
+    disable_bluetooth = 0
+    disable_cachestorage = 0
+    disable_compositorworker = 0
+    disable_credentialmanager = 0
+    disable_crypto = 0
+    disable_donottrack = 0
+    disable_device_light = 0
+    disable_device_orientation = 0
+    disable_encoding = 0
+    disable_encryptedmedia = 0
+    disable_fetch = 0
+    disable_filesystem = 0
+    disable_gamepad = 0
+    disable_geo_features = 0
+    disable_indexeddb = 0
+    disable_mediasource = 0
+    disable_mediastream = 0
+    disable_navigatorconnect = 0
+    disable_netinfo = 0
+    disable_notifications = 0
+    disable_performance = 0
+    disable_permissions = 0
+    disable_plugins = 0
+    disable_presentation = 0
+    disable_push_messaging = 0
+    disable_quota = 0
+    disable_screen_orientation = 0
+    disable_serviceworkers = 0
+    disable_speech = 0
+    disable_storage = 0
+    disable_vibration = 0
+    disable_vr = 0
+    disable_webaudio = 0
+    disable_webcl = 0
+    disable_webdatabase = 0
+    disable_webmidi = 0
+    disable_websockets = 0
 
     disable_accessibility = args[0]
     disable_geo_features = args[1]
