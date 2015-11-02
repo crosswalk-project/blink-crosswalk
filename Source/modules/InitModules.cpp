@@ -16,7 +16,9 @@
 #include "modules/accessibility/AXObjectCacheImpl.h"
 #endif
 #include "modules/filesystem/DraggedIsolatedFileSystemImpl.h"
+#ifndef DISABLE_WEBDATABASE
 #include "modules/webdatabase/DatabaseManager.h"
+#endif
 
 namespace blink {
 
@@ -42,7 +44,9 @@ void ModulesInitializer::init()
 
 void ModulesInitializer::terminateThreads()
 {
+#ifndef DISABLE_WEBDATABASE
     DatabaseManager::terminateDatabaseThread();
+#endif
 }
 
 } // namespace blink

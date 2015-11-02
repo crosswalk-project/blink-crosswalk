@@ -444,8 +444,9 @@ WebViewImpl::WebViewImpl(WebViewClient* client)
 #endif
     provideNavigatorContentUtilsTo(*m_page, NavigatorContentUtilsClientImpl::create(this));
     provideContextFeaturesTo(*m_page, ContextFeaturesClientImpl::create());
+#ifndef DISABLE_WEBDATABASE
     provideDatabaseClientTo(*m_page, DatabaseClientImpl::create());
-
+#endif
     provideStorageQuotaClientTo(*m_page, StorageQuotaClientImpl::create());
     m_page->setValidationMessageClient(ValidationMessageClientImpl::create(*this));
     provideWorkerGlobalScopeProxyProviderTo(*m_page, WorkerGlobalScopeProxyProviderImpl::create());

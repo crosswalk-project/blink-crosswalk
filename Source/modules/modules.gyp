@@ -69,6 +69,14 @@
       ['disable_devtools==1', {
         'sources!': ['<@(modules_files_inspector)',],
       }],
+      ['disable_webdatabase==1', {
+        'dependencies!': [
+          '<(DEPTH)/third_party/sqlite/sqlite.gyp:sqlite',
+         ],
+        'sources!': [
+          '../bindings/modules/v8/custom/V8CustomSQLStatementErrorCallback.cpp',
+         ],
+      }],
       ['component=="shared_library" and link_core_modules_separately==1', {
         'type': 'shared_library',
         'defines': [

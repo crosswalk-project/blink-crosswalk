@@ -33,6 +33,12 @@
       'WebGeolocationPosition.cpp',
     ],
 
+    'web_files_webdatabase': [
+      'DatabaseClientImpl.cpp',
+      'DatabaseClientImpl.h',
+      'WebDatabase.cpp',
+    ],
+
     'web_files': [
       'AssertMatchingEnums.cpp',
       'AssociatedURLLoader.cpp',
