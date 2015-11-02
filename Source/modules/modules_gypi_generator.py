@@ -2990,11 +2990,12 @@ def generate_modules_gypi(args):
     disable_websockets = 0
 
     disable_accessibility = args[0]
-    disable_geo_features = args[1]
-    disable_indexeddb = args[2]
-    disable_notifications = args[3]
-    disable_speech = args[4]
-    disable_webcl = args[5]
+    disable_bluetooth = args[1]
+    disable_geo_features = args[2]
+    disable_indexeddb = args[3]
+    disable_notifications = args[4]
+    disable_speech = args[5]
+    disable_webcl = args[6]
 
     name = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'modules.gypi')
 
