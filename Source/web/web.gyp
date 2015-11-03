@@ -124,6 +124,12 @@
                   ],
                 }],
 
+                ['disable_webdatabase==1 and OS=="android"', {
+                  'sources!': [
+                    '<@(web_files_webdatabase)',
+                  ],
+                }],
+
                 ['component=="shared_library"', {
                     'dependencies': [
                         '../wtf/wtf_tests.gyp:wtf_unittest_helpers',
