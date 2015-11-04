@@ -216,7 +216,9 @@
 #endif
 #include "web/InspectorOverlayImpl.h"
 #include "web/LocalFileSystemClient.h"
+#ifndef DISABLE_WEBMIDI
 #include "web/MIDIClientProxy.h"
+#endif
 #include "web/NotificationPermissionClientImpl.h"
 #include "web/PageOverlay.h"
 #include "web/RemoteBridgeFrameOwner.h"
@@ -1672,7 +1674,9 @@ void WebLocalFrameImpl::setCoreFrame(PassRefPtrWillBeRawPtr<LocalFrame> frame)
         provideGeolocationTo(*m_frame, m_geolocationClientProxy.get());
         m_geolocationClientProxy->setController(GeolocationController::from(m_frame.get()));
 #endif
+#ifndef DISABLE_WEBMIDI
         provideMIDITo(*m_frame, MIDIClientProxy::create(m_client ? m_client->webMIDIClient() : nullptr));
+#endif
         provideLocalFileSystemTo(*m_frame, LocalFileSystemClient::create());
 
         if (RuntimeEnabledFeatures::screenOrientationEnabled())

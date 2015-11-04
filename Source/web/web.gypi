@@ -39,6 +39,12 @@
       'WebDatabase.cpp',
     ],
 
+    'web_files_webmidi': [
+      'MIDIClientProxy.cpp',
+      'MIDIClientProxy.h',
+      'WebMIDIPermissionRequest.cpp',
+    ],
+
     'web_files': [
       'AssertMatchingEnums.cpp',
       'AssociatedURLLoader.cpp',
