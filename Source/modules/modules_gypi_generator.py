@@ -1037,7 +1037,6 @@ def modules_dictionary_idl_files():
     """
 
     str_permissions = """
-      'permissions/MidiPermissionDescriptor.idl',
       'permissions/PermissionDescriptor.idl',
       'permissions/PushPermissionDescriptor.idl',
     """
@@ -1080,6 +1079,7 @@ def modules_dictionary_idl_files():
       'webmidi/MIDIConnectionEventInit.idl',
       'webmidi/MIDIMessageEventInit.idl',
       'webmidi/MIDIOptions.idl',
+      'permissions/MidiPermissionDescriptor.idl',
     """
 
     str_websockets = """
@@ -1273,8 +1273,6 @@ def generated_modules_dictionary_files():
     """
 
     str_permissions = """
-      '<(blink_modules_output_dir)/permissions/MidiPermissionDescriptor.cpp',
-      '<(blink_modules_output_dir)/permissions/MidiPermissionDescriptor.h',
       '<(blink_modules_output_dir)/permissions/PermissionDescriptor.cpp',
       '<(blink_modules_output_dir)/permissions/PermissionDescriptor.h',
       '<(blink_modules_output_dir)/permissions/PushPermissionDescriptor.cpp',
@@ -1335,6 +1333,8 @@ def generated_modules_dictionary_files():
       '<(blink_modules_output_dir)/webmidi/MIDIMessageEventInit.cpp',
       '<(blink_modules_output_dir)/webmidi/MIDIOptions.cpp',
       '<(blink_modules_output_dir)/webmidi/MIDIOptions.h',
+      '<(blink_modules_output_dir)/permissions/MidiPermissionDescriptor.cpp',
+      '<(blink_modules_output_dir)/permissions/MidiPermissionDescriptor.h',
     """
 
     str_websockets = """
@@ -2997,6 +2997,7 @@ def generate_modules_gypi(args):
     disable_speech = args[5]
     disable_webcl = args[6]
     disable_webdatabase = args[7]
+    disable_webmidi = args[8]
 
     name = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'modules.gypi')
 

@@ -130,6 +130,12 @@
                   ],
                 }],
 
+                ['disable_webmidi==1 and OS=="android"', {
+                  'sources!': [
+                    '<@(web_files_webmidi)',
+                  ],
+                }],
+
                 ['component=="shared_library"', {
                     'dependencies': [
                         '../wtf/wtf_tests.gyp:wtf_unittest_helpers',
