@@ -287,6 +287,14 @@
           '<(DEPTH)/third_party/libwebp/libwebp.gyp:libwebp',
         ],
       }],
+      ['disable_plugins==1', {
+        'sources!': [
+          'plugins/PluginData.cpp',
+          'plugins/PluginData.h',
+          'plugins/PluginListBuilder.cpp',
+          'plugins/PluginListBuilder.h',
+        ],
+      }],
       ['OS=="mac"', {
         'dependencies': [
           '<(DEPTH)/third_party/harfbuzz-ng/harfbuzz.gyp:harfbuzz-ng',

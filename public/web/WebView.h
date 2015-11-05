@@ -308,10 +308,11 @@ public:
     virtual void performMediaPlayerAction(
         const WebMediaPlayerAction&, const WebPoint& location) = 0;
 
+#ifndef DISABLE_PLUGINS
     // Performs the specified plugin action on the node at the given location.
     virtual void performPluginAction(
         const WebPluginAction&, const WebPoint& location) = 0;
-
+#endif
 
     // Data exchange -------------------------------------------------------
 
