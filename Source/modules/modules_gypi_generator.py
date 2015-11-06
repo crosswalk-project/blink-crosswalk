@@ -2995,9 +2995,10 @@ def generate_modules_gypi(args):
     disable_indexeddb = args[3]
     disable_notifications = args[4]
     disable_speech = args[5]
-    disable_webcl = args[6]
-    disable_webdatabase = args[7]
-    disable_webmidi = args[8]
+    disable_webaudio = args[6]
+    disable_webcl = args[7]
+    disable_webdatabase = args[8]
+    disable_webmidi = args[9]
 
     name = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'modules.gypi')
 
