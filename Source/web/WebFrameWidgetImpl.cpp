@@ -52,7 +52,9 @@
 #endif
 #include "web/WebInputEventConversion.h"
 #include "web/WebLocalFrameImpl.h"
+#ifndef DISABLE_PLUGINS
 #include "web/WebPluginContainerImpl.h"
+#endif
 #include "web/WebRemoteFrameImpl.h"
 #include "web/WebViewImpl.h"
 
@@ -129,10 +131,12 @@ void WebFrameWidgetImpl::willStartLiveResize()
     if (m_localRoot->frameView())
         m_localRoot->frameView()->willStartLiveResize();
 
+#ifndef DISABLE_PLUGINS
     LocalFrame* frame = m_localRoot->frame();
     WebPluginContainerImpl* pluginContainer = WebLocalFrameImpl::pluginContainerFromFrame(frame);
     if (pluginContainer)
         pluginContainer->willStartLiveResize();
+#endif
 }
 
 void WebFrameWidgetImpl::resize(const WebSize& newSize)
@@ -210,10 +214,12 @@ void WebFrameWidgetImpl::willEndLiveResize()
     if (m_localRoot->frameView())
         m_localRoot->frameView()->willEndLiveResize();
 
+#ifndef DISABLE_PLUGINS
     LocalFrame* frame = m_localRoot->frame();
     WebPluginContainerImpl* pluginContainer = WebLocalFrameImpl::pluginContainerFromFrame(frame);
     if (pluginContainer)
         pluginContainer->willEndLiveResize();
+#endif
 }
 
 void WebFrameWidgetImpl::willEnterFullScreen()

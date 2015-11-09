@@ -53,7 +53,9 @@
 #include "platform/MIMETypeFromURL.h"
 #include "platform/MIMETypeRegistry.h"
 #include "platform/Widget.h"
+#ifndef DISABLE_PLUGINS
 #include "platform/plugins/PluginData.h"
+#endif
 #include "public/platform/WebURLRequest.h"
 
 namespace blink {
@@ -194,6 +196,7 @@ void HTMLPlugInElement::updateWidget()
 
 void HTMLPlugInElement::requestPluginCreationWithoutLayoutObjectIfPossible()
 {
+#ifndef DISABLE_PLUGINS
     if (m_serviceType.isEmpty())
         return;
 
@@ -205,10 +208,12 @@ void HTMLPlugInElement::requestPluginCreationWithoutLayoutObjectIfPossible()
         return;
 
     createPluginWithoutLayoutObject();
+#endif
 }
 
 void HTMLPlugInElement::createPluginWithoutLayoutObject()
 {
+#ifndef DISABLE_PLUGINS
     ASSERT(document().frame()->loader().client()->canCreatePluginWithoutRenderer(m_serviceType));
 
     KURL url;
@@ -220,6 +225,7 @@ void HTMLPlugInElement::createPluginWithoutLayoutObject()
 
     bool useFallback = false;
     loadPlugin(url, m_serviceType, paramNames, paramValues, useFallback, false);
+#endif
 }
 
 bool HTMLPlugInElement::shouldAccelerate() const
@@ -534,6 +540,7 @@ bool HTMLPlugInElement::loadPlugin(const KURL& url, const String& mimeType, cons
 
     OwnPtrWillBeRawPtr<PluginPlaceholder> placeholder = nullptr;
     RefPtrWillBeRawPtr<Widget> widget = m_persistedPluginWidget;
+#ifndef DISABLE_PLUGINS
     if (!widget) {
         bool loadManually = document().isPluginDocument() && !document().containsPlugins();
         placeholder = frame->loader().client()->createPluginPlaceholder(document(), url, paramNames, paramValues, mimeType, loadManually);
@@ -542,6 +549,7 @@ bool HTMLPlugInElement::loadPlugin(const KURL& url, const String& mimeType, cons
             widget = frame->loader().client()->createPlugin(this, url, paramNames, paramValues, mimeType, loadManually, policy);
         }
     }
+#endif
 
     if (!placeholder && !widget) {
         if (layoutObject && !layoutObject->showsUnavailablePluginIndicator())
@@ -577,12 +585,14 @@ bool HTMLPlugInElement::shouldUsePlugin(const KURL& url, const String& mimeType,
     // Allow other plugins to win over QuickTime because if the user has
     // installed a plugin that can handle TIFF (which QuickTime can also
     // handle) they probably intended to override QT.
+#ifndef DISABLE_PLUGINS
     if (document().frame()->page() && (mimeType == "image/tiff" || mimeType == "image/tif" || mimeType == "image/x-tiff")) {
         const PluginData* pluginData = document().frame()->page()->pluginData();
         String pluginName = pluginData ? pluginData->pluginNameForMimeType(mimeType) : String();
         if (!pluginName.isEmpty() && !pluginName.contains("QuickTime", TextCaseInsensitive))
             return true;
     }
+#endif
 
     ObjectContentType objectType = document().frame()->loader().client()->objectContentType(url, mimeType, shouldPreferPlugInsForImages());
     // If an object's content can't be handled and it has no fallback, let

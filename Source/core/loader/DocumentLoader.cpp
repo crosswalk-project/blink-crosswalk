@@ -64,7 +64,9 @@
 #include "platform/mhtml/ArchiveResourceCollection.h"
 #include "platform/mhtml/MHTMLArchive.h"
 #include "platform/network/ContentSecurityPolicyResponseHeaders.h"
+#ifndef DISABLE_PLUGINS
 #include "platform/plugins/PluginData.h"
+#endif
 #include "platform/weborigin/SchemeRegistry.h"
 #include "platform/weborigin/SecurityPolicy.h"
 #include "public/platform/Platform.h"
@@ -364,8 +366,12 @@ static bool canShowMIMEType(const String& mimeType, Page* page)
 {
     if (Platform::current()->mimeRegistry()->supportsMIMEType(mimeType) == WebMimeRegistry::IsSupported)
         return true;
+#ifndef DISABLE_PLUGINS
     PluginData* pluginData = page->pluginData();
     return !mimeType.isEmpty() && pluginData && pluginData->supportsMimeType(mimeType);
+#else
+    return false;
+#endif
 }
 
 bool DocumentLoader::shouldContinueForResponse() const
