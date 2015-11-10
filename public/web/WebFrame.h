@@ -521,7 +521,9 @@ public:
     // If the frame contains a full-frame plugin or the given node refers to a
     // plugin whose content indicates that printed output should not be scaled,
     // return true, otherwise return false.
+#ifndef DISABLE_PLUGINS
     virtual bool isPrintScalingDisabledForPlugin(const WebNode& = WebNode()) = 0;
+#endif
 
     // CSS3 Paged Media ----------------------------------------------------
 
