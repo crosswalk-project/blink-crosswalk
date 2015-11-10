@@ -41,7 +41,9 @@
 namespace blink {
 
 class WebLocalFrameImpl;
+#ifndef DISABLE_PLUGINS
 class WebPluginLoadObserver;
+#endif
 
 class FrameLoaderClientImpl final : public FrameLoaderClient {
 public:
@@ -118,6 +120,7 @@ public:
     virtual WTF::String doNotTrackValue() override;
     virtual void transitionToCommittedForNewPage() override;
     virtual PassRefPtrWillBeRawPtr<LocalFrame> createFrame(const FrameLoadRequest&, const WTF::AtomicString& name, HTMLFrameOwnerElement*) override;
+#ifndef DISABLE_PLUGINS
     virtual bool canCreatePluginWithoutRenderer(const String& mimeType) const;
     virtual PassOwnPtrWillBeRawPtr<PluginPlaceholder> createPluginPlaceholder(
         Document&, const KURL&,
@@ -132,6 +135,7 @@ public:
         const KURL& /* base_url */,
         const Vector<WTF::String>& paramNames,
         const Vector<WTF::String>& paramValues) override;
+#endif // DISABLE_PLUGINS
     virtual ObjectContentType objectContentType(
         const KURL&, const WTF::String& mimeType, bool shouldPreferPlugInsForImages) override;
     virtual void didChangeScrollOffset() override;
@@ -182,7 +186,9 @@ public:
 private:
     virtual bool isFrameLoaderClientImpl() const override { return true; }
 
+#ifndef DISABLE_PLUGINS
     PassOwnPtr<WebPluginLoadObserver> pluginLoadObserver(DocumentLoader*);
+#endif
 
     // The WebFrame that owns this object and manages its lifetime. Therefore,
     // the web frame object is guaranteed to exist.

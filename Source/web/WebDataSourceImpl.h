@@ -36,14 +36,18 @@
 #include "platform/exported/WrappedResourceResponse.h"
 #include "platform/weborigin/KURL.h"
 #include "public/web/WebDataSource.h"
+#ifndef DISABLE_PLUGINS
 #include "web/WebPluginLoadObserver.h"
+#endif
 #include "wtf/OwnPtr.h"
 #include "wtf/PassOwnPtr.h"
 #include "wtf/Vector.h"
 
 namespace blink {
 
+#ifndef DISABLE_PLUGINS
 class WebPluginLoadObserver;
+#endif
 
 class WebDataSourceImpl final : public DocumentLoader, public WebDataSource {
 public:
@@ -70,9 +74,10 @@ public:
     virtual void setNavigationStartTime(double) override;
 
     static WebNavigationType toWebNavigationType(NavigationType);
-
+#ifndef DISABLE_PLUGINS
     PassOwnPtr<WebPluginLoadObserver> releasePluginLoadObserver() { return m_pluginLoadObserver.release(); }
     static void setNextPluginLoadObserver(PassOwnPtr<WebPluginLoadObserver>);
+#endif
 
 private:
     WebDataSourceImpl(LocalFrame*, const ResourceRequest&, const SubstituteData&);
@@ -85,7 +90,9 @@ private:
     mutable WrappedResourceResponse m_responseWrapper;
 
     OwnPtr<ExtraData> m_extraData;
+#ifndef DISABLE_PLUGINS
     OwnPtr<WebPluginLoadObserver> m_pluginLoadObserver;
+#endif
 };
 
 } // namespace blink

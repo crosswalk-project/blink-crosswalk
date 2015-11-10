@@ -564,11 +564,13 @@ void WebRemoteFrameImpl::printEnd()
     ASSERT_NOT_REACHED();
 }
 
+#ifndef DISABLE_PLUGINS
 bool WebRemoteFrameImpl::isPrintScalingDisabledForPlugin(const WebNode&)
 {
     ASSERT_NOT_REACHED();
     return false;
 }
+#endif
 
 bool WebRemoteFrameImpl::hasCustomPageSizeStyle(int pageIndex)
 {

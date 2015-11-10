@@ -33,7 +33,9 @@
 #include "core/html/forms/ColorChooser.h"
 #include "core/html/forms/DateTimeChooser.h"
 #include "core/loader/DocumentLoader.h"
+#ifndef DISABLE_PLUGINS
 #include "core/plugins/PluginPlaceholder.h"
+#endif
 #include "platform/FileChooser.h"
 #include "platform/Widget.h"
 #include "public/platform/WebApplicationCacheHost.h"
@@ -119,6 +121,7 @@ PassRefPtrWillBeRawPtr<LocalFrame> EmptyFrameLoaderClient::createFrame(const Fra
     return nullptr;
 }
 
+#ifndef DISABLE_PLUGINS
 PassOwnPtrWillBeRawPtr<PluginPlaceholder> EmptyFrameLoaderClient::createPluginPlaceholder(Document&, const KURL&, const Vector<String>& paramNames, const Vector<String>& paramValues, const String& mimeType, bool loadManually)
 {
     return nullptr;
@@ -133,6 +136,7 @@ PassRefPtrWillBeRawPtr<Widget> EmptyFrameLoaderClient::createJavaAppletWidget(HT
 {
     return nullptr;
 }
+#endif
 
 void EmptyTextCheckerClient::requestCheckingOfString(PassRefPtrWillBeRawPtr<TextCheckingRequest>)
 {
