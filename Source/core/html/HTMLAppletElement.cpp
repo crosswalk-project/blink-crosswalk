@@ -122,10 +122,8 @@ void HTMLAppletElement::updateWidgetInternal()
 
     LayoutEmbeddedObject* layoutObject = layoutEmbeddedObject();
 
-#ifndef DISABLE_PLUGINS
     LocalFrame* frame = document().frame();
     ASSERT(frame);
-#endif
 
     Vector<String> paramNames;
     Vector<String> paramValues;
@@ -192,13 +190,11 @@ void HTMLAppletElement::updateWidgetInternal()
 
     OwnPtrWillBeRawPtr<PluginPlaceholder> placeholder = nullptr;
     RefPtrWillBeRawPtr<Widget> widget = nullptr;
-#ifndef DISABLE_PLUGINS
     if (frame->loader().allowPlugins(AboutToInstantiatePlugin)) {
         placeholder = frame->loader().client()->createPluginPlaceholder(document(), KURL(), paramNames, paramValues, m_serviceType, false);
         if (!placeholder)
             widget = frame->loader().client()->createJavaAppletWidget(this, baseURL, paramNames, paramValues);
     }
-#endif
 
     if (!placeholder && !widget) {
         if (!layoutObject->showsUnavailablePluginIndicator())

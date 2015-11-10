@@ -136,22 +136,6 @@
                   ],
                 }],
 
-                ['disable_plugins', {
-                   'sources!': [
-                     'PluginPlaceholderImpl.cpp',
-                     'PluginPlaceholderImpl.h',
-                     'WebHelperPluginImpl.cpp',
-                     'WebHelperPluginImpl.h',
-                     'WebPluginContainerImpl.cpp',
-                     'WebPluginContainerImpl.h',
-                     'WebPluginDocument.cpp',
-                     'WebPluginLoadObserver.cpp',
-                     'WebPluginLoadObserver.h',
-                     'WebPluginScrollbarImpl.cpp',
-                     'WebPluginScrollbarImpl.h',
-                   ],
-                }],
-
                 ['component=="shared_library"', {
                     'dependencies': [
                         '../wtf/wtf_tests.gyp:wtf_unittest_helpers',

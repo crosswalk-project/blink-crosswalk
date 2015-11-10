@@ -55,9 +55,7 @@
 #include "platform/ContentType.h"
 #include "platform/MIMETypeRegistry.h"
 #include "platform/graphics/Image.h"
-#ifndef DISABLE_PLUGINS
 #include "platform/plugins/PluginData.h"
-#endif
 #include "platform/weborigin/SecurityOrigin.h"
 #include "wtf/StdLibExtras.h"
 
@@ -229,7 +227,6 @@ PassRefPtrWillBeRawPtr<Document> DOMImplementation::createDocument(const String&
     if (type == "application/xhtml+xml")
         return XMLDocument::createXHTML(init);
 
-#ifndef DISABLE_PLUGINS
     PluginData* pluginData = 0;
     if (init.frame() && init.frame()->page() && init.frame()->loader().allowPlugins(NotAboutToInstantiatePlugin))
         pluginData = init.frame()->page()->pluginData();
@@ -238,7 +235,6 @@ PassRefPtrWillBeRawPtr<Document> DOMImplementation::createDocument(const String&
     // We do not want QuickTime to take over all image types, obviously.
     if ((type == "application/pdf" || type == "text/pdf") && pluginData && pluginData->supportsMimeType(type))
         return PluginDocument::create(init);
-#endif
     if (Image::supportsType(type))
         return ImageDocument::create(init);
 
@@ -249,10 +245,8 @@ PassRefPtrWillBeRawPtr<Document> DOMImplementation::createDocument(const String&
     // Everything else except text/plain can be overridden by plugins. In particular, Adobe SVG Viewer should be used for SVG, if installed.
     // Disallowing plugins to use text/plain prevents plugins from hijacking a fundamental type that the browser is expected to handle,
     // and also serves as an optimization to prevent loading the plugin database in the common case.
-#ifndef DISABLE_PLUGINS
     if (type != "text/plain" && pluginData && pluginData->supportsMimeType(type))
         return PluginDocument::create(init);
-#endif
     if (isTextMIMEType(type))
         return TextDocument::create(init);
     if (type == "image/svg+xml")

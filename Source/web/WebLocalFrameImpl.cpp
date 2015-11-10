@@ -128,9 +128,7 @@
 #include "core/html/HTMLImageElement.h"
 #include "core/html/HTMLInputElement.h"
 #include "core/html/HTMLLinkElement.h"
-#ifndef DISABLE_PLUGINS
 #include "core/html/PluginDocument.h"
-#endif
 #include "core/inspector/ConsoleMessage.h"
 #include "core/inspector/ScriptCallStack.h"
 #include "core/layout/HitTestResult.h"
@@ -204,9 +202,7 @@
 #include "public/web/WebKit.h"
 #include "public/web/WebNode.h"
 #include "public/web/WebPerformance.h"
-#ifndef DISABLE_PLUGINS
 #include "public/web/WebPlugin.h"
-#endif
 #include "public/web/WebPrintParams.h"
 #include "public/web/WebPrintPresetOptions.h"
 #include "public/web/WebRange.h"
@@ -234,9 +230,7 @@
 #include "web/WebDevToolsAgentImpl.h"
 #endif
 #include "web/WebFrameWidgetImpl.h"
-#ifndef DISABLE_PLUGINS
 #include "web/WebPluginContainerImpl.h"
-#endif
 #include "web/WebRemoteFrameImpl.h"
 #include "web/WebViewImpl.h"
 #include "wtf/CurrentTime.h"
@@ -317,7 +311,6 @@ static WillBeHeapVector<ScriptSourceCode> createSourcesVector(const WebScriptSou
     return sources;
 }
 
-#ifndef DISABLE_PLUGINS
 WebPluginContainerImpl* WebLocalFrameImpl::pluginContainerFromFrame(LocalFrame* frame)
 {
     if (!frame)
@@ -335,7 +328,6 @@ WebPluginContainerImpl* WebLocalFrameImpl::pluginContainerFromNode(LocalFrame* f
         return pluginContainer;
     return toWebPluginContainerImpl(node.pluginContainer());
 }
-#endif
 
 // Simple class to override some of PrintContext behavior. Some of the methods
 // made virtual so that they can be overridden by ChromePluginPrintContext.
@@ -468,7 +460,6 @@ private:
     float m_printedPageWidth;
 };
 
-#ifndef DISABLE_PLUGINS
 // Simple class to override some of PrintContext behavior. This is used when
 // the frame hosts a plugin that supports custom printing. In this case, we
 // want to delegate all printing related calls to the plugin.
@@ -522,7 +513,6 @@ private:
     WebPluginContainerImpl* m_plugin;
     WebPrintParams m_printParams;
 };
-#endif
 
 static WebDataSource* DataSourceForDocLoader(DocumentLoader* loader)
 {
@@ -1158,11 +1148,9 @@ bool WebLocalFrameImpl::executeCommand(const WebString& name, const WebNode& nod
     if (command[command.length() - 1] == UChar(':'))
         command = command.substring(0, command.length() - 1);
 
-#ifndef DISABLE_PLUGINS
     WebPluginContainerImpl* pluginContainer = pluginContainerFromNode(frame(), node);
     if (pluginContainer && pluginContainer->executeEditCommand(name))
         return true;
-#endif
 
     return frame()->editor().executeCommand(command);
 }
@@ -1171,11 +1159,9 @@ bool WebLocalFrameImpl::executeCommand(const WebString& name, const WebString& v
 {
     ASSERT(frame());
 
-#ifndef DISABLE_PLUGINS
     WebPluginContainerImpl* pluginContainer = pluginContainerFromNode(frame(), node);
     if (pluginContainer && pluginContainer->executeEditCommand(name, value))
         return true;
-#endif
 
     return frame()->editor().executeCommand(name, value);
 }
@@ -1208,10 +1194,8 @@ void WebLocalFrameImpl::requestTextChecking(const WebElement& webElement)
 void WebLocalFrameImpl::replaceMisspelledRange(const WebString& text)
 {
     // If this caret selection has two or more markers, this function replace the range covered by the first marker with the specified word as Microsoft Word does.
-#ifndef DISABLE_PLUGINS
     if (pluginContainerFromFrame(frame()))
         return;
-#endif
     frame()->spellChecker().replaceMisspelledRange(text);
 }
 
@@ -1222,11 +1206,9 @@ void WebLocalFrameImpl::removeSpellingMarkers()
 
 bool WebLocalFrameImpl::hasSelection() const
 {
-#ifndef DISABLE_PLUGINS
     WebPluginContainerImpl* pluginContainer = pluginContainerFromFrame(frame());
     if (pluginContainer)
         return pluginContainer->plugin()->hasSelection();
-#endif
 
     // frame()->selection()->isNone() never returns true.
     return frame()->selection().start() != frame()->selection().end();
@@ -1239,11 +1221,9 @@ WebRange WebLocalFrameImpl::selectionRange() const
 
 WebString WebLocalFrameImpl::selectionAsText() const
 {
-#ifndef DISABLE_PLUGINS
     WebPluginContainerImpl* pluginContainer = pluginContainerFromFrame(frame());
     if (pluginContainer)
         return pluginContainer->plugin()->selectionAsText();
-#endif
 
     RefPtrWillBeRawPtr<Range> range = frame()->selection().toNormalizedRange();
     if (!range)
@@ -1259,11 +1239,9 @@ WebString WebLocalFrameImpl::selectionAsText() const
 
 WebString WebLocalFrameImpl::selectionAsMarkup() const
 {
-#ifndef DISABLE_PLUGINS
     WebPluginContainerImpl* pluginContainer = pluginContainerFromFrame(frame());
     if (pluginContainer)
         return pluginContainer->plugin()->selectionAsMarkup();
-#endif
 
     RefPtrWillBeRawPtr<Range> range = frame()->selection().toNormalizedRange();
     if (!range)
@@ -1345,12 +1323,10 @@ bool WebLocalFrameImpl::setCompositionFromExistingText(int compositionStart, int
 
 void WebLocalFrameImpl::extendSelectionAndDelete(int before, int after)
 {
-#ifndef DISABLE_PLUGINS
     if (WebPlugin* plugin = focusedPluginIfInputMethodSupported()) {
         plugin->extendSelectionAndDelete(before, after);
         return;
     }
-#endif
     frame()->inputMethodController().extendSelectionAndDelete(before, after);
 }
 
@@ -1364,7 +1340,6 @@ VisiblePosition WebLocalFrameImpl::visiblePositionForViewportPoint(const WebPoin
     return visiblePositionForContentsPoint(frame()->view()->viewportToContents(pointInViewport), frame());
 }
 
-#ifndef DISABLE_PLUGINS
 WebPlugin* WebLocalFrameImpl::focusedPluginIfInputMethodSupported()
 {
     WebPluginContainerImpl* container = WebLocalFrameImpl::pluginContainerFromNode(frame(), WebNode(frame()->document()->focusedElement()));
@@ -1372,12 +1347,10 @@ WebPlugin* WebLocalFrameImpl::focusedPluginIfInputMethodSupported()
         return container->plugin();
     return 0;
 }
-#endif
 
 int WebLocalFrameImpl::printBegin(const WebPrintParams& printParams, const WebNode& constrainToNode)
 {
     ASSERT(!frame()->document()->isFrameSet());
-#ifndef DISABLE_PLUGINS
     WebPluginContainerImpl* pluginContainer = nullptr;
     if (constrainToNode.isNull()) {
         // If this is a plugin document, check if the plugin supports its own
@@ -1392,9 +1365,6 @@ int WebLocalFrameImpl::printBegin(const WebPrintParams& printParams, const WebNo
         m_printContext = adoptPtrWillBeNoop(new ChromePluginPrintContext(frame(), pluginContainer, printParams));
     else
         m_printContext = adoptPtrWillBeNoop(new ChromePrintContext(frame()));
-#endif
-
-    m_printContext = adoptPtrWillBeNoop(new ChromePrintContext(frame()));
 
     FloatRect rect(0, 0, static_cast<float>(printParams.printContentArea.width), static_cast<float>(printParams.printContentArea.height));
     m_printContext->begin(rect.width(), rect.height());
@@ -1432,7 +1402,6 @@ void WebLocalFrameImpl::printEnd()
     m_printContext.clear();
 }
 
-#ifndef DISABLE_PLUGINS
 bool WebLocalFrameImpl::isPrintScalingDisabledForPlugin(const WebNode& node)
 {
     WebPluginContainerImpl* pluginContainer =  node.isNull() ? pluginContainerFromFrame(frame()) : toWebPluginContainerImpl(node.pluginContainer());
@@ -1452,7 +1421,6 @@ bool WebLocalFrameImpl::getPrintPresetOptionsForPlugin(const WebNode& node, WebP
 
     return pluginContainer->getPrintPresetOptionsFromDocument(presetOptions);
 }
-#endif
 
 bool WebLocalFrameImpl::hasCustomPageSizeStyle(int pageIndex)
 {

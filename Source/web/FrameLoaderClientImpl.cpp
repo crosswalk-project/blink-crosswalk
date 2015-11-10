@@ -64,9 +64,7 @@
 #include "platform/exported/WrappedResourceRequest.h"
 #include "platform/exported/WrappedResourceResponse.h"
 #include "platform/network/HTTPParsers.h"
-#ifndef DISABLE_PLUGINS
 #include "platform/plugins/PluginData.h"
-#endif
 #include "public/platform/Platform.h"
 #include "public/platform/WebApplicationCacheHost.h"
 #include "public/platform/WebMimeRegistry.h"
@@ -85,17 +83,13 @@
 #include "public/web/WebFormElement.h"
 #include "public/web/WebFrameClient.h"
 #include "public/web/WebNode.h"
-#ifndef DISABLE_PLUGINS
 #include "public/web/WebPlugin.h"
 #include "public/web/WebPluginParams.h"
 #include "public/web/WebPluginPlaceholder.h"
-#endif
 #include "public/web/WebTransitionElementData.h"
 #include "public/web/WebViewClient.h"
 #include "web/DevToolsEmulator.h"
-#ifndef DISABLE_PLUGINS
 #include "web/PluginPlaceholderImpl.h"
-#endif
 #include "web/SharedWorkerRepositoryClientImpl.h"
 #include "web/WebDataSourceImpl.h"
 #ifndef DISABLE_INSPECTOR
@@ -103,10 +97,8 @@
 #endif
 #include "web/WebDevToolsFrontendImpl.h"
 #include "web/WebLocalFrameImpl.h"
-#ifndef DISABLE_PLUGINS
 #include "web/WebPluginContainerImpl.h"
 #include "web/WebPluginLoadObserver.h"
-#endif
 #include "web/WebViewImpl.h"
 #include "wtf/StringExtras.h"
 #include "wtf/text/CString.h"
@@ -223,14 +215,10 @@ bool FrameLoaderClientImpl::allowScriptFromSource(bool enabledPerSettings, const
 
 bool FrameLoaderClientImpl::allowPlugins(bool enabledPerSettings)
 {
-#ifndef DISABLE_PLUGINS
     if (m_webFrame->contentSettingsClient())
         return m_webFrame->contentSettingsClient()->allowPlugins(enabledPerSettings);
 
     return enabledPerSettings;
-#else
-    return false;
-#endif
 }
 
 bool FrameLoaderClientImpl::allowImage(bool enabledPerSettings, const KURL& imageURL)
@@ -273,10 +261,8 @@ void FrameLoaderClientImpl::didNotAllowScript()
 
 void FrameLoaderClientImpl::didNotAllowPlugins()
 {
-#ifndef DISABLE_PLUGINS
     if (m_webFrame->contentSettingsClient())
         m_webFrame->contentSettingsClient()->didNotAllowPlugins();
-#endif
 
 }
 
@@ -460,26 +446,18 @@ void FrameLoaderClientImpl::dispatchDidCommitLoad(HistoryItem* item, HistoryComm
 void FrameLoaderClientImpl::dispatchDidFailProvisionalLoad(
     const ResourceError& error, HistoryCommitType commitType)
 {
-#ifndef DISABLE_PLUGINS
     OwnPtr<WebPluginLoadObserver> observer = pluginLoadObserver(m_webFrame->frame()->loader().provisionalDocumentLoader());
     m_webFrame->didFail(error, true, commitType);
     if (observer)
         observer->didFailLoading(error);
-#else
-    m_webFrame->didFail(error, true, commitType);
-#endif
 }
 
 void FrameLoaderClientImpl::dispatchDidFailLoad(const ResourceError& error, HistoryCommitType commitType)
 {
-#ifndef DISABLE_PLUGINS
     OwnPtr<WebPluginLoadObserver> observer = pluginLoadObserver(m_webFrame->frame()->loader().documentLoader());
     m_webFrame->didFail(error, false, commitType);
     if (observer)
         observer->didFailLoading(error);
-#else
-    m_webFrame->didFail(error, false, commitType);
-#endif
 
     // Don't clear the redirect chain, this will happen in the middle of client
     // redirects, and we need the context. The chain will be cleared when the
@@ -488,7 +466,6 @@ void FrameLoaderClientImpl::dispatchDidFailLoad(const ResourceError& error, Hist
 
 void FrameLoaderClientImpl::dispatchDidFinishLoad()
 {
-#ifndef DISABLE_PLUGINS
     OwnPtr<WebPluginLoadObserver> observer = pluginLoadObserver(m_webFrame->frame()->loader().documentLoader());
 
     if (m_webFrame->client())
@@ -496,10 +473,7 @@ void FrameLoaderClientImpl::dispatchDidFinishLoad()
 
     if (observer)
         observer->didFinishLoading();
-#else
-    if (m_webFrame->client())
-        m_webFrame->client()->didFinishLoad(m_webFrame);
-#endif
+
     // Don't clear the redirect chain, this will happen in the middle of client
     // redirects, and we need the context. The chain will be cleared when the
     // provisional load succeeds or fails, not the "real" one.
@@ -734,7 +708,6 @@ PassRefPtrWillBeRawPtr<LocalFrame> FrameLoaderClientImpl::createFrame(
     return m_webFrame->createChildFrame(request, name, ownerElement);
 }
 
-#ifndef DISABLE_PLUGINS
 bool FrameLoaderClientImpl::canCreatePluginWithoutRenderer(const String& mimeType) const
 {
     if (!m_webFrame->client())
@@ -822,14 +795,12 @@ PassRefPtrWillBeRawPtr<Widget> FrameLoaderClientImpl::createJavaAppletWidget(
     return createPlugin(element, KURL(), paramNames, paramValues,
         "application/x-java-applet", false, FailOnDetachedPlugin);
 }
-#endif // DISABLE_PLUGINS
 
 ObjectContentType FrameLoaderClientImpl::objectContentType(
     const KURL& url,
     const String& explicitMimeType,
     bool shouldPreferPlugInsForImages)
 {
-#ifndef DISABLE_PLUGINS
     // This code is based on Apple's implementation from
     // WebCoreSupport/WebFrameBridge.mm.
 
@@ -864,20 +835,14 @@ ObjectContentType FrameLoaderClientImpl::objectContentType(
 
     if (MIMETypeRegistry::isSupportedNonImageMIMEType(mimeType))
         return ObjectContentFrame;
-#else
-    (void) url;
-    (void) explicitMimeType;
-    (void) shouldPreferPlugInsForImages;
-#endif
+
     return ObjectContentNone;
 }
 
-#ifndef DISABLE_PLUGINS
 PassOwnPtr<WebPluginLoadObserver> FrameLoaderClientImpl::pluginLoadObserver(DocumentLoader* loader)
 {
     return WebDataSourceImpl::fromDocumentLoader(loader)->releasePluginLoadObserver();
 }
-#endif // DISABLE_PLUGINS
 
 WebCookieJar* FrameLoaderClientImpl::cookieJar() const
 {
