@@ -64,10 +64,8 @@ class WebFrameClient;
 class WebFrameWidgetImpl;
 class WebNode;
 class WebPerformance;
-#ifndef DISABLE_PLUGINS
 class WebPlugin;
 class WebPluginContainerImpl;
-#endif
 class WebScriptExecutionCallback;
 class WebSuspendableTask;
 class WebView;
@@ -191,10 +189,8 @@ public:
     virtual float printPage(int pageToPrint, WebCanvas*) override;
     virtual float getPrintPageShrink(int page) override;
     virtual void printEnd() override;
-#ifndef DISABLE_PLUGINS
     virtual bool isPrintScalingDisabledForPlugin(const WebNode&) override;
     virtual bool getPrintPresetOptionsForPlugin(const WebNode&, WebPrintPresetOptions*) override;
-#endif
     virtual bool hasCustomPageSizeStyle(int pageIndex) override;
     virtual bool isPageBoxVisible(int pageIndex) override;
     virtual void pageSizeAndMarginsInPixels(
@@ -271,7 +267,6 @@ public:
     static WebLocalFrameImpl* fromFrame(LocalFrame&);
     static WebLocalFrameImpl* fromFrameOwnerElement(Element*);
 
-#ifndef DISABLE_PLUGINS
     // If the frame hosts a PluginDocument, this method returns the WebPluginContainerImpl
     // that hosts the plugin.
     static WebPluginContainerImpl* pluginContainerFromFrame(LocalFrame*);
@@ -280,7 +275,6 @@ public:
     // that hosts the plugin. If the provided node is a plugin, then it runs its
     // WebPluginContainerImpl.
     static WebPluginContainerImpl* pluginContainerFromNode(LocalFrame*, const WebNode&);
-#endif
 
     WebViewImpl* viewImpl() const;
 
@@ -358,9 +352,7 @@ private:
 
     void loadJavaScriptURL(const KURL&);
 
-#ifndef DISABLE_PLUGINS
     WebPlugin* focusedPluginIfInputMethodSupported();
-#endif
 
     FrameLoaderClientImpl m_frameLoaderClientImpl;
 

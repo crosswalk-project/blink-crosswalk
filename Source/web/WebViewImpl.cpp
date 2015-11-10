@@ -135,10 +135,8 @@
 #include "public/web/WebInputElement.h"
 #include "public/web/WebMediaPlayerAction.h"
 #include "public/web/WebNode.h"
-#ifndef DISABLE_PLUGINS
 #include "public/web/WebPlugin.h"
 #include "public/web/WebPluginAction.h"
-#endif
 #include "public/web/WebRange.h"
 #include "public/web/WebSelection.h"
 #include "public/web/WebTextInputInfo.h"
@@ -167,9 +165,7 @@
 #include "web/WebInputEventConversion.h"
 #include "web/WebLocalFrameImpl.h"
 #include "web/WebPagePopupImpl.h"
-#ifndef DISABLE_PLUGINS
 #include "web/WebPluginContainerImpl.h"
-#endif
 #include "web/WebPopupMenuImpl.h"
 #include "web/WebRemoteFrameImpl.h"
 #include "web/WebSettingsImpl.h"
@@ -1075,7 +1071,6 @@ bool WebViewImpl::handleKeyEvent(const WebKeyboardEvent& event)
     PlatformKeyboardEventBuilder evt(event);
 
     if (frame->eventHandler().keyEvent(evt)) {
-#ifndef DISABLE_PLUGINS
         if (WebInputEvent::RawKeyDown == event.type) {
             // Suppress the next keypress event unless the focused node is a plugin node.
             // (Flash needs these keypress events to handle non-US keyboards.)
@@ -1094,7 +1089,6 @@ bool WebViewImpl::handleKeyEvent(const WebKeyboardEvent& event)
                 m_suppressNextKeypressEvent = true;
             }
         }
-#endif
         return true;
     }
 
@@ -1761,12 +1755,10 @@ void WebViewImpl::willStartLiveResize()
     if (mainFrameImpl() && mainFrameImpl()->frameView())
         mainFrameImpl()->frameView()->willStartLiveResize();
 
-#ifndef DISABLE_PLUGINS
     LocalFrame* frame = mainFrameImpl()->frame();
     WebPluginContainerImpl* pluginContainer = WebLocalFrameImpl::pluginContainerFromFrame(frame);
     if (pluginContainer)
         pluginContainer->willStartLiveResize();
-#endif
 }
 
 WebSize WebViewImpl::size()
@@ -1912,12 +1904,10 @@ void WebViewImpl::willEndLiveResize()
     if (mainFrameImpl() && mainFrameImpl()->frameView())
         mainFrameImpl()->frameView()->willEndLiveResize();
 
-#ifndef DISABLE_PLUGINS
     LocalFrame* frame = mainFrameImpl()->frame();
     WebPluginContainerImpl* pluginContainer = WebLocalFrameImpl::pluginContainerFromFrame(frame);
     if (pluginContainer)
         pluginContainer->willEndLiveResize();
-#endif
 }
 
 void WebViewImpl::didEnterFullScreen()
@@ -2332,10 +2322,8 @@ bool WebViewImpl::setComposition(
     if (!focused || !m_imeAcceptEvents)
         return false;
 
-#ifndef DISABLE_PLUGINS
     if (WebPlugin* plugin = focusedPluginIfInputMethodSupported(focused))
         return plugin->setComposition(text, underlines, selectionStart, selectionEnd);
-#endif
 
     // The input focus has been moved to another WebWidget object.
     // We should use this |editor| object only to complete the ongoing
@@ -2397,10 +2385,8 @@ bool WebViewImpl::confirmComposition(const WebString& text, ConfirmCompositionBe
     if (!focused || !m_imeAcceptEvents)
         return false;
 
-#ifndef DISABLE_PLUGINS
     if (WebPlugin* plugin = focusedPluginIfInputMethodSupported(focused))
         return plugin->confirmComposition(text, selectionBehavior);
-#endif
 
     return focused->inputMethodController().confirmCompositionOrInsertText(text, selectionBehavior == KeepSelection ? InputMethodController::KeepSelection : InputMethodController::DoNotKeepSelection);
 }
@@ -2677,7 +2663,6 @@ InputMethodContext* WebViewImpl::inputMethodContext()
     return 0;
 }
 
-#ifndef DISABLE_PLUGINS
 WebPlugin* WebViewImpl::focusedPluginIfInputMethodSupported(LocalFrame* frame)
 {
     WebPluginContainerImpl* container = WebLocalFrameImpl::pluginContainerFromNode(frame, WebNode(focusedElement()));
@@ -2685,7 +2670,6 @@ WebPlugin* WebViewImpl::focusedPluginIfInputMethodSupported(LocalFrame* frame)
         return container->plugin();
     return 0;
 }
-#endif
 
 void WebViewImpl::didShowCandidateWindow()
 {
@@ -3091,7 +3075,6 @@ double WebViewImpl::setZoomLevel(double zoomLevel)
     else
         m_zoomLevel = zoomLevel;
 
-#ifndef DISABLE_PLUGINS
     LocalFrame* frame = mainFrameImpl()->frame();
     WebPluginContainerImpl* pluginContainer = WebLocalFrameImpl::pluginContainerFromFrame(frame);
     if (pluginContainer)
@@ -3100,7 +3083,6 @@ double WebViewImpl::setZoomLevel(double zoomLevel)
         float zoomFactor = m_zoomFactorOverride ? m_zoomFactorOverride : static_cast<float>(zoomLevelToZoomFactor(m_zoomLevel));
         frame->setPageZoomFactor(zoomFactor);
     }
-#endif
 
     return m_zoomLevel;
 }
@@ -3121,10 +3103,8 @@ float WebViewImpl::textZoomFactor()
 float WebViewImpl::setTextZoomFactor(float textZoomFactor)
 {
     LocalFrame* frame = mainFrameImpl()->frame();
-#ifndef DISABLE_PLUGINS
     if (WebLocalFrameImpl::pluginContainerFromFrame(frame))
         return 1;
-#endif
 
     frame->setTextZoomFactor(textZoomFactor);
 
@@ -3555,7 +3535,6 @@ void WebViewImpl::performMediaPlayerAction(const WebMediaPlayerAction& action,
     }
 }
 
-#ifndef DISABLE_PLUGINS
 void WebViewImpl::performPluginAction(const WebPluginAction& action,
                                       const WebPoint& location)
 {
@@ -3583,7 +3562,6 @@ void WebViewImpl::performPluginAction(const WebPluginAction& action,
         }
     }
 }
-#endif
 
 WebHitTestResult WebViewImpl::hitTestResultAt(const WebPoint& point)
 {

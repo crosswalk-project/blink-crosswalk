@@ -56,9 +56,7 @@ namespace blink {
     class HistoryItem;
     class KURL;
     class LocalFrame;
-#ifndef DISABLE_PLUGINS
     class PluginPlaceholder;
-#endif
     class ResourceError;
     class ResourceRequest;
     class ResourceResponse;
@@ -149,7 +147,6 @@ namespace blink {
             FailOnDetachedPlugin,
             AllowDetachedPlugin,
         };
-#ifndef DISABLE_PLUGINS
         virtual bool canCreatePluginWithoutRenderer(const String& mimeType) const = 0;
 
         // Called before plugin creation in order to ask the embedder whether a
@@ -159,8 +156,9 @@ namespace blink {
         virtual PassRefPtrWillBeRawPtr<Widget> createPlugin(HTMLPlugInElement*, const KURL&, const Vector<String>&, const Vector<String>&, const String&, bool loadManually, DetachedPluginPolicy) = 0;
 
         virtual PassRefPtrWillBeRawPtr<Widget> createJavaAppletWidget(HTMLAppletElement*, const KURL& baseURL, const Vector<String>& paramNames, const Vector<String>& paramValues) = 0;
-#endif
+
         virtual ObjectContentType objectContentType(const KURL&, const String& mimeType, bool shouldPreferPlugInsForImages) = 0;
+
         virtual void didCreateNewDocument() = 0;
         virtual void dispatchDidClearWindowObjectInMainWorld() = 0;
         virtual void documentElementAvailable() = 0;

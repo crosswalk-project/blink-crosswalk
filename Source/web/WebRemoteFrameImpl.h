@@ -128,9 +128,7 @@ public:
     virtual float printPage(int pageToPrint, WebCanvas*) override;
     virtual float getPrintPageShrink(int page) override;
     virtual void printEnd() override;
-#ifndef DISABLE_PLUGINS
     virtual bool isPrintScalingDisabledForPlugin(const WebNode&) override;
-#endif
     virtual bool hasCustomPageSizeStyle(int pageIndex) override;
     virtual bool isPageBoxVisible(int pageIndex) override;
     virtual void pageSizeAndMarginsInPixels(

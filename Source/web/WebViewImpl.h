@@ -86,9 +86,7 @@ class WebLayerTreeView;
 class WebLocalFrameImpl;
 class WebImage;
 class WebPagePopupImpl;
-#ifndef DISABLE_PLUGINS
 class WebPlugin;
-#endif
 class WebSelection;
 class WebSettingsImpl;
 
@@ -224,11 +222,9 @@ public:
     virtual void performMediaPlayerAction(
         const WebMediaPlayerAction& action,
         const WebPoint& location) override;
-#ifndef DISABLE_PLUGINS
     virtual void performPluginAction(
         const WebPluginAction&,
         const WebPoint&) override;
-#endif
     virtual WebHitTestResult hitTestResultAt(const WebPoint&) override;
     virtual WebHitTestResult hitTestResultForTap(const WebPoint&, const WebSize&) override;
     virtual void copyImageAt(const WebPoint&) override;
@@ -627,9 +623,7 @@ private:
     bool handleSyntheticWheelFromTouchpadPinchEvent(const WebGestureEvent&);
 
     InputMethodContext* inputMethodContext();
-#ifndef DISABLE_PLUGINS
     WebPlugin* focusedPluginIfInputMethodSupported(LocalFrame*);
-#endif
 
     void enablePopupMouseWheelEventListener();
     void disablePopupMouseWheelEventListener();

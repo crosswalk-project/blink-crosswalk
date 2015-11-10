@@ -38,13 +38,11 @@
 
 namespace blink {
 
-#ifndef DISABLE_PLUGINS
 static OwnPtr<WebPluginLoadObserver>& nextPluginLoadObserver()
 {
     DEFINE_STATIC_LOCAL(OwnPtr<WebPluginLoadObserver>, nextPluginLoadObserver, ());
     return nextPluginLoadObserver;
 }
-#endif
 
 PassRefPtr<WebDataSourceImpl> WebDataSourceImpl::create(LocalFrame* frame, const ResourceRequest& request, const SubstituteData& data)
 {
@@ -139,17 +137,14 @@ WebNavigationType WebDataSourceImpl::toWebNavigationType(NavigationType type)
     }
 }
 
-#ifndef DISABLE_PLUGINS
 void WebDataSourceImpl::setNextPluginLoadObserver(PassOwnPtr<WebPluginLoadObserver> observer)
 {
     nextPluginLoadObserver() = observer;
 }
-#endif
 
 WebDataSourceImpl::WebDataSourceImpl(LocalFrame* frame, const ResourceRequest& request, const SubstituteData& data)
     : DocumentLoader(frame, request, data)
 {
-#ifndef DISABLE_PLUGINS
     if (!nextPluginLoadObserver())
         return;
     // When a new frame is created, it initially gets a data source for an
@@ -161,7 +156,6 @@ WebDataSourceImpl::WebDataSourceImpl(LocalFrame* frame, const ResourceRequest& r
 
     ASSERT(nextPluginLoadObserver()->url() == WebURL(request.url()));
     m_pluginLoadObserver = nextPluginLoadObserver().release();
-#endif
 }
 
 WebDataSourceImpl::~WebDataSourceImpl()

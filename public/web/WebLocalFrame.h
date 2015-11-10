@@ -88,10 +88,10 @@ public:
 
 
     // Printing ------------------------------------------------------------
-#ifndef DISABLE_PLUGINS
+
     // Returns true on success and sets the out parameter to the print preset options for the document.
     virtual bool getPrintPresetOptionsForPlugin(const WebNode&, WebPrintPresetOptions*) = 0;
-#endif
+
 
     // Scripting --------------------------------------------------------------
     // Executes script in the context of the current page and returns the value
