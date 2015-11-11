@@ -68,6 +68,7 @@ ScriptPromise Permissions::query(ScriptState* scriptState, const ScriptValue& ra
             return promise;
         }
         type = WebPermissionTypePushNotifications;
+#ifndef DISABLE_WEBMIDI
     } else if (name == "midi") {
         MidiPermissionDescriptor midiPermission = NativeValueTraits<MidiPermissionDescriptor>::nativeValue(scriptState->isolate(), rawPermission.v8Value(), exceptionState);
         // Only sysex usage requires a permission, otherwise it is granted.
@@ -76,6 +77,7 @@ ScriptPromise Permissions::query(ScriptState* scriptState, const ScriptValue& ra
             return promise;
         }
         type = WebPermissionTypeMidiSysEx;
+#endif
     } else {
         ASSERT_NOT_REACHED();
         type = WebPermissionTypeGeolocation;
