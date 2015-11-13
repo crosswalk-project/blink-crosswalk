@@ -31,7 +31,9 @@
 #include "bindings/core/v8/V8Binding.h"
 #include "bindings/modules/v8/V8Gamepad.h"
 #include "bindings/modules/v8/V8Headers.h"
+#ifndef DISABLE_WEBMIDI
 #include "bindings/modules/v8/V8MIDIPort.h"
+#endif
 #include "bindings/modules/v8/V8MediaStream.h"
 #include "bindings/modules/v8/V8PushMessageData.h"
 #ifndef DISABLE_SPEECH
@@ -48,8 +50,9 @@
 #endif
 
 namespace blink {
-
+#ifndef DISABLE_WEBMIDI
 template bool DictionaryHelper::get(const Dictionary&, const String& key, Member<MIDIPort>& value);
+#endif
 #ifndef DISABLE_SPEECH
 template bool DictionaryHelper::get(const Dictionary&, const String& key, Member<SpeechRecognitionResultList>& value);
 #endif
@@ -59,7 +62,9 @@ template bool DictionaryHelper::get(const Dictionary&, const String& key, Member
 template bool DictionaryHelper::get(const Dictionary&, const String& key, Member<PushMessageData>& value);
 template bool DictionaryHelper::get(const Dictionary&, const String& key, Member<Storage>& value);
 
+#ifndef DISABLE_WEBMIDI
 template bool DictionaryHelper::convert(const Dictionary&, Dictionary::ConversionContext&, const String& key, Member<MIDIPort>& value);
+#endif
 #ifndef DISABLE_SPEECH
 template bool DictionaryHelper::convert(const Dictionary&, Dictionary::ConversionContext&, const String& key, Member<SpeechRecognitionResultList>& value);
 #endif
