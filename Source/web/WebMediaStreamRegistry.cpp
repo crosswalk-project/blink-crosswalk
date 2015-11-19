@@ -39,6 +39,7 @@
 #include "public/platform/WebString.h"
 #include "public/platform/WebURL.h"
 
+#ifndef DISABLE_MEDIASTREAM
 namespace blink {
 
 WebMediaStream WebMediaStreamRegistry::lookupMediaStreamDescriptor(const WebURL& url)
@@ -47,3 +48,4 @@ WebMediaStream WebMediaStreamRegistry::lookupMediaStreamDescriptor(const WebURL&
 }
 
 } // namespace blink
+#endif // DISABLE_MEDIASTREAM

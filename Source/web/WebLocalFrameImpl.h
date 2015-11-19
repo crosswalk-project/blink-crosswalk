@@ -393,7 +393,9 @@ private:
     IntSize m_inputEventsOffsetForEmulation;
     float m_inputEventsScaleFactorForEmulation;
 
+#ifndef DISABLE_MEDIASTREAM
     UserMediaClientImpl m_userMediaClientImpl;
+#endif
 
 #ifndef DISABLE_GEO_FEATURES
     OwnPtrWillBeMember<GeolocationClientProxy> m_geolocationClientProxy;

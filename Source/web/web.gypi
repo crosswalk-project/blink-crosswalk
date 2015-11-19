@@ -320,6 +320,13 @@
       'WebMediaPlayerClientImpl.cpp',
       'WebMediaPlayerClientImpl.h',
     ],
+    'web_files_mediastream': [
+      'UserMediaClientImpl.cpp',
+      'UserMediaClientImpl.h',
+      'WebDOMMediaStreamTrack.cpp',
+      'WebMediaDevicesRequest.cpp',
+      'WebUserMediaRequest.cpp',
+    ],
     'web_unittest_files': [
       'ExternalPopupMenuTest.cpp',
       'PageOverlayTest.cpp',
