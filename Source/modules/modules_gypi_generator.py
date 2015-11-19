@@ -2993,13 +2993,14 @@ def generate_modules_gypi(args):
     disable_bluetooth = args[1]
     disable_geo_features = args[2]
     disable_indexeddb = args[3]
-    disable_notifications = args[4]
-    disable_plugins = args[5]
-    disable_speech = args[6]
-    disable_webaudio = args[7]
-    disable_webcl = args[8]
-    disable_webdatabase = args[9]
-    disable_webmidi = args[10]
+    disable_mediastream = args[4]
+    disable_notifications = args[5]
+    disable_plugins = args[6]
+    disable_speech = args[7]
+    disable_webaudio = args[8]
+    disable_webcl = args[9]
+    disable_webdatabase = args[10]
+    disable_webmidi = args[11]
 
     name = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'modules.gypi')
 

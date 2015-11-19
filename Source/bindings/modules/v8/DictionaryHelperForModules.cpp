@@ -34,7 +34,9 @@
 #ifndef DISABLE_WEBMIDI
 #include "bindings/modules/v8/V8MIDIPort.h"
 #endif
+#ifndef DISABLE_MEDIASTREAM
 #include "bindings/modules/v8/V8MediaStream.h"
+#endif
 #include "bindings/modules/v8/V8PushMessageData.h"
 #ifndef DISABLE_SPEECH
 #include "bindings/modules/v8/V8SpeechRecognitionResult.h"
@@ -42,7 +44,9 @@
 #endif
 #include "bindings/modules/v8/V8Storage.h"
 #include "modules/gamepad/Gamepad.h"
+#ifndef DISABLE_MEDIASTREAM
 #include "modules/mediastream/MediaStream.h"
+#endif
 #include "modules/push_messaging/PushMessageData.h"
 #ifndef DISABLE_SPEECH
 #include "modules/speech/SpeechRecognitionResult.h"
@@ -57,7 +61,9 @@ template bool DictionaryHelper::get(const Dictionary&, const String& key, Member
 template bool DictionaryHelper::get(const Dictionary&, const String& key, Member<SpeechRecognitionResultList>& value);
 #endif
 template bool DictionaryHelper::get(const Dictionary&, const String& key, Member<Gamepad>& value);
+#ifndef DISABLE_MEDIASTREAM
 template bool DictionaryHelper::get(const Dictionary&, const String& key, Member<MediaStream>& value);
+#endif
 template bool DictionaryHelper::get(const Dictionary&, const String& key, Member<Headers>& value);
 template bool DictionaryHelper::get(const Dictionary&, const String& key, Member<PushMessageData>& value);
 template bool DictionaryHelper::get(const Dictionary&, const String& key, Member<Storage>& value);
@@ -69,7 +75,9 @@ template bool DictionaryHelper::convert(const Dictionary&, Dictionary::Conversio
 template bool DictionaryHelper::convert(const Dictionary&, Dictionary::ConversionContext&, const String& key, Member<SpeechRecognitionResultList>& value);
 #endif
 template bool DictionaryHelper::convert(const Dictionary&, Dictionary::ConversionContext&, const String& key, Member<Gamepad>& value);
+#ifndef DISABLE_MEDIASTREAM
 template bool DictionaryHelper::convert(const Dictionary&, Dictionary::ConversionContext&, const String& key, Member<MediaStream>& value);
+#endif
 template bool DictionaryHelper::convert(const Dictionary&, Dictionary::ConversionContext&, const String& key, Member<Headers>& value);
 template bool DictionaryHelper::convert(const Dictionary&, Dictionary::ConversionContext&, const String& key, Member<PushMessageData>& value);
 template bool DictionaryHelper::convert(const Dictionary&, Dictionary::ConversionContext&, const String& key, Member<Storage>& value);

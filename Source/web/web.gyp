@@ -100,6 +100,12 @@
                   ],
                 }],
 
+                ['disable_mediastream==1', {
+                     'sources!': [
+                         '<@(web_files_mediastream)',
+                     ],
+                }],
+
                 ['disable_speech==1', {
                     'sources!': [
                         '<@(web_files_speech)',
