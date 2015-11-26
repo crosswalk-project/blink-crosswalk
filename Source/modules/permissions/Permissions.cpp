@@ -7,7 +7,9 @@
 
 #include "bindings/core/v8/ScriptPromise.h"
 #include "bindings/core/v8/ScriptPromiseResolver.h"
+#ifndef DISABLE_WEBMIDI
 #include "bindings/modules/v8/V8MidiPermissionDescriptor.h"
+#endif
 #include "bindings/modules/v8/V8PermissionDescriptor.h"
 #include "bindings/modules/v8/V8PushPermissionDescriptor.h"
 #include "core/dom/DOMException.h"
